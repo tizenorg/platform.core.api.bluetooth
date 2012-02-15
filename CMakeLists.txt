@@ -1,4 +1,3 @@
-
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 SET(fw_name "capi-network-bluetooth")
 
@@ -34,6 +33,13 @@ aux_source_directory(src SOURCES)
 ADD_LIBRARY(${fw_name} SHARED ${SOURCES})
 
 TARGET_LINK_LIBRARIES(${fw_name} ${${fw_name}_LDFLAGS})
+
+SET_TARGET_PROPERTIES(${fw_name}
+     PROPERTIES
+     VERSION ${FULLVER}
+     SOVERSION ${MAJORVER}
+     CLEAN_DIRECT_OUTPUT 1
+)
 
 INSTALL(TARGETS ${fw_name} DESTINATION lib)
 INSTALL(
