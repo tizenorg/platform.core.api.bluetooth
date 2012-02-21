@@ -43,30 +43,13 @@ typedef enum
 /**
  * @internal
  */
-struct bt_event_sig_event_slot_s
+typedef struct bt_event_sig_event_slot_s
 {
     int event_type;
     const void* callback;
     void* user_data;
-};
+} bt_event_sig_event_slot_s;
 
-/**
- * @internal
- * @brief Proxy of platform events.
- */
-void _bt_event_proxy(int event, bluetooth_event_param_t *param, void *user_data);
-
-/**
- * @internal
- * @brief Registers a new callback.
- */
-void _bt_set_cb(int events, void *callback, void *user_data);
-
-/**
- * @internal
- * @brief Removes callback function form callback registry.
- */
-void _bt_unset_cb(int events);
 
 /**
  * @internal
@@ -104,61 +87,11 @@ void _bt_convert_address_to_hex(bluetooth_device_address_t* addr_hex, const char
 
 /**
  * @internal
- * @brief Convert Bluetooth F/W bt_sdp_info_t to capi bt_device_sdp_info_s.
- */
-int _bt_get_bt_device_sdp_info_s(bt_device_sdp_info_s **dest, bt_sdp_info_t *source);
-
-
-/**
- * @internal
- * @brief Free bt_device_sdp_info_s.
- */
-void _bt_free_bt_device_sdp_info_s(bt_device_sdp_info_s *sdp_info);
-
-/**
- * @internal
- * @brief Convert bluetooth_discoverable_mode_t into bt_adapter_visibility_mode_e.
- */
-bt_adapter_visibility_mode_e _bt_get_bt_adapter_visibility_mode_e(bluetooth_discoverable_mode_t mode);
-
-/**
- * @internal
- * @brief Convert Bluetooth F/W bluetooth_device_info_t to capi bt_adapter_device_discovery_info_s.
- */
-int _bt_get_bt_adapter_device_discovery_info_s
-	(bt_adapter_device_discovery_info_s **discovery_info, bluetooth_device_info_t *source_info);
-
-/**
- * @internal
- * @brief Free bt_adapter_device_discovery_info_s.
- */
-void _bt_free_bt_adapter_device_discovery_info_s(bt_adapter_device_discovery_info_s *discovery_info);
-
-/**
- * @internal
- * @brief Get index of callback.
- */
-int _bt_get_cb_index(int event);
-
-/**
- * @internal
- * @brief Copy service list.
- */
-int _bt_copy_service_list(bt_device_info_s *bonded_device_info, bt_device_sdp_info_s *sdp_info);
-
-/**
- * @internal
  * @brief Convert error code to string.
  */
 char* _bt_convert_error_to_string(int error);
 
-/**
- * @internal
- * @brief Convert lower case to upper case in origin.
- */
-void _bt_convert_lower_to_upper(char* origin);
 
-	
 #ifdef __cplusplus
 }
 #endif
