@@ -1,8 +1,40 @@
+capi-network-bluetooth (0.1.2-1) unstable; urgency=low
+
+  * Fix the DTS testcase
+  * Git: api/bluetooth
+  * Tag: capi-network-bluetooth_0.1.2-1
+
+ -- DoHyun Pyun <dh79.pyun@samsung.com>  Thu, 12 Apr 2012 15:48:47 +0900
+
+capi-network-bluetooth (0.1.1-1) unstable; urgency=low
+
+  * Fix the crash in DTS test
+  * Git: api/bluetooth
+  * Tag: capi-network-bluetooth_0.1.1-1
+
+ -- DoHyun Pyun <dh79.pyun@samsung.com>  Thu, 29 Mar 2012 14:45:08 +0900
+
+capi-network-bluetooth (0.1.0-14) unstable; urgency=low
+
+  * Initialize the pointer to NULL after free
+  * Git: api/bluetooth
+  * Tag: capi-network-bluetooth_0.1.0-14
+
+ -- DoHyun Pyun <dh79.pyun@samsung.com>  Wed, 21 Mar 2012 17:15:59 +0900
+
+capi-network-bluetooth (0.1.0-13) unstable; urgency=low
+
+  * Correct dependent package
+  * Git: api/bluetooth
+  * Tag: capi-network-bluetooth_0.1.0-13
+
+ -- ByungWoo Lee <bw1212.lee@samsung.com>  Thu, 15 Mar 2012 13:13:36 +0900
+
 capi-network-bluetooth (0.1.0-12) unstable; urgency=low
 
   * Convert internal symbol to static
-  * Git: slp/api/bluetooth
-  * Tag: capi-network-bluetooth_0.1.0-12 
+  * Git: api/bluetooth
+  * Tag: capi-network-bluetooth_0.1.0-12
 
  -- ByungWoo Lee <bw1212.lee@samsung.com>  Mon, 20 Feb 2012 15:50:45 +0900
 
@@ -10,7 +42,7 @@ capi-network-bluetooth (0.1.0-11) unstable; urgency=low
 
   * Add versioning of library
   * Git: api/bluetooth
-  * Tag: capi-network-bluetooth_0.1.0-11 
+  * Tag: capi-network-bluetooth_0.1.0-11
 
  -- ByungWoo Lee <bw1212.lee@samsung.com>  Tue, 14 Feb 2012 17:09:56 +0900
 
@@ -18,7 +50,7 @@ capi-network-bluetooth (0.1.0-10) unstable; urgency=low
 
   * Correct typos
   * Git: api/bluetooth
-  * Tag: capi-network-bluetooth_0.1.0-10 
+  * Tag: capi-network-bluetooth_0.1.0-10
 
  -- ByungWoo Lee <bw1212.lee@samsung.com>  Fri, 03 Feb 2012 09:43:46 +0900
 
@@ -32,7 +64,7 @@ capi-network-bluetooth (0.1.0-9) unstable; urgency=low
 
 capi-network-bluetooth (0.0.1-1) unstable; urgency=low
 
-  * Initial release. 
+  * Initial release.
   * Git: api/bluetooth
   * Tag: capi-network-bluetooth_0.0.1-1
 

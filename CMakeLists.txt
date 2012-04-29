@@ -10,6 +10,7 @@ SET(INC_DIR include)
 INCLUDE_DIRECTORIES(${INC_DIR})
 
 SET(dependents "dlog glib-2.0 capi-base-common bluetooth-api")
+SET(pc_dependents "capi-base-common")
 
 INCLUDE(FindPkgConfig)
 pkg_check_modules(${fw_name} REQUIRED ${dependents})
@@ -50,9 +51,8 @@ INSTALL(
         )
 
 SET(PC_NAME ${fw_name})
-SET(PC_REQUIRED ${dependents})
+SET(PC_REQUIRED ${pc_dependents})
 SET(PC_LDFLAGS -l${fw_name})
-SET(PC_CFLAGS -I\${includedir}/network)
 
 CONFIGURE_FILE(
     capi-network-bluetooth.pc.in

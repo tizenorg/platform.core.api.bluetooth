@@ -6,12 +6,12 @@ Build-Depends: debhelper (>= 5), dlog-dev, capi-base-common-dev, libglib2.0-dev,
 
 Package: capi-network-bluetooth
 Architecture: any
-Depends: ${shilbs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: A Network Bluetooth library in Tizen Native API
 
 Package: capi-network-bluetooth-dev
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, capi-network-bluetooth (= ${Source-Version}), dlog-dev, capi-base-common-dev, libglib2.0-dev, libbluetooth-frwk-dev
+Depends: ${shlibs:Depends}, ${misc:Depends}, capi-network-bluetooth (= ${Source-Version}), capi-base-common-dev
 Description: A Network Bluetooth library in Tizen Native API (DEV)
 
 Package: capi-network-bluetooth-dbg

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 #ifndef __TIZEN_NETWORK_BLUETOOTH_H__
 #define __TIZEN_NETWORK_BLUETOOTH_H__
@@ -253,12 +253,12 @@ typedef enum
 	BT_MINOR_DEVICE_CLASS_HEATH_PULSE_OXIMETER = 0x14, /**< Pulse oximeter minor device class of health */
 	BT_MINOR_DEVICE_CLASS_HEATH_HEART_PULSE_RATE_MONITOR = 0x18, /**< Heart/Pulse rate monitor minor device class of health */
 	BT_MINOR_DEVICE_CLASS_HEATH_DATA_DISPLAY = 0x1C, /**< Health data display minor device class of health */
-	BT_MINOR_DEVICE_CLASS_HEATH_STEP_COUNTER = 0x20, /**< Step counter minor device class of health */    
-	BT_MINOR_DEVICE_CLASS_HEATH_BODY_COMPOSITION_ANALYZER = 0x24, /**< Body composition analyzer minor device class of health */    
-	BT_MINOR_DEVICE_CLASS_HEATH_PEAK_FLOW_MONITOR = 0x28, /**< Peak flow monitor minor device class of health */    
-	BT_MINOR_DEVICE_CLASS_HEATH_MEDICATION_MONITOR = 0x2C, /**< Medication monitor minor device class of health */    
-	BT_MINOR_DEVICE_CLASS_HEATH_KNEE_PROSTHESIS = 0x30, /**< Knee prosthesis minor device class of health */    
-	BT_MINOR_DEVICE_CLASS_HEATH_ANKLE_PROSTHESIS = 0x34, /**< Ankle prosthesis minor device class of health */    
+	BT_MINOR_DEVICE_CLASS_HEATH_STEP_COUNTER = 0x20, /**< Step counter minor device class of health */
+	BT_MINOR_DEVICE_CLASS_HEATH_BODY_COMPOSITION_ANALYZER = 0x24, /**< Body composition analyzer minor device class of health */
+	BT_MINOR_DEVICE_CLASS_HEATH_PEAK_FLOW_MONITOR = 0x28, /**< Peak flow monitor minor device class of health */
+	BT_MINOR_DEVICE_CLASS_HEATH_MEDICATION_MONITOR = 0x2C, /**< Medication monitor minor device class of health */
+	BT_MINOR_DEVICE_CLASS_HEATH_KNEE_PROSTHESIS = 0x30, /**< Knee prosthesis minor device class of health */
+	BT_MINOR_DEVICE_CLASS_HEATH_ANKLE_PROSTHESIS = 0x34, /**< Ankle prosthesis minor device class of health */
 } bt_minor_device_class_e;
 
 /**
@@ -278,7 +278,7 @@ typedef struct
 {
 	bt_major_device_class_e major_device_class;	/**< Major device class. */
 	bt_minor_device_class_e minor_device_class;	/**< Minor device class. */
-	int major_service_class_mask;	/**< Major service class mask. 
+	int major_service_class_mask;	/**< Major service class mask.
 	This value can be a combination of #bt_major_service_class_e like #BT_MAJOR_SERVICE_CLASS_RENDERING | #BT_MAJOR_SERVICE_CLASS_AUDIO */
 } bt_class_s;
 
@@ -311,7 +311,7 @@ typedef struct
 	char* remote_name;	/**< The name of remote device */
 	bt_class_s bt_class;	/**< The Bluetooth classes */
 	char** service_uuid;  /**< The UUID list of service */
-	int service_count;	/**< The number of services */     
+	int service_count;	/**< The number of services */
 	bool is_bonded;	/**< The bonding state */
 	bool is_connected;	/**< The connection state */
 	bool is_authorized;	/**< The authorization state */
@@ -322,7 +322,7 @@ typedef struct
  * @brief Service Discovery Protocol (SDP) data structure.
  *
  * @details This protocol is used for discovering available services or pear device,
- * and finding one to connect with. 
+ * and finding one to connect with.
  *
  * @see bt_device_service_searched_cb()
  */
@@ -371,7 +371,7 @@ typedef struct
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_MODULE
- * @brief  Called when the Bluetooth adapter state changes. 
+ * @brief  Called when the Bluetooth adapter state changes.
  * @param[in]   result  The result of the adapter state changing
  * @param[in]   adapter_state  The adapter state to be changed
  * @param[in]   user_data  The user data passed from the callback registration function
@@ -379,13 +379,13 @@ typedef struct
  * @see bt_adapter_enable()
  * @see bt_adapter_disable()
  * @see bt_adapter_set_state_changed_cb()
- * @see bt_adapter_unset_state_changed_cb() 
+ * @see bt_adapter_unset_state_changed_cb()
  */
 typedef void (*bt_adapter_state_changed_cb)(int result, bt_adapter_state_e adapter_state, void *user_data);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_MODULE
- * @brief  Called when adapter name changes. 
+ * @brief  Called when adapter name changes.
  * @param[in]   device_name	The name of the Bluetooth device to be changed
  * @param[in]   user_data	The user data passed from the callback registration function
  * @pre This function will be invoked when the name of Bluetooth adapter changes
@@ -398,14 +398,14 @@ typedef void (*bt_adapter_name_changed_cb)(char *device_name, void *user_data);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_MODULE
- * @brief  Called when the visibility mode changes. 
+ * @brief  Called when the visibility mode changes.
  * @param[in] result The result of the visibility mode changing
  * @param[in] visibility_mode The visibility mode to be changed
  * @param[in] user_data The user data passed from the callback registration function
- * 
+ *
  * @pre This function will be invoked when the visibility of Bluetooth adapter changes
  * if you register this callback using bt_adapter_set_visibility_mode_changed_cb().
- * 
+ *
  * @see bt_adapter_set_visibility()
  * @see bt_adapter_set_visibility_mode_changed_cb()
  * @see bt_adapter_unset_visibility_mode_changed_cb()
@@ -415,26 +415,26 @@ typedef void (*bt_adapter_visibility_mode_changed_cb)
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_MODULE
- * @brief  Called when the state of device discovery changes. 
+ * @brief  Called when the state of device discovery changes.
  *
- * @remarks If \a discovery_state is #BT_ADAPTER_DEVICE_DISCOVERY_FOUND, 
+ * @remarks If \a discovery_state is #BT_ADAPTER_DEVICE_DISCOVERY_FOUND,
  * then you can get some information, such as remote device address, remote device name, rssi, and bonding state.
  *
  * @param[in] result The result of the device discovery
  * @param[in] discovery_state The discovery state to be changed
  * @param[in] device_info The information of the discovered device \n
- * 					If \a discovery_state is #BT_ADAPTER_DEVICE_DISCOVERY_STARTED or 
+ *					If \a discovery_state is #BT_ADAPTER_DEVICE_DISCOVERY_STARTED or
  * #BT_ADAPTER_DEVICE_DISCOVERY_FINISHED, then \a device_info is NULL.
  * @param[in] user_data The user data passed from the callback registration function
- * 
- * @pre Either bt_adapter_start_device_discovery() or bt_adapter_stop_device_discovery() will invoke this function 
+ *
+ * @pre Either bt_adapter_start_device_discovery() or bt_adapter_stop_device_discovery() will invoke this function
  * if you register this callback using bt_adapter_set_device_discovery_state_changed_cb().
  *
- * @see bt_adapter_start_device_discovery() 
+ * @see bt_adapter_start_device_discovery()
  * @see bt_adapter_stop_device_discovery()
  * @see bt_adapter_set_device_discovery_state_changed_cb()
  * @see bt_adapter_unset_device_discovery_state_changed_cb()
- * 
+ *
  */
 typedef void (*bt_adapter_device_discovery_state_changed_cb)
 	(int result, bt_adapter_device_discovery_state_e discovery_state, bt_adapter_device_discovery_info_s *discovery_info, void *user_data);
@@ -445,12 +445,12 @@ typedef void (*bt_adapter_device_discovery_state_changed_cb)
  *
  * @param[in] device_info The bonded device information
  * @param[in] user_data The user data passed from the foreach function
- * @return @c true to continue with the next iteration of the loop, 
+ * @return @c true to continue with the next iteration of the loop,
  * \n @c false to break out of the loop.
  * @pre bt_adapter_foreach_bonded_device() will invoke this function.
- * 
+ *
  * @see bt_adapter_foreach_bonded_device()
- * 
+ *
  */
 typedef bool (*bt_adapter_bonded_device_cb)(bt_device_info_s* device_info, void *user_data);
 
@@ -458,7 +458,7 @@ typedef bool (*bt_adapter_bonded_device_cb)(bt_device_info_s* device_info, void 
  * @ingroup CAPI_NETWORK_BLUETOOTH_DEVICE_MODULE
  * @brief Called when the process of creating bond finishes.
  * @remarks If the remote user does not respond within 60 seconds, a time out will happen with #BT_ERROR_TIMED_OUT result code.\n
- * If bt_device_cancel_bonding() is called and it returns #BT_ERROR_NONE, then this callback function will be called 
+ * If bt_device_cancel_bonding() is called and it returns #BT_ERROR_NONE, then this callback function will be called
  * with #BT_ERROR_CANCELLED result. \n
  * If creating a bond succeeds but service search fails, then this callback will be called with #BT_ERROR_SERVICE_SEARCH_FAILED.
  * In this case, you should try service search again by bt_device_start_service_search() to get the supported service list.
@@ -466,11 +466,11 @@ typedef bool (*bt_adapter_bonded_device_cb)(bt_device_info_s* device_info, void 
  * @param[in] result The result of the bonding device
  * @param[in] device_info The device information which you creates bond with
  * @param[in] user_data The user data passed from the callback registration function
- * 
- * @pre Either bt_device_create_bond() will invoke this function 
+ *
+ * @pre Either bt_device_create_bond() will invoke this function
  * if you register this callback using bt_device_set_bond_created_cb().
  *
- * @see bt_device_create_bond() 
+ * @see bt_device_create_bond()
  * @see bt_device_cancel_bonding()
  * @see bt_device_set_bond_created_cb()
  * @see bt_device_unset_bond_created_cb()
@@ -479,13 +479,13 @@ typedef void (*bt_device_bond_created_cb)(int result, bt_device_info_s *device_i
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DEVICE_MODULE
- * @brief  Called when the bond destroys. 
+ * @brief  Called when the bond destroys.
  * @param[in] result The result that a bond is destroyed
  * @param[in] remote_address The address of the remote Bluetooth device to destroy bond with
  * @param[in] user_data The user data passed from the callback registration function
  * @pre bt_device_destroy_bond() will invoke this function
  * if you register this callback using bt_device_set_bond_destroyed_cb().
- * 
+ *
  * @see bt_device_destroy_bond()
  * @see bt_device_set_bond_destroyed_cb()
  * @see bt_device_unset_bond_destroyed_cb()
@@ -494,14 +494,14 @@ typedef void (*bt_device_bond_destroyed_cb)(int result, char *remote_address, vo
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DEVICE_MODULE
- * @brief  Called when the authorization of device changes. 
+ * @brief  Called when the authorization of device changes.
  * @param[in] authorization The authorization of device
  * @param[in] remote_address The address of the remote Bluetooth device which is (un)authorized
  * @param[in] user_data The user data passed from the callback registration function
  * @pre bt_device_set_authorization() will invoke this function if you register this callback using bt_device_set_authorization_changed_cb().
  *
  * @see bt_device_set_authorization()
- * @see #bt_device_set_authorization_changed_cb() 
+ * @see #bt_device_set_authorization_changed_cb()
  * @see #bt_device_unset_authorization_changed_cb()
  */
 typedef void (*bt_device_authorization_changed_cb)
@@ -509,14 +509,14 @@ typedef void (*bt_device_authorization_changed_cb)
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DEVICE_MODULE
- * @brief  Called when the process of service search finishes. 
- * @remark If bt_device_cancel_service_search() is called and it returns #BT_ERROR_NONE, 
+ * @brief  Called when the process of service search finishes.
+ * @remark If bt_device_cancel_service_search() is called and it returns #BT_ERROR_NONE,
  * then this callback function will be called with #BT_ERROR_CANCELLED result.
  *
  * @param[in] result The result of the service searching
  * @param[in] sdp_info The structure of service lists found on a device
  * @param[in] user_data The user data passed from the callback registration function
- * @pre Either bt_device_start_service_search() will invoke this function 
+ * @pre Either bt_device_start_service_search() will invoke this function
  * if you register this callback using  bt_device_set_service_searched_cb().
  *
  * @see bt_device_start_service_search()
@@ -527,15 +527,15 @@ typedef void (*bt_device_authorization_changed_cb)
  */
 typedef void (*bt_device_service_searched_cb)(int result, bt_device_sdp_info_s *sdp_info, void *user_data);
 
-/** 
+/**
  * @ingroup CAPI_NETWORK_BLUETOOTH_SOCKET_MODULE
- * @brief Called when you receive data. 
+ * @brief Called when you receive data.
  *
  * @param[in] data The received data from the remote device
  * @param[in] user_data The user data passed from the callback registration function
  *
  * @pre When the connected remote Bluetooth device invokes bt_socket_send_data(),
- *		this function will be invoked if you register this function using bt_socket_set_data_received_cb(). 
+ *		this function will be invoked if you register this function using bt_socket_set_data_received_cb().
  *
  * @see bt_socket_set_data_received_cb()
  * @see bt_socket_unset_data_received_cb()
@@ -552,7 +552,7 @@ typedef void (*bt_socket_data_received_cb)(bt_socket_received_data_s *data, void
  * @param[in] connection_state The connection state
  * @param[in] connection The connection information which is established or disconnected
  * @param[in] user_data The user data passed from the callback registration function
- * @pre Either bt_socket_listen_and_accept_rfcomm() or bt_socket_connect_rfcomm() will invoke this function 
+ * @pre Either bt_socket_listen_and_accept_rfcomm() or bt_socket_connect_rfcomm() will invoke this function
  * if you register this callback using bt_socket_set_connection_state_changed_cb(). \n
  * If the remote Bluetooth device is connected when bt_socket_destroy_rfcomm() is called, then bt_socket_connection_state_changed_cb() will be invoked.
  *
@@ -585,7 +585,7 @@ int bt_initialize(void);
  * @ingroup CAPI_NETWORK_BLUETOOTH_MODULE
  * @brief Releases all resources of the Bluetooth API.
  *
- * @remarks This function must be called if Bluetooth API is no longer needed. 
+ * @remarks This function must be called if Bluetooth API is no longer needed.
  *
  * @return 0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
@@ -603,7 +603,7 @@ int bt_deinitialize(void);
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_MODULE
  * @brief Enables the local Bluetooth adapter, asynchronously.
  *
- * @details This function enables Bluetooth protocol stack and hardware. 
+ * @details This function enables Bluetooth protocol stack and hardware.
  *
  * @return 0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
@@ -618,7 +618,7 @@ int bt_deinitialize(void);
  * @see bt_adapter_get_state()
  * @see bt_adapter_disable()
  * @see bt_adapter_set_state_changed_cb()
- * @see bt_adapter_unset_state_changed_cb() 
+ * @see bt_adapter_unset_state_changed_cb()
  * @see bt_adapter_state_changed_cb()
  *
  */
@@ -626,9 +626,9 @@ int bt_adapter_enable(void);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_MODULE
- * @brief Disables the local Bluetooth adapter, asynchronously. 
+ * @brief Disables the local Bluetooth adapter, asynchronously.
  *
- * @details This function disables Bluetooth protocol stack and hardware. 
+ * @details This function disables Bluetooth protocol stack and hardware.
  *
  * @remarks You should disable Bluetooth adapter to switch off Bluetooth chip, which is helpful for saving power.
  *
@@ -663,7 +663,7 @@ int bt_adapter_disable(void);
  *
  * @pre Bluetooth service must be initialized with bt_initialize().
  *
- * @see bt_initialize() 
+ * @see bt_initialize()
  * @see bt_adapter_enable()
  * @see bt_adapter_disable()
  */
@@ -680,13 +680,13 @@ int bt_adapter_get_state(bt_adapter_state_e *adapter_state);
  * @return 0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter 
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
  * @retval #BT_ERROR_NOT_ENABLED  Not enabled
  * @retval #BT_ERROR_OUT_OF_MEMORY  Out of memory
- * @retval #BT_ERROR_OPERATION_FAILED Operation failed 
+ * @retval #BT_ERROR_OPERATION_FAILED Operation failed
  * @pre The state of local Bluetooth must be #BT_ADAPTER_ENABLED with bt_adapter_enable().
  * @see bt_adapter_enable()
- * @see bt_adapter_get_name()  
+ * @see bt_adapter_get_name()
  */
 int bt_adapter_get_address(char **local_address);
 
@@ -694,7 +694,7 @@ int bt_adapter_get_address(char **local_address);
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_MODULE
  * @brief Gets the name of local Bluetooth adapter.
  *
- * @details Use this function to get the friendly name associated with Bluetooth 
+ * @details Use this function to get the friendly name associated with Bluetooth
  * device, retrieved by the remote Bluetooth devices.
  *
  * @remarks The @a local_name must be released with free() by you.
@@ -707,21 +707,21 @@ int bt_adapter_get_address(char **local_address);
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
  * @retval #BT_ERROR_NOT_ENABLED  Not enabled
  * @retval #BT_ERROR_OUT_OF_MEMORY  Out of memory
- * @retval #BT_ERROR_OPERATION_FAILED  Operation failed 
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
  *
  * @pre The state of local Bluetooth must be #BT_ADAPTER_ENABLED with bt_adapter_enable().
- * 
- * @see bt_adapter_enable() 
- * @see bt_adapter_set_name() 
+ *
+ * @see bt_adapter_enable()
+ * @see bt_adapter_set_name()
  */
 int bt_adapter_get_name(char **local_name);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_MODULE
- * @brief Sets the name of local Bluetooth adapter. 
+ * @brief Sets the name of local Bluetooth adapter.
  *
  * @param[in] local_name The name of the Bluetooth device. \n
- * 				The maximum length is 248 characters.
+ *				The maximum length is 248 characters.
  *
  * @return 0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
@@ -732,12 +732,12 @@ int bt_adapter_get_name(char **local_name);
  *
  * @pre The state of local Bluetooth must be #BT_ADAPTER_ENABLED with bt_adapter_enable().
  * @post bt_adapter_name_changed_cb() will be invoked if this function returns #BT_ERROR_NONE.
- * 
+ *
  * @see bt_adapter_enable()
  * @see bt_adapter_get_name()
  * @see bt_adapter_name_changed_cb()
  * @see bt_adapter_set_name_changed_cb()
- * @see bt_adapter_unset_name_changed_cb() 
+ * @see bt_adapter_unset_name_changed_cb()
  */
 int bt_adapter_set_name(const char *local_name);
 
@@ -754,23 +754,23 @@ int bt_adapter_set_name(const char *local_name);
  * @retval #BT_ERROR_NOT_ENABLED  Not enabled
  * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
  *
- * @pre The state of local Bluetooth must be #BT_ADAPTER_ENABLED with bt_adapter_enable(). 
+ * @pre The state of local Bluetooth must be #BT_ADAPTER_ENABLED with bt_adapter_enable().
  *
- * @see bt_adapter_enable() 
+ * @see bt_adapter_enable()
  * @see bt_adapter_set_visibility()
  */
 int bt_adapter_get_visibility(bt_adapter_visibility_mode_e *mode);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_MODULE
- * @brief Sets the visibility mode. 
+ * @brief Sets the visibility mode.
  *
- * @remarks #BT_ADAPTER_VISIBILITY_MODE_LIMITED_DISCOVERABLE will change to #BT_ADAPTER_VISIBILITY_MODE_NON_DISCOVERABLE 
+ * @remarks #BT_ADAPTER_VISIBILITY_MODE_LIMITED_DISCOVERABLE will change to #BT_ADAPTER_VISIBILITY_MODE_NON_DISCOVERABLE
  * after the given @a timeout_sec goes.
  *
  * @param[in] discoverable_mode The Bluetooth discoverable mode to set
  * @param[in] timeout_sec The discoverable time duration (in seconds)
- * 					@a timeout_sec is used only for #BT_ADAPTER_VISIBILITY_MODE_LIMITED_DISCOVERABLE mode.
+ *					@a timeout_sec is used only for #BT_ADAPTER_VISIBILITY_MODE_LIMITED_DISCOVERABLE mode.
  *
  * @return 0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
@@ -779,22 +779,22 @@ int bt_adapter_get_visibility(bt_adapter_visibility_mode_e *mode);
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
  * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
  *
- * @pre The state of local Bluetooth must be #BT_ADAPTER_ENABLED with bt_adapter_enable(). 
- * @post bt_adapter_visibility_mode_changed_cb() will be invoked if this function returns #BT_ERROR_NONE. 
+ * @pre The state of local Bluetooth must be #BT_ADAPTER_ENABLED with bt_adapter_enable().
+ * @post bt_adapter_visibility_mode_changed_cb() will be invoked if this function returns #BT_ERROR_NONE.
  *
  * @see bt_adapter_enable()
  * @see bt_adapter_get_visibility()
  * @see bt_adapter_visibility_mode_changed_cb()
  * @see bt_adapter_set_visibility_mode_changed_cb()
- * @see bt_adapter_unset_visibility_mode_changed_cb() 
+ * @see bt_adapter_unset_visibility_mode_changed_cb()
  */
 int bt_adapter_set_visibility(bt_adapter_visibility_mode_e discoverable_mode, int timeout_sec);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_MODULE
- * @brief Starts the device discovery, asynchronously. 
+ * @brief Starts the device discovery, asynchronously.
  *
- * @details If a device is discovered, bt_adapter_device_discovery_state_changed_cb() will be invoked 
+ * @details If a device is discovered, bt_adapter_device_discovery_state_changed_cb() will be invoked
  * with #BT_ADAPTER_DEVICE_DISCOVERY_FOUND, and then bt_adapter_device_discovery_state_changed_cb()
  * will be called with #BT_ADAPTER_DEVICE_DISCOVERY_FINISHED in case of the completion or cancellation of the discovery.
  *
@@ -805,10 +805,10 @@ int bt_adapter_set_visibility(bt_adapter_visibility_mode_e discoverable_mode, in
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_NOT_ENABLED  Not enabled
- * @retval #BT_ERROR_NOW_IN_PROGRESS  Operation is now in progress 
+ * @retval #BT_ERROR_NOW_IN_PROGRESS  Operation is now in progress
  * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
  *
- * @pre The state of local Bluetooth must be #BT_ADAPTER_ENABLED with bt_adapter_enable(). 
+ * @pre The state of local Bluetooth must be #BT_ADAPTER_ENABLED with bt_adapter_enable().
  * @post This function invokes bt_adapter_device_discovery_state_changed_cb().
  *
  * @see bt_adapter_enable()
@@ -816,15 +816,15 @@ int bt_adapter_set_visibility(bt_adapter_visibility_mode_e discoverable_mode, in
  * @see bt_adapter_stop_device_discovery()
  * @see bt_adapter_device_discovery_state_changed_cb()
  * @see bt_adapter_set_device_discovery_state_changed_cb()
- * @see bt_adapter_unset_device_discovery_state_changed_cb() 
+ * @see bt_adapter_unset_device_discovery_state_changed_cb()
  */
 int bt_adapter_start_device_discovery(void);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_MODULE
- * @brief Stops the device discovery, asynchronously. 
- * @remarks The device discovery process will take 10 ~ 20 seconds to get all the devices in vicinity. 
- * 
+ * @brief Stops the device discovery, asynchronously.
+ * @remarks The device discovery process will take 10 ~ 20 seconds to get all the devices in vicinity.
+ *
  * @return 0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
@@ -832,10 +832,10 @@ int bt_adapter_start_device_discovery(void);
  * @retval #BT_ERROR_NOT_IN_PROGRESS  Operation is not in progress
  * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
  *
- * @pre The device discovery must be in progress with bt_adapter_start_device_discovery(). 
+ * @pre The device discovery must be in progress with bt_adapter_start_device_discovery().
  * @post This function invokes bt_adapter_device_discovery_state_changed_cb().
  *
- * @see bt_adapter_is_discovering() 
+ * @see bt_adapter_is_discovering()
  * @see bt_adapter_start_device_discovery()
  * @see bt_adapter_set_device_discovery_state_changed_cb()
  * @see bt_adapter_unset_device_discovery_state_changed_cb()
@@ -847,8 +847,8 @@ int bt_adapter_stop_device_discovery(void);
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_MODULE
  * @brief Checks for the device discovery is in progress or not.
  *
- * @remarks If Bluetooth discovery is in progress, other operations are not allowed and 
- * you have to either stop the discovery operation, or wait for it to be finished, 
+ * @remarks If Bluetooth discovery is in progress, other operations are not allowed and
+ * you have to either stop the discovery operation, or wait for it to be finished,
  * before performing other operations.
 
  * @param[out] is_discovering The discovering status: (@c true = in progress , @c  false = not in progress )
@@ -860,8 +860,8 @@ int bt_adapter_stop_device_discovery(void);
  * @retval #BT_ERROR_NOT_ENABLED  Not enabled
  * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
  *
- * @pre The state of local Bluetooth must be #BT_ADAPTER_ENABLED with bt_adapter_enable(). 
- * 
+ * @pre The state of local Bluetooth must be #BT_ADAPTER_ENABLED with bt_adapter_enable().
+ *
  * @see bt_adapter_enable()
  * @see bt_adapter_start_device_discovery()
  * @see bt_adapter_stop_device_discovery()
@@ -870,8 +870,8 @@ int bt_adapter_is_discovering(bool* is_discovering);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_MODULE
- * @brief Retrieves the device information of all bonded devices. 
- * 
+ * @brief Retrieves the device information of all bonded devices.
+ *
  * @param [in] callback The callback function to invoke
  * @param [in] user_data The user data passed from the foreach function
  *
@@ -879,11 +879,11 @@ int bt_adapter_is_discovering(bool* is_discovering);
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
- * @retval #BT_ERROR_OUT_OF_MEMORY  Out of memory 
+ * @retval #BT_ERROR_OUT_OF_MEMORY  Out of memory
  * @retval #BT_ERROR_NOT_ENABLED  Not enabled
  * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
  *
- * @pre The state of local Bluetooth must be #BT_ADAPTER_ENABLED with bt_adapter_enable(). 
+ * @pre The state of local Bluetooth must be #BT_ADAPTER_ENABLED with bt_adapter_enable().
  * @post This function invokes bt_adapter_bonded_device_cb().
  *
  * @see bt_adapter_bonded_device_cb()
@@ -903,7 +903,7 @@ int bt_adapter_foreach_bonded_device(bt_adapter_bonded_device_cb callback, void 
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
  *
- * @pre The Bluetooth service must be initialized with bt_initialize(). 
+ * @pre The Bluetooth service must be initialized with bt_initialize().
  * @post bt_adapter_state_changed_cb() will be invoked.
  *
  * @see bt_initialize()
@@ -921,7 +921,7 @@ int bt_adapter_set_state_changed_cb(bt_adapter_state_changed_cb callback, void *
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  *
- * @pre The Bluetooth service must be initialized with bt_initialize(). 
+ * @pre The Bluetooth service must be initialized with bt_initialize().
  *
  * @see bt_initialize()
  * @see bt_adapter_set_state_changed_cb()
@@ -940,10 +940,10 @@ int bt_adapter_unset_state_changed_cb(void);
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
  *
- * @pre The Bluetooth service must be initialized with bt_initialize(). 
+ * @pre The Bluetooth service must be initialized with bt_initialize().
  * @post  bt_adapter_name_changed_cb() will be invoked.
  *
- * @see bt_initialize() 
+ * @see bt_initialize()
  * @see bt_adapter_name_changed_cb()
  * @see bt_adapter_unset_name_changed_cb()
  */
@@ -976,10 +976,10 @@ int bt_adapter_unset_name_changed_cb(void);
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
  *
- * @pre The Bluetooth service must be initialized with bt_initialize(). 
+ * @pre The Bluetooth service must be initialized with bt_initialize().
  * @post bt_adapter_visibility_mode_changed_cb() will be invoked.
  *
- * @see bt_initialize() 
+ * @see bt_initialize()
  * @see bt_adapter_visibility_mode_changed_cb()
  * @see bt_adapter_unset_visibility_mode_changed_cb()
  */
@@ -993,9 +993,9 @@ int bt_adapter_set_visibility_mode_changed_cb(bt_adapter_visibility_mode_changed
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  *
- * @pre The Bluetooth service must be initialized with bt_initialize(). 
+ * @pre The Bluetooth service must be initialized with bt_initialize().
  *
- * @see bt_initialize() 
+ * @see bt_initialize()
  * @see bt_adapter_set_visibility_mode_changed_cb()
  */
 int bt_adapter_unset_visibility_mode_changed_cb(void);
@@ -1012,13 +1012,13 @@ int bt_adapter_unset_visibility_mode_changed_cb(void);
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
  *
- * @pre The Bluetooth service must be initialized with bt_initialize(). 
+ * @pre The Bluetooth service must be initialized with bt_initialize().
  * @post bt_adapter_device_discovery_state_changed_cb() will be invoked.
  *
- * @see bt_initialize() 
+ * @see bt_initialize()
  * @see bt_adapter_device_discovery_state_changed_cb()
  * @see bt_adapter_set_device_discovery_state_changed_cb()
- * @see bt_adapter_unset_device_discovery_state_changed_cb() 
+ * @see bt_adapter_unset_device_discovery_state_changed_cb()
  */
 int bt_adapter_set_device_discovery_state_changed_cb(bt_adapter_device_discovery_state_changed_cb callback, void *user_data);
 
@@ -1032,15 +1032,15 @@ int bt_adapter_set_device_discovery_state_changed_cb(bt_adapter_device_discovery
  *
  * @pre The Bluetooth service must be initialized with bt_initialize().
  *
- * @see bt_initialize() 
- * @see bt_adapter_set_device_discovery_state_changed_cb()  
+ * @see bt_initialize()
+ * @see bt_adapter_set_device_discovery_state_changed_cb()
  */
 int bt_adapter_unset_device_discovery_state_changed_cb(void);
 
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DEVICE_MODULE
- * @brief Creates a bond with a remote Bluetooth device, asynchronously. 
+ * @brief Creates a bond with a remote Bluetooth device, asynchronously.
  *
  * @remarks A bond can be destroyed by bt_device_destroy_bond().\n
  * The bonding request can be cancelled by bt_device_cancel_bonding().
@@ -1065,34 +1065,34 @@ int bt_adapter_unset_device_discovery_state_changed_cb(void);
  * @see bt_device_cancel_bonding()
  * @see bt_device_destroy_bond()
  * @see bt_device_set_bond_created_cb()
- * @see bt_device_unset_bond_created_cb() 
+ * @see bt_device_unset_bond_created_cb()
  */
 int bt_device_create_bond(const char *remote_address);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DEVICE_MODULE
- * @brief Cancels the bonding process. 
+ * @brief Cancels the bonding process.
  *
- * @remakrs Use this function when the remote Bluetooth device is not responding to the 
+ * @remakrs Use this function when the remote Bluetooth device is not responding to the
  * bond request or you wish to cancel the bonding request.
- * 
+ *
  * @return 0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_NOT_ENABLED  Not enabled
  * @retval #BT_ERROR_NOT_IN_PROGRESS  Operation not in progress
- * @pre The creating a bond must be in progress by bt_device_create_bond(). 
+ * @pre The creating a bond must be in progress by bt_device_create_bond().
  *
  * @see bt_device_create_bond()
- * @see bt_device_bond_created_cb() 
+ * @see bt_device_bond_created_cb()
  * @see bt_device_set_bond_created_cb()
- * @see bt_device_unset_bond_created_cb() 
+ * @see bt_device_unset_bond_created_cb()
  */
 int bt_device_cancel_bonding(void);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DEVICE_MODULE
- * @brief Destroys the bond, asynchronously. 
+ * @brief Destroys the bond, asynchronously.
  *
  * @param[in] remote_address The address of the remote Bluetooth device to remove bonding
  *
@@ -1106,20 +1106,20 @@ int bt_device_cancel_bonding(void);
  * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
  *
  * @pre The state of local Bluetooth must be #BT_ADAPTER_ENABLED with bt_adapter_enable().
- * @pre The bond with the remote device must be created with bt_device_create_bond(). 
+ * @pre The bond with the remote device must be created with bt_device_create_bond().
  * @post This function invokes bt_device_bond_destroyed_cb().
  *
  * @see bt_adapter_enable()
  * @see bt_device_create_bond()
  * @see bt_device_bond_destroyed_cb()
  * @see bt_device_set_bond_destroyed_cb()
- * @see bt_device_unset_bond_destroyed_cb() 
+ * @see bt_device_unset_bond_destroyed_cb()
  */
 int bt_device_destroy_bond(const char *remote_address);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DEVICE_MODULE
- * @brief Sets an alias for the bonded device. 
+ * @brief Sets an alias for the bonded device.
  *
  * @param[in] remote_address The address of the remote Bluetooth device
  * @param[in] alias The alias of the remote Bluetooth device
@@ -1128,50 +1128,50 @@ int bt_device_destroy_bond(const char *remote_address);
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
- * @retval #BT_ERROR_NOT_ENABLED  Not enabled 
- * @retval #BT_ERROR_REMOTE_DEVICE_NOT_BONDED  Remote device not bonded 
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_BONDED  Remote device not bonded
  * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
  *
  * @pre The state of local Bluetooth must be #BT_ADAPTER_ENABLED with bt_adapter_enable().
- * @pre The bond with the remote device must be created with bt_device_create_bond(). 
+ * @pre The bond with the remote device must be created with bt_device_create_bond().
  *
  * @see bt_adapter_enable()
- * @see bt_device_create_bond() 
+ * @see bt_device_create_bond()
  */
 int bt_device_set_alias(const char *remote_address, const char *alias);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DEVICE_MODULE
- * @brief Sets the authorization of a bonded device, asynchronously. 
+ * @brief Sets the authorization of a bonded device, asynchronously.
  *
  * @remarks Once a device is authorized, you don't need to receive a confirmation.
- * 
+ *
  * @param[in] remote_address The address of the remote Bluetooth device to authorize
  * @param[in] authorization The Bluetooth authorization state
- * 
+ *
  * @return 0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
  * @retval #BT_ERROR_NOT_ENABLED  Not enabled
- * @retval #BT_ERROR_REMOTE_DEVICE_NOT_BONDED  Remote device not bonded 
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_BONDED  Remote device not bonded
  * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
  *
  * @pre The state of local Bluetooth must be #BT_ADAPTER_ENABLED with bt_adapter_enable().
- * @pre The bond with the remote device must be created with bt_device_create_bond(). 
+ * @pre The bond with the remote device must be created with bt_device_create_bond().
  * @post bt_device_authorization_changed_cb() will be invoked.
  *
  * @see bt_adapter_enable()
- * @see bt_device_create_bond()  
+ * @see bt_device_create_bond()
  * @see bt_device_authorization_changed_cb()
  * @see bt_device_set_authorization_changed_cb()
- * @see bt_device_unset_authorization_changed_cb() 
+ * @see bt_device_unset_authorization_changed_cb()
  */
 int bt_device_set_authorization(const char *remote_address, bt_device_authorization_e authorization_state);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DEVICE_MODULE
- * @brief Starts the search for services supported by the specified device, asynchronously.  
+ * @brief Starts the search for services supported by the specified device, asynchronously.
  *
  * @remarks If creating a bond succeeds, which means bt_device_bond_created_cb() is called with result #BT_ERROR_NONE,
  * then you don't need to run this function.\n
@@ -1187,20 +1187,20 @@ int bt_device_set_authorization(const char *remote_address, bt_device_authorizat
  * @retval #BT_ERROR_NOT_ENABLED  Not enabled
  * @retval #BT_ERROR_REMOTE_DEVICE_NOT_BONDED  Remote device not bonded
  * @retval #BT_ERROR_SERVICE_SEARCH_FAILED  Service search failed
- * 
+ *
  * @pre The state of local Bluetooth must be #BT_ADAPTER_ENABLED with bt_adapter_enable().
- * @pre The remote device must be discoverable with bt_adapter_start_device_discovery(). 
- * @pre The bond with the remote device must be created with bt_device_create_bond(). 
+ * @pre The remote device must be discoverable with bt_adapter_start_device_discovery().
+ * @pre The bond with the remote device must be created with bt_device_create_bond().
  * @post This function invokes bt_device_service_searched_cb().
  *
  * @see bt_adapter_enable()
  * @see bt_adapter_start_device_discovery()
- * @see bt_device_create_bond() 
+ * @see bt_device_create_bond()
  * @see bt_device_bond_created_cb()
  * @see bt_device_service_searched_cb()
  * @see bt_device_cancel_service_search()
  * @see bt_device_set_service_searched_cb()
- * @see bt_device_unset_service_searched_cb() 
+ * @see bt_device_unset_service_searched_cb()
  */
 int bt_device_start_service_search(const char *remote_address);
 
@@ -1212,16 +1212,16 @@ int bt_device_start_service_search(const char *remote_address);
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_NOT_ENABLED  Not enabled
- * @retval #BT_ERROR_REMOTE_DEVICE_NOT_BONDED  Remote device not bonded 
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_BONDED  Remote device not bonded
  * @retval #BT_ERROR_NOT_IN_PROGRESS  Operation not in progress
  * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
  *
- * @pre The service search must be in progress by bt_device_start_service_search(). 
+ * @pre The service search must be in progress by bt_device_start_service_search().
  *
  * @see bt_device_start_service_search()
- * @see bt_device_service_searched_cb() 
+ * @see bt_device_service_searched_cb()
  * @see bt_device_set_service_searched_cb()
- * @see bt_device_unset_service_searched_cb() 
+ * @see bt_device_unset_service_searched_cb()
  */
 int bt_device_cancel_service_search(void);
 
@@ -1234,8 +1234,8 @@ int bt_device_cancel_service_search(void);
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
- * @pre The Bluetooth service must be initialized with bt_initialize(). 
- * @post  bt_device_bond_created_cb() will be invoked. 
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ * @post  bt_device_bond_created_cb() will be invoked.
  * @see bt_initialize()
  * @see bt_device_bond_created_cb()
  * @see bt_device_unset_bond_created_cb()
@@ -1248,8 +1248,8 @@ int bt_device_set_bond_created_cb(bt_device_bond_created_cb callback, void *user
  * @return	0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @pre The Bluetooth service must be initialized with bt_initialize(). 
- * @see bt_initialize() 
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ * @see bt_initialize()
  * @see bt_device_set_bond_created_cb()
  */
 int bt_device_unset_bond_created_cb(void);
@@ -1263,9 +1263,9 @@ int bt_device_unset_bond_created_cb(void);
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
- * @pre The Bluetooth service must be initialized with bt_initialize(). 
- * @post  bt_device_bond_destroyed_cb() will be invoked. 
- * @see bt_initialize() 
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ * @post  bt_device_bond_destroyed_cb() will be invoked.
+ * @see bt_initialize()
  * @see bt_device_bond_destroyed_cb()
  * @see bt_device_unset_bond_destroyed_cb()
  */
@@ -1277,8 +1277,8 @@ int bt_device_set_bond_destroyed_cb(bt_device_bond_destroyed_cb callback, void *
  * @return	0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @pre The Bluetooth service must be initialized with bt_initialize(). 
- * @see bt_initialize() 
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ * @see bt_initialize()
  * @see bt_device_set_bond_destroyed_cb()
  */
 int bt_device_unset_bond_destroyed_cb(void);
@@ -1292,11 +1292,11 @@ int bt_device_unset_bond_destroyed_cb(void);
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
- * @pre The Bluetooth service must be initialized with bt_initialize(). 
- * @post  bt_device_authorization_changed_cb() will be invoked. 
- * @see bt_initialize() 
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ * @post  bt_device_authorization_changed_cb() will be invoked.
+ * @see bt_initialize()
  * @see bt_device_authorization_changed_cb()
- * @see bt_device_set_authorization_changed_cb() 
+ * @see bt_device_set_authorization_changed_cb()
  * @see bt_device_unset_authorization_changed_cb()
  */
 int bt_device_set_authorization_changed_cb(bt_device_authorization_changed_cb callback, void *user_data);
@@ -1307,8 +1307,8 @@ int bt_device_set_authorization_changed_cb(bt_device_authorization_changed_cb ca
  * @return	0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @pre The Bluetooth service must be initialized with bt_initialize(). 
- * @see bt_initialize() 
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ * @see bt_initialize()
  * @see bt_device_set_authorization_changed_cb()
  */
 int bt_device_unset_authorization_changed_cb(void);
@@ -1322,9 +1322,9 @@ int bt_device_unset_authorization_changed_cb(void);
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
- * @pre The Bluetooth service must be initialized with bt_initialize(). 
- * @post  bt_device_service_searched_cb() will be invoked. 
- * @see bt_initialize() 
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ * @post  bt_device_service_searched_cb() will be invoked.
+ * @see bt_initialize()
  * @see bt_device_service_searched_cb()
  * @see bt_device_unset_service_searched_cb()
  */
@@ -1336,15 +1336,15 @@ int bt_device_set_service_searched_cb(bt_device_service_searched_cb callback, vo
  * @return	0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @pre The Bluetooth service must be initialized with bt_initialize(). 
- * @see bt_initialize() 
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ * @see bt_initialize()
  * @see bt_device_set_service_searched_cb()
  */
 int bt_device_unset_service_searched_cb(void);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_SOCKET_MODULE
- * @brief Registers a rfcomm socket with a specific UUID. 
+ * @brief Registers a rfcomm socket with a specific UUID.
  *
  * @remarks A socket can be destroyed by bt_socket_destroy_rfcomm().
  *
@@ -1357,9 +1357,9 @@ int bt_device_unset_service_searched_cb(void);
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
  * @retval #BT_ERROR_NOT_ENABLED  Not enabled
  * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
- * @pre The state of local Bluetooth must be #BT_ADAPTER_ENABLED with bt_adapter_enable(). 
+ * @pre The state of local Bluetooth must be #BT_ADAPTER_ENABLED with bt_adapter_enable().
  *
- * @see bt_adapter_enable() 
+ * @see bt_adapter_enable()
  * @see bt_socket_listen_and_accept_rfcomm()
  * @see bt_socket_destroy_rfcomm()
  */
@@ -1377,7 +1377,7 @@ int bt_socket_create_rfcomm(const char* port_uuid, int *socket_fd);
  * @retval #BT_ERROR_NOT_ENABLED  Not enabled
  * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
  *
- * @pre The socket must be created with bt_socket_create_rfcomm(). 
+ * @pre The socket must be created with bt_socket_create_rfcomm().
  * @post If callback function bt_socket_connection_state_changed_cb() is set and the remote Bluetooth device is connected,
  * then bt_socket_connection_state_changed_cb() will be called.
  *
@@ -1390,7 +1390,7 @@ int bt_socket_destroy_rfcomm(int socket_fd);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_SOCKET_MODULE
- * @brief Starts listening on passed rfcomm socket and accepts connection requests, asynchronously. 
+ * @brief Starts listening on passed rfcomm socket and accepts connection requests, asynchronously.
  *
  * @param[in] socket_fd	The socket file descriptor on which start to listen
  * @param[in] max_pending_connections The maximum number of pending connections
@@ -1398,25 +1398,25 @@ int bt_socket_destroy_rfcomm(int socket_fd);
  * @return 0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_NOT_ENABLED  Not enabled 
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
- * @retval #BT_ERROR_OPERATION_FAILED  Operation failed 
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
  *
- * @pre The socket must be created with bt_socket_create_rfcomm(). 
+ * @pre The socket must be created with bt_socket_create_rfcomm().
  * @post This function invokes bt_socket_connection_state_changed_cb().
  *
  * @see bt_socket_create_rfcomm()
  * @see bt_socket_connection_state_changed_cb()
  * @see bt_socket_set_connection_state_changed_cb()
- * @see bt_socket_unset_connection_state_changed_cb() 
+ * @see bt_socket_unset_connection_state_changed_cb()
  */
 int bt_socket_listen_and_accept_rfcomm(int socket_fd, int max_pending_connections);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_SOCKET_MODULE
- * @brief Connects to a specific RFCOMM based service on a remote Bluetooth device UUID, asynchronously.  
+ * @brief Connects to a specific RFCOMM based service on a remote Bluetooth device UUID, asynchronously.
  *
- * @remarks A connection can be disconnected by bt_socket_disconnect_rfcomm(). 
+ * @remarks A connection can be disconnected by bt_socket_disconnect_rfcomm().
  *
  * @param[in] remote_address The address of the remote Bluetooth device
  * @param[in] remote_port_uuid The UUID of service provided by the remote Bluetooth device
@@ -1431,9 +1431,9 @@ int bt_socket_listen_and_accept_rfcomm(int socket_fd, int max_pending_connection
  *
  * @pre The state of local Bluetooth must be #BT_ADAPTER_ENABLED with bt_adapter_enable().
  * @pre The remote device must be discoverable with bt_adapter_start_device_discovery().
- * @pre The bond with the remote device must be created with bt_device_create_bond().  
+ * @pre The bond with the remote device must be created with bt_device_create_bond().
  * @post This function invokes bt_socket_connection_state_changed_cb().
- * 
+ *
  * @see bt_adapter_enable()
  * @see bt_device_create_bond()
  * @see bt_adapter_start_device_discovery()
@@ -1441,48 +1441,48 @@ int bt_socket_listen_and_accept_rfcomm(int socket_fd, int max_pending_connection
  * @see bt_socket_disconnect_rfcomm()
  * @see bt_socket_connection_state_changed_cb()
  * @see bt_socket_set_connection_state_changed_cb()
- * @see bt_socket_unset_connection_state_changed_cb()  
+ * @see bt_socket_unset_connection_state_changed_cb()
  */
 int bt_socket_connect_rfcomm(const char *remote_address, const char* remote_port_uuid);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_SOCKET_MODULE
- * @brief Disconnects the RFCOMM connection with the given socket file descriptor. 
+ * @brief Disconnects the RFCOMM connection with the given socket file descriptor.
  * @remarks Because this is a synchronous function, bt_socket_connection_state_changed_cb() won't be called
- * even though a connection is disconnected successfully. 
+ * even though a connection is disconnected successfully.
  *
  * @param[in] socket_fd The socket file descriptor to close
  *
  * @return 0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_NOT_ENABLED  Not enabled 
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
  *
- * @pre The connection must be established with bt_socket_connect_rfcomm(). 
- * 
+ * @pre The connection must be established with bt_socket_connect_rfcomm().
+ *
  * @see bt_socket_connect_rfcomm()
  */
 int bt_socket_disconnect_rfcomm(int socket_fd);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_SOCKET_MODULE
- * @brief Sends data to the connected device. 
+ * @brief Sends data to the connected device.
  *
- * @param[in] socket_fd The connected socket 
+ * @param[in] socket_fd The connected socket
  * @param[in] data The data to be sent
  * @param[in] length The length of data to be sent
  *
  * @return 0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_NOT_ENABLED  Not enabled 
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
  * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
  *
- * @pre The connection must be established with either bt_socket_connect_rfcomm() or bt_socket_listen_and_accept_rfcomm(). 
+ * @pre The connection must be established with either bt_socket_connect_rfcomm() or bt_socket_listen_and_accept_rfcomm().
  *
- * @see bt_socket_connect_rfcomm() 
+ * @see bt_socket_connect_rfcomm()
  * @see bt_socket_listen_and_accept_rfcomm()
  */
 int bt_socket_send_data(int socket_fd, const char* data, int length);
@@ -1496,11 +1496,11 @@ int bt_socket_send_data(int socket_fd, const char* data, int length);
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
- * @pre The Bluetooth service must be initialized with bt_initialize(). 
+ * @pre The Bluetooth service must be initialized with bt_initialize().
  * @post  bt_socket_data_received_cb() will be invoked.
  * @see bt_initialize()
  * @see bt_socket_data_received_cb()
- * @see bt_socket_set_data_received_cb() 
+ * @see bt_socket_set_data_received_cb()
  * @see bt_socket_unset_data_received_cb()
  */
 int bt_socket_set_data_received_cb(bt_socket_data_received_cb callback, void *user_data);
@@ -1511,7 +1511,7 @@ int bt_socket_set_data_received_cb(bt_socket_data_received_cb callback, void *us
  * @return	0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @pre The Bluetooth service must be initialized with bt_initialize(). 
+ * @pre The Bluetooth service must be initialized with bt_initialize().
  * @see bt_initialize()
  * @see bt_socket_data_received_cb()
  * @see bt_socket_set_data_received_cb()
@@ -1527,9 +1527,9 @@ int bt_socket_unset_data_received_cb(void);
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
- * @pre The Bluetooth service must be initialized with bt_initialize(). 
+ * @pre The Bluetooth service must be initialized with bt_initialize().
  * @post bt_socket_connection_state_changed_cb() will be invoked.
- * @see bt_initialize() 
+ * @see bt_initialize()
  * @see bt_socket_connection_state_changed_cb()
  * @see bt_socket_unset_connection_state_changed_cb()
  */
@@ -1541,8 +1541,8 @@ int bt_socket_set_connection_state_changed_cb(bt_socket_connection_state_changed
  * @return	0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @pre The Bluetooth service must be initialized with bt_initialize(). 
- * @see bt_initialize() 
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ * @see bt_initialize()
  * @see bt_socket_connection_state_changed_cb()
  * @see bt_socket_set_connection_state_changed_cb()
  */

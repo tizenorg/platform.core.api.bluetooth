@@ -1,6 +1,6 @@
 Name:       capi-network-bluetooth
 Summary:    Network Bluetooth Framework
-Version:    0.1.0
+Version: 0.1.2
 Release:    1
 Group:      TO_BE/FILLED_IN
 License:    Apache-2.0
@@ -13,7 +13,8 @@ BuildRequires:  pkgconfig(dlog)
 BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(vconf)
 BuildRequires:  pkgconfig(bluetooth-api)
-BuildRequires:  capi-base-common
+BuildRequires:  pkgconfig(capi-base-common)
+
 BuildRequires:  cmake
 
 
@@ -32,9 +33,8 @@ Network Bluetooth Framework (DEV).
 %setup -q
 
 %build
-FULLVER=%{version}
-MAJORVER=`echo ${FULLVER} | cut -d '.' -f 1`
-cmake . -DCMAKE_INSTALL_PREFIX=/usr -DFULLVER=${FULLVER} -DMAJORVER=${MAJORVER}
+MAJORVER=`echo %{version} | awk 'BEGIN {FS="."}{print $1}'`
+cmake . -DCMAKE_INSTALL_PREFIX=/usr -DFULLVER=%{version} -DMAJORVER=${MAJORVER}
 
 make %{?jobs:-j%jobs}
 
@@ -48,8 +48,10 @@ rm -rf %{buildroot}
 %postun -p /sbin/ldconfig
 
 %files
-/usr/lib/*.so*
+%{_libdir}/libcapi-network-bluetooth.so.*
 
 %files devel
-/usr/include/*
-/usr/lib/pkgconfig/capi-network-bluetooth.pc
+%{_includedir}/network/bluetooth.h
+%{_libdir}/pkgconfig/capi-network-bluetooth.pc
+%{_libdir}/libcapi-network-bluetooth.so
+
