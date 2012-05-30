@@ -5,6 +5,7 @@ Release:    1
 Group:      TO_BE/FILLED_IN
 License:    Apache-2.0
 Source0:    %{name}-%{version}.tar.gz
+Source1001: packaging/capi-network-bluetooth.manifest 
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
@@ -33,6 +34,7 @@ Network Bluetooth Framework (DEV).
 %setup -q
 
 %build
+cp %{SOURCE1001} .
 MAJORVER=`echo %{version} | awk 'BEGIN {FS="."}{print $1}'`
 cmake . -DCMAKE_INSTALL_PREFIX=/usr -DFULLVER=%{version} -DMAJORVER=${MAJORVER}
 
@@ -48,9 +50,11 @@ rm -rf %{buildroot}
 %postun -p /sbin/ldconfig
 
 %files
+%manifest capi-network-bluetooth.manifest
 %{_libdir}/libcapi-network-bluetooth.so.*
 
 %files devel
+%manifest capi-network-bluetooth.manifest
 %{_includedir}/network/bluetooth.h
 %{_libdir}/pkgconfig/capi-network-bluetooth.pc
 %{_libdir}/libcapi-network-bluetooth.so
