@@ -74,6 +74,7 @@ typedef enum
 	BT_ERROR_AUTH_FAILED = TIZEN_ERROR_NETWORK_CLASS|0x0108, /**< Authentication failed */
 	BT_ERROR_REMOTE_DEVICE_NOT_FOUND = TIZEN_ERROR_NETWORK_CLASS|0x0109, /**< Remote device not found */
 	BT_ERROR_SERVICE_SEARCH_FAILED = TIZEN_ERROR_NETWORK_CLASS|0x010A, /**< Service search failed */
+	BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED = TIZEN_ERROR_NETWORK_CLASS|0x010B, /**< Remote device is not connected */
 } bt_error_e;
 
 /**
@@ -94,7 +95,7 @@ typedef enum
 {
 	BT_ADAPTER_VISIBILITY_MODE_NON_DISCOVERABLE = 0x00,  /**< Other devices cannot find your device via discovery */
 	BT_ADAPTER_VISIBILITY_MODE_GENERAL_DISCOVERABLE,  /**< Discoverable mode */
-	BT_ADAPTER_VISIBILITY_MODE_LIMITED_DISCOVERABLE,  /**< Discoverable mode with time limit. After specific period, 
+	BT_ADAPTER_VISIBILITY_MODE_LIMITED_DISCOVERABLE,  /**< Discoverable mode with time limit. After specific period,
 							    it is changed to #BT_ADAPTER_VISIBILITY_MODE_NON_DISCOVERABLE.*/
 } bt_adapter_visibility_mode_e;
 
@@ -126,8 +127,8 @@ typedef enum
  */
 typedef enum
 {
-	BT_SOCKET_CONNECTED, /**< Socket is connected */
-	BT_SOCKET_DISCONNECTED, /**< Socket is disconnected */
+	BT_SOCKET_CONNECTED, /**< RFCOMM is connected */
+	BT_SOCKET_DISCONNECTED, /**< RFCOMM is disconnected */
 } bt_socket_connection_state_e;
 
 /**
@@ -262,8 +263,83 @@ typedef enum
 } bt_minor_device_class_e;
 
 /**
- * @}
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PAN_PANU_MODULE
+ * @brief  Enumerations for the types of PAN(Personal Area Networking) service
  */
+typedef enum {
+    BT_PANU_SERVICE_TYPE_NAP = 0,  /**< Network Access Point */
+} bt_panu_service_type_e;
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_MODULE
+ * @brief  Enumerations for the types of profiles related with audio
+ */
+typedef enum {
+    BT_AUDIO_PROFILE_TYPE_ALL = 0,  /**< All supported profiles related with audio */
+    BT_AUDIO_PROFILE_TYPE_HSP_HFP,  /**< HSP(Headset Profile) and HFP(Hands-Free Profile) */
+    BT_AUDIO_PROFILE_TYPE_A2DP,  /**< A2DP(Advanced Audio Distribution Profile) */
+} bt_audio_profile_type_e;
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @brief  Enumerations for the equalizer state
+ */
+typedef enum {
+    BT_AVRCP_EQUALIZER_STATE_OFF = 0x01,  /**< Equalizer Off */
+    BT_AVRCP_EQUALIZER_STATE_ON,  /**< Equalizer On */
+} bt_avrcp_equalizer_state_e;
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @brief  Enumerations for the repeat mode
+ */
+typedef enum {
+    BT_AVRCP_REPEAT_MODE_OFF = 0x01,  /**< Repeat Off */
+    BT_AVRCP_REPEAT_MODE_SINGLE_TRACK,  /**< Single track repeat */
+    BT_AVRCP_REPEAT_MODE_ALL_TRACK,  /**< All track repeat */
+    BT_AVRCP_REPEAT_MODE_GROUP,  /**< Group repeat */
+} bt_avrcp_repeat_mode_e;
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @brief  Enumerations for the shuffle mode
+ */
+typedef enum {
+    BT_AVRCP_SHUFFLE_MODE_OFF = 0x01,  /**< Shuffle Off */
+    BT_AVRCP_SHUFFLE_MODE_ALL_TRACK,  /**< All tracks shuffle */
+    BT_AVRCP_SHUFFLE_MODE_GROUP,  /**< Group shuffle */
+} bt_avrcp_shuffle_mode_e;
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @brief  Enumerations for the scan mode
+ */
+typedef enum {
+    BT_AVRCP_SCAN_MODE_OFF = 0x01,  /**< Scan Off */
+    BT_AVRCP_SCAN_MODE_ALL_TRACK,  /**< All tracks scan */
+    BT_AVRCP_SCAN_MODE_GROUP,  /**< Group scan */
+} bt_avrcp_scan_mode_e;
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @brief  Enumerations for the player state
+ */
+typedef enum {
+    BT_AVRCP_PLAYER_STATE_STOPPED = 0x00,  /**< Stopped */
+    BT_AVRCP_PLAYER_STATE_PLAYING,  /**< Playing */
+    BT_AVRCP_PLAYER_STATE_PAUSED,  /**< Paused */
+    BT_AVRCP_PLAYER_STATE_FORWARD_SEEK,  /**< Seek Forward */
+    BT_AVRCP_PLAYER_STATE_REWIND_SEEK,  /**< Seek Rewind */
+} bt_avrcp_player_state_e;
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HDP_MODULE
+ * @brief  Enumerations for the data channel type
+ */
+typedef enum {
+    BT_HDP_CHANNEL_TYPE_RELIABLE  = 0x01,  /**< Reliable Data Channel */
+    BT_HDP_CHANNEL_TYPE_STREAMING,  /**< Streaming Data Channel */
+} bt_hdp_channel_type_e;
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DEVICE_MODULE
@@ -291,11 +367,13 @@ typedef struct
  */
 typedef struct
 {
-	char* remote_address;	/**< The address of remote device */
-	char* remote_name;	/**< The name of remote device */
+	char *remote_address;	/**< The address of remote device */
+	char *remote_name;	/**< The name of remote device */
 	bt_class_s bt_class;	/**< The Bluetooth classes */
 	int rssi;	/**< The strength indicator of received signal  */
 	bool is_bonded;	/**< The bonding state */
+	char **service_uuid;  /**< The UUID list of service */
+	int service_count;	/**< The number of services */
 } bt_adapter_device_discovery_info_s;
 
 /**
@@ -307,10 +385,10 @@ typedef struct
  */
 typedef struct
 {
-	char* remote_address;	/**< The address of remote device */
-	char* remote_name;	/**< The name of remote device */
+	char *remote_address;	/**< The address of remote device */
+	char *remote_name;	/**< The name of remote device */
 	bt_class_s bt_class;	/**< The Bluetooth classes */
-	char** service_uuid;  /**< The UUID list of service */
+	char **service_uuid;  /**< The UUID list of service */
 	int service_count;	/**< The number of services */
 	bool is_bonded;	/**< The bonding state */
 	bool is_connected;	/**< The connection state */
@@ -328,8 +406,8 @@ typedef struct
  */
 typedef struct
 {
-	char* remote_address;   /**< The address of remote device */
-	char** service_uuid;  /**< The UUID list of service */
+	char *remote_address;   /**< The address of remote device */
+	char **service_uuid;  /**< The UUID list of service */
 	int service_count;    /**< The number of services. */
 } bt_device_sdp_info_s;
 
@@ -342,9 +420,10 @@ typedef struct
  */
 typedef struct
 {
-	int socket_fd;	/**< The socket fd */
+	int socket_fd;	/**< The file descriptor of connected socket */
 	bt_socket_role_e local_role;	/**< The local device role in this connection */
-	char* remote_address;	/**< The remote device address. */
+	char *remote_address;	/**< The remote device address */
+	char *service_uuid;	/**< The service UUId */
 } bt_socket_connection_s;
 
 /**
@@ -361,13 +440,8 @@ typedef struct
 {
 	int socket_fd;	/**< The socket fd */
 	int data_size;	/**< The length of the received data */
-	char* data;	/**< The received data */
+	char *data;	/**< The received data */
 } bt_socket_received_data_s;
-
-/**
- * @addtogroup CAPI_NETWORK_BLUETOOTH_MODULE
- * @{
- */
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_MODULE
@@ -452,7 +526,7 @@ typedef void (*bt_adapter_device_discovery_state_changed_cb)
  * @see bt_adapter_foreach_bonded_device()
  *
  */
-typedef bool (*bt_adapter_bonded_device_cb)(bt_device_info_s* device_info, void *user_data);
+typedef bool (*bt_adapter_bonded_device_cb)(bt_device_info_s *device_info, void *user_data);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DEVICE_MODULE
@@ -866,7 +940,7 @@ int bt_adapter_stop_device_discovery(void);
  * @see bt_adapter_start_device_discovery()
  * @see bt_adapter_stop_device_discovery()
  */
-int bt_adapter_is_discovering(bool* is_discovering);
+int bt_adapter_is_discovering(bool *is_discovering);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_MODULE
@@ -890,6 +964,61 @@ int bt_adapter_is_discovering(bool* is_discovering);
  * @see bt_adapter_enable()
  */
 int bt_adapter_foreach_bonded_device(bt_adapter_bonded_device_cb callback, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_MODULE
+ * @brief Gets the device information of a bonded device.
+ * @remarks The @a device_info must be released with bt_adapter_free_device_info() by you .
+ *
+ * @param [in] remote_address The address of remote device
+ * @param [out] device_info The bonded device information
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_OUT_OF_MEMORY  Out of memory
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_BONDED  Remote device not bonded
+ *
+ * @pre The state of local Bluetooth must be #BT_ADAPTER_ENABLED with bt_adapter_enable().
+ * @post This function invokes bt_adapter_bonded_device_cb().
+ *
+ * @see bt_adapter_bonded_device_cb()
+ * @see bt_adapter_enable()
+ */
+int bt_adapter_get_bonded_device_info(const char *remote_address, bt_device_info_s **device_info);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_MODULE
+ * @brief Frees device info.
+ *
+ * @param [in] device_info The bonded device information
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ *
+ * @see bt_adapter_get_bonded_device_info()
+ */
+int bt_adapter_free_device_info(bt_device_info_s *device_info);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_MODULE
+ * @brief Checks whether the UUID of service is used or not
+ * @param[in] service_uuid The UUID of service
+ * @param[out] used Indicates whether the service is used or not
+ * @return true on success, otherwise false.
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @see bt_adapter_enable()
+ */
+int bt_adapter_is_service_used(const char *service_uuid, bool *used);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_MODULE
@@ -1348,8 +1477,8 @@ int bt_device_unset_service_searched_cb(void);
  *
  * @remarks A socket can be destroyed by bt_socket_destroy_rfcomm().
  *
- * @param[in] port_uuid The UUID of service to provide
- * @param[out] socket_fd A socket file descriptor to be used to communicate
+ * @param[in] service_uuid The UUID of service to provide
+ * @param[out] socket_fd The file descriptor of socket to listen
  * @return 0 on success, otherwise a negative error value.
  *
  * @retval #BT_ERROR_NONE  Successful
@@ -1363,13 +1492,13 @@ int bt_device_unset_service_searched_cb(void);
  * @see bt_socket_listen_and_accept_rfcomm()
  * @see bt_socket_destroy_rfcomm()
  */
-int bt_socket_create_rfcomm(const char* port_uuid, int *socket_fd);
+int bt_socket_create_rfcomm(const char *service_uuid, int *socket_fd);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_SOCKET_MODULE
- * @brief Removes the rfcomm socket with the given socket file descriptor.
+ * @brief Removes the rfcomm socket with the given socket.
  *
- * @param[in] socket_fd The socket file descriptor to destroy
+ * @param[in] socket_fd The file descriptor of socket to destroy
  * @return 0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
@@ -1390,9 +1519,12 @@ int bt_socket_destroy_rfcomm(int socket_fd);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_SOCKET_MODULE
- * @brief Starts listening on passed rfcomm socket and accepts connection requests, asynchronously.
+ * @brief Starts listening on passed rfcomm socket and accepts connection requests.
+ * @details Pop-up is shown automatically when a RFCOMM connection is requested.
+ * bt_socket_connection_state_changed_cb() will be called with
+ * #BT_SOCKET_CONNECTED if you click "yes" and connection is finished successfully.
  *
- * @param[in] socket_fd	The socket file descriptor on which start to listen
+ * @param[in] socket_fd The file descriptor of socket on which start to listen
  * @param[in] max_pending_connections The maximum number of pending connections
  *
  * @return 0 on success, otherwise a negative error value.
@@ -1414,12 +1546,89 @@ int bt_socket_listen_and_accept_rfcomm(int socket_fd, int max_pending_connection
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_SOCKET_MODULE
+ * @brief  Called when a RFCOMM connection is requested.
+ * @details You must call bt_socket_accept() if you want to accept. Otherwise, you must call bt_socket_reject().
+ * @param[in] socket_fd  The file descriptor of socket on which a connection is requested
+ * @param[in] remote_address  The address of remote device
+ * @param[in] user_data The user data passed from the callback registration function
+ * @pre If you register this callback function by bt_socket_set_connection_requested_cb() and listen a socket by bt_socket_listen(),
+ * bt_socket_connection_requested_cb() will be invoked.
+ * @see bt_socket_listen()
+ * @see bt_socket_accept()
+ * @see bt_socket_reject()
+ */
+typedef void (*bt_socket_connection_requested_cb) (int socket_fd, const char *remote_address, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_SOCKET_MODULE
+ * @brief Starts listening on passed rfcomm socket.
+ * @details bt_socket_connection_requested_cb() will be called when a RFCOMM connection is requested.
+ *
+ * @param[in] socket_fd  The file descriptor socket on which start to listen
+ * @param[in] user_data  The user data to be passed to the callback function
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ *
+ * @pre The socket must be created with bt_socket_create_rfcomm().
+ * @post This function invokes bt_socket_connection_state_changed_cb().
+ *
+ * @see bt_socket_create_rfcomm()
+ * @see bt_socket_set_connection_requested_cb()
+ * @see bt_socket_unset_connection_requested_cb()
+ * @see bt_socket_connection_requested_cb()
+ */
+int bt_socket_listen(int socket_fd, int max_pending_connections);
+
+/**
+ * @ingroup  CAPI_NETWORK_BLUETOOTH_SOCKET_MODULE
+ * @brief  Accepts a connection request.
+ * @param[in] requested_socket_fd  The file descriptor of socket on which a connection is requested
+ * @param[out] connected_socket_fd  The file descriptor of connected socket
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @pre The connection is requested by bt_socket_connection_requested_cb().
+ * @see bt_socket_create_rfcomm()
+ * @see bt_socket_connection_requested_cb()
+ * @see bt_socket_listen()
+ * @see bt_socket_reject()
+*/
+int bt_socket_accept(int requested_socket_fd, int *connected_socket_fd);
+
+/**
+ * @ingroup  CAPI_NETWORK_BLUETOOTH_SOCKET_MODULE
+ * @brief  Rejects a connection request.
+ * @param[in] socket_fd  The file descriptor of socket on which a connection is requested
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @pre The connection is requested by bt_socket_connection_requested_cb().
+ * @see bt_socket_create_rfcomm()
+ * @see bt_socket_connection_requested_cb()
+ * @see bt_socket_listen()
+ * @see bt_socket_accept()
+ */
+int bt_socket_reject(int socket_fd);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_SOCKET_MODULE
  * @brief Connects to a specific RFCOMM based service on a remote Bluetooth device UUID, asynchronously.
  *
  * @remarks A connection can be disconnected by bt_socket_disconnect_rfcomm().
  *
  * @param[in] remote_address The address of the remote Bluetooth device
- * @param[in] remote_port_uuid The UUID of service provided by the remote Bluetooth device
+ * @param[in] service_uuid The UUID of service provided by the remote Bluetooth device
  *
  * @return 0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
@@ -1443,25 +1652,19 @@ int bt_socket_listen_and_accept_rfcomm(int socket_fd, int max_pending_connection
  * @see bt_socket_set_connection_state_changed_cb()
  * @see bt_socket_unset_connection_state_changed_cb()
  */
-int bt_socket_connect_rfcomm(const char *remote_address, const char* remote_port_uuid);
+int bt_socket_connect_rfcomm(const char *remote_address, const char *service_uuid);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_SOCKET_MODULE
- * @brief Disconnects the RFCOMM connection with the given socket file descriptor.
- * @remarks Because this is a synchronous function, bt_socket_connection_state_changed_cb() won't be called
- * even though a connection is disconnected successfully.
- *
- * @param[in] socket_fd The socket file descriptor to close
- *
+ * @brief Disconnects the RFCOMM connection with the given file descriptor of conneted socket.
+ * @remarks Because this function is synchronous, bt_socket_connection_state_changed_cb() won't be called
+ * @param[in] socket_fd  The file descriptor of socket to close
  * @return 0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_NOT_ENABLED  Not enabled
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
- *
- * @pre The connection must be established with bt_socket_connect_rfcomm().
- *
- * @see bt_socket_connect_rfcomm()
+ * @pre The connection must be established.
  */
 int bt_socket_disconnect_rfcomm(int socket_fd);
 
@@ -1469,7 +1672,7 @@ int bt_socket_disconnect_rfcomm(int socket_fd);
  * @ingroup CAPI_NETWORK_BLUETOOTH_SOCKET_MODULE
  * @brief Sends data to the connected device.
  *
- * @param[in] socket_fd The connected socket
+ * @param[in] socket_fd The file descriptor of connected socket
  * @param[in] data The data to be sent
  * @param[in] length The length of data to be sent
  *
@@ -1480,12 +1683,9 @@ int bt_socket_disconnect_rfcomm(int socket_fd);
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
  * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
  *
- * @pre The connection must be established with either bt_socket_connect_rfcomm() or bt_socket_listen_and_accept_rfcomm().
- *
- * @see bt_socket_connect_rfcomm()
- * @see bt_socket_listen_and_accept_rfcomm()
+ * @pre The connection must be established.
  */
-int bt_socket_send_data(int socket_fd, const char* data, int length);
+int bt_socket_send_data(int socket_fd, const char *data, int length);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_SOCKET_MODULE
@@ -1520,6 +1720,35 @@ int bt_socket_unset_data_received_cb(void);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_SOCKET_MODULE
+ * @brief  Register a callback function that will be invoked when a RFCOMM connection is requested.
+ * @param[in] callback The callback function to register
+ * @param[in] user_data The user data to be passed to the callback function
+ * @return   0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ * @post If you listen a socket by bt_socket_listen(), bt_socket_connection_requested_cb() will be invoked.
+ * @see bt_initialize()
+ * @see bt_socket_unset_connection_requested_cb()
+ */
+int bt_socket_set_connection_requested_cb(bt_socket_connection_requested_cb callback, void *user_data);
+
+/**
+ * @ingroup  CAPI_NETWORK_BLUETOOTH_SOCKET_MODULE
+ * @brief  Unregisters the callback function.
+ * @return  0 on success, otherwise a negative error value.
+ * @retval  #BT_ERROR_NONE  Successful
+ * @retval  #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @pre  The Bluetooth service must be initialized with bt_initialize().
+ * @see  bt_initialize()
+ * @see  bt_socket_set_connection_requested_cb()
+ * @see  bt_socket_connection_requested_cb()
+ */
+int bt_socket_unset_connection_requested_cb(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_SOCKET_MODULE
  * @brief  Register a callback function that will be invoked when the connection state changes.
  * @param[in] callback The callback function to register
  * @param[in] user_data The user data to be passed to the callback function
@@ -1548,10 +1777,1138 @@ int bt_socket_set_connection_state_changed_cb(bt_socket_connection_state_changed
  */
 int bt_socket_unset_connection_state_changed_cb(void);
 
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_OPP_SERVER_MODULE
+ * @brief  Called when the push is requested.
+ * @details You must call bt_opp_server_accept_push() if you want to accept.
+ * Otherwise, you must call bt_opp_server_reject_push().
+ * @param[in] file  The path of file to be pushed
+ * @param[in] size The file size (bytes)
+ * @param[in] user_data The user data passed from the callback registration function
+ * @see bt_opp_server_initialize()
+ */
+typedef void (*bt_opp_server_push_requested_cb)(const char *file, int size, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_OPP_SERVER_MODULE
+ * @brief  Called when an OPP connection is requested.
+ * @details You must call bt_opp_server_accept_connection() if you want to accept.
+ * Otherwise, you must call bt_opp_server_reject_connection().
+ * @param[in] remote_address  The address of remote device
+ * @param[in] user_data The user data passed from the callback registration function
+ * @see bt_opp_server_initialize()
+ * @see bt_opp_server_accept_connection()
+ * @see bt_opp_server_reject_connection()
+ */
+typedef void (*bt_opp_server_connection_requested_cb)(const char *remote_address, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_OPP_SERVER_MODULE
+ * @brief Initializes the Bluetooth OPP server requested by bt_opp_server_push_requested_cb().
+ * @details The popup appears when an OPP connection is requested from a remote device.
+ * If you accept the request, then connection will be established and bt_opp_server_push_requested_cb() will be called.
+ * At that time, you can call either bt_opp_server_accept() or bt_opp_server_reject().
+ * @remarks This function must be called to start Bluetooth OPP server. You must free all resources of the Bluetooth service
+ * by calling bt_opp_server_deinitialize() if Bluetooth OPP service is no longer needed.
+ * @param[in] destination  The destination path
+ * @param[in] push_requested_cb  The callback called when a push is requested
+ * @param[in] user_data The user data to be passed to the callback function
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_RESOURCE_BUSY  Device or resource busy
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @see  bt_opp_server_push_requested_cb()
+ * @see  bt_opp_server_deinitialize()
+ * @see  bt_opp_server_accept_push()
+ * @see  bt_opp_server_reject_push()
+ */
+int bt_opp_server_initialize(const char *destination, bt_opp_server_push_requested_cb push_requested_cb, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_OPP_SERVER_MODULE
+ * @brief Initializes the Bluetooth OPP server requested by bt_opp_server_connection_requested_cb().
+ * @details No popup appears when an OPP connection is requested from a remote device.
+ * Instead, @a connection_requested_cb() will be called.
+ * At that time, you can call either bt_opp_server_accept() or bt_opp_server_reject().
+ * @remarks This function must be called to start Bluetooth OPP server. \n
+ * You must free all resources of the Bluetooth service by calling bt_opp_server_deinitialize() if Bluetooth OPP service is no longer needed.
+ * @param[in] destination  The destination path
+ * @param[in] connection_requested_cb  The callback called when an OPP connection is requested
+ * @param[in] user_data The user data to be passed to the callback function
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_RESOURCE_BUSY  Device or resource busy
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @see  bt_opp_server_connection_requested_cb()
+ * @see  bt_opp_server_deinitialize()
+ * @see  bt_opp_server_accept_connection()
+ * @see  bt_opp_server_reject_connection()
+ */
+int bt_opp_server_initialize_by_connection_request(const char *destination, bt_opp_server_connection_requested_cb connection_requested_cb, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_OPP_SERVER_MODULE
+ * @brief Denitializes the Bluetooth OPP server.
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @see  bt_opp_server_initialize()
+ * @see  bt_opp_server_deinitialize()
+ * @see  bt_opp_server_initialize()
+ */
+int bt_opp_server_deinitialize(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_OPP_SERVER_MODULE
+ * @brief  Called when a file is being transfered.
+ * @param[in] file  The path of file to be pushed
+ * @param[in] size The file size (bytes)
+ * @param[in] percent The progress in percentage (1 ~ 100)
+ * @param[in] user_data The user data passed from the callback registration function
+ * @see bt_opp_server_accept_push()
+ * @see bt_opp_server_accept_connection()
+ */
+typedef void (*bt_opp_server_transfer_progress_cb) (const char *file, long long size, int percent, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_OPP_SERVER_MODULE
+ * @brief  Called when a transfer is finished.
+ * @param[in] error_code  The result of push
+ * @param[in] file  The path of file to be pushed
+ * @param[in] size The file size (bytes)
+ * @param[in] user_data The user data passed from the callback registration function
+ * @see bt_opp_server_accept_push()
+ * @see bt_opp_server_accept_connection()
+ */
+typedef void (*bt_opp_server_transfer_finished_cb) (int result, const char *file, long long size, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_OPP_SERVER_MODULE
+ * @brief Accepts the push request from the remote device.
+ * @remarks If you initialize OPP server by bt_opp_server_initialize_by_connection_request(), then name is ignored.
+ * You can cancel the pushes by bt_opp_server_cancel_transfer() with transfer_id.
+ * @param[in] progress_cb  The callback called when a file is being transfered
+ * @param[in] finished_cb  The callback called when a transfer is finished
+ * @param[in] name  The name to store. This can be NULL if you initialize OPP server by bt_opp_server_initialize_by_connection_request().
+ * @param[in] user_data The user data to be passed to the callback function
+ * @param[out]  transfer_id  The ID of transfer
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_NOW_IN_PROGRESS  Operation now in progress
+ * @see  bt_opp_server_reject()
+ */
+int bt_opp_server_accept(bt_opp_server_transfer_progress_cb progress_cb, bt_opp_server_transfer_finished_cb finished_cb, const char *name,
+ void *user_data, int *transfer_id);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_OPP_SERVER_MODULE
+ * @brief Rejects the push request from the remote device.
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @see  bt_opp_server_accept_push()
+ */
+int bt_opp_server_reject(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_OPP_SERVER_MODULE
+ * @brief Cancels the transfer.
+ * @param[in] transfer_id  The ID of transfer
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @see  bt_opp_server_accept_connection()
+ * @see  bt_opp_server_accept_push()
+ */
+int bt_opp_server_cancel_transfer(int transfer_id);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_OPP_SERVER_MODULE
+ * @brief Sets the destination path of file to be pushed.
+ * @param[in] destination  The destination path of file to be pushed
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @see  bt_opp_server_initialize()
+ */
+int bt_opp_server_set_destination(const char *destination);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_OPP_CLIENT_MODULE
+ * @brief Initializes the Bluetooth OPP client.
+ * @remarks This function must be called before Bluetooth OPP client starts. \n
+ * You must free all resources of the Bluetooth service by calling bt_opp_client_deinitialize()
+ * if Bluetooth OPP service is no longer needed.
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_RESOURCE_BUSY  Device or resource busy
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @see  bt_opp_client_deinitialize()
+ */
+int bt_opp_client_initialize(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_OPP_CLIENT_MODULE
+ * @brief Denitializes the Bluetooth OPP client.
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @see  bt_opp_client_initialize()
+ */
+int bt_opp_client_deinitialize(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_OPP_CLIENT_MODULE
+ * @brief Adds file to be pushed.
+ * @param[in] file  The path of file to be pushed
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @see  bt_opp_client_clear_files()
+ * @see  bt_opp_client_push_files()
+ */
+int bt_opp_client_add_file(const char *file);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_OPP_CLIENT_MODULE
+ * @brief Adds file to be pushed.
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @see  bt_opp_client_add_file()
+ * @see  bt_opp_client_push_files()
+ */
+int bt_opp_client_clear_files(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_OPP_CLIENT_MODULE
+ * @brief  Called when OPP server responds to the push request.
+ * @param[in] result  The result of OPP server response
+ * @param[in] remote_address  The remote address
+ * @param[in] user_data  The user data passed from the callback registration function
+ * @pre bt_opp_client_push_files() will invoke this function.
+ * @see bt_opp_client_push_files()
+ */
+typedef void (*bt_opp_client_push_responded_cb)(int result, const char *remote_address, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_OPP_CLIENT_MODULE
+ * @brief  Called when each file is being transfered.
+ * @param[in] file  The path of file to be pushed
+ * @param[in] size The file size (bytes)
+ * @param[in] percent The progress in percentage (1 ~ 100). 100 means that a file is transfered completely.
+ * @param[in] user_data The user data passed from the callback registration function
+ * @pre bt_opp_client_push_files() will invoke this function.
+ * @see bt_opp_client_push_files()
+ */
+typedef void (*bt_opp_client_push_progress_cb)(const char *file, long long size, int percent, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_OPP_CLIENT_MODULE
+ * @brief  Called when the push request is finished.
+ * @param[in] result  The result of the push request
+ * @param[in] remote_address  The remote address
+ * @param[in] user_data The user data passed from the callback registration function
+ * @see bt_opp_client_push_files()
+ */
+typedef void (*bt_opp_client_push_finished_cb)(int result, const char *remote_address, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_OPP_CLIENT_MODULE
+ * @brief Pushes the file to the remote device, asynchronously.
+ * @details At first, bt_opp_client_push_responded_cb() will be called when OPP server responds to the push request.
+ * After connection is established, bt_opp_client_push_progress_cb() will be called repeatedly until a file is tranfered completely.
+ * If you send several files, then bt_opp_client_push_progress_cb() with another file will be called repeatedly until the file is tranfered completely.
+ * bt_opp_client_push_finished_cb() will be called when the push request is finished.
+ * @param[in] remote_address The remote address
+ * @param[in] responded_cb  The callback called when OPP server responds to the push request
+ * @param[in] progress_cb  The callback called when each file is being transfered
+ * @param[in] finished_cb  The callback called when the push request is finished
+ * @param[in] user_data The user data to be passed to the callback function
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_NOW_IN_PROGRESS  Operation now in progress
+ * @see bt_opp_client_initialize()
+ * @see bt_opp_client_cancel_push
+ */
+int bt_opp_client_push_files(const char *remote_address, bt_opp_client_push_responded_cb responded_cb,
+ bt_opp_client_push_progress_cb progress_cb, bt_opp_client_push_finished_cb finished_cb, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_OPP_CLIENT_MODULE
+ * @brief Cancels the push request in progress, asynchronously.
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @pre bt_opp_client_push_files() must be called.
+ * @post bt_opp_client_push_finished_cb() will be invoked with result #BT_ERROR_CANCELLED,
+ * which is a parameter of bt_opp_client_push_files().
+ * @see bt_opp_client_initialize()
+ * @see bt_opp_client_push_files()
+ */
+int bt_opp_client_cancel_push(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PAN_NAP_MODULE
+ * @brief  Called when the connection state is changed.
+ * @param[in] connected  Indicates whether a client is connected or disconnected
+ * @param[in] remote_address  The remote address
+ * @param[in] interface_name  The interface name. For example, bnep0, bnep1.
+ * @param[in] user_data The user data passed from the callback registration function
+ * @see bt_nap_set_connection_state_changed_cb()
+ * @see bt_nap_unset_connection_state_changed_cb()
+ */
+typedef void (*bt_nap_connection_state_changed_cb) (bool connected, const char *remote_address, const char *interface_name, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PAN_NAP_MODULE
+ * @brief Activates the NAP(Network Access Point).
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @pre The Bluetooth must be enabled with bt_adapter_enable().
+ * @see bt_adapter_enable()
+ * @see bt_nap_deactivate()
+ */
+int bt_nap_activate(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PAN_NAP_MODULE
+ * @brief Deactivates the NAP(Network Access Point).
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @pre The Bluetooth NAP service must be activated with bt_nap_activate().
+ * @see bt_nap_activate()
+ */
+int bt_nap_deactivate(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PAN_NAP_MODULE
+ * @brief  Registers a callback function that will be invoked when the connection state changes.
+ * @param[in] callback The callback function to register
+ * @param[in] user_data The user data to be passed to the callback function
+ * @return   0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ * @post bt_nap_connection_state_changed_cb() will be invoked.
+ * @see bt_initialize()
+ * @see bt_nap_connection_state_changed_cb()
+ * @see bt_nap_unset_connection_state_changed_cb()
+ */
+int bt_nap_set_connection_state_changed_cb(bt_nap_connection_state_changed_cb callback, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PAN_NAP_MODULE
+ * @brief  Unregisters a callback function that will be invoked when the connection state changes.
+ * @return   0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ * @post bt_nap_connection_state_changed_cb() will be invoked.
+ * @see bt_initialize()
+ * @see bt_nap_connection_state_changed_cb()
+ * @see bt_nap_set_connection_state_changed_cb()
+ */
+int bt_nap_unset_connection_state_changed_cb(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PAN_PANU_MODULE
+ * @brief  Called when the connection state is changed.
+ * @details  This callback is called when the connection state is changed.
+ * When you call bt_panu_connect() or bt_panu_disconnect(), this callback is also called with error result even though these functions fail.
+ * @param[in] result  The result of changing the connection state
+ * @param[in] connected  The state to be changed. @a true means connected state, Otherwise, @a false.
+ * @param[in] remote_address  The remote address
+ * @param[in] type  The type of PAN service
+ * @param[in] user_data The user data passed from the callback registration function
+ * @see bt_nap_set_connection_state_changed_cb()
+ * @see bt_nap_unset_connection_state_changed_cb()
+ */
+typedef void (*bt_panu_connection_state_changed_cb) (int result, bool connected, const char *remote_address, bt_panu_service_type_e type, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PAN_PANU_MODULE
+ * @brief  Registers a callback function that will be invoked when the connection state changes.
+ * @param[in] callback The callback function to register
+ * @param[in] user_data The user data to be passed to the callback function
+ * @return   0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ * @post bt_nap_connection_state_changed_cb() will be invoked.
+ * @see bt_initialize()
+ * @see bt_panu_connection_state_changed_cb()
+ * @see bt_panu_unset_connection_state_changed_cb()
+ */
+int bt_panu_set_connection_state_changed_cb(bt_panu_connection_state_changed_cb callback, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PAN_PANU_MODULE
+ * @brief  Unregisters a callback function that will be invoked when the connection state changes.
+ * @return   0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ * @post bt_nap_connection_state_changed_cb() will be invoked.
+ * @see bt_initialize()
+ * @see bt_panu_connection_state_changed_cb()
+ * @see bt_panu_set_connection_state_changed_cb()
+ */
+int bt_panu_unset_connection_state_changed_cb(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PAN_PANU_MODULE
+ * @brief Connects the remote device with the PAN(Personal Area Networking) service, asynchronously.
+ * @param[in] remote_address  The remote address
+ * @param[in] type  The type of PAN service
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_BONDED  Remote device is not bonded
+ * @retval #BT_ERROR_OUT_OF_MEMORY  Out of memory
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @pre The local device must be bonded with the remote device by bt_device_create_bond().
+ * @post bt_panu_connection_state_changed_cb() will be invoked.
+ * @see bt_panu_disconnect()
+ * @see bt_panu_connection_state_changed_cb()
+ */
+int bt_panu_connect(const char *remote_address, bt_panu_service_type_e type);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PAN_PANU_MODULE
+ * @brief Disconnects the remote device with the PAN(Personal Area Networking) service, asynchronously.
+ * @param[in] remote_address  The remote address
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
+ * @retval #BT_ERROR_OUT_OF_MEMORY  Out of memory
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @pre The remote device must be connected by bt_panu_connect().
+ * @post bt_panu_connection_state_changed_cb() will be invoked.
+ * @see bt_panu_connect()
+ * @see bt_panu_connection_state_changed_cb()
+ */
+int bt_panu_disconnect(const char *remote_address);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_MODULE
+ * @brief  Called when the connection state is changed.
+ * @details  This callback is called when the connection state is changed.
+ * When you call bt_hid_host_connect() or bt_hid_host_disconnect(), this callback is also called with error result even though these functions fail.
+ * @param[in] result  The result of changing the connection state
+ * @param[in] connected  The state to be changed. @a true means connected state, Otherwise, @a false.
+ * @param[in] remote_address  The remote address
+ * @param[in] user_data The user data passed from the callback registration function
+ * @see bt_hid_host_connect()
+ * @see bt_hid_host_disconnect()
+ */
+typedef void (*bt_hid_host_connection_state_changed_cb) (int result, bool connected, const char *remote_address, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_MODULE
+ * @brief Initializes the Bluetooth HID(Human Interface Device) Host.
+ * @remarks This function must be called before Bluetooth HID Host starts. \n
+ * You must free all resources of the Bluetooth service by calling bt_hid_host_deinitialize()
+ * if Bluetooth HID Host service is no longer needed.
+ * @param[in] connection_cb  The callback called when the connection state is changed
+ * @param[in] user_data The user data to be passed to the callback function
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ * @see bt_initialize()
+ * @see  bt_hid_host_deinitialize()
+ */
+int bt_hid_host_initialize(bt_hid_host_connection_state_changed_cb connection_cb, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_MODULE
+ * @brief Deinitializes the Bluetooth HID(Human Interface Device) Host.
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @pre The Bluetooth HID service must be initialized with bt_hid_host_initialize().
+ * @see  bt_hid_host_initialize()
+ */
+int bt_hid_host_deinitialize(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_MODULE
+ * @brief Connects the remote device with the HID(Human Interface Device) service, asynchronously.
+ * @param[in] remote_address  The remote address
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_BONDED  Remote device is not bonded
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @pre The local device must be bonded with the remote device by bt_device_create_bond().
+ * @pre The Bluetooth HID service must be initialized with bt_hid_host_initialize().
+ * @post bt_hid_host_connection_state_changed_cb() will be invoked.
+ * @see bt_hid_host_disconnect()
+ * @see bt_hid_host_connection_state_changed_cb()
+ */
+int bt_hid_host_connect(const char *remote_address);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_MODULE
+ * @brief Disconnects the remote device with the HID(Human Interface Device) service, asynchronously.
+ * @param[in] remote_address  The remote address
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @pre The remote device must be connected by bt_hid_host_connect().
+ * @post bt_hid_host_connection_state_changed_cb() will be invoked.
+ * @see bt_hid_host_connect()
+ * @see bt_hid_host_connection_state_changed_cb()
+ */
+int bt_hid_host_disconnect(const char *remote_address);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_MODULE
+ * @brief Initializes the Bluetooth profiles related with audio.
+ * @remarks This function must be called before Bluetooth profiles related with audio starts. \n
+ * You must free all resources of the this service by calling bt_audio_deinitialize()
+ * if Bluetooth profiles related with audio service is no longer needed.
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ * @see bt_initialize()
+ * @see bt_audio_deinitialize()
+ */
+int bt_audio_initialize(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_MODULE
+ * @brief Deinitializes the Bluetooth profiles related with audio.
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @pre The Bluetooth audio service must be initialized with bt_audio_initialize().
+ * @see bt_audio_initialize()
+ */
+int bt_audio_deinitialize(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_MODULE
+ * @brief Connects the remote device with the given audio profile, asynchronously.
+ * @details If you input type as #BT_AUDIO_PROFILE_TYPE_ALL and connection request succeeds, then bt_audio_connection_state_changed_cb() will be called twice
+ * when #BT_AUDIO_PROFILE_TYPE_HSP_HFP is connected and #BT_AUDIO_PROFILE_TYPE_A2DP is connected.
+ * @param[in] remote_address  The remote address
+ * @param[in] type  The type of audio profile
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_BONDED  Remote device is not bonded
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @pre The Bluetooth audio service must be initialized with bt_audio_initialize().
+ * @pre The local device must be bonded with the remote device by bt_device_create_bond().
+ * @post bt_audio_connection_state_changed_cb() will be invoked.
+ * @see bt_audio_disconnect()
+ * @see bt_audio_connection_state_changed_cb()
+ */
+int bt_audio_connect(const char *remote_address, bt_audio_profile_type_e type);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_MODULE
+ * @brief Disconnects the remote device with the given audio profile, asynchronously.
+ * @details If you input type as #BT_AUDIO_PROFILE_TYPE_ALL and disconnection request succeeds, then bt_audio_connection_state_changed_cb() will be called twice
+ * when #BT_AUDIO_PROFILE_TYPE_HSP_HFP is disconnected and #BT_AUDIO_PROFILE_TYPE_A2DP is disconnected.
+ * @param[in] remote_address  The remote address
+ * @param[in] type  The type of audio profile
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @pre The remote device must be connected by bt_audio_connect().
+ * @post bt_audio_connection_state_changed_cb() will be invoked.
+ * @see bt_audio_connect()
+ * @see bt_audio_connection_state_changed_cb()
+ */
+int bt_audio_disconnect(const char *remote_address, bt_audio_profile_type_e type);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_MODULE
+ * @brief  Called when the connection state is changed.
+ * @details  This callback is called when the connection state is changed.
+ * When you call bt_audio_connect() or bt_audio_disconnect(), this callback is also called with error result even though these functions fail.
+ * @param[in] result  The result of changing the connection state
+ * @param[in] connected  The state to be changed. @a true means connected state, Otherwise, @a false.
+ * @param[in] remote_address  The remote address
+ * @param[in] type  The type of audio profile except #BT_AUDIO_PROFILE_TYPE_ALL
+ * @param[in] user_data The user data passed from the callback registration function
+ * @see bt_audio_set_connection_state_changed_cb()
+ * @see bt_audio_unset_connection_state_changed_cb()
+ */
+typedef void (*bt_audio_connection_state_changed_cb) (int result, bool connected, const char *remote_address, bt_audio_profile_type_e type, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_MODULE
+ * @brief  Registers a callback function that will be invoked when the connection state is changed.
+ * @param[in] callback The callback function to register
+ * @param[in] user_data The user data to be passed to the callback function
+ * @return   0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @pre The Bluetooth audio service must be initialized with bt_audio_initialize().
+ * @see bt_audio_initialize()
+ * @see bt_audio_connection_state_changed_cb()
+ * @see bt_panu_unset_connection_state_changed_cb()
+ */
+int bt_audio_set_connection_state_changed_cb(bt_audio_connection_state_changed_cb callback, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_MODULE
+ * @brief  Unregisters a callback function that will be invoked when the connection state is changed.
+ * @return   0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @pre The Bluetooth audio service must be initialized with bt_audio_initialize().
+ * @see bt_audio_initialize()
+ * @see bt_audio_connection_state_changed_cb()
+ * @see bt_audio_set_connection_state_changed_cb()
+ */
+int bt_audio_unset_connection_state_changed_cb(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_AG_MODULE
+ * @brief  Notifies the speaker gain to the remote device.
+ * @details This function sends a signal to the remote device. This signal has the gain value.
+ * @a gain is represented on a scale from 0 to 15. This value is absolute value relating to a particular volume level.
+ * When the speaker gain of remote device is changed to the requested gain, bt_audio_speaker_gain_changed_cb() will be called.
+ * @param[in] remote_address  The remote address
+ * @param[in] gain The gain of speaker (0 ~ 15)
+ * @return   0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
+ * @pre The remote device is connected by bt_audio_connect() with #BT_AUDIO_PROFILE_TYPE_HSP_HFP service.
+ * @see bt_ag_get_speaker_gain()
+ * @see bt_ag_set_speaker_gain_changed_cb()
+ * @see bt_ag_unset_speaker_gain_changed_cb()
+ */
+int bt_ag_notify_speaker_gain(const char *remote_address, int gain);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_AG_MODULE
+ * @brief  Gets the current speaker gain of the remote device.
+ * @details This function gets the value of speaker gain of the remote device.
+ * @a gain is represented on a scale from 0 to 15. This value is absolute value relating to a particular volume level.
+ * @param[in] remote_address  The remote address
+ * @param[out] gain The gain of speaker (0 ~ 15)
+ * @return   0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
+ * @pre The remote device is connected by bt_audio_connect() with #BT_AUDIO_PROFILE_TYPE_HSP_HFP service.
+ * @see bt_ag_notify_speaker_gain()
+ * @see bt_ag_set_speaker_gain_changed_cb()
+ * @see bt_ag_unset_speaker_gain_changed_cb()
+ */
+int bt_ag_get_speaker_gain(const char *remote_address, int *gain);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_MODULE
+ * @brief  Called when the speaker gain of the remote device is changed.
+ * @param[in] remote_address  The remote address
+ * @param[in] gain The gain of speaker (0 ~ 15)
+ * @param[in] user_data The user data passed from the callback registration function
+ * @see bt_ag_set_speaker_gain_changed_cb()
+ * @see bt_ag_unset_speaker_gain_changed_cb()
+ */
+typedef void (*bt_ag_speaker_gain_changed_cb) (const char *remote_address, int gain, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_AG_MODULE
+ * @brief  Registers a callback function that will be invoked when the speaker gain of the remote device is changed.
+ * @details This function let you know the change of the speaker gain of the remote device.
+ * @a gain is represented on a scale from 0 to 15. This value is absolute value relating to a particular volume level.
+ * @param[in] callback The callback function to register
+ * @param[in] user_data The user data to be passed to the callback function
+ * @return   0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @pre The Bluetooth audio service must be initialized with bt_audio_initialize().
+ * @see bt_audio_initialize()
+ * @see bt_ag_unset_speaker_gain_changed_cb()
+ */
+int bt_ag_set_speaker_gain_changed_cb(bt_ag_speaker_gain_changed_cb callback, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_AG_MODULE
+ * @brief  Unregisters a callback function that will be invoked when the speaker gain of the remote device is changed.
+ * @return   0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @pre The Bluetooth audio service must be initialized with bt_audio_initialize().
+ * @see bt_audio_initialize()
+ * @see bt_ag_set_speaker_gain_changed_cb()
+ */
+int bt_ag_unset_speaker_gain_changed_cb(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_MODULE
+ * @brief  Called when the microphone gain of the remote device is changed.
+ * @param[in] remote_address  The remote address
+ * @param[in] gain The gain of microphone (0 ~ 15)
+ * @param[in] user_data The user data passed from the callback registration function
+ * @see bt_ag_set_microphone_gain_changed_cb()
+ * @see bt_ag_unset_microphone_gain_changed_cb()
+ */
+typedef void (*bt_ag_microphone_gain_changed_cb) (const char *remote_address, int gain, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_AG_MODULE
+ * @brief  Registers a callback function that will be invoked when the microphone gain of the remote device is changed.
+ * @param[in] callback The callback function to register
+ * @param[in] user_data The user data to be passed to the callback function
+ * @return   0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @pre The Bluetooth audio service must be initialized with bt_audio_initialize().
+ * @see bt_audio_initialize()
+ * @see bt_ag_unset_microphone_gain_changed_cb()
+ */
+int bt_ag_set_microphone_gain_changed_cb(bt_ag_microphone_gain_changed_cb callback, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_AG_MODULE
+ * @brief  Unregisters a callback function that will be invoked when the microphone gain of the remote device is changed.
+ * @return   0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @pre The Bluetooth audio service must be initialized with bt_audio_initialize().
+ * @see bt_audio_initialize()
+ * @see bt_ag_set_microphone_gain_changed_cb()
+ */
+int bt_ag_unset_microphone_gain_changed_cb(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @brief  Called when the connection state is changed.
+ * @param[in] connected  The state to be changed. @a true means connected state, Otherwise, @a false.
+ * @param[in] remote_address  The remote address
+ * @param[in] user_data The user data passed from the callback registration function
+ * @see bt_avrcp_target_initialize()
+ * @see bt_avrcp_target_deinitialize()
+ */
+typedef void (*bt_avrcp_target_connection_state_changed_cb) (bool connected, const char *remote_address, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @brief Initializes the Bluetooth AVRCP(Audio/Video Remote Control Profile) service.
+ * @remarks This function must be called before Bluetooth AVRCP service. \n
+ * You must free all resources of the this service by calling bt_avrcp_target_deinitialize()
+ * if Bluetooth AVRCP service is no longer needed.
+ * @param[in] callback The callback function called when the connection state is changed
+ * @param[in] user_data The user data to be passed to the callback function
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ * @see bt_initialize()
+ * @see bt_avrcp_target_deinitialize()
+ */
+int bt_avrcp_target_initialize(bt_avrcp_target_connection_state_changed_cb callback, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @brief Deinitializes the Bluetooth AVRCP(Audio/Video Remote Control Profile) service.
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @pre The Bluetooth audio service must be initialized with bt_avrcp_target_initialize().
+ * @see bt_avrcp_target_initialize()
+ */
+int bt_avrcp_target_deinitialize(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @brief  Notify the equalize state to the remote device.
+ * @param[in] state The state of equalizer
+ * @return   0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
+ * @pre The remote device must be connected.
+ * @see bt_avrcp_target_connection_state_changed_cb()
+ * @see bt_avrcp_target_initialize()
+ */
+int bt_avrcp_target_notify_equalizer_state(bt_avrcp_equalizer_state_e state);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @brief  Notify the repeat mode to the remote device.
+ * @param[in] mode The repeat mode
+ * @return   0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
+ * @pre The remote device must be connected.
+ * @see bt_avrcp_target_connection_state_changed_cb()
+ * @see bt_avrcp_target_initialize()
+ */
+int bt_avrcp_target_notify_repeat_mode(bt_avrcp_repeat_mode_e mode);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @brief  Notify the shuffle mode to the remote device.
+ * @param[in] mode The repeat mode
+ * @return   0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
+ * @pre The remote device must be connected.
+ * @see bt_avrcp_target_connection_state_changed_cb()
+ * @see bt_avrcp_target_initialize()
+ */
+int bt_avrcp_target_notify_shuffle_mode(bt_avrcp_shuffle_mode_e mode);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @brief  Notify the scan mode to the remote device.
+ * @param[in] mode The scan mode
+ * @return   0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
+ * @pre The remote device must be connected.
+ * @see bt_avrcp_target_connection_state_changed_cb()
+ * @see bt_avrcp_target_initialize()
+ */
+int bt_avrcp_target_notify_scan_mode(bt_avrcp_scan_mode_e mode);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @brief  Notify the player state to the remote device.
+ * @param[in] state The player state
+ * @return   0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
+ * @pre The remote device must be connected.
+ * @see bt_avrcp_target_connection_state_changed_cb()
+ * @see bt_avrcp_target_initialize()
+ */
+int bt_avrcp_target_notify_player_state(bt_avrcp_player_state_e state);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @brief  Notify the current position of song to the remote device.
+ * @param[in] position The current position in milliseconds
+ * @return  0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
+ * @pre The remote device must be connected.
+ * @see bt_avrcp_target_connection_state_changed_cb()
+ * @see bt_avrcp_target_initialize()
+ */
+int bt_avrcp_target_notify_position(unsigned int position);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @brief  Notify the track to the remote device.
+ * @param[in] title The title of track
+ * @param[in] artist The artist of track
+ * @param[in] album The album of track
+ * @param[in] genre The genre of track
+ * @param[in] track_num The track number
+ * @param[in] total_tracks The number of all tracks
+ * @param[in] duration The duration of track in milliseconds
+ * @return   0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
+ * @pre The remote device must be connected.
+ * @see bt_avrcp_target_connection_state_changed_cb()
+ * @see bt_avrcp_target_initialize()
+ */
+int bt_avrcp_target_notify_track(const char *title, const char *artist, const char *album, const char *genre, unsigned int track_num, unsigned int total_tracks, unsigned int duration);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HDP_MODULE
+ * @brief Registers an application that acts as the @a Sink role of HDP(Health Device Profile).
+ * @param[in] data_type  The data type of MDEP. This value is defined in ISO/IEEE 11073-20601 spec.
+ * For example, pulse oximeter is 0x1004 and blood pressure monitor is 0x1007.
+ * @param[out] app_id  The ID of application
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @pre The Bluetooth must be enabled with bt_adapter_enable().
+ * @see bt_adapter_enable()
+ * @see bt_hdp_deactivate_sink()
+ */
+int bt_hdp_register_sink_app(unsigned short data_type, char **app_id);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HDP_MODULE
+ * @brief Unregisters the given application that acts as the @a Sink role of HDP(Health Device Profile).
+ * @param[in] app_id  The ID of application
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @see bt_hdp_register_sink_app()
+ */
+int bt_hdp_unregister_sink_app(const char *app_id);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HDP_MODULE
+ * @brief Connects the remote device which acts as @a Source role, asynchronously.
+ * @param[in] remote_address  The remote address
+ * @param[in] app_id  The ID of application
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_BONDED  Remote device is not bonded
+ * @retval #BT_ERROR_OUT_OF_MEMORY  Out of memory
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @pre The Sink role of HDP must be activated with bt_hdp_activate_sink().
+ * @pre The local device must be bonded with the remote device by bt_device_create_bond().
+ * @post bt_hdp_connected_cb() will be invoked.
+ * @see bt_hdp_disconnect()
+ * @see bt_hdp_set_connection_state_changed_cb()
+ * @see bt_hdp_unset_connection_state_changed_cb()
+ */
+int bt_hdp_connect_to_source(const char *remote_address, const char *app_id);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HDP_MODULE
+ * @brief Disconnects the remote device, asynchronously.
+ * @param[in] remote_address  The remote address
+ * @param[in] channel  The connected data channel
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
+ * @retval #BT_ERROR_OUT_OF_MEMORY  Out of memory
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @pre The remote device must be connected.
+ * @post bt_hdp_disconnected_cb() will be invoked.
+ * @see bt_hdp_set_connection_state_changed_cb()
+ * @see bt_hdp_unset_connection_state_changed_cb()
+ */
+int bt_hdp_disconnect(const char *remote_address, unsigned int channel);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HDP_MODULE
+ * @brief Sends the data to the remote device.
+ * @param[in] channel  The connected data channel
+ * @param[in] data  The data to send
+ * @param[in] size  The size of data to send (byte)
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @pre The remote device must be connected.
+ * @see bt_hdp_data_received_cb()
+ * @see bt_hdp_set_data_received_cb()
+ * @see bt_hdp_unset_data_received_cb()
+ */
+int bt_hdp_send_data(unsigned int channel, const char *data, unsigned int size);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HDP_MODULE
+ * @brief  Called when the connection is established.
+ * @param[in] result  The result of connecting to the remote device
+ * @param[in] remote_address  The address of connected remote device
+ * @param[in] app_id  The ID of application
+ * @param[in] type  The type of HDP(Health Device Profile) channel
+ * @param[in] channel  The connected data channel
+ * @param[in] user_data The user data passed from the callback registration function
+ * @see  bt_hdp_disconnected_cb
+ * @see bt_hdp_set_connection_state_changed_cb()
+ * @see bt_hdp_unset_connection_state_changed_cb()
+ */
+typedef void (*bt_hdp_connected_cb) (int result, const char *remote_address, const char *app_id,
+    bt_hdp_channel_type_e type, unsigned int channel, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HDP_MODULE
+ * @brief  Called when the connection is disconnected.
+ * @param[in] result  The result of disconnecting from the remote device
+ * @param[in] remote_address  The address of disconnected remote device
+ * @param[in] channel  The connected data channel
+ * @param[in] user_data The user data passed from the callback registration function
+ * @see  bt_hdp_connected_cb
+ * @see bt_hdp_set_connection_state_changed_cb()
+ * @see bt_hdp_unset_connection_state_changed_cb()
+ */
+typedef void (*bt_hdp_disconnected_cb) (int result, const char *remote_address, unsigned int channel, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HDP_MODULE
+ * @brief  Registers a callback function that will be invoked when the connection state is changed.
+ * @param[in] connected_cb The callback function called when a connection is established
+ * @param[in] disconnected_cb The callback function called when a connection is disconnected
+ * @param[in] user_data The user data to be passed to the callback function
+ * @return   0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ * @see bt_hdp_unset_connection_state_changed_cb()
+ */
+int bt_hdp_set_connection_state_changed_cb(bt_hdp_connected_cb connected_cb, bt_hdp_disconnected_cb disconnected_cb, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HDP_MODULE
+ * @brief  Unregisters a callback function that will be invoked when the connection state is changed.
+ * @return   0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ * @see bt_hdp_set_connection_state_changed_cb()
+ */
+int bt_hdp_unset_connection_state_changed_cb(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HDP_MODULE
+ * @brief  Called when the you receive the data.
+ * @param[in] channel  The connected data channel
+ * @param[in] data  The received data
+ * @param[in] size  The size of received data (byte)
+ * @param[in] user_data The user data passed from the callback registration function
+ * @see bt_hdp_set_data_received_cb()
+ * @see bt_hdp_unset_data_received_cb()
+ */
+typedef void (*bt_hdp_data_received_cb) (unsigned int channel, const char *data, unsigned int size, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HDP_MODULE
+ * @brief  Registers a callback function that will be invoked when you receive the data.
+ * @param[in] callback The callback function to register
+ * @param[in] user_data The user data to be passed to the callback function
+ * @return   0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ * @see bt_hdp_unset_data_received_cb()
+ */
+int bt_hdp_set_data_received_cb(bt_hdp_data_received_cb callback, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HDP_MODULE
+ * @brief  Unregisters a callback function that will be invoked when you receive the data.
+ * @return   0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ * @see bt_hdp_set_data_received_cb()
+ */
+int bt_hdp_unset_data_received_cb(void);
 
 /**
  * @}
  */
+
 
 #ifdef __cplusplus
 }

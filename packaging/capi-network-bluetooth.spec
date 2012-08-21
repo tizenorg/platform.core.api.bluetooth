@@ -1,9 +1,10 @@
+#sbs-git:slp/api/bluetooth capi-network-bluetooth 0.1.0 686c444083e4197845c768e5dd034022b1dfa250
 Name:       capi-network-bluetooth
 Summary:    Network Bluetooth Framework
-Version: 0.1.2
+Version: 0.1.12
 Release:    1
 Group:      TO_BE/FILLED_IN
-License:    Apache-2.0
+License:    TO BE FILLED IN
 Source0:    %{name}-%{version}.tar.gz
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig

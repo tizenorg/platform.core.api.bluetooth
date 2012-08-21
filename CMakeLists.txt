@@ -9,7 +9,7 @@ SET(PREFIX ${CMAKE_INSTALL_PREFIX})
 SET(INC_DIR include)
 INCLUDE_DIRECTORIES(${INC_DIR})
 
-SET(dependents "dlog glib-2.0 capi-base-common bluetooth-api")
+SET(dependents "dlog glib-2.0 capi-base-common bluetooth-api bluetooth-media-control")
 SET(pc_dependents "capi-base-common")
 
 INCLUDE(FindPkgConfig)
@@ -30,7 +30,20 @@ ADD_DEFINITIONS("-DTIZEN_DEBUG")
 
 SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--as-needed -Wl,--rpath=/usr/lib")
 
-aux_source_directory(src SOURCES)
+SET(SOURCES
+src/bluetooth-common.c
+src/bluetooth-adapter.c
+src/bluetooth-device.c
+src/bluetooth-socket.c
+src/bluetooth-opp-server.c
+src/bluetooth-opp-client.c
+src/bluetooth-pan.c
+src/bluetooth-hdp.c
+src/bluetooth-hid.c
+src/bluetooth-audio.c
+src/bluetooth-avrcp.c
+)
+
 ADD_LIBRARY(${fw_name} SHARED ${SOURCES})
 
 TARGET_LINK_LIBRARIES(${fw_name} ${${fw_name}_LDFLAGS})
@@ -60,8 +73,6 @@ CONFIGURE_FILE(
     @ONLY
 )
 INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${fw_name}.pc DESTINATION lib/pkgconfig)
-
-ADD_SUBDIRECTORY(test)
 
 IF(UNIX)
 
