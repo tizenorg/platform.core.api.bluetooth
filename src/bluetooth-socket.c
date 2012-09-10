@@ -108,8 +108,6 @@ int bt_socket_accept(int socket_fd, int *connected_socket_fd)
 		LOGE("[%s] %s(0x%08x)", __FUNCTION__, _bt_convert_error_to_string(error_code), error_code);
 	}
 
-	_bt_unset_cb(BT_EVENT_RFCOMM_CONNECTION_REQUESTED);
-
 	return error_code;
 }
 
