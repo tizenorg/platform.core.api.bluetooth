@@ -844,13 +844,15 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 		break;
 	case BLUETOOTH_HID_CONNECTED:
 		LOGI("[%s] BLUETOOTH_HID_CONNECTED", __FUNCTION__);
-		device_addr = (char *)(param->param_data);
+		bd_addr = (bluetooth_device_address_t *)(param->param_data);
+		_bt_convert_address_to_string(&device_addr, bd_addr);
 		((bt_hid_host_connection_state_changed_cb)bt_event_slot_container[event_index].callback)
 		(_bt_get_error_code(param->result), TRUE, device_addr, bt_event_slot_container[event_index].user_data);
 		break;
 	case BLUETOOTH_HID_DISCONNECTED:
 		LOGI("[%s] BLUETOOTH_HID_DISCONNECTED", __FUNCTION__);
-		device_addr = (char *)(param->param_data);
+		bd_addr = (bluetooth_device_address_t *)(param->param_data);
+		_bt_convert_address_to_string(&device_addr, bd_addr);
 		((bt_hid_host_connection_state_changed_cb)bt_event_slot_container[event_index].callback)
 		(_bt_get_error_code(param->result), FALSE, device_addr, bt_event_slot_container[event_index].user_data);
 		break;
