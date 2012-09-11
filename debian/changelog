@@ -1,3 +1,11 @@
+capi-network-bluetooth (0.1.14-1) unstable; urgency=low
+
+  * Tagging and upload the package
+  * Git: slp/api/bluetooth
+  * Tag: capi-network-bluetooth_0.1.14-1
+
+ -- DoHyun Pyun <dh79.pyun@samsung.com>  Tue, 11 Sep 2012 09:56:47 +0900
+
 capi-network-bluetooth (0.1.13-1) unstable; urgency=low
 
   * Tagging and upload the package

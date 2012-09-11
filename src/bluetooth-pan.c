@@ -37,6 +37,7 @@ int bt_nap_activate(void)
 
 	BT_CHECK_INIT_STATUS();
 	error = bluetooth_network_activate_server();
+	error = _bt_get_error_code(error);
 	if (error != BT_ERROR_NONE) {
 		LOGE("[%s] %s(0x%08x)", __FUNCTION__,
 			_bt_convert_error_to_string(error), error);
@@ -50,6 +51,7 @@ int bt_nap_deactivate(void)
 
 	BT_CHECK_INIT_STATUS();
 	error = bluetooth_network_deactivate_server();
+	error = _bt_get_error_code(error);
 	if (error != BT_ERROR_NONE) {
 		LOGE("[%s] %s(0x%08x)", __FUNCTION__,
 			_bt_convert_error_to_string(error), error);
@@ -101,6 +103,7 @@ int bt_panu_connect(const char *remote_address, bt_panu_service_type_e type)
 	if (BT_PANU_SERVICE_TYPE_NAP == type) {
 		error = bluetooth_network_connect(&addr_hex,
 					BLUETOOTH_NETWORK_NAP_ROLE, NULL);
+		error = _bt_get_error_code(error);
 		if (error != BT_ERROR_NONE) {
 			LOGE("[%s] %s(0x%08x)", __FUNCTION__,
 				_bt_convert_error_to_string(error), error);
@@ -118,11 +121,11 @@ int bt_panu_disconnect(const char *remote_address)
 	BT_CHECK_INPUT_PARAMETER(remote_address);
 	_bt_convert_address_to_hex(&addr_hex, remote_address);
 	error = bluetooth_network_disconnect(&addr_hex);
+	error = _bt_get_error_code(error);
 	if (error != BT_ERROR_NONE) {
 		LOGE("[%s] %s(0x%08x)", __FUNCTION__,
 			_bt_convert_error_to_string(error), error);
 	}
 	return error;
 }
-
 
