@@ -1,17 +1,24 @@
 /*
- * Copyright (c) 2012-2013 Samsung Electronics Co., Ltd.
+ * capi-network-bluetooth
  *
- * Licensed under the Apache License, Version 2.0 (the License);
+ * Copyright (c) 2000 - 2011 Samsung Electronics Co., Ltd. All rights reserved.
+ *
+ * Contact:  Hocheol Seo <hocheol.seo@samsung.com>
+ *		 Girishashok Joshi <girish.joshi@samsung.com>
+ *		 Chanyeol Park <chanyeol.park@samsung.com>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *		http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an AS IS BASIS,
+ * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
 /**
@@ -123,7 +130,6 @@ tc_table_t tc_table[] = {
 	/* Network functions */
 	{"bt_nap_activate"		, 110},
 	{"bt_nap_deactivate"		, 111},
-	{"bt_nap_disconnect_all"	, 112},
 
 	/* Device functions */
 	{"bt_device_set_authorization (true)"	, 120},
@@ -902,13 +908,6 @@ int test_input_callback(void *data)
 
 	case 111:
 		ret = bt_nap_deactivate();
-		if (ret < BT_ERROR_NONE) {
-			TC_PRT("failed with [0x%04x]", ret);
-		}
-		break;
-
-	case 112:
-		ret = bt_nap_disconnect_all();
 		if (ret < BT_ERROR_NONE) {
 			TC_PRT("failed with [0x%04x]", ret);
 		}

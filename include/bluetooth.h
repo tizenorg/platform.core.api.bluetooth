@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2013 Samsung Electronics Co., Ltd.
+ * Copyright (c) 2011 Samsung Electronics Co., Ltd All Rights Reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License);
  * you may not use this file except in compliance with the License.
@@ -2306,19 +2306,6 @@ int bt_nap_activate(void);
  * @see bt_nap_activate()
  */
 int bt_nap_deactivate(void);
-
-/**
- * @ingroup CAPI_NETWORK_BLUETOOTH_PAN_NAP_MODULE
- * @brief Disconnects the all PANUs(Personal Area Networking User) which are connected to you.
- * @return 0 on success, otherwise a negative error value.
- * @retval #BT_ERROR_NONE  Successful
- * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_NOT_ENABLED  Not enabled
- * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
- * @pre The Bluetooth NAP service must be activated with bt_nap_activate().
- * @see bt_nap_activate()
- */
-int bt_nap_disconnect_all(void);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_PAN_NAP_MODULE
