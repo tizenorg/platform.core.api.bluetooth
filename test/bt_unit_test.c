@@ -446,7 +446,7 @@ void __bt_avrcp_scan_mode_changed_cb(bt_avrcp_scan_mode_e scan, void *user_data)
 int test_input_callback(void *data)
 {
 	int ret = 0;
-	int test_id = (int)data;
+	long test_id = (long)data;
 
 	switch (test_id) {
 	case 0x00ff:
@@ -1153,8 +1153,8 @@ static gboolean key_event_cb(GIOChannel *chan,
 {
 	char buf[BUFFER_LEN] = { 0 };
 
-	unsigned int len = 0;
-	int test_id;
+	gsize len = 0;
+	long test_id;
 
 	memset(buf, 0, sizeof(buf));
 
