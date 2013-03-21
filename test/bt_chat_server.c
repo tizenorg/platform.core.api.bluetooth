@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Samsung Electronics Co., Ltd All Rights Reserved
+ * Copyright (c) 2012-2013 Samsung Electronics Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the License);
  * you may not use this file except in compliance with the License.
@@ -200,7 +200,8 @@ int main()
 		{
 			if(bt_adapter_set_name("chat_server") != BT_ERROR_NONE)
 			{
-				free(name);
+				if (NULL != name)
+					free(name);
 				LOGE("[%s] bt_adapter_set_name() failed.", __FUNCTION__);
 				return -1;
 			}

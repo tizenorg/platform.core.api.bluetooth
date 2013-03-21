@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Samsung Electronics Co., Ltd All Rights Reserved
+ * Copyright (c) 2012-2013 Samsung Electronics Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the License);
  * you may not use this file except in compliance with the License.
@@ -829,6 +829,29 @@ int bt_adapter_enable(void);
  *
  */
 int bt_adapter_disable(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_MODULE
+ * @brief Reset the local Bluetooth adapter, synchronously.
+ *
+ * @details This function resets Bluetooth protocol and values.
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_OPERATION_FAILED Operation failed
+ *
+ * @pre Bluetooth service must be initialized with bt_initialize().
+ * @post bt_adapter_state_changed_cb() will be invoked if The state of local Bluetooth was #BT_ADAPTER_ENABLED.
+ *
+ * @see bt_initialize()
+ * @see bt_adapter_get_state()
+ * @see bt_adapter_set_state_changed_cb()
+ * @see bt_adapter_unset_state_changed_cb()
+ * @see bt_adapter_state_changed_cb()
+ *
+ */
+int bt_adapter_reset(void);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_MODULE
@@ -2306,6 +2329,19 @@ int bt_nap_activate(void);
  * @see bt_nap_activate()
  */
 int bt_nap_deactivate(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PAN_NAP_MODULE
+ * @brief Disconnects the all PANUs(Personal Area Networking User) which are connected to you.
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @pre The Bluetooth NAP service must be activated with bt_nap_activate().
+ * @see bt_nap_activate()
+ */
+int bt_nap_disconnect_all(void);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_PAN_NAP_MODULE

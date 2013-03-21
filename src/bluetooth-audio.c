@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Samsung Electronics Co., Ltd All Rights Reserved
+ * Copyright (c) 2012-2013 Samsung Electronics Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the License);
  * you may not use this file except in compliance with the License.
@@ -77,7 +77,7 @@ int bt_audio_initialize(void)
 	error = _bt_convert_telephony_error_code(error);
 	error = _bt_get_error_code(error);
 	if (BT_ERROR_NONE != error) {
-		BT_ERR("[%s] %s(0x%08x)",
+		BT_ERR("[%s] (0x%08x)",
 			_bt_convert_error_to_string(error), error);
 	}
 	return error;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Samsung Electronics Co., Ltd All Rights Reserved
+ * Copyright (c) 2012-2013 Samsung Electronics Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the License);
  * you may not use this file except in compliance with the License.
@@ -44,6 +44,18 @@ int bt_adapter_disable(void)
 
 	BT_CHECK_INIT_STATUS();
 	error_code = _bt_get_error_code(bluetooth_disable_adapter());
+	if (error_code != BT_ERROR_NONE) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
+	}
+	return error_code;
+}
+
+int bt_adapter_reset(void)
+{
+	int error_code = BT_ERROR_NONE;
+
+	BT_CHECK_INIT_STATUS();
+	error_code = _bt_get_error_code(bluetooth_reset_adapter());
 	if (error_code != BT_ERROR_NONE) {
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 	}

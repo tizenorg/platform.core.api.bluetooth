@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Samsung Electronics Co., Ltd All Rights Reserved
+ * Copyright (c) 2012-2013 Samsung Electronics Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the License);
  * you may not use this file except in compliance with the License.
@@ -49,6 +49,24 @@ int bt_nap_deactivate(void)
 	if (error != BT_ERROR_NONE) {
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
 	}
+	return error;
+}
+
+/* bluez don't support the disconnect API about NAP server */
+/* So we implement this, deactivate the server and re-activate the server */
+int bt_nap_disconnect_all(void)
+{
+	int error = BT_ERROR_NONE;
+
+	BT_CHECK_INIT_STATUS();
+	error = bluetooth_network_deactivate_server();
+	error = _bt_get_error_code(error);
+	if (error != BT_ERROR_NONE) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
+	} else {
+		return bt_nap_activate();
+	}
+
 	return error;
 }
 
