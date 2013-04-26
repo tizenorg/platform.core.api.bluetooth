@@ -6,8 +6,8 @@ Release:    1
 Group:      TO_BE/FILLED_IN
 License:    Apache License, Version 2.0
 Source0:    %{name}-%{version}.tar.gz
-Requires(post): eglibc
-Requires(postun): eglibc
+Requires(post): /sbin/ldconfig
+Requires(postun): /sbin/ldconfig
 
 BuildRequires:  pkgconfig(dbus-glib-1)
 BuildRequires:  pkgconfig(dlog)
