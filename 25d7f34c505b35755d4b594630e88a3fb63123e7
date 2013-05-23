@@ -1,0 +1,8 @@
+Change-Id: I25d7f34c505b35755d4b594630e88a3fb63123e7
+Code-Review+2: Anas Nashif
+Verified+1: Rusty Lynch <rusty.lynch@intel.com>
+Submitted-by: Anas Nashif
+Submitted-at: Thu, 23 May 2013 12:54:21 -0700
+Reviewed-on: https://review.tizen.org/gerrit/3646
+Project: platform/core/api/bluetooth
+Branch: refs/heads/tizen
