@@ -1,3 +1,6 @@
+* Fri May 31 2013 Anas Nashif <anas.nashif@intel.com> accepted/tizen/20130523.195543@25d7f34
+- Remove placeholders and cleanup spec
+
 * Thu May 23 2013 Rusty Lynch <rusty.lynch@intel.com> submit/tizen/20130517.044608@045ab24
 - Fix build for Tizen 3.0
 
