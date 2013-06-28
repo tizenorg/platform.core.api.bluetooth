@@ -5,6 +5,7 @@ Release:    1
 Group:      Connectivity/API
 License:    Apache-2.0
 Source0:    %{name}-%{version}.tar.gz
+Source1001: 	capi-network-bluetooth.manifest
 BuildRequires:  pkgconfig(dbus-glib-1)
 BuildRequires:  pkgconfig(dlog)
 BuildRequires:  pkgconfig(glib-2.0)
@@ -30,6 +31,7 @@ Network Bluetooth Framework.
 
 %prep
 %setup -q
+cp %{SOURCE1001} .
 
 %build
 MAJORVER=`echo %{version} | awk 'BEGIN {FS="."}{print $1}'`
@@ -46,11 +48,13 @@ make %{?jobs:-j%jobs}
 %postun -p /sbin/ldconfig
 
 %files
+%manifest %{name}.manifest
 %license LICENSE.APLv2 LICENSE
 %manifest bluetooth.manifest
 %{_libdir}/libcapi-network-bluetooth.so.*
 
 %files devel
+%manifest %{name}.manifest
 %{_includedir}/network/bluetooth.h
 %{_libdir}/pkgconfig/capi-network-bluetooth.pc
 %{_libdir}/libcapi-network-bluetooth.so
