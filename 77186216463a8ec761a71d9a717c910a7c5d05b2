@@ -1,0 +1,8 @@
+Change-Id: I77186216463a8ec761a71d9a717c910a7c5d05b2
+Code-Review+2: Ryan Ware <ware@linux.intel.com>
+Verified+1: Ryan Ware <ware@linux.intel.com>
+Submitted-by: Ryan Ware <ware@linux.intel.com>
+Submitted-at: Mon, 08 Jul 2013 10:07:10 -0700
+Reviewed-on: https://review.tizen.org/gerrit/4500
+Project: platform/core/api/bluetooth
+Branch: refs/heads/tizen
