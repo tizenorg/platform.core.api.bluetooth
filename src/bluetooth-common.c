@@ -489,11 +489,13 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 
 	event_index = __bt_get_cb_index(event);
 	if (event_index == -1 || bt_event_slot_container[event_index].callback == NULL) {
+		//BT_ERR("[CLE] : event = %d   *********PROBLEM********", event);
 		return;
 	}
-
+	// BT_ERR("[CLE] : event_index = %d   *****************", event_index);
 	memset(&rfcomm_connection, 0x00, sizeof(bt_socket_connection_s));
 
+	//BT_ERR("[CLE] : event = %d ", event);
 	switch (event) {
 	case BLUETOOTH_EVENT_ENABLED:
 		BT_INFO("bt_adapter_state_changed_cb() will be called with BT_ADAPTER_ENABLED");
@@ -506,17 +508,17 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 		    (_bt_get_error_code(param->result), BT_ADAPTER_DISABLED, bt_event_slot_container[event_index].user_data);
 		break;
 	case BLUETOOTH_EVENT_LOCAL_NAME_CHANGED:
-		BT_INFO("bt_adapter_name_changed_cb() will be called");
+		BT_ERR("bt_adapter_name_changed_cb() will be called");
 		((bt_adapter_name_changed_cb)bt_event_slot_container[event_index].callback)
 		    ((char *)(param->param_data), bt_event_slot_container[event_index].user_data);
 		break;
 	case BLUETOOTH_EVENT_DISCOVERABLE_MODE_CHANGED:
-		BT_INFO("bt_adapter_visibility_mode_changed_cb() will be called");
+		BT_ERR("bt_adapter_visibility_mode_changed_cb() will be called");
 		((bt_adapter_visibility_mode_changed_cb)bt_event_slot_container[event_index].callback)
 		    (_bt_get_error_code(param->result), _bt_get_bt_visibility_mode_e(*(bt_adapter_visibility_mode_e *)(param->param_data)), bt_event_slot_container[event_index].user_data);
 		break;
 	case BLUETOOTH_EVENT_DISCOVERY_STARTED:
-		BT_INFO("bt_adapter_device_discovery_state_changed_cb() will be called with BT_ADAPTER_DEVICE_DISCOVERY_STARTED");
+		BT_ERR("bt_adapter_device_discovery_state_changed_cb() will be called with BT_ADAPTER_DEVICE_DISCOVERY_STARTED");
 		((bt_adapter_device_discovery_state_changed_cb) bt_event_slot_container[event_index].callback)
 		    (_bt_get_error_code(param->result), BT_ADAPTER_DEVICE_DISCOVERY_STARTED, NULL, bt_event_slot_container[event_index].user_data);
 		break;

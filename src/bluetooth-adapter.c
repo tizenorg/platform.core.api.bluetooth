@@ -29,7 +29,7 @@
 int bt_adapter_enable(void)
 {
 	int error_code = BT_ERROR_NONE;
-
+	BT_DBG("[CLE] ");
 	BT_CHECK_INIT_STATUS();
 	error_code = _bt_get_error_code(bluetooth_enable_adapter());
 	if (error_code != BT_ERROR_NONE) {
@@ -41,7 +41,7 @@ int bt_adapter_enable(void)
 int bt_adapter_disable(void)
 {
 	int error_code = BT_ERROR_NONE;
-
+	BT_DBG("[CLE] ");
 	BT_CHECK_INIT_STATUS();
 	error_code = _bt_get_error_code(bluetooth_disable_adapter());
 	if (error_code != BT_ERROR_NONE) {
@@ -66,7 +66,7 @@ int bt_adapter_get_state(bt_adapter_state_e *adapter_state)
 {
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(adapter_state);
-
+	BT_DBG("[CLE] ");
 	*adapter_state = bluetooth_check_adapter();
 	return BT_ERROR_NONE;
 }
@@ -91,6 +91,7 @@ int bt_adapter_get_address(char **address)
 		return error_code;
 	}
 
+ 	BT_DBG("[CLE] return address NO ERROR");
 	return BT_ERROR_NONE;
 }
 
@@ -98,7 +99,7 @@ int bt_adapter_get_name(char **name)
 {
 	int ret = BT_ERROR_NONE;
 	bluetooth_device_name_t loc_name = { {0} };
-
+	BT_DBG("[CLE] ");
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(name);
 
@@ -113,7 +114,8 @@ int bt_adapter_get_name(char **name)
 		BT_ERR("OUT_OF_MEMORY(0x%08x)", BT_ERROR_OUT_OF_MEMORY);
 		return BT_ERROR_OUT_OF_MEMORY;
 	}
-
+	// BT_DBG("[CLE] returns name: %s", *name);
+	BT_DBG("[CLE] returns name NO ERROR");
 	return BT_ERROR_NONE;
 }
 
@@ -121,7 +123,7 @@ int bt_adapter_set_name(const char *name)
 {
 	bluetooth_device_name_t loc_name = { {0} };
 	int ret = BT_ERROR_NONE;
-
+	// BT_DBG("[CLE] set name: %s", name);
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(name);
 
@@ -331,7 +333,7 @@ int bt_adapter_set_state_changed_cb(bt_adapter_state_changed_cb callback, void *
 int bt_adapter_set_name_changed_cb(bt_adapter_name_changed_cb callback, void *user_data)
 {
 	int ret = BT_ERROR_NONE;
-
+	BT_DBG("[CLE] callback)");
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(callback);
 	_bt_set_cb(BT_EVENT_NAME_CHANGED, callback, user_data);
