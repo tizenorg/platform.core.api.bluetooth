@@ -109,6 +109,7 @@ typedef enum
 	BT_ADAPTER_DEVICE_DISCOVERY_STARTED, /**< Device discovery is started */
 	BT_ADAPTER_DEVICE_DISCOVERY_FINISHED, /**< Device discovery is finished */
 	BT_ADAPTER_DEVICE_DISCOVERY_FOUND, /**< The remote Bluetooth device is found */
+	BT_ADAPTER_DEVICE_DISCOVERY_REMOVED, /**< A known remote Bluetooth device is disappeard */
 } bt_adapter_device_discovery_state_e;
 
 /**
