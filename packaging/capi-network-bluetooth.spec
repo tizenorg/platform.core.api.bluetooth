@@ -56,6 +56,7 @@ make %{?jobs:-j%jobs}
 %files devel
 %manifest %{name}-devel.manifest
 %{_includedir}/network/bluetooth.h
+%{_includedir}/network/bluetooth_type.h
 %{_libdir}/pkgconfig/capi-network-bluetooth.pc
 %{_libdir}/libcapi-network-bluetooth.so
 

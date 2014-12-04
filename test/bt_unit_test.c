@@ -589,7 +589,7 @@ int test_input_callback(void *data)
 	case 54: {
 		int socket_fd = 0;
 
-		ret = bt_socket_accept(server_fd, &socket_fd);
+		ret = bt_socket_accept(server_fd);
 		if (ret < BT_ERROR_NONE) {
 			TC_PRT("failed with [0x%04x]", ret);
 		} else {
@@ -865,12 +865,15 @@ int test_input_callback(void *data)
 			TC_PRT("failed with [0x%04x]", ret);
 		}
 		break;
-	case 99:
-		ret = bt_call_list_add(call_list, 1, BT_AG_CALL_STATE_ACTIVE);
+	case 99: {
+		const char *phone_number;
+		phone_number = g_strdup("01012345678");
+		ret = bt_call_list_add(call_list, 1, BT_AG_CALL_STATE_ACTIVE, phone_number);
 		if (ret < BT_ERROR_NONE) {
 			TC_PRT("failed with [0x%04x]", ret);
 		}
 		break;
+	}
 	case 100:
 		ret = bt_ag_notify_call_list(call_list);
 		if (ret < BT_ERROR_NONE) {
@@ -951,12 +954,13 @@ int test_input_callback(void *data)
 		break;
 
 	case 124:
+#if 0
 		ret = bt_device_set_connection_state_changed_cb(__bt_device_connection_state_changed_cb, NULL);
 		if (ret < BT_ERROR_NONE) {
 			TC_PRT("failed with [0x%04x]", ret);
 		}
 		break;
-
+#endif
 	case 125:
 		ret = bt_device_unset_connection_state_changed_cb();
 		if (ret < BT_ERROR_NONE) {
@@ -1024,7 +1028,7 @@ int test_input_callback(void *data)
 	}
 
 	case 144: {
-		ret = bt_gatt_set_characteristic_changed_cb(service_clone[1], __bt_gatt_characteristic_changed_cb, NULL);
+		ret = bt_gatt_set_characteristic_changed_cb(__bt_gatt_characteristic_changed_cb, NULL);
 		if (ret < BT_ERROR_NONE) {
 			TC_PRT("failed with [0x%04x]", ret);
 		}
@@ -1032,7 +1036,7 @@ int test_input_callback(void *data)
 	}
 
 	case 145: {
-		ret = bt_gatt_unset_characteristic_changed_cb(service_clone[1]);
+		ret = bt_gatt_unset_characteristic_changed_cb();
 		if (ret < BT_ERROR_NONE) {
 			TC_PRT("failed with [0x%04x]", ret);
 		}

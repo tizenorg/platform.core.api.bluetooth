@@ -39,6 +39,12 @@ int bt_device_create_bond(const char *device_address)
 	return error_code;
 }
 
+int bt_device_create_bond_by_type(const char *device_address,
+			bt_device_connection_link_type_e conn_type)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
 int bt_device_cancel_bonding(void)
 {
 	int error_code = BT_ERROR_NONE;
@@ -147,7 +153,7 @@ int bt_device_foreach_connected_profiles(const char *remote_address, bt_device_c
 	int ret;
 	int i = 0;
 	int profiles[] = {BT_PROFILE_RFCOMM, BT_PROFILE_A2DP,
-			BT_PROFILE_HSP, BT_PROFILE_HID, 0};
+			BT_PROFILE_HSP, BT_PROFILE_HID,	0};
 
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(remote_address);
@@ -173,6 +179,12 @@ int bt_device_foreach_connected_profiles(const char *remote_address, bt_device_c
 	}
 
 	return BT_ERROR_NONE;
+}
+
+int bt_device_is_profile_connected(const char *remote_address, bt_profile_e bt_profile,
+				bool *connected_status)
+{
+	return BT_ERROR_NOT_SUPPORTED;
 }
 
 int bt_device_set_bond_created_cb(bt_device_bond_created_cb callback, void *user_data)
@@ -255,3 +267,15 @@ int bt_device_unset_connection_state_changed_cb(void)
 	return BT_ERROR_NONE;
 }
 
+int bt_device_le_conn_update(const char *device_address,
+            const bt_le_conn_update_s *parameters)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
+int bt_device_get_service_mask_from_uuid_list(char **uuids,
+				      int no_of_service,
+				      bt_service_class_t *service_mask_list)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}

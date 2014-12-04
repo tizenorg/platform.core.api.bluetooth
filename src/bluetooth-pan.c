@@ -70,6 +70,11 @@ int bt_nap_disconnect_all(void)
 	return error;
 }
 
+int bt_nap_disconnect(const char *remote_address)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
 int bt_nap_set_connection_state_changed_cb(
 				bt_nap_connection_state_changed_cb callback,
 				void *user_data)
