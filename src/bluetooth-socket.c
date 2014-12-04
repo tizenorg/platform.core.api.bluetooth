@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#include <errno.h>
+#include <tizen.h>
 #include <dlog.h>
 #include <stdio.h>
 #include <bluetooth-api.h>
@@ -94,8 +96,9 @@ int bt_socket_listen(int socket_fd, int max_pending_connections)
 	return error_code;
 }
 
-int bt_socket_accept(int socket_fd, int *connected_socket_fd)
+int bt_socket_accept(int socket_fd)
 {
+#if 0
 	int error_code = BT_ERROR_NONE;
 
 	BT_CHECK_INIT_STATUS();
@@ -105,8 +108,9 @@ int bt_socket_accept(int socket_fd, int *connected_socket_fd)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code),
 				error_code);
 	}
-
 	return error_code;
+#endif
+	return BT_ERROR_NONE;
 }
 
 int bt_socket_reject(int socket_fd)
@@ -164,6 +168,7 @@ int bt_socket_send_data(int socket_fd, const char *data, int length)
 	int ret = 0;
 
 	BT_CHECK_INIT_STATUS();
+
 	ret = bluetooth_rfcomm_write(socket_fd, data, length);
 	if (ret == BLUETOOTH_ERROR_NOT_IN_OPERATION) {
 		BT_ERR("OPERATION_FAILED(0x%08x)", BT_ERROR_OPERATION_FAILED);

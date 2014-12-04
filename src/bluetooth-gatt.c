@@ -52,7 +52,7 @@ int bt_gatt_foreach_primary_services(const char *remote_address,
 		if (prim_svc->handle[i] == NULL)
 			continue;
 
-		BT_DBG("handle: %s", prim_svc->handle[i]);
+		BT_INFO("handle: %s", prim_svc->handle[i]);
 
 		if (foreach_call == true &&
 		    !callback((bt_gatt_attribute_h)prim_svc->handle[i], user_data)) {
@@ -162,28 +162,42 @@ int bt_gatt_foreach_included_services(bt_gatt_attribute_h service,
 	return ret;
 }
 
-int bt_gatt_set_characteristic_changed_cb(bt_gatt_attribute_h service,
-				bt_gatt_characteristic_changed_cb callback,
+int bt_gatt_set_characteristic_changed_cb(bt_gatt_characteristic_changed_cb callback,
 				void *user_data)
+{
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(callback);
+
+	_bt_set_cb(BT_EVENT_GATT_VALUE_CHANGED, callback, user_data);
+
+	return BT_ERROR_NONE;
+}
+
+int bt_gatt_unset_characteristic_changed_cb()
+{
+	BT_CHECK_INIT_STATUS();
+
+	_bt_unset_cb(BT_EVENT_GATT_VALUE_CHANGED);
+
+	return BT_ERROR_NONE;
+}
+
+int bt_gatt_watch_characteristic_changes(bt_gatt_attribute_h service)
 {
 	int ret;
 
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(service);
-	BT_CHECK_INPUT_PARAMETER(callback);
 
 	ret = _bt_get_error_code(bluetooth_gatt_watch_characteristics((const char *)service));
 
-	if (ret != BT_ERROR_NONE) {
+	if (ret != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
-	} else {
-		_bt_set_cb(BT_EVENT_GATT_VALUE_CHANGED, callback, user_data);
-	}
 
 	return ret;
 }
 
-int bt_gatt_unset_characteristic_changed_cb(bt_gatt_attribute_h service)
+int bt_gatt_unwatch_characteristic_changes(bt_gatt_attribute_h service)
 {
 	int ret;
 
@@ -192,11 +206,8 @@ int bt_gatt_unset_characteristic_changed_cb(bt_gatt_attribute_h service)
 
 	ret = _bt_get_error_code(bluetooth_gatt_unwatch_characteristics((const char *)service));
 
-	if (ret != BT_ERROR_NONE) {
+	if (ret != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
-	} else {
-		_bt_unset_cb(BT_EVENT_GATT_VALUE_CHANGED);
-	}
 
 	return ret;
 }
@@ -211,7 +222,7 @@ int bt_gatt_get_characteristic_declaration(bt_gatt_attribute_h characteristic,
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(characteristic);
 
-	memset(&property, 0x00, sizeof(bt_gatt_service_property_t));
+	memset(&property, 0x00, sizeof(bt_gatt_char_property_t));
 
 	ret = _bt_get_error_code(bluetooth_gatt_get_characteristics_property((const char *)characteristic, &property));
 
@@ -259,6 +270,34 @@ int bt_gatt_set_characteristic_value(bt_gatt_attribute_h characteristic,
 	return ret;
 }
 
+int bt_gatt_set_characteristic_value_request(bt_gatt_attribute_h characteristic,
+				const unsigned char *value, int value_length,
+				bt_gatt_characteristic_write_cb callback)
+{
+#if 0
+	int ret;
+
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(characteristic);
+	BT_CHECK_INPUT_PARAMETER(value);
+
+	if (value_length <= 0)
+		return BT_ERROR_INVALID_PARAMETER;
+
+	ret = _bt_get_error_code(bluetooth_gatt_set_characteristics_value_request(
+					(const char *)characteristic,
+					(const guint8 *)value, value_length));
+
+	if (ret != BT_ERROR_NONE) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+	} else {
+		_bt_set_cb(BT_EVENT_GATT_WRITE_CHARACTERISTIC, callback, characteristic);
+	}
+	return ret;
+#endif
+	return BT_ERROR_NONE;
+}
+
 int bt_gatt_clone_attribute_handle(bt_gatt_attribute_h *clone,
 				bt_gatt_attribute_h origin)
 {
@@ -283,3 +322,98 @@ int bt_gatt_destroy_attribute_handle(bt_gatt_attribute_h handle)
 
 	return error;
 }
+
+int bt_gatt_read_characteristic_value(bt_gatt_attribute_h characteristic,
+		bt_gatt_characteristic_read_cb callback)
+{
+	int ret = BT_ERROR_NONE;
+
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(characteristic);
+	BT_CHECK_INPUT_PARAMETER(callback);
+#if 0
+	ret = _bt_get_error_code(bluetooth_gatt_read_characteristic_value((const char *)characteristic));
+
+	if (ret != BT_ERROR_NONE) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+	} else {
+		_bt_set_cb(BT_EVENT_GATT_READ_CHARACTERISTIC, callback, NULL);
+	}
+#endif
+	return ret;
+}
+
+int bt_gatt_discover_characteristic_descriptor(bt_gatt_attribute_h characteristic_handle,
+				bt_gatt_characteristic_descriptor_discovered_cb callback,
+				void *user_data)
+{
+	int ret = BT_ERROR_NONE;
+
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(characteristic_handle);
+	BT_CHECK_INPUT_PARAMETER(callback);
+#if 0
+	ret = _bt_get_error_code(bluetooth_gatt_discover_characteristic_descriptor
+							((const char *)characteristic_handle));
+
+	if (ret != BT_ERROR_NONE) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+	} else {
+		_bt_set_cb(BT_EVENT_GATT_CHARACTERISTIC_DESCRIPTOR_DISCOVERED, callback, user_data);
+	}
+#endif
+	return ret;
+}
+
+int bt_gatt_connect(const char *address, bool auto_connect)
+{
+	int ret = BT_ERROR_NONE;
+	bluetooth_device_address_t bd_addr = { {0,} };
+
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(address);
+	_bt_convert_address_to_hex(&bd_addr, address);
+#if 0
+	ret = _bt_get_error_code(bluetooth_connect_le(&bd_addr, auto_connect ? TRUE : FALSE));
+
+	if (ret != BT_ERROR_NONE) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+	}
+#endif
+	return ret;
+}
+
+int bt_gatt_disconnect(const char *address)
+{
+	int ret = BT_ERROR_NONE;
+	bluetooth_device_address_t bd_addr = { {0,} };
+
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(address);
+	_bt_convert_address_to_hex(&bd_addr, address);
+#if 0
+	ret = _bt_get_error_code(bluetooth_disconnect_le(&bd_addr));
+
+	if (ret != BT_ERROR_NONE) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+	}
+#endif
+	return ret;
+}
+
+int bt_gatt_set_connection_state_changed_cb(bt_gatt_connection_state_changed_cb callback, void *user_data)
+{
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(callback);
+	_bt_set_cb(BT_EVENT_GATT_CONNECTION_STATUS, callback, user_data);
+
+	return BT_ERROR_NONE;
+}
+
+int bt_gatt_unset_connection_state_changed_cb(void)
+{
+	BT_CHECK_INIT_STATUS();
+	_bt_unset_cb(BT_EVENT_GATT_CONNECTION_STATUS);
+	return BT_ERROR_NONE;
+}
+

@@ -27,6 +27,25 @@ typedef struct _call_list_s {
 	GList *list;
 } call_list_s;
 
+static bool is_audio_initialized = false;
+
+#define BT_CHECK_AUDIO_INIT_STATUS() \
+	if (__bt_check_audio_init_status() == BT_ERROR_NOT_INITIALIZED) \
+	{ \
+		LOGE("[%s] NOT_INITIALIZED(0x%08x)", __FUNCTION__, BT_ERROR_NOT_INITIALIZED); \
+		return BT_ERROR_NOT_INITIALIZED; \
+	}
+
+int __bt_check_audio_init_status(void)
+{
+	if (is_audio_initialized != true) {
+		BT_ERR("NOT_INITIALIZED(0x%08x)", BT_ERROR_NOT_INITIALIZED);
+		return BT_ERROR_NOT_INITIALIZED;
+	}
+
+	return BT_ERROR_NONE;
+}
+
 /*The below API is just to convert the error from Telephony API's to CAPI error codes,
 * this is temporary change and changes to proper error code will be done in
 * subsequent check ins.*/
@@ -57,6 +76,10 @@ int _bt_convert_telephony_error_code(int error)
 	case BLUETOOTH_TELEPHONY_ERROR_I_O_ERROR:
 	case BLUETOOTH_TELEPHONY_ERROR_OPERATION_NOT_AVAILABLE:
 		return BT_ERROR_OPERATION_FAILED;
+#if 0
+	case BLUETOOTH_TELEPHONY_ERROR_PERMISSION_DENIED:
+		return BT_ERROR_PERMISSION_DENIED;
+#endif
 	default:
 		return BT_ERROR_NONE;
 	}
@@ -479,7 +502,7 @@ int bt_call_list_reset(bt_call_list_h list)
 	return BT_ERROR_NONE;
 }
 
-int bt_call_list_add(bt_call_list_h list, unsigned int call_id, bt_ag_call_state_e state)
+int bt_call_list_add(bt_call_list_h list, unsigned int call_id, bt_ag_call_state_e state, const char *phone_number)
 {
 	call_list_s *handle;
 	bt_telephony_call_status_info_t *call_status;

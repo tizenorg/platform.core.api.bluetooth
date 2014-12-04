@@ -22,6 +22,25 @@
 #include "bluetooth-audio-api.h"
 #include "bluetooth-media-control.h"
 
+static bool is_avrcp_target_initialized = false;
+
+#define BT_CHECK_AVRCP_TARGET_INIT_STATUS() \
+	if (__bt_check_avrcp_target_init_status() == BT_ERROR_NOT_INITIALIZED) \
+	{ \
+		LOGE("[%s] NOT_INITIALIZED(0x%08x)", __FUNCTION__, BT_ERROR_NOT_INITIALIZED); \
+		return BT_ERROR_NOT_INITIALIZED; \
+	}
+
+int __bt_check_avrcp_target_init_status(void)
+{
+	if (is_avrcp_target_initialized != true) {
+		BT_ERR("NOT_INITIALIZED(0x%08x)", BT_ERROR_NOT_INITIALIZED);
+		return BT_ERROR_NOT_INITIALIZED;
+	}
+
+	return BT_ERROR_NONE;
+}
+
 /*The below API is just to conver the error from Audio API's to CAPI error codes,
 * this is temporary change and changes to proper error code will be done in
 * subsequent check ins.*/
