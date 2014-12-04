@@ -37,9 +37,11 @@ int bt_hid_host_initialize(bt_hid_host_connection_state_changed_cb connection_cb
 	error = _bt_get_error_code(error);
 	if (BT_ERROR_NONE != error) {
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
+		return error;
 	} else {
 		_bt_set_cb(BT_EVENT_HID_CONNECTION_STATUS, connection_cb, user_data);
 	}
+
 	return error;
 }
 
@@ -53,10 +55,10 @@ int bt_hid_host_deinitialize()
 	error = _bt_get_error_code(error);
 	if (BT_ERROR_NONE != error) {
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
+		return error;
 	} else {
 		_bt_unset_cb(BT_EVENT_HID_CONNECTION_STATUS);
 	}
-
 	return error;
 }
 
@@ -75,6 +77,7 @@ int bt_hid_host_connect(const char *remote_address)
 	if (error != BT_ERROR_NONE) {
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
 	}
+	
 	return error;
 }
 
