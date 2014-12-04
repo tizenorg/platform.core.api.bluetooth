@@ -48,9 +48,12 @@ extern "C" {
 typedef enum
 {
 	BT_EVENT_STATE_CHANGED = 0x00, /**< Adapter state is changed */
+	BT_EVENT_LE_STATE_CHANGED, /**< Adapter le state is changed */
 	BT_EVENT_NAME_CHANGED, /**< Adapter name is changed */
 	BT_EVENT_VISIBILITY_MODE_CHANGED, /**< Adapter visibility mode is changed */
+	BT_EVENT_VISIBILITY_DURATION_CHANGED, /**< Adapter visibility duration is changed */
 	BT_EVENT_DEVICE_DISCOVERY_STATE_CHANGED, /**< Device discovery state is changed */
+	BT_EVENT_LE_DEVICE_DISCOVERY_STATE_CHANGED, /**< LE Device discovery state is changed */
 	BT_EVENT_BOND_CREATED, /**< A bond is created */
 	BT_EVENT_BOND_DESTROYED, /**< A bond is destroyed */
 	BT_EVENT_AUTHORIZATION_CHANGED, /**< Authorization is changed */
@@ -77,6 +80,7 @@ typedef enum
 	BT_EVENT_AG_DTMF_TRANSMITTED, /**< Audio - DTMF tone sending request */
 	BT_EVENT_AG_MICROPHONE_GAIN_CHANGE, /**< Audio Microphone change callback */
 	BT_EVENT_AG_SPEAKER_GAIN_CHANGE, /**< Audio Speaker gain change callback */
+	BT_EVENT_AG_VENDOR_CMD, /**< Audio - XSAT Vendor cmd */
 	BT_EVENT_AVRCP_CONNECTION_STATUS, /**< AVRCP connection change callback */
 	BT_EVENT_AVRCP_EQUALIZER_STATE_CHANGED, /**< AVRCP equalizer state change callback */
 	BT_EVENT_AVRCP_REPEAT_MODE_CHANGED, /**< AVRCP repeat mode change callback */
@@ -84,9 +88,40 @@ typedef enum
 	BT_EVENT_AVRCP_SCAN_MODE_CHANGED, /**< AVRCP scan mode change callback */
 	BT_EVENT_HID_CONNECTION_STATUS, /**< HID connection status callback */
 	BT_EVENT_DEVICE_CONNECTION_STATUS, /**< Device connection status callback */
+	BT_EVENT_GATT_CONNECTION_STATUS, /** < GATT connection status callback */
 	BT_EVENT_GATT_CHARACTERISTIC_DISCOVERED, /**< GATT characteristic discovered callback */
+	BT_EVENT_GATT_CHARACTERISTIC_DESCRIPTOR_DISCOVERED, /**< GATT characteristic descriptor discovered callback */
 	BT_EVENT_GATT_VALUE_CHANGED, /**< GATT characteristic value changed callback */
+	BT_EVENT_GATT_READ_CHARACTERISTIC, /**< GATT characteristic value read callback */
+	BT_EVENT_GATT_WRITE_CHARACTERISTIC, /**< GATT characteristic value write callback */
+	BT_EVENT_ADVERTISING_STATE_CHANGED, /**< Advertising state changed callback */
+	BT_EVENT_MANUFACTURER_DATA_CHANGED, /**< Manufacturer data changed callback */
+	BT_EVENT_CONNECTABLE_CHANGED_EVENT, /**< Adapter connectable changed callback */
+	BT_EVENT_RSSI_ENABLED_EVENT, /**< RSSI Enabled callback */
+	BT_EVENT_RSSI_ALERT_EVENT, /**< RSSI Alert callback */
+	BT_EVENT_GET_RSSI_EVENT, /**< Get RSSI Strength callback */
+
 } bt_event_e;
+
+/**
+ * @internal
+ */
+typedef struct {
+	int handle;
+
+	bt_adapter_le_advertising_state_changed_cb cb;
+	void *cb_data;
+
+	bt_adapter_le_advertising_params_s adv_params;
+
+	unsigned int adv_data_len;
+	char *adv_data;
+
+	unsigned int scan_rsp_data_len;
+	char *scan_rsp_data;
+
+	void *user_data;
+} bt_advertiser_s;
 
 /**
  * @internal
@@ -118,6 +153,18 @@ int _bt_check_init_status(void);
 		LOGE("[%s] NOT_INITIALIZED(0x%08x)", __FUNCTION__, BT_ERROR_NOT_INITIALIZED); \
 		return BT_ERROR_NOT_INITIALIZED; \
 	}
+
+/**
+ * @internal
+ * @brief Initialize Bluetooth LE adapter
+ */
+int _bt_le_adapter_init(void);
+
+/**
+ * @internal
+ * @brief Deinitialize Bluetooth LE adapter
+ */
+int _bt_le_adapter_deinit(void);
 
 /**
  * @internal
