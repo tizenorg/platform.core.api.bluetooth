@@ -50,6 +50,11 @@ int bt_adapter_disable(void)
 	return error_code;
 }
 
+int bt_adapter_recover(void)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
 int bt_adapter_reset(void)
 {
 	int error_code = BT_ERROR_NONE;
@@ -69,6 +74,21 @@ int bt_adapter_get_state(bt_adapter_state_e *adapter_state)
 
 	*adapter_state = bluetooth_check_adapter();
 	return BT_ERROR_NONE;
+}
+
+int bt_adapter_le_enable(void)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
+int bt_adapter_le_disable(void)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
+int bt_adapter_le_get_state(bt_adapter_le_state_e *adapter_le_state)
+{
+	return BT_ERROR_NOT_SUPPORTED;
 }
 
 int bt_adapter_get_address(char **address)
@@ -92,6 +112,17 @@ int bt_adapter_get_address(char **address)
 	}
 
 	return BT_ERROR_NONE;
+}
+
+int bt_adapter_get_version(char **version)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
+
+int bt_adapter_get_local_info(char **chipset, char **firmware, char **stack_version, char **profiles)
+{
+	return BT_ERROR_NOT_SUPPORTED;
 }
 
 int bt_adapter_get_name(char **name)
@@ -196,6 +227,26 @@ int bt_adapter_set_visibility(bt_adapter_visibility_mode_e visibility_mode, int 
 	}
 
 	return error_code;
+}
+
+int bt_adapter_set_connectable_changed_cb(bt_adapter_connectable_changed_cb callback, void *user_data)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
+int bt_adapter_unset_connectable_changed_cb(void)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
+int bt_adapter_get_connectable(bool *connectable)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
+int bt_adapter_set_connectable(bool connectable)
+{
+	return BT_ERROR_NOT_SUPPORTED;
 }
 
 int bt_adapter_foreach_bonded_device(bt_adapter_bonded_device_cb foreach_cb, void *user_data)
@@ -316,6 +367,7 @@ int bt_adapter_is_service_used(const char *service_uuid, bool *used)
 
 int bt_adapter_set_state_changed_cb(bt_adapter_state_changed_cb callback, void *user_data)
 {
+	BT_DBG("");
 	int ret = BT_ERROR_NONE;
 
 	BT_CHECK_INIT_STATUS();
@@ -326,6 +378,11 @@ int bt_adapter_set_state_changed_cb(bt_adapter_state_changed_cb callback, void *
 	}
 
 	return ret;
+}
+
+int bt_adapter_le_set_state_changed_cb(bt_adapter_le_state_changed_cb callback, void *user_data)
+{
+	return BT_ERROR_NOT_SUPPORTED;
 }
 
 int bt_adapter_set_name_changed_cb(bt_adapter_name_changed_cb callback, void *user_data)
@@ -370,11 +427,21 @@ int bt_adapter_set_device_discovery_state_changed_cb(bt_adapter_device_discovery
 	return ret;
 }
 
+int bt_adapter_le_set_device_discovery_state_changed_cb(bt_adapter_le_device_discovery_state_changed_cb callback, void *user_data)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
 int bt_adapter_unset_state_changed_cb(void)
 {
 	BT_CHECK_INIT_STATUS();
 	_bt_unset_cb(BT_EVENT_STATE_CHANGED);
 	return BT_ERROR_NONE;
+}
+
+int bt_adapter_le_unset_state_changed_cb(void)
+{
+	return BT_ERROR_NOT_SUPPORTED;
 }
 
 int bt_adapter_unset_name_changed_cb(void)
@@ -393,20 +460,12 @@ int bt_adapter_unset_visibility_mode_changed_cb(void)
 
 int bt_adapter_set_visibility_duration_changed_cb(bt_adapter_visibility_duration_changed_cb callback, void *user_data)
 {
-	BT_CHECK_INIT_STATUS();
-
-	/* Will impelement it */
-
-	return BT_ERROR_NONE;
+	return BT_ERROR_NOT_SUPPORTED;
 }
 
 int bt_adapter_unset_visibility_duration_changed_cb(void)
 {
-	BT_CHECK_INIT_STATUS();
-
-	/* Will impelement it */
-
-	return BT_ERROR_NONE;
+	return BT_ERROR_NOT_SUPPORTED;
 }
 
 int bt_adapter_unset_device_discovery_state_changed_cb(void)
@@ -414,6 +473,11 @@ int bt_adapter_unset_device_discovery_state_changed_cb(void)
 	BT_CHECK_INIT_STATUS();
 	_bt_unset_cb(BT_EVENT_DEVICE_DISCOVERY_STATE_CHANGED);
 	return BT_ERROR_NONE;
+}
+
+int bt_adapter_le_unset_device_discovery_state_changed_cb(void)
+{
+	return BT_ERROR_NOT_SUPPORTED;
 }
 
 int bt_adapter_start_device_discovery(void)
@@ -456,5 +520,99 @@ int bt_adapter_is_discovering(bool *is_discovering)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
 		return ret;
 	}
+}
+
+int bt_adapter_le_start_device_discovery(void)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
+int bt_adapter_le_stop_device_discovery(void)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
+int bt_adapter_le_is_discovering(bool *is_discovering)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
+int bt_adapter_get_local_oob_data(unsigned char **hash, unsigned char **randomizer,
+					int *hash_len, int *randomizer_len)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
+int bt_adapter_set_remote_oob_data(const char *remote_address,
+				unsigned char *hash, unsigned char *randomizer,
+				int hash_len, int randomizer_len)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
+int bt_adapter_remove_remote_oob_data(const char *remote_address)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
+int bt_adapter_le_add_white_list(const char *address, bt_device_address_type_e address_type)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
+int bt_adapter_le_remove_white_list(const char *address, bt_device_address_type_e address_type)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
+int bt_adapter_le_clear_white_list(void)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
+int bt_adapter_le_create_advertiser(bt_advertiser_h *advertiser)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
+int bt_adapter_le_destroy_advertiser(bt_advertiser_h advertiser)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
+int bt_adapter_le_add_advertising_data(bt_advertiser_h advertiser,
+		bt_adapter_le_packet_type_e pkt_type, bt_adapter_le_packet_data_type_e data_type,
+		void *data, unsigned int data_size)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
+int bt_adapter_le_remove_advertising_data(bt_advertiser_h advertiser,
+		bt_adapter_le_packet_type_e pkt_type, bt_adapter_le_packet_data_type_e data_type)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
+int bt_adapter_le_clear_advertising_data(bt_advertiser_h advertiser,
+		bt_adapter_le_packet_type_e pkt_type)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
+int bt_adapter_le_start_advertising(bt_advertiser_h advertiser,
+		bt_adapter_le_advertising_params_s *adv_params,
+		bt_adapter_le_advertising_state_changed_cb cb, void *user_data)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
+int bt_adapter_le_stop_advertising(bt_advertiser_h advertiser)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
+int bt_adapter_le_enable_privacy(bool enable_privacy)
+{
+	return BT_ERROR_NOT_SUPPORTED;
 }
 

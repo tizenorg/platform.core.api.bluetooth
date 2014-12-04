@@ -479,7 +479,7 @@ int bt_call_list_reset(bt_call_list_h list)
 	return BT_ERROR_NONE;
 }
 
-int bt_call_list_add(bt_call_list_h list, unsigned int call_id, bt_ag_call_state_e state)
+int bt_call_list_add(bt_call_list_h list, unsigned int call_id, bt_ag_call_state_e state, const char *phone_number)
 {
 	call_list_s *handle;
 	bt_telephony_call_status_info_t *call_status;

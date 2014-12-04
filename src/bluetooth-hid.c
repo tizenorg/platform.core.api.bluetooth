@@ -56,7 +56,6 @@ int bt_hid_host_deinitialize()
 	} else {
 		_bt_unset_cb(BT_EVENT_HID_CONNECTION_STATUS);
 	}
-
 	return error;
 }
 

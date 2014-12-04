@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#include <errno.h>
+#include <tizen.h>
 #include <dlog.h>
 #include <stdio.h>
 #include <bluetooth-api.h>
@@ -94,19 +96,9 @@ int bt_socket_listen(int socket_fd, int max_pending_connections)
 	return error_code;
 }
 
-int bt_socket_accept(int socket_fd, int *connected_socket_fd)
+int bt_socket_accept(int socket_fd)
 {
-	int error_code = BT_ERROR_NONE;
-
-	BT_CHECK_INIT_STATUS();
-
-	error_code = _bt_get_error_code(bluetooth_rfcomm_accept_connection(socket_fd, connected_socket_fd));
-	if (error_code != BT_ERROR_NONE) {
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code),
-				error_code);
-	}
-
-	return error_code;
+	return BT_ERROR_NOT_SUPPORTED;
 }
 
 int bt_socket_reject(int socket_fd)
