@@ -82,7 +82,6 @@ static void __bt_free_bt_device_sdp_info_s(bt_device_sdp_info_s *sdp_info);
 static int __bt_get_bt_adapter_device_discovery_info_s(bt_adapter_device_discovery_info_s **discovery_info, bluetooth_device_info_t *source_info);
 static void __bt_free_bt_adapter_device_discovery_info_s(bt_adapter_device_discovery_info_s *discovery_info);
 
-
 /*
  *  Public Functions
  */
@@ -146,6 +145,16 @@ bool _bt_check_cb(int events)
 	return (bt_event_slot_container[events].callback != NULL) ? true : false;
 }
 
+int _bt_le_adapter_init(void)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
+int _bt_le_adapter_deinit(void)
+{
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
 int _bt_get_error_code(int origin_error)
 {
 	switch (origin_error) {
@@ -154,8 +163,9 @@ int _bt_get_error_code(int origin_error)
 	case BLUETOOTH_ERROR_INVALID_DATA:
 	case BLUETOOTH_ERROR_INVALID_PARAM:
 	case BLUETOOTH_ERROR_NOT_CONNECTED:
-	case BLUETOOTH_ERROR_NOT_SUPPORT:
 		return BT_ERROR_INVALID_PARAMETER;
+	case BLUETOOTH_ERROR_NOT_SUPPORT:
+		return BT_ERROR_NOT_SUPPORTED;
 	case BLUETOOTH_ERROR_MEMORY_ALLOCATION:
 	case BLUETOOTH_ERROR_OUT_OF_MEMORY:
 		return BT_ERROR_OUT_OF_MEMORY;
@@ -185,6 +195,7 @@ int _bt_get_error_code(int origin_error)
 	case BLUETOOTH_ERROR_SERVICE_SEARCH_ERROR:
 		return BT_ERROR_SERVICE_SEARCH_FAILED;
 	case BLUETOOTH_ERROR_SERVICE_NOT_FOUND:
+		return BT_ERROR_SERVICE_NOT_FOUND;
 	case BLUETOOTH_ERROR_PARING_FAILED:
 	case BLUETOOTH_ERROR_MAX_CONNECTION:
 	case BLUETOOTH_ERROR_ALREADY_CONNECT:
@@ -340,6 +351,14 @@ char *_bt_convert_error_to_string(int error)
 		return "REMOTE_DEVICE_NOT_FOUND";
 	case BT_ERROR_SERVICE_SEARCH_FAILED:
 		return "SERVICE_SEARCH_FAILED";
+	case BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED:
+		return "REMOTE_DEVICE_NOT_CONNECTED";
+	case BT_ERROR_PERMISSION_DENIED:
+		return "PERMISSION_DENIED";
+	case BT_ERROR_SERVICE_NOT_FOUND:
+		return "SERVICE_NOT_FOUND";
+	case BT_ERROR_NOT_SUPPORTED:
+		return "NOT_SUPPORTD";
 	default:
 		return "UNKNOWN";
 	}
@@ -477,6 +496,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 	bt_opc_transfer_info_t *client_info = NULL;
 	bluetooth_device_address_t *bd_addr = NULL;
 	telephony_event_callid_t *call_data = NULL;
+	bt_device_connection_info_s *conn_info = NULL;
 	char *device_addr = NULL;
 	int error_code = BT_ERROR_NONE;
 	int event_index = -1;
@@ -486,8 +506,8 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 	bt_hdp_data_ind_t *hdp_data_ind = NULL;
 	bt_gatt_discovered_char_t *svc_char = NULL;
 	bt_gatt_char_value_t *char_val = NULL;
-
 	event_index = __bt_get_cb_index(event);
+
 	if (event_index == -1 || bt_event_slot_container[event_index].callback == NULL) {
 		return;
 	}
@@ -537,16 +557,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 		}
 		break;
 	case BLUETOOTH_EVENT_REMOTE_DEVICE_DISAPPEARED:
-		BT_INFO("bt_adapter_device_discovery_state_changed_cb() will be called with BT_ADAPTER_DEVICE_DISCOVERY_REMOVED");
-		if (__bt_get_bt_adapter_device_discovery_info_s(&discovery_info, (bluetooth_device_info_t *)(param->param_data)) == BT_ERROR_NONE) {
-			((bt_adapter_device_discovery_state_changed_cb)bt_event_slot_container[event_index].callback)
-			    (_bt_get_error_code(param->result), BT_ADAPTER_DEVICE_DISCOVERY_REMOVED, discovery_info, bt_event_slot_container[event_index].user_data);
-			__bt_free_bt_adapter_device_discovery_info_s(discovery_info);
-		} else {
-			((bt_adapter_device_discovery_state_changed_cb)bt_event_slot_container[event_index].callback)
-			    (_bt_get_error_code(param->result), BT_ADAPTER_DEVICE_DISCOVERY_REMOVED, NULL, bt_event_slot_container[event_index].user_data);
-		}
-		break;
+                break;
 	case BLUETOOTH_EVENT_BONDING_FINISHED:
 		BT_INFO("bt_device_bond_created_cb() will be called");
 		_bt_get_bt_device_info_s(&bonded_device, (bluetooth_device_info_t *)(param->param_data));
@@ -585,7 +596,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 		BT_INFO("bt_device_connection_state_changed_cb() will be called");
 		_bt_convert_address_to_string(&device_addr, (bluetooth_device_address_t *)(param->param_data));
 		((bt_device_connection_state_changed_cb)bt_event_slot_container[event_index].callback)
-		    (true, device_addr, bt_event_slot_container[event_index].user_data);
+		    (true, conn_info, bt_event_slot_container[event_index].user_data);
 		if (device_addr != NULL)
 			free(device_addr);
 		break;
@@ -593,7 +604,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 		BT_INFO("bt_device_connection_state_changed_cb() will be called");
 		_bt_convert_address_to_string(&device_addr, (bluetooth_device_address_t *)(param->param_data));
 		((bt_device_connection_state_changed_cb)bt_event_slot_container[event_index].callback)
-		    (false, device_addr, bt_event_slot_container[event_index].user_data);
+		    (false, conn_info, bt_event_slot_container[event_index].user_data);
 		if (device_addr != NULL)
 			free(device_addr);
 		break;
@@ -609,7 +620,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 		__bt_free_bt_device_sdp_info_s(sdp_info);
 		break;
 	case BLUETOOTH_EVENT_RFCOMM_DATA_RECEIVED:
-		BT_INFO("bt_socket_data_received_cb() will be called");
+		/*BT_INFO("bt_socket_data_received_cb() will be * called"); */
 		((bt_socket_data_received_cb)bt_event_slot_container[event_index].callback)
 		    ((bt_socket_received_data_s *)(param->param_data), bt_event_slot_container[event_index].user_data);
 		break;
@@ -628,7 +639,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 
 			if (strlen(connection_ind->uuid) > 0) {
 				rfcomm_connection.service_uuid = strdup(connection_ind->uuid);
-				BT_DBG("uuid: [%s]", rfcomm_connection.service_uuid);
+				BT_INFO("uuid: [%s]", rfcomm_connection.service_uuid);
 			}
 
 			_bt_convert_address_to_string(&(rfcomm_connection.remote_address),
@@ -660,7 +671,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 
 			if (strlen(disconnection_ind->uuid) > 0) {
 				rfcomm_connection.service_uuid = strdup(disconnection_ind->uuid);
-				BT_DBG("uuid: [%s]", rfcomm_connection.service_uuid);
+				BT_INFO("uuid: [%s]", rfcomm_connection.service_uuid);
 			}
 
 			_bt_convert_address_to_string(&(rfcomm_connection.remote_address),
@@ -1109,7 +1120,7 @@ static int __bt_get_bt_adapter_device_discovery_info_s(bt_adapter_device_discove
 					__bt_convert_lower_to_upper((*discovery_info)->service_uuid[i]);
 				}
 
-				BT_DBG("UUID: %s", (*discovery_info)->service_uuid[i]);
+				BT_INFO("UUID: %s", (*discovery_info)->service_uuid[i]);
 			}
 		}
 	} else {
