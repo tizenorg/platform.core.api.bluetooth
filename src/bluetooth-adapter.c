@@ -28,7 +28,7 @@
 
 int bt_adapter_enable(void)
 {
-	int error_code = BT_ERROR_NONE;
+	int error_code;
 
 	BT_CHECK_INIT_STATUS();
 	error_code = _bt_get_error_code(bluetooth_enable_adapter());
@@ -40,7 +40,7 @@ int bt_adapter_enable(void)
 
 int bt_adapter_disable(void)
 {
-	int error_code = BT_ERROR_NONE;
+	int error_code;
 
 	BT_CHECK_INIT_STATUS();
 	error_code = _bt_get_error_code(bluetooth_disable_adapter());
@@ -52,7 +52,7 @@ int bt_adapter_disable(void)
 
 int bt_adapter_reset(void)
 {
-	int error_code = BT_ERROR_NONE;
+	int error_code;
 
 	BT_CHECK_INIT_STATUS();
 	error_code = _bt_get_error_code(bluetooth_reset_adapter());
@@ -74,7 +74,7 @@ int bt_adapter_get_state(bt_adapter_state_e *adapter_state)
 int bt_adapter_get_address(char **address)
 {
 	bluetooth_device_address_t loc_address = { {0} };
-	int error_code = BT_ERROR_NONE;
+	int error_code;
 
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(address);
@@ -96,7 +96,7 @@ int bt_adapter_get_address(char **address)
 
 int bt_adapter_get_name(char **name)
 {
-	int ret = BT_ERROR_NONE;
+	int ret;
 	bluetooth_device_name_t loc_name = { {0} };
 
 	BT_CHECK_INIT_STATUS();
@@ -120,7 +120,7 @@ int bt_adapter_get_name(char **name)
 int bt_adapter_set_name(const char *name)
 {
 	bluetooth_device_name_t loc_name = { {0} };
-	int ret = BT_ERROR_NONE;
+	int ret;
 
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(name);
@@ -139,7 +139,7 @@ int bt_adapter_set_name(const char *name)
 int bt_adapter_get_visibility(bt_adapter_visibility_mode_e *mode, int *duration)
 {
 	bluetooth_discoverable_mode_t discoverable_mode = BLUETOOTH_DISCOVERABLE_MODE_CONNECTABLE;
-	int ret = BT_ERROR_NONE;
+	int ret;
 
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(mode);
@@ -418,7 +418,7 @@ int bt_adapter_unset_device_discovery_state_changed_cb(void)
 
 int bt_adapter_start_device_discovery(void)
 {
-	int error_code = BT_ERROR_NONE;
+	int error_code;
 
 	BT_CHECK_INIT_STATUS();
 	error_code = _bt_get_error_code(bluetooth_start_discovery(0, 0, BLUETOOTH_DEVICE_MAJOR_MASK_MISC));
@@ -430,7 +430,7 @@ int bt_adapter_start_device_discovery(void)
 
 int bt_adapter_stop_device_discovery(void)
 {
-	int error_code = BT_ERROR_NONE;
+	int error_code;
 
 	BT_CHECK_INIT_STATUS();
 	error_code = _bt_get_error_code(bluetooth_cancel_discovery());
