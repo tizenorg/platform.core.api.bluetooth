@@ -479,7 +479,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 	telephony_event_callid_t *call_data = NULL;
 	char *device_addr = NULL;
 	int error_code = BT_ERROR_NONE;
-	int event_index = -1;
+	int event_index;
 	bluetooth_network_device_info_t *dev_info = NULL;
 	bt_hdp_connected_t *hdp_conn_info = NULL;
 	bt_hdp_disconnected_t *hdp_disconn_info = NULL;
