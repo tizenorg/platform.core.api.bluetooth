@@ -19,7 +19,11 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#ifdef NTB
+#include "ntb-bluetooth.h"
+#else
 #include <bluetooth-api.h>
+#endif
 
 #include "bluetooth.h"
 #include "bluetooth_private.h"
@@ -28,6 +32,11 @@ GList *sending_files;
 
 int bt_nap_activate(void)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_nap_activate();
+	return error_code;
+#else
 	int error = BT_ERROR_NONE;
 
 	BT_CHECK_INIT_STATUS();
@@ -37,10 +46,16 @@ int bt_nap_activate(void)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
 	}
 	return error;
+#endif
 }
 
 int bt_nap_deactivate(void)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_nap_deactivate();
+	return error_code;
+#else
 	int error = BT_ERROR_NONE;
 
 	BT_CHECK_INIT_STATUS();
@@ -50,8 +65,10 @@ int bt_nap_deactivate(void)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
 	}
 	return error;
+#endif
 }
 
+#ifndef NTB
 /* bluez don't support the disconnect API about NAP server */
 /* So we implement this, deactivate the server and re-activate the server */
 int bt_nap_disconnect_all(void)
@@ -74,42 +91,71 @@ int bt_nap_disconnect(const char *remote_address)
 {
 	return BT_ERROR_NOT_SUPPORTED;
 }
+#endif
 
 int bt_nap_set_connection_state_changed_cb(
 				bt_nap_connection_state_changed_cb callback,
 				void *user_data)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_nap_set_connection_state_changed_cb(callback, user_data);
+	return error_code;
+#else
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(callback);
 	_bt_set_cb(BT_EVENT_NAP_CONNECTION_STATE_CHANGED, callback, user_data);
 	return BT_ERROR_NONE;
-
+#endif
 }
 
 int bt_nap_unset_connection_state_changed_cb(void)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_nap_unset_connection_state_changed_cb();
+	return error_code;
+#else
 	_bt_unset_cb(BT_EVENT_NAP_CONNECTION_STATE_CHANGED);
 	return BT_ERROR_NONE;
+#endif
 }
 
 int bt_panu_set_connection_state_changed_cb(
 				bt_panu_connection_state_changed_cb callback,
 				void *user_data)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_panu_set_connection_state_changed_cb(callback, user_data);
+	return error_code;
+#else
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(callback);
 	_bt_set_cb(BT_EVENT_PAN_CONNECTION_STATE_CHANGED, callback, user_data);
 	return BT_ERROR_NONE;
+#endif
 }
 
 int bt_panu_unset_connection_state_changed_cb(void)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_panu_unset_connection_state_changed_cb();
+	return error_code;
+#else
 	_bt_unset_cb(BT_EVENT_PAN_CONNECTION_STATE_CHANGED);
 	return BT_ERROR_NONE;
+#endif
 }
 
 int bt_panu_connect(const char *remote_address, bt_panu_service_type_e type)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_panu_connect(remote_address, type);
+	return error_code;
+#else
 	int error = BT_ERROR_INVALID_PARAMETER;
 	bluetooth_device_address_t addr_hex = { {0,} };
 
@@ -126,10 +172,16 @@ int bt_panu_connect(const char *remote_address, bt_panu_service_type_e type)
 		}
 	}
 	return error;
+#endif
 }
 
 int bt_panu_disconnect(const char *remote_address)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_panu_disconnect(remote_address);
+	return error_code;
+#else
 	int error = BT_ERROR_INVALID_PARAMETER;
 	bluetooth_device_address_t addr_hex = { {0,} };
 
@@ -143,5 +195,6 @@ int bt_panu_disconnect(const char *remote_address)
 				error);
 	}
 	return error;
+#endif
 }
 

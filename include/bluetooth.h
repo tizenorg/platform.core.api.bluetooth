@@ -4154,6 +4154,129 @@ int bt_gatt_destroy_attribute_handle(bt_gatt_attribute_h handle);
 int bt_gatt_read_characteristic_value(bt_gatt_attribute_h char_handle,
 		bt_gatt_characteristic_read_cb callback);
 
+#ifdef NTB
+/**
+ * @ingroup  CAPI_NETWORK_BLUETOOTH_AGENT_MODULE
+ * @brief  Register bluez agent.
+ *
+ * @remarks This function must be called before all Bluetooth Agent API.
+ * You must free all resources of the Bluetooth agent by calling
+ * bt_agent_unregister() if Bluetooth agent is no longer needed.
+ *
+ * @return  0 on success, otherwise negative error value.
+ * @retval  #BT_ERROR_NONE  Successful
+ * @retval  #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval  #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval  #BT_ERROR_ALREADY_DONE Already register
+ *
+ * @see  bt_agent_unregister()
+ *
+ */
+int bt_agent_register(bt_agent *agent);
+
+#ifdef TIZEN_3
+/**
+ * @ingroup  CAPI_NETWORK_BLUETOOTH_AGENT_MODULE
+ * @brief  Register bluez agent in syncrhonous mode.
+ *
+ * @remarks This function is similar to bt_agent_register() but do not register
+ * any callback. In that way, user could make some synchronous replies.
+ *
+ * @return  0 on success, otherwise negative error value.
+ * @retval  #BT_ERROR_NONE  Successful
+ * @retval  #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval  #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval  #BT_ERROR_ALREADY_DONE Already register
+ *
+ * @see  bt_agent_unregister()
+ * @see  bt_agent_reply_sync()
+ *
+ */
+int bt_agent_register_sync(void);
+#endif
+/**
+ * @ingroup  CAPI_NETWORK_BLUETOOTH_AGENT_MODULE
+ * @brief Releases all resources of the Bluetooth Agent.
+ *
+ * @remarks This function must be called if Bluetooth Agent is no longer needed.
+ *
+ * @return  0 on success, otherwise negative error value.
+ * @retval  #BT_ERROR_NONE  Successful
+ * @retval  #BT_ERROR_NOT_INITIALIZED  Not initialized
+ *
+ * @see  bt_agent_register()
+ */
+int bt_agent_unregister(void);
+
+/**
+ * @ingroup  CAPI_NETWORK_BLUETOOTH_AGENT_MODULE
+ * @brief  Agent accept confirm info.
+ *
+ * @param[in]  user_data The user data from agent callback
+ * indicate which confirm will be accepted.
+ *
+ * @see bt_agent_register()
+ * @see bt_agent_unregister()
+ * @see bt_agent_confirm_reject()
+ */
+void bt_agent_confirm_accept(bt_req_t *requestion);
+
+#ifdef TIZEN_3
+/**
+ * @ingroup  CAPI_NETWORK_BLUETOOTH_AGENT_MODULE
+ * @brief  Agent synchronous reply.
+ *
+ * @param[in]  reply The accept or reject user reply which can be
+ *
+ * @pre to allow sync replies, user should have previously register the agent
+ * with bt_agent_register_sync()
+ *
+ * @see bt_agent_register_sync()
+ * @see bt_agent_unregister()
+ */
+void bt_agent_reply_sync(bt_agent_accept_type_t reply);
+#endif
+/**
+ * @ingroup  CAPI_NETWORK_BLUETOOTH_AGENT_MODULE
+ * @brief  Agent reject confirm info.
+ *
+ * @param[in]  user_data The user data from agent callback
+ * indicate which confirm will be rejected.
+ *
+ * @see bt_agent_register()
+ * @see bt_agent_unregister()
+ * @see bt_agent_confirm_accept()
+ */
+void bt_agent_confirm_reject(bt_req_t *requestion);
+
+/**
+ * @ingroup  CAPI_NETWORK_BLUETOOTH_AGENT_MODULE
+ * @brief  Agent puts the pin code to authorize.
+ *
+ * @param[in]  pin_code The pin code used to authorize.
+ * @param[in]  user_data The user data from agent callback
+ * indicate which pin code authorized will be reply.
+ *
+ * @see bt_agent_register()
+ * @see bt_agent_unregister()
+ * @see bt_agent_pincode_cancel()
+ */
+void bt_agent_pincode_reply(const char *pin_code, bt_req_t *requestion);
+
+/**
+ * @ingroup  CAPI_NETWORK_BLUETOOTH_AGENT_MODULE
+ * @brief  Agent cancel the authorized with pin code.
+ *
+ * @param[in]  user_data The user data from agent callback
+ * indicate which pin code authorized will be reply.
+ *
+ * @see bt_agent_register()
+ * @see bt_agent_unregister()
+ * @see bt_agent_pincode_reply()
+ */
+void bt_agent_pincode_cancel(bt_req_t *requestion);
+#endif
+
 /**
  * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
  * @brief  Discovers the characteristic descriptors of a characteristic within its definition, asynchronously.
@@ -4508,6 +4631,66 @@ int bt_panu_disconnect(const char *remote_address);
 int bt_device_le_conn_update(const char *device_address,
 			     const bt_le_conn_update_s *parameters);
 
+#ifdef NTB
+/**
+ * * @ingroup CAPI_NETWORK_BLUETOOTH_DEVICE_MODULE
+ * * @brief Connects to remote BLE device, asynchronously.
+ *
+ * @remarks A Connection can be destroyed by bt_device_disconnect_le()
+ *
+ * @param[in] callback  The result callback
+ * @param[in] address The address of the remote BLE device with
+ * which the connection should be created
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_RESOURCE_BUSY      Device or resource busy
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ *
+ * @pre The state of local Bluetooth must be #BT_ADAPTER_ENABLED with bt_adapter_enable()
+ * @pre The remote device must be discoverable with bt_adapter_start_device_discovery().
+ * @post This function invokes bt_device_gatt_state_changed_cb().
+ *
+ * @see bt_adapter_enable()
+ * @see bt_adapter_start_device_discovery()
+ */
+int bt_device_connect_le(bt_device_gatt_state_changed_cb callback,
+			const char *address);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_DEVICE_MODULE
+ * @brief Disconnects remote BLE device, asynchronously.
+ *
+ * @remarks A Connection can be established by bt_device_connect_le()
+ *
+ * @param[in] callback  The result callback
+ * @param[in] address The address of the remote BLE device with
+ * which the connection should be created
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_RESOURCE_BUSY      Device or resource busy
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ *
+ * @pre The state of local Bluetooth must be #BT_ADAPTER_ENABLED
+ * with bt_adapter_enable()
+ * @pre The remote device must be discoverable with
+ * bt_adapter_start_device_discovery().
+ * @pre The remote device must be connected with bt_device_connect_le().
+ * @post This function invokes bt_device_gatt_state_changed_cb().
+ *
+ * @see bt_adapter_enable()
+ * @see bt_adapter_start_device_discovery()
+ */
+int bt_device_disconnect_le(bt_device_gatt_state_changed_cb callback,
+			const char *address);
+#endif
 
 /**
  * @}

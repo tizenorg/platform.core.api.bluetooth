@@ -11,14 +11,34 @@ BuildRequires:  pkgconfig(dbus-glib-1)
 BuildRequires:  pkgconfig(dlog)
 BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(vconf)
-BuildRequires:  pkgconfig(bluetooth-api)
 BuildRequires:  pkgconfig(capi-base-common)
-
+%if "%{bluetooth_frwk}"=="ntb"
+BuildRequires:  pkgconfig(vconf)
+BuildRequires:  pkgconfig(dbus-1)
+BuildRequires:  pkgconfig(gio-2.0)
+BuildRequires:  pkgconfig(gio-unix-2.0)
+BuildRequires:  pkgconfig(notification)
+%if "%{tizen_version}"!="3.0"
+BuildRequires:  pkgconfig(aul)
+BuildRequires:  pkgconfig(syspopup-caller)
+%endif
+%else
+BuildRequires:  pkgconfig(bluetooth-api)
+%endif
 BuildRequires:  cmake
-
 
 %description
 Network Bluetooth Framework
+
+%if "%{bluetooth_frwk}"=="ntb"
+%package test
+Summary:    Test case for Bletooth Framework (DEV)
+Requires:   %{name} = %{version}
+
+%description test
+Test case for Bluetooth Framework (DEV). Some test programs to test the APIs
+and interfaces about Bluetooth Framework or other inner code.
+%endif
 
 %package devel
 Summary:    Network Bluetooth Framework (DEV)
@@ -36,7 +56,14 @@ cp %{SOURCE1001} %{SOURCE1002} .
 
 %build
 MAJORVER=`echo %{version} | awk 'BEGIN {FS="."}{print $1}'`
-%cmake . -DFULLVER=%{version} -DMAJORVER=${MAJORVER}
+%if "%{bluetooth_frwk}"=="ntb"
+	%if "%{tizen_version}"=="3.0"
+		PLUGIN="Tizen3"
+	%endif
+	%cmake . -DFULLVER=%{version} -DMAJORVER=${MAJORVER} -Dbluetooth_frwk="ntb" -Dplatform=${PLUGIN}
+%else
+	%cmake . -DFULLVER=%{version} -DMAJORVER=${MAJORVER}
+%endif
 
 make %{?jobs:-j%jobs}
 
@@ -52,6 +79,11 @@ make %{?jobs:-j%jobs}
 %manifest %{name}.manifest
 %license LICENSE.APLv2 LICENSE
 %{_libdir}/libcapi-network-bluetooth.so.*
+
+%if "%{bluetooth_frwk}"=="ntb"
+%files test
+%{_libdir}/%{name}-test/bluez-capi-test
+%endif
 
 %files devel
 %manifest %{name}-devel.manifest

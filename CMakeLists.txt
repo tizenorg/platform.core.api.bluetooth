@@ -1,15 +1,30 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 SET(fw_name "capi-network-bluetooth")
-
 PROJECT(${fw_name})
+
+IF("${bluetooth_frwk}" STREQUAL "ntb")
+       ADD_DEFINITIONS("-DNTB")
+ENDIF()
+IF(platform STREQUAL "Tizen3")
+	ADD_DEFINITIONS(-DTIZEN_3)
+ENDIF()
 
 SET(CMAKE_INSTALL_PREFIX /usr)
 SET(PREFIX ${CMAKE_INSTALL_PREFIX})
 
 SET(INC_DIR include)
+IF("${bluetooth_frwk}" STREQUAL "ntb")
+INCLUDE_DIRECTORIES(${INC_DIR} src/ntb/include)
+ELSE()
 INCLUDE_DIRECTORIES(${INC_DIR})
+ENDIF()
 
-SET(dependents "dlog glib-2.0 capi-base-common bluetooth-api")
+
+IF("${bluetooth_frwk}" STREQUAL "ntb")
+       SET(dependents "dlog glib-2.0 capi-base-common dbus-1 gio-2.0 gio-unix-2.0")
+ELSE()
+       SET(dependents "dlog glib-2.0 capi-base-common bluetooth-api")
+ENDIF()
 SET(pc_dependents "capi-base-common")
 
 INCLUDE(FindPkgConfig)
@@ -30,6 +45,29 @@ ADD_DEFINITIONS("-DTIZEN_DEBUG")
 
 SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--as-needed -Wl,--rpath=${LIB_INSTALL_DIR}")
 
+IF("${bluetooth_frwk}" STREQUAL "ntb")
+SET(SOURCES
+src/ntb/lib/common.c
+src/ntb/lib/bluez.c
+src/ntb/lib/bluez-hdp.c
+src/ntb/lib/obex.c
+src/ntb/lib/bluetooth-service.c
+src/ntb/capi/bluetooth.c
+src/ntb/capi/bluetooth-obex.c
+src/bluetooth-common.c
+src/bluetooth-adapter.c
+src/bluetooth-device.c
+src/bluetooth-socket.c
+src/bluetooth-opp-server.c
+src/bluetooth-opp-client.c
+src/bluetooth-pan.c
+src/bluetooth-hdp.c
+src/bluetooth-hid.c
+src/bluetooth-audio.c
+src/bluetooth-avrcp.c
+src/bluetooth-gatt.c
+)
+ELSE()
 SET(SOURCES
 src/bluetooth-common.c
 src/bluetooth-adapter.c
@@ -44,6 +82,7 @@ src/bluetooth-audio.c
 src/bluetooth-avrcp.c
 src/bluetooth-gatt.c
 )
+ENDIF()
 
 ADD_LIBRARY(${fw_name} SHARED ${SOURCES})
 
@@ -75,7 +114,17 @@ CONFIGURE_FILE(
 )
 INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${fw_name}.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 
+IF("${bluetooth_frwk}" STREQUAL "ntb")
+SET(BLUEZ-CAPI-TEST "bluez-capi-test")
+SET(SOURCE_BLUEZ_CAPI_TEST
+       test/ntb/bluez-capi-test.c
+)
+ADD_EXECUTABLE(${BLUEZ-CAPI-TEST} ${SOURCE_BLUEZ_CAPI_TEST})
+TARGET_LINK_LIBRARIES(${BLUEZ-CAPI-TEST} ${fw_name} ${${fw_name}_LDFLAGS})
+INSTALL(TARGETS ${BLUEZ-CAPI-TEST} DESTINATION ${LIB_INSTALL_DIR}/${fw_name}-test)
+ELSE()
 ADD_SUBDIRECTORY(test)
+ENDIF()
 
 IF(UNIX)
 

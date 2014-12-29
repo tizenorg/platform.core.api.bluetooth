@@ -21,13 +21,18 @@
 #include <dlog.h>
 #include <stdio.h>
 #include <stdbool.h>
-#include <bluetooth-api.h>
 
 #include "bluetooth.h"
 #include "bluetooth_private.h"
+#ifdef NTB
+#include "ntb-bluetooth.h"
+#else
+#include <bluetooth-api.h>
 #include "bluetooth-media-control.h"
 #include "bluetooth-telephony-api.h"
+#endif
 
+#ifndef NTB
 static bool is_initialized = false;
 static bt_event_sig_event_slot_s bt_event_slot_container[] = {
 	{BT_EVENT_STATE_CHANGED, NULL, NULL},
@@ -81,6 +86,7 @@ static int __bt_get_bt_device_sdp_info_s(bt_device_sdp_info_s **dest, bt_sdp_inf
 static void __bt_free_bt_device_sdp_info_s(bt_device_sdp_info_s *sdp_info);
 static int __bt_get_bt_adapter_device_discovery_info_s(bt_adapter_device_discovery_info_s **discovery_info, bluetooth_device_info_t *source_info);
 static void __bt_free_bt_adapter_device_discovery_info_s(bt_adapter_device_discovery_info_s *discovery_info);
+#endif
 
 /*
  *  Public Functions
@@ -88,6 +94,11 @@ static void __bt_free_bt_adapter_device_discovery_info_s(bt_adapter_device_disco
 
 int bt_initialize(void)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_initialize();
+	return error_code;
+#else
 	if (is_initialized != true) {
 		if (bluetooth_register_callback(&__bt_event_proxy, NULL) != BLUETOOTH_ERROR_NONE) {
 			BT_ERR("OPERATION_FAILED(0x%08x)", BT_ERROR_OPERATION_FAILED);
@@ -97,10 +108,16 @@ int bt_initialize(void)
 	}
 
 	return BT_ERROR_NONE;
+#endif
 }
 
 int bt_deinitialize(void)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_deinitialize();
+	return error_code;
+#else
 	BT_CHECK_INIT_STATUS();
 	if (bluetooth_unregister_callback() != BLUETOOTH_ERROR_NONE) {
 		BT_ERR("OPERATION_FAILED(0x%08x)", BT_ERROR_OPERATION_FAILED);
@@ -109,9 +126,10 @@ int bt_deinitialize(void)
 	is_initialized = false;
 
 	return BT_ERROR_NONE;
+#endif
 }
 
-
+#ifndef NTB
 /*
  *  Common Functions
  */
@@ -1291,3 +1309,4 @@ static void __bt_convert_lower_to_upper(char *origin)
 		}
 	}
 }
+#endif
