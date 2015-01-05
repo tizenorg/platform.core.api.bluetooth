@@ -21,13 +21,22 @@
 #include <dlog.h>
 #include <stdio.h>
 #include <stdbool.h>
+#ifdef NTB
+#include "ntb-bluetooth.h"
+#else
 #include <bluetooth-api.h>
+#endif
 
 #include "bluetooth.h"
 #include "bluetooth_private.h"
 
 int bt_adapter_enable(void)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_enable();
+        return error_code;
+#else
 	int error_code;
 
 	BT_CHECK_INIT_STATUS();
@@ -36,10 +45,16 @@ int bt_adapter_enable(void)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 	}
 	return error_code;
+#endif
 }
 
 int bt_adapter_disable(void)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_disable();
+	return error_code;
+#else
 	int error_code;
 
 	BT_CHECK_INIT_STATUS();
@@ -48,15 +63,27 @@ int bt_adapter_disable(void)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 	}
 	return error_code;
+#endif
 }
 
 int bt_adapter_recover(void)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_recover();
+	return error_code;
+#else
 	return BT_ERROR_NOT_SUPPORTED;
+#endif
 }
 
 int bt_adapter_reset(void)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_reset();
+	return error_code;
+#else
 	int error_code;
 
 	BT_CHECK_INIT_STATUS();
@@ -65,17 +92,25 @@ int bt_adapter_reset(void)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 	}
 	return error_code;
+#endif
 }
 
 int bt_adapter_get_state(bt_adapter_state_e *adapter_state)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_get_state(adapter_state);
+	return error_code;
+#else
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(adapter_state);
 
 	*adapter_state = bluetooth_check_adapter();
 	return BT_ERROR_NONE;
+#endif
 }
 
+#ifndef NTB
 int bt_adapter_le_enable(void)
 {
 	return BT_ERROR_NOT_SUPPORTED;
@@ -90,9 +125,15 @@ int bt_adapter_le_get_state(bt_adapter_le_state_e *adapter_le_state)
 {
 	return BT_ERROR_NOT_SUPPORTED;
 }
+#endif
 
 int bt_adapter_get_address(char **address)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_get_address(address);
+	return error_code;
+#else
 	bluetooth_device_address_t loc_address = { {0} };
 	int error_code;
 
@@ -112,21 +153,39 @@ int bt_adapter_get_address(char **address)
 	}
 
 	return BT_ERROR_NONE;
+#endif
 }
 
 int bt_adapter_get_version(char **version)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_get_version(version);
+	return error_code;
+#else
 	return BT_ERROR_NOT_SUPPORTED;
+#endif
 }
 
 
 int bt_adapter_get_local_info(char **chipset, char **firmware, char **stack_version, char **profiles)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_get_local_info(chipset, firmware, stack_version, profiles);
+	return error_code;
+#else
 	return BT_ERROR_NOT_SUPPORTED;
+#endif
 }
 
 int bt_adapter_get_name(char **name)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_get_name(name);
+	return error_code;
+#else
 	int ret;
 	bluetooth_device_name_t loc_name = { {0} };
 
@@ -146,10 +205,16 @@ int bt_adapter_get_name(char **name)
 	}
 
 	return BT_ERROR_NONE;
+#endif
 }
 
 int bt_adapter_set_name(const char *name)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_set_name(name);
+	return error_code;
+#else
 	bluetooth_device_name_t loc_name = { {0} };
 	int ret;
 
@@ -165,10 +230,16 @@ int bt_adapter_set_name(const char *name)
 	}
 
 	return ret;
+#endif
 }
 
 int bt_adapter_get_visibility(bt_adapter_visibility_mode_e *mode, int *duration)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_get_visibility(mode, duration);
+	return error_code;
+#else
 	bluetooth_discoverable_mode_t discoverable_mode = BLUETOOTH_DISCOVERABLE_MODE_CONNECTABLE;
 	int ret;
 
@@ -196,10 +267,16 @@ int bt_adapter_get_visibility(bt_adapter_visibility_mode_e *mode, int *duration)
 	}
 
 	return BT_ERROR_NONE;
+#endif
 }
 
 int bt_adapter_set_visibility(bt_adapter_visibility_mode_e visibility_mode, int timeout_sec)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_set_visibility(visibility_mode, timeout_sec);
+	return error_code;
+#else
 	bluetooth_discoverable_mode_t discoverable_mode = BLUETOOTH_DISCOVERABLE_MODE_CONNECTABLE;
 	int error_code = BT_ERROR_NONE;
 
@@ -227,30 +304,60 @@ int bt_adapter_set_visibility(bt_adapter_visibility_mode_e visibility_mode, int 
 	}
 
 	return error_code;
+#endif
 }
 
 int bt_adapter_set_connectable_changed_cb(bt_adapter_connectable_changed_cb callback, void *user_data)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_set_connectable_changed_cb(callback, user_data);
+	return error_code;
+#else
 	return BT_ERROR_NOT_SUPPORTED;
+#endif
 }
 
 int bt_adapter_unset_connectable_changed_cb(void)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_unset_connectable_changed_cb();
+	return error_code;
+#else
 	return BT_ERROR_NOT_SUPPORTED;
+#endif
 }
 
 int bt_adapter_get_connectable(bool *connectable)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_get_connectable(connectable);
+	return error_code;
+#else
 	return BT_ERROR_NOT_SUPPORTED;
+#endif
 }
 
 int bt_adapter_set_connectable(bool connectable)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_set_connectable(connectable);
+	return error_code;
+#else
 	return BT_ERROR_NOT_SUPPORTED;
+#endif
 }
 
 int bt_adapter_foreach_bonded_device(bt_adapter_bonded_device_cb foreach_cb, void *user_data)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_foreach_bonded_device(foreach_cb, user_data);
+	return error_code;
+#else
 	GPtrArray *dev_list = NULL;
 	bt_device_info_s *dev_info = NULL;
 	bluetooth_device_info_t *ptr = NULL;
@@ -298,10 +405,16 @@ int bt_adapter_foreach_bonded_device(bt_adapter_bonded_device_cb foreach_cb, voi
 	}
 
 	return ret;
+#endif
 }
 
 int bt_adapter_get_bonded_device_info(const char *remote_address, bt_device_info_s **device_info)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_get_bonded_device_info(remote_address, device_info);
+	return error_code;
+#else
 	int ret;
 	bluetooth_device_address_t addr_hex = { {0,} };
 	bluetooth_device_info_t *info;
@@ -331,20 +444,32 @@ int bt_adapter_get_bonded_device_info(const char *remote_address, bt_device_info
 	free(info);
 
 	return ret;
+#endif
 }
 
 int bt_adapter_free_device_info(bt_device_info_s *device_info)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_free_device_info(device_info);
+	return error_code;
+#else
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(device_info);
 
 	_bt_free_bt_device_info_s(device_info);
 
 	return BT_ERROR_NONE;
+#endif
 }
 
 int bt_adapter_is_service_used(const char *service_uuid, bool *used)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_is_service_used(service_uuid, used);
+	return error_code;
+#else
 	int ret = BT_ERROR_NONE;
 
 	BT_CHECK_INIT_STATUS();
@@ -363,10 +488,17 @@ int bt_adapter_is_service_used(const char *service_uuid, bool *used)
 	}
 
 	return ret;
+#endif
 }
 
 int bt_adapter_set_state_changed_cb(bt_adapter_state_changed_cb callback, void *user_data)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_set_state_changed_cb(callback, user_data);
+	return error_code;
+#else
+
 	BT_DBG("");
 	int ret = BT_ERROR_NONE;
 
@@ -378,15 +510,23 @@ int bt_adapter_set_state_changed_cb(bt_adapter_state_changed_cb callback, void *
 	}
 
 	return ret;
+#endif
 }
 
+#ifndef NTB
 int bt_adapter_le_set_state_changed_cb(bt_adapter_le_state_changed_cb callback, void *user_data)
 {
 	return BT_ERROR_NOT_SUPPORTED;
 }
+#endif
 
 int bt_adapter_set_name_changed_cb(bt_adapter_name_changed_cb callback, void *user_data)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_set_name_changed_cb(callback, user_data);
+	return error_code;
+#else
 	int ret = BT_ERROR_NONE;
 
 	BT_CHECK_INIT_STATUS();
@@ -397,10 +537,16 @@ int bt_adapter_set_name_changed_cb(bt_adapter_name_changed_cb callback, void *us
 	}
 
 	return ret;
+#endif
 }
 
 int bt_adapter_set_visibility_mode_changed_cb(bt_adapter_visibility_mode_changed_cb callback, void *user_data)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_set_visibility_mode_changed_cb(callback, user_data);
+	return error_code;
+#else
 	int ret = BT_ERROR_NONE;
 
 	BT_CHECK_INIT_STATUS();
@@ -411,10 +557,16 @@ int bt_adapter_set_visibility_mode_changed_cb(bt_adapter_visibility_mode_changed
 	}
 
 	return ret;
+#endif
 }
 
 int bt_adapter_set_device_discovery_state_changed_cb(bt_adapter_device_discovery_state_changed_cb callback, void *user_data)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_set_device_discovery_state_changed_cb(callback, user_data);
+	return error_code;
+#else
 	int ret = BT_ERROR_NONE;
 
 	BT_CHECK_INIT_STATUS();
@@ -425,63 +577,111 @@ int bt_adapter_set_device_discovery_state_changed_cb(bt_adapter_device_discovery
 	}
 
 	return ret;
+#endif
 }
 
+#ifndef NTB
 int bt_adapter_le_set_device_discovery_state_changed_cb(bt_adapter_le_device_discovery_state_changed_cb callback, void *user_data)
 {
 	return BT_ERROR_NOT_SUPPORTED;
 }
+#endif
 
 int bt_adapter_unset_state_changed_cb(void)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_unset_state_changed_cb();
+	return error_code;
+#else
 	BT_CHECK_INIT_STATUS();
 	_bt_unset_cb(BT_EVENT_STATE_CHANGED);
 	return BT_ERROR_NONE;
+#endif
 }
 
+#ifndef NTB
 int bt_adapter_le_unset_state_changed_cb(void)
 {
 	return BT_ERROR_NOT_SUPPORTED;
 }
+#endif
 
 int bt_adapter_unset_name_changed_cb(void)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_unset_name_changed_cb();
+	return error_code;
+#else
 	BT_CHECK_INIT_STATUS();
 	_bt_unset_cb(BT_EVENT_NAME_CHANGED);
 	return BT_ERROR_NONE;
+#endif
 }
 
 int bt_adapter_unset_visibility_mode_changed_cb(void)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_unset_visibility_mode_changed_cb();
+	return error_code;
+#else
 	BT_CHECK_INIT_STATUS();
 	_bt_unset_cb(BT_EVENT_VISIBILITY_MODE_CHANGED);
 	return BT_ERROR_NONE;
+#endif
 }
 
 int bt_adapter_set_visibility_duration_changed_cb(bt_adapter_visibility_duration_changed_cb callback, void *user_data)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_set_visibility_duration_changed_cb(callback, user_data);
+	return error_code;
+#else
 	return BT_ERROR_NOT_SUPPORTED;
+#endif
 }
 
 int bt_adapter_unset_visibility_duration_changed_cb(void)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_unset_visibility_duration_changed_cb();
+	return error_code;
+#else
 	return BT_ERROR_NOT_SUPPORTED;
+#endif
 }
 
 int bt_adapter_unset_device_discovery_state_changed_cb(void)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_unset_device_discovery_state_changed_cb();
+	return error_code;
+#else
 	BT_CHECK_INIT_STATUS();
 	_bt_unset_cb(BT_EVENT_DEVICE_DISCOVERY_STATE_CHANGED);
 	return BT_ERROR_NONE;
+#endif
 }
 
+#ifndef NTB
 int bt_adapter_le_unset_device_discovery_state_changed_cb(void)
 {
 	return BT_ERROR_NOT_SUPPORTED;
 }
+#endif
 
 int bt_adapter_start_device_discovery(void)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_start_device_discovery();
+	return error_code;
+#else
 	int error_code;
 
 	BT_CHECK_INIT_STATUS();
@@ -490,10 +690,16 @@ int bt_adapter_start_device_discovery(void)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 	}
 	return error_code;
+#endif
 }
 
 int bt_adapter_stop_device_discovery(void)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_stop_device_discovery();
+	return error_code;
+#else
 	int error_code;
 
 	BT_CHECK_INIT_STATUS();
@@ -502,10 +708,16 @@ int bt_adapter_stop_device_discovery(void)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 	}
 	return error_code;
+#endif
 }
 
 int bt_adapter_is_discovering(bool *is_discovering)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_is_discovering(is_discovering);
+	return error_code;
+#else
 	int ret = 0;
 
 	BT_CHECK_INIT_STATUS();
@@ -520,8 +732,10 @@ int bt_adapter_is_discovering(bool *is_discovering)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
 		return ret;
 	}
+#endif
 }
 
+#ifndef NTB
 int bt_adapter_le_start_device_discovery(void)
 {
 	return BT_ERROR_NOT_SUPPORTED;
@@ -536,25 +750,45 @@ int bt_adapter_le_is_discovering(bool *is_discovering)
 {
 	return BT_ERROR_NOT_SUPPORTED;
 }
+#endif
 
 int bt_adapter_get_local_oob_data(unsigned char **hash, unsigned char **randomizer,
 					int *hash_len, int *randomizer_len)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_get_local_oob_data(hash, randomizer, hash_len, randomizer_len);
+	return error_code;
+#else
 	return BT_ERROR_NOT_SUPPORTED;
+#endif
 }
 
 int bt_adapter_set_remote_oob_data(const char *remote_address,
 				unsigned char *hash, unsigned char *randomizer,
 				int hash_len, int randomizer_len)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_set_remote_oob_data(remote_address, hash, randomizer, hash_len, randomizer_len);
+	return error_code;
+#else
 	return BT_ERROR_NOT_SUPPORTED;
+#endif
 }
 
 int bt_adapter_remove_remote_oob_data(const char *remote_address)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_adapter_remove_remote_oob_data(remote_address);
+	return error_code;
+#else
 	return BT_ERROR_NOT_SUPPORTED;
+#endif
 }
 
+#ifndef NTB
 int bt_adapter_le_add_white_list(const char *address, bt_device_address_type_e address_type)
 {
 	return BT_ERROR_NOT_SUPPORTED;
@@ -615,4 +849,54 @@ int bt_adapter_le_enable_privacy(bool enable_privacy)
 {
 	return BT_ERROR_NOT_SUPPORTED;
 }
+#endif
 
+#ifdef NTB
+int bt_agent_register(bt_agent *agent)
+{
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_agent_register(agent);
+	return error_code;
+}
+
+int bt_agent_unregister(void)
+{
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_agent_unregister();
+	return error_code;
+}
+
+void bt_agent_confirm_accept(bt_req_t *requestion)
+{
+	ntb_bt_agent_confirm_accept(requestion);
+}
+
+void bt_agent_confirm_reject(bt_req_t *requestion)
+{
+	ntb_bt_agent_confirm_reject(requestion);
+}
+
+void bt_agent_pincode_reply(const char *pin_code, bt_req_t *requestion)
+{
+	ntb_bt_agent_pincode_reply(pin_code, requestion);
+}
+
+void bt_agent_pincode_cancel(bt_req_t *requestion)
+{
+	ntb_bt_agent_pincode_cancel(requestion);
+}
+
+#ifdef TIZEN_3
+int bt_agent_register_sync(void)
+{
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_agent_register_sync();
+	return error_code;
+}
+
+void bt_agent_reply_sync(bt_agent_accept_type_t reply)
+{
+	ntb_bt_agent_reply_sync(reply);
+}
+#endif
+#endif

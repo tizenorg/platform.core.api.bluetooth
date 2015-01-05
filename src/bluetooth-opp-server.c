@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 
+#include <glib.h>
 #include <dlog.h>
 #include <stdio.h>
 #include <stdbool.h>
+#ifdef NTB
+#include "ntb-bluetooth.h"
+#else
 #include <bluetooth-api.h>
+#endif
 
 #include "bluetooth.h"
 #include "bluetooth_private.h"
@@ -26,6 +31,11 @@ int bt_opp_server_initialize(const char *destination,
 			bt_opp_server_push_requested_cb push_requested_cb,
 			void *user_data)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_opp_server_initialize(destination, push_requested_cb, user_data);
+	return error_code;
+#else
 	int error_code = BT_ERROR_NONE;
 
 	BT_CHECK_INIT_STATUS();
@@ -41,12 +51,18 @@ int bt_opp_server_initialize(const char *destination,
 	}
 
 	return error_code;
+#endif
 }
 
 int bt_opp_server_initialize_by_connection_request(const char *destination,
 			bt_opp_server_connection_requested_cb connection_requested_cb,
 			void *user_data)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_opp_server_initialize_by_connection_request(destination, connection_requested_cb, user_data);
+	return error_code;
+#else
 	int error_code = BT_ERROR_NONE;
 
 	BT_CHECK_INIT_STATUS();
@@ -62,10 +78,16 @@ int bt_opp_server_initialize_by_connection_request(const char *destination,
 	}
 
 	return error_code;
+#endif
 }
 
 int bt_opp_server_deinitialize(void)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_opp_server_deinitialize();
+	return error_code;
+#else
 	int error_code = BT_ERROR_NONE;
 
 	BT_CHECK_INIT_STATUS();
@@ -86,6 +108,7 @@ int bt_opp_server_deinitialize(void)
 	_bt_unset_cb(BT_EVENT_OPP_PUSH_REQUESTED);
 
 	return error_code;
+#endif
 }
 
 int bt_opp_server_accept(bt_opp_server_transfer_progress_cb progress_cb,
@@ -94,6 +117,11 @@ int bt_opp_server_accept(bt_opp_server_transfer_progress_cb progress_cb,
 			void *user_data,
 			int *transfer_id)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_opp_server_accept(progress_cb, finished_cb, name, user_data, transfer_id);
+	return error_code;
+#else
 	int error_code = BT_ERROR_NONE;
 
 	BT_CHECK_INIT_STATUS();
@@ -118,10 +146,16 @@ int bt_opp_server_accept(bt_opp_server_transfer_progress_cb progress_cb,
 	}
 
 	return error_code;
+#endif
 }
 
 int bt_opp_server_reject(void)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_opp_server_reject();
+	return error_code;
+#else
 	int error_code = BT_ERROR_NONE;
 
 	BT_CHECK_INIT_STATUS();
@@ -143,10 +177,16 @@ int bt_opp_server_reject(void)
 	_bt_unset_cb(BT_EVENT_OPP_SERVER_TRANSFER_FINISHED);
 
 	return error_code;
+#endif
 }
 
 int bt_opp_server_set_destination(const char *destination)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_opp_server_set_destination(destination);
+	return error_code;
+#else
 	int error_code = BT_ERROR_NONE;
 
 	BT_CHECK_INIT_STATUS();
@@ -159,10 +199,16 @@ int bt_opp_server_set_destination(const char *destination)
 	}
 
 	return error_code;
+#endif
 }
 
 int bt_opp_server_cancel_transfer(int transfer_id)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_opp_server_cancel_transfer(transfer_id);
+	return error_code;
+#else
 	int error_code = BT_ERROR_NONE;
 
 	BT_CHECK_INIT_STATUS();
@@ -174,5 +220,6 @@ int bt_opp_server_cancel_transfer(int transfer_id)
 	}
 
 	return error_code;
+#endif
 }
 

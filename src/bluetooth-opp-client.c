@@ -19,7 +19,11 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#ifdef NTB
+#include "ntb-bluetooth.h"
+#else
 #include <bluetooth-api.h>
+#endif
 
 #include "bluetooth.h"
 #include "bluetooth_private.h"
@@ -62,6 +66,11 @@ char** __bt_opp_get_file_array(GList *file_list)
 
 int bt_opp_client_initialize(void)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_opp_client_initialize();
+	return error_code;
+#else
 	int error_code = BT_ERROR_NONE;
 
 	BT_CHECK_INIT_STATUS();
@@ -74,10 +83,16 @@ int bt_opp_client_initialize(void)
 	}
 
 	return error_code;
+#endif
 }
 
 int bt_opp_client_deinitialize(void)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_opp_client_deinitialize();
+	return error_code;
+#else
 	int error_code = BT_ERROR_NONE;
 
 	BT_CHECK_INIT_STATUS();
@@ -92,10 +107,16 @@ int bt_opp_client_deinitialize(void)
 	bt_opp_client_clear_files();
 
 	return error_code;
+#endif
 }
 
 int bt_opp_client_add_file(const char *file)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_opp_client_add_file(file);
+	return error_code;
+#else
 	int error_code = BT_ERROR_NONE;
 
 	BT_CHECK_INIT_STATUS();
@@ -110,10 +131,16 @@ int bt_opp_client_add_file(const char *file)
 	}
 
 	return error_code;
+#endif
 }
 
 int bt_opp_client_clear_files(void)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_opp_client_clear_files();
+	return error_code;
+#else
 	int i = 0;
 	int file_num = 0;
 	char *c_file = NULL;
@@ -137,6 +164,7 @@ int bt_opp_client_clear_files(void)
 	}
 
 	return BT_ERROR_NONE;
+#endif
 }
 
 int bt_opp_client_push_files(const char *remote_address,
@@ -145,6 +173,11 @@ int bt_opp_client_push_files(const char *remote_address,
 			bt_opp_client_push_finished_cb finished_cb,
 			void *user_data)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_opp_client_push_files(remote_address, responded_cb, progress_cb, finished_cb, user_data);
+	return error_code;
+#else
 	int error_code = BT_ERROR_NONE;
 	bluetooth_device_address_t addr_hex = { {0,} };
 	char **files = NULL;
@@ -173,10 +206,16 @@ int bt_opp_client_push_files(const char *remote_address,
 		free(files);
 
 	return error_code;
+#endif
 }
 
 int bt_opp_client_cancel_push(void)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_opp_client_cancel_push();
+	return error_code;
+#else
 	int error_code = BT_ERROR_NONE;
 
 	BT_CHECK_INIT_STATUS();
@@ -189,5 +228,6 @@ int bt_opp_client_cancel_push(void)
 	}
 
 	return error_code;
+#endif
 }
 

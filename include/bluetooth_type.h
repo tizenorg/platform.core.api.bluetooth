@@ -23,6 +23,13 @@ extern "C"
 {
 #endif /* __cplusplus */
 
+#ifdef NTB
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdbool.h>
+#include <stdint.h>
+#endif
+
 /**
  * @file bluetooth_type.h
  * @brief API to control the Bluetooth adapter, devices and communications.
@@ -35,6 +42,7 @@ extern "C"
  * @brief Enumerations of Bluetooth error codes.
  * @since_tizen 2.3
  */
+#ifndef NTB
 typedef enum
 {
 	BT_ERROR_NONE = TIZEN_ERROR_NONE, /**< Successful*/
@@ -61,6 +69,58 @@ typedef enum
 	BT_ERROR_AGAIN = TIZEN_ERROR_NETWORK_CLASS|0x010C, /**< Resource temporarily unavailable */
 	BT_ERROR_SERVICE_NOT_FOUND = TIZEN_ERROR_NETWORK_CLASS|0x010D, /**< Service Not Found */
 } bt_error_e;
+#else
+typedef enum
+{
+#ifdef TIZEN
+	BT_ERROR_NONE = TIZEN_ERROR_NONE, /**< Successful*/
+	BT_ERROR_CANCELLED = TIZEN_ERROR_CANCELED, /**< Operation cancelled */
+	BT_ERROR_INVALID_PARAMETER = TIZEN_ERROR_INVALID_PARAMETER, /**< Invalid parameter */
+	BT_ERROR_OUT_OF_MEMORY = TIZEN_ERROR_OUT_OF_MEMORY, /**< Out of memory */
+	BT_ERROR_RESOURCE_BUSY = TIZEN_ERROR_RESOURCE_BUSY, /**< Device or resource busy */
+	BT_ERROR_TIMED_OUT = TIZEN_ERROR_TIMED_OUT, /**< Timeout error */
+	BT_ERROR_NOW_IN_PROGRESS = TIZEN_ERROR_NOW_IN_PROGRESS, /**< Operation now in progress */
+	BT_ERROR_NOT_SUPPORTED = TIZEN_ERROR_NETWORK_CLASS|0x111, /**< Not Supported */
+	BT_ERROR_NOT_INITIALIZED = TIZEN_ERROR_NETWORK_CLASS|0x0101, /**< Local adapter not initialized */
+	BT_ERROR_NOT_ENABLED = TIZEN_ERROR_NETWORK_CLASS|0x0102, /**< Local adapter not enabled */
+	BT_ERROR_ALREADY_DONE = TIZEN_ERROR_NETWORK_CLASS|0x0103, /**< Operation already done  */
+	BT_ERROR_OPERATION_FAILED = TIZEN_ERROR_NETWORK_CLASS|0x0104, /**< Operation failed */
+	BT_ERROR_NOT_IN_PROGRESS = TIZEN_ERROR_NETWORK_CLASS|0x0105, /**< Operation not in progress */
+	BT_ERROR_REMOTE_DEVICE_NOT_BONDED = TIZEN_ERROR_NETWORK_CLASS|0x0106, /**< Remote device not bonded */
+	BT_ERROR_AUTH_REJECTED = TIZEN_ERROR_NETWORK_CLASS|0x0107, /**< Authentication rejected */
+	BT_ERROR_AUTH_FAILED = TIZEN_ERROR_NETWORK_CLASS|0x0108, /**< Authentication failed */
+	BT_ERROR_REMOTE_DEVICE_NOT_FOUND = TIZEN_ERROR_NETWORK_CLASS|0x0109, /**< Remote device not found */
+	BT_ERROR_SERVICE_SEARCH_FAILED = TIZEN_ERROR_NETWORK_CLASS|0x010A, /**< Service search failed */
+	BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED = TIZEN_ERROR_NETWORK_CLASS|0x010B, /**< Remote device is not connected */
+	BT_ERROR_ADAPTER_NOT_FOUND = TIZEN_ERROR_NETWORK_CLASS|0x010C, /**< Adapter not found */
+#else
+	BT_ERROR_NONE = 0x00, /**< Successful*/
+	BT_ERROR_CANCELLED, /**< Operation cancelled */
+	BT_ERROR_INVALID_PARAMETER, /**< Invalid parameter */
+	BT_ERROR_OUT_OF_MEMORY, /**< Out of memory */
+	BT_ERROR_RESOURCE_BUSY, /**< Device or resource busy */
+	BT_ERROR_TIMED_OUT, /**< Timeout error */
+	BT_ERROR_NOW_IN_PROGRESS, /**< Operation now in progress */
+	BT_ERROR_NOT_SUPPORTED, /**< Not Supported */
+	BT_ERROR_NOT_INITIALIZED, /**< Local adapter not initialized */
+	BT_ERROR_NOT_ENABLED, /**< Local adapter not enabled */
+	BT_ERROR_ALREADY_DONE, /**< Operation already done  */
+	BT_ERROR_OPERATION_FAILED, /**< Operation failed */
+	BT_ERROR_NOT_IN_PROGRESS, /**< Operation not in progress */
+	BT_ERROR_REMOTE_DEVICE_NOT_BONDED, /**< Remote device not bonded */
+	BT_ERROR_AUTH_REJECTED, /**< Authentication rejected */
+	BT_ERROR_AUTH_FAILED, /**< Authentication failed */
+	BT_ERROR_REMOTE_DEVICE_NOT_FOUND, /**< Remote device not found */
+	BT_ERROR_SERVICE_SEARCH_FAILED, /**< Service search failed */
+	BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED, /**< Remote device is not connected */
+	BT_ERROR_ADAPTER_NOT_FOUND, /**< Adapter not found */
+#endif
+} bt_error_e;
+#endif
+
+#ifdef NTB
+#define BT_SUCCESS BT_ERROR_NONE
+#endif
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_MODULE
@@ -750,6 +810,18 @@ typedef struct
 	bt_device_disconnect_reason_e disconn_reason;  /**< Disconnection reason */
 } bt_device_connection_info_s;
 
+#ifdef NTB
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_DEVICE_MODULE
+ * @brief  Called when GATT connection state is changed.
+ * @param[in]  result  The connection result (1 - Connected 0 - Disconnected)
+ * @param[in]  user_data  The user data passed from the foreach function
+ * @see bt_device_connect_le()
+ * @see bt_device_disconnect_le()
+ */
+typedef void (*bt_device_gatt_state_changed_cb)(int result, void *user_data);
+#endif
+
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DEVICE_MODULE
  * @brief Device LE connection update structure.
@@ -797,6 +869,54 @@ typedef struct
 	int data_size;	/**< The length of the received data */
 	char *data;	/**< The received data */
 } bt_socket_received_data_s;
+
+#ifdef NTB
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AGENT_MODULE
+ *
+ * @brief Structure of agent callbacks.
+ *
+ * @see bt_agent_register()
+ */
+typedef void bt_req_t;
+
+typedef struct
+{
+	void (*display_pincode)(const char *device_name,
+				const char *pincode,
+				bt_req_t *requestion);
+	void (*request_pincode)(const char *device_name,
+				bt_req_t *requestion);
+	void (*request_passkey)(const char *device_name,
+				bt_req_t *requestion);
+	void (*display_passkey)(const char *device_name,
+				guint32 passkey,
+				guint16 entered,
+				bt_req_t *requestion);
+	void (*request_confirm)(const char *device_name,
+				unsigned int confirm_num,
+				bt_req_t *requestion);
+	void (*authorize_service)(const char *device_name,
+				const char *uuid,
+				bt_req_t *requestion);
+	void (*cancel)(void);
+} bt_agent;
+
+#ifdef TIZEN_3
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AGENT_MODULE
+ *
+ * @brief  Enumerations used by user for synchronous agent replies
+ *
+ * @see bt_agent_reply_sync()
+ */
+typedef enum
+{
+  BT_AGENT_ACCEPT = 0, /**< accept user request over bt_agent */
+  BT_AGENT_REJECT, /**< reject user request over bt_agent */
+} bt_agent_accept_type_t;
+#endif
+#endif
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_MODULE
