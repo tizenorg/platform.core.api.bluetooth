@@ -19,8 +19,12 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#ifdef NTB
+#include "ntb-bluetooth.h"
+#else
 #include <bluetooth-api.h>
 #include <bluetooth-hid-api.h>
+#endif
 
 #include "bluetooth.h"
 #include "bluetooth_private.h"
@@ -28,6 +32,11 @@
 int bt_hid_host_initialize(bt_hid_host_connection_state_changed_cb connection_cb,
 								void *user_data)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_hid_host_initialize(connection_cb, user_data);
+	return error_code;
+#else
 	int error;
 
 	BT_CHECK_INIT_STATUS();
@@ -41,10 +50,16 @@ int bt_hid_host_initialize(bt_hid_host_connection_state_changed_cb connection_cb
 		_bt_set_cb(BT_EVENT_HID_CONNECTION_STATUS, connection_cb, user_data);
 	}
 	return error;
+#endif
 }
 
-int bt_hid_host_deinitialize()
+int bt_hid_host_deinitialize(void)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_hid_host_deinitialize();
+	return error_code;
+#else
 	int error;
 
 	BT_CHECK_INIT_STATUS();
@@ -57,10 +72,16 @@ int bt_hid_host_deinitialize()
 		_bt_unset_cb(BT_EVENT_HID_CONNECTION_STATUS);
 	}
 	return error;
+#endif
 }
 
 int bt_hid_host_connect(const char *remote_address)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_hid_host_connect(remote_address);
+	return error_code;
+#else
 	int error;
 	bluetooth_device_address_t addr_hex = { {0,} };
 
@@ -75,10 +96,16 @@ int bt_hid_host_connect(const char *remote_address)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
 	}
 	return error;
+#endif
 }
 
 int bt_hid_host_disconnect(const char *remote_address)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_hid_host_disconnect(remote_address);
+	return error_code;
+#else
 	int error;
 	bluetooth_device_address_t addr_hex = { {0,} };
 
@@ -93,4 +120,5 @@ int bt_hid_host_disconnect(const char *remote_address)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
 	}
 	return error;
+#endif
 }

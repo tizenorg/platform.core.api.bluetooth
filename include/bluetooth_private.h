@@ -20,11 +20,13 @@
 
 #include <dlog.h>
 #include <stdbool.h>
+#ifndef NTB
 #include <bluetooth-api.h>
 #include <bluetooth-audio-api.h>
 #include <bluetooth-telephony-api.h>
 #include <bluetooth-media-control.h>
 #include <bluetooth-hid-api.h>
+#endif
 
 #include "bluetooth.h"
 
@@ -41,6 +43,7 @@ extern "C" {
 
 #define OPP_UUID "00001105-0000-1000-8000-00805f9b34fb"
 
+#ifndef NTB
 /**
  * @internal
  * @brief Bluetooth callback.
@@ -253,7 +256,7 @@ void _bt_avrcp_event_proxy(int event, media_event_param_t *param, void *user_dat
  * @brief Since the HID call back and event proxy call backs have different prototype it is wrapper function.
  */
 void _bt_hid_event_proxy(int event, hid_event_param_t *param, void *user_data);
-
+#endif
 
 #ifdef __cplusplus
 }

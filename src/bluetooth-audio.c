@@ -16,17 +16,22 @@
 
 #include <dlog.h>
 #include <stdbool.h>
-#include <bluetooth-api.h>
 #include <string.h>
 #include "bluetooth.h"
 #include "bluetooth_private.h"
-#include "bluetooth-audio-api.h"
+#ifdef NTB
+#include "ntb-bluetooth.h"
+#else
+#include <bluetooth-api.h>
 #include "bluetooth-telephony-api.h"
+#include "bluetooth-audio-api.h"
+#endif
 
 typedef struct _call_list_s {
 	GList *list;
 } call_list_s;
 
+#ifndef NTB
 /*The below API is just to convert the error from Telephony API's to CAPI error codes,
 * this is temporary change and changes to proper error code will be done in
 * subsequent check ins.*/
@@ -61,9 +66,15 @@ int _bt_convert_telephony_error_code(int error)
 		return BT_ERROR_NONE;
 	}
 }
+#endif
 
 int bt_audio_initialize(void)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_audio_initialize();
+	return error_code;
+#else
 	int error;
 
 	BT_CHECK_INIT_STATUS();
@@ -81,10 +92,16 @@ int bt_audio_initialize(void)
 			_bt_convert_error_to_string(error), error);
 	}
 	return error;
+#endif
 }
 
 int bt_audio_deinitialize(void)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_audio_deinitialize();
+	return error_code;
+#else
 	int error;
 
 	BT_CHECK_INIT_STATUS();
@@ -101,10 +118,16 @@ int bt_audio_deinitialize(void)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
 	}
 	return error;
+#endif
 }
 
 int bt_audio_connect(const char *remote_address, bt_audio_profile_type_e type)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_audio_connect(remote_address, type);
+	return error_code;
+#else
 	int error;
 	bluetooth_device_address_t addr_hex = { {0,} };
 
@@ -128,10 +151,16 @@ int bt_audio_connect(const char *remote_address, bt_audio_profile_type_e type)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
 	}
 	return error;
+#endif
 }
 
 int bt_audio_disconnect(const char *remote_address, bt_audio_profile_type_e type)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_audio_disconnect(remote_address, type);
+	return error_code;
+#else
 	int error;
 	bluetooth_device_address_t addr_hex = { {0,} };
 
@@ -155,24 +184,39 @@ int bt_audio_disconnect(const char *remote_address, bt_audio_profile_type_e type
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
 	}
 	return error;
+#endif
 }
 
 int bt_audio_set_connection_state_changed_cb(bt_audio_connection_state_changed_cb callback, void *user_data)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_audio_set_connection_state_changed_cb(callback,
+								user_data);
+	return error_code;
+#else
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(callback);
 	_bt_set_cb(BT_EVENT_AUDIO_CONNECTION_STATUS, callback, user_data);
 	return BT_ERROR_NONE;
-
+#endif
 }
+
 int bt_audio_unset_connection_state_changed_cb(void)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_audio_unset_connection_state_changed_cb();
+	return error_code;
+#else
 	BT_CHECK_INIT_STATUS();
 	if (_bt_check_cb(BT_EVENT_AUDIO_CONNECTION_STATUS) == true)
 		_bt_unset_cb(BT_EVENT_AUDIO_CONNECTION_STATUS);
 	return BT_ERROR_NONE;
+#endif
 }
 
+#ifndef NTB
 int bt_ag_notify_speaker_gain(int gain)
 {
 	int error;
@@ -222,7 +266,6 @@ int bt_ag_set_microphone_gain_changed_cb(bt_ag_microphone_gain_changed_cb callba
 	BT_CHECK_INPUT_PARAMETER(callback);
 	_bt_set_cb(BT_EVENT_AG_MICROPHONE_GAIN_CHANGE, callback, user_data);
 	return BT_ERROR_NONE;
-
 }
 
 int bt_ag_unset_microphone_gain_changed_cb(void)
@@ -388,7 +431,6 @@ int bt_ag_set_call_handling_event_cb(bt_ag_call_handling_event_cb callback,
 	BT_CHECK_INPUT_PARAMETER(callback);
 	_bt_set_cb(BT_EVENT_AG_CALL_HANDLING_EVENT, callback, user_data);
 	return BT_ERROR_NONE;
-
 }
 
 int bt_ag_unset_call_handling_event_cb(void)
@@ -493,3 +535,4 @@ int bt_call_list_add(bt_call_list_h list, unsigned int call_id, bt_ag_call_state
 	handle->list = g_list_append(handle->list, (gpointer)call_status);
 	return BT_ERROR_NONE;
 }
+#endif

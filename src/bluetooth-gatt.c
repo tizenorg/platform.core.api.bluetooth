@@ -16,7 +16,11 @@
 
 #include <stdbool.h>
 #include <dlog.h>
+#ifdef NTB
+#include "ntb-bluetooth.h"
+#else
 #include <bluetooth-api.h>
+#endif
 
 #include "bluetooth.h"
 #include "bluetooth_private.h"
@@ -25,6 +29,12 @@ int bt_gatt_foreach_primary_services(const char *remote_address,
 				bt_gatt_primary_service_cb callback,
 				void *user_data)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_gatt_foreach_primary_services(remote_address,
+							callback, user_data);
+	return error_code;
+#else
 	int i;
 	int ret;
 	bool foreach_call = true;
@@ -68,12 +78,19 @@ int bt_gatt_foreach_primary_services(const char *remote_address,
 	g_free(prim_svc);
 
 	return ret;
+#endif
 }
 
 int bt_gatt_discover_characteristics(bt_gatt_attribute_h service,
 				bt_gatt_characteristics_discovered_cb callback,
 				void *user_data)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_gatt_discover_characteristics(service,
+						callback, user_data);
+	return error_code;
+#else
 	int ret;
 
 	BT_CHECK_INIT_STATUS();
@@ -89,10 +106,16 @@ int bt_gatt_discover_characteristics(bt_gatt_attribute_h service,
 	}
 
 	return ret;
+#endif
 }
 
 int bt_gatt_get_service_uuid(bt_gatt_attribute_h service, char **uuid)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_gatt_get_service_uuid(service, uuid);
+	return error_code;
+#else
 	int i;
 	int ret;
 	bt_gatt_service_property_t property;
@@ -118,12 +141,19 @@ int bt_gatt_get_service_uuid(bt_gatt_attribute_h service, char **uuid)
 	}
 
 	return ret;
+#endif
 }
 
 int bt_gatt_foreach_included_services(bt_gatt_attribute_h service,
 				bt_gatt_included_service_cb callback,
 				void *user_data)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_gatt_foreach_included_services(service,
+						callback, user_data);
+	return error_code;
+#else
 	int i;
 	int ret;
 	bool foreach_call = true;
@@ -160,15 +190,17 @@ int bt_gatt_foreach_included_services(bt_gatt_attribute_h service,
 		g_free(property.handle_info.handle);
 	}
 	return ret;
+#endif
 }
 
+#ifndef NTB
 int bt_gatt_set_characteristic_changed_cb(bt_gatt_characteristic_changed_cb callback,
 				void *user_data)
 {
 	return BT_ERROR_NOT_SUPPORTED;
 }
 
-int bt_gatt_unset_characteristic_changed_cb()
+int bt_gatt_unset_characteristic_changed_cb(void)
 {
 	return BT_ERROR_NOT_SUPPORTED;
 }
@@ -182,11 +214,18 @@ int bt_gatt_unwatch_characteristic_changes(bt_gatt_attribute_h service)
 {
 	return BT_ERROR_NOT_SUPPORTED;
 }
+#endif
 
 int bt_gatt_get_characteristic_declaration(bt_gatt_attribute_h characteristic,
 				char **uuid, unsigned char **value,
 				int *value_length)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_gatt_get_characteristic_declaration(
+			characteristic, uuid, value, value_length);
+	return error_code;
+#else
 	int ret;
 	bt_gatt_char_property_t property;
 
@@ -216,8 +255,10 @@ int bt_gatt_get_characteristic_declaration(bt_gatt_attribute_h characteristic,
 	}
 
 	return ret;
+#endif
 }
 
+#ifndef NTB
 int bt_gatt_set_characteristic_value(bt_gatt_attribute_h characteristic,
 				const unsigned char *value,
 				int value_length)
@@ -247,10 +288,16 @@ int bt_gatt_set_characteristic_value_request(bt_gatt_attribute_h characteristic,
 {
 	return BT_ERROR_NOT_SUPPORTED;
 }
+#endif
 
 int bt_gatt_clone_attribute_handle(bt_gatt_attribute_h *clone,
 				bt_gatt_attribute_h origin)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_gatt_clone_attribute_handle(clone, origin);
+	return error_code;
+#else
 	int error = BT_ERROR_NONE;
 
 	BT_CHECK_INIT_STATUS();
@@ -259,10 +306,16 @@ int bt_gatt_clone_attribute_handle(bt_gatt_attribute_h *clone,
 	*clone = g_strdup((char *)origin);
 
 	return error;
+#endif
 }
 
 int bt_gatt_destroy_attribute_handle(bt_gatt_attribute_h handle)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_gatt_destroy_attribute_handle(handle);
+	return error_code;
+#else
 	int error = BT_ERROR_NONE;
 
 	BT_CHECK_INIT_STATUS();
@@ -271,14 +324,23 @@ int bt_gatt_destroy_attribute_handle(bt_gatt_attribute_h handle)
 	g_free(handle);
 
 	return error;
+#endif
 }
 
 int bt_gatt_read_characteristic_value(bt_gatt_attribute_h characteristic,
 		bt_gatt_characteristic_read_cb callback)
 {
+#ifdef NTB
+	int error_code = BT_ERROR_NONE;
+	error_code = ntb_bt_gatt_read_characteristic_value(characteristic,
+								callback);
+	return error_code;
+#else
 	return BT_ERROR_NOT_SUPPORTED;
+#endif
 }
 
+#ifndef NTB
 int bt_gatt_discover_characteristic_descriptor(bt_gatt_attribute_h characteristic_handle,
 				bt_gatt_characteristic_descriptor_discovered_cb callback,
 				void *user_data)
@@ -305,4 +367,5 @@ int bt_gatt_unset_connection_state_changed_cb(void)
 {
 	return BT_ERROR_NOT_SUPPORTED;
 }
+#endif
 
