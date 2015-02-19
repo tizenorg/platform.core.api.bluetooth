@@ -15,3 +15,7 @@ FOREACH(src ${sources})
     ADD_EXECUTABLE(${src_name} ${src})
     TARGET_LINK_LIBRARIES(${src_name} ${fw_name} ${${fw_test}_LDFLAGS})
 ENDFOREACH()
+
+INSTALL(TARGETS bt_unit_test DESTINATION bin)
+INSTALL(TARGETS bt_onoff DESTINATION bin)
+INSTALL(FILES capi-network-bluetooth-test.efl DESTINATION /etc/smack/accesses.d/)

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2013 Samsung Electronics Co., Ltd.
+ * Copyright (c) 2011 Samsung Electronics Co., Ltd All Rights Reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License);
  * you may not use this file except in compliance with the License.
@@ -165,22 +165,51 @@ int bt_gatt_foreach_included_services(bt_gatt_attribute_h service,
 int bt_gatt_set_characteristic_changed_cb(bt_gatt_characteristic_changed_cb callback,
 				void *user_data)
 {
-	return BT_ERROR_NOT_SUPPORTED;
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(callback);
+
+	_bt_set_cb(BT_EVENT_GATT_VALUE_CHANGED, callback, user_data);
+
+	return BT_ERROR_NONE;
 }
 
 int bt_gatt_unset_characteristic_changed_cb()
 {
-	return BT_ERROR_NOT_SUPPORTED;
+	BT_CHECK_INIT_STATUS();
+
+	_bt_unset_cb(BT_EVENT_GATT_VALUE_CHANGED);
+
+	return BT_ERROR_NONE;
 }
 
 int bt_gatt_watch_characteristic_changes(bt_gatt_attribute_h service)
 {
-	return BT_ERROR_NOT_SUPPORTED;
+	int ret;
+
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(service);
+
+	ret = _bt_get_error_code(bluetooth_gatt_watch_characteristics((const char *)service));
+
+	if (ret != BT_ERROR_NONE)
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+
+	return ret;
 }
 
 int bt_gatt_unwatch_characteristic_changes(bt_gatt_attribute_h service)
 {
-	return BT_ERROR_NOT_SUPPORTED;
+	int ret;
+
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(service);
+
+	ret = _bt_get_error_code(bluetooth_gatt_unwatch_characteristics((const char *)service));
+
+	if (ret != BT_ERROR_NONE)
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+
+	return ret;
 }
 
 int bt_gatt_get_characteristic_declaration(bt_gatt_attribute_h characteristic,
@@ -245,7 +274,26 @@ int bt_gatt_set_characteristic_value_request(bt_gatt_attribute_h characteristic,
 				const unsigned char *value, int value_length,
 				bt_gatt_characteristic_write_cb callback)
 {
-	return BT_ERROR_NOT_SUPPORTED;
+	int ret;
+
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(characteristic);
+	BT_CHECK_INPUT_PARAMETER(value);
+
+	if (value_length <= 0)
+		return BT_ERROR_INVALID_PARAMETER;
+
+	ret = _bt_get_error_code(bluetooth_gatt_set_characteristics_value_request(
+					(const char *)characteristic,
+					(const guint8 *)value, value_length));
+
+	if (ret != BT_ERROR_NONE) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+	} else {
+		_bt_set_cb(BT_EVENT_GATT_WRITE_CHARACTERISTIC, callback, characteristic);
+	}
+
+	return ret;
 }
 
 int bt_gatt_clone_attribute_handle(bt_gatt_attribute_h *clone,
@@ -276,33 +324,92 @@ int bt_gatt_destroy_attribute_handle(bt_gatt_attribute_h handle)
 int bt_gatt_read_characteristic_value(bt_gatt_attribute_h characteristic,
 		bt_gatt_characteristic_read_cb callback)
 {
-	return BT_ERROR_NOT_SUPPORTED;
+	int ret;
+
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(characteristic);
+	BT_CHECK_INPUT_PARAMETER(callback);
+
+	ret = _bt_get_error_code(bluetooth_gatt_read_characteristic_value((const char *)characteristic));
+
+	if (ret != BT_ERROR_NONE) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+	} else {
+		_bt_set_cb(BT_EVENT_GATT_READ_CHARACTERISTIC, callback, NULL);
+	}
+
+	return ret;
 }
 
 int bt_gatt_discover_characteristic_descriptor(bt_gatt_attribute_h characteristic_handle,
 				bt_gatt_characteristic_descriptor_discovered_cb callback,
 				void *user_data)
 {
-	return BT_ERROR_NOT_SUPPORTED;
+	int ret;
+
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(characteristic_handle);
+	BT_CHECK_INPUT_PARAMETER(callback);
+
+	ret = _bt_get_error_code(bluetooth_gatt_discover_characteristic_descriptor
+							((const char *)characteristic_handle));
+
+	if (ret != BT_ERROR_NONE) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+	} else {
+		_bt_set_cb(BT_EVENT_GATT_CHARACTERISTIC_DESCRIPTOR_DISCOVERED, callback, user_data);
+	}
+
+	return ret;
 }
 
 int bt_gatt_connect(const char *address, bool auto_connect)
 {
-	return BT_ERROR_NOT_SUPPORTED;
+	int ret;
+	bluetooth_device_address_t bd_addr = { {0,} };
+
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(address);
+	_bt_convert_address_to_hex(&bd_addr, address);
+
+	ret = _bt_get_error_code(bluetooth_connect_le(&bd_addr, auto_connect ? TRUE : FALSE));
+
+	if (ret != BT_ERROR_NONE) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+	}
+	return ret;
 }
 
 int bt_gatt_disconnect(const char *address)
 {
-	return BT_ERROR_NOT_SUPPORTED;
+	int ret;
+	bluetooth_device_address_t bd_addr = { {0,} };
+
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(address);
+	_bt_convert_address_to_hex(&bd_addr, address);
+
+	ret = _bt_get_error_code(bluetooth_disconnect_le(&bd_addr));
+
+	if (ret != BT_ERROR_NONE) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+	}
+	return ret;
 }
 
 int bt_gatt_set_connection_state_changed_cb(bt_gatt_connection_state_changed_cb callback, void *user_data)
 {
-	return BT_ERROR_NOT_SUPPORTED;
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(callback);
+	_bt_set_cb(BT_EVENT_GATT_CONNECTION_STATUS, callback, user_data);
+
+	return BT_ERROR_NONE;
 }
 
 int bt_gatt_unset_connection_state_changed_cb(void)
 {
-	return BT_ERROR_NOT_SUPPORTED;
+	BT_CHECK_INIT_STATUS();
+	_bt_unset_cb(BT_EVENT_GATT_CONNECTION_STATUS);
+	return BT_ERROR_NONE;
 }
 

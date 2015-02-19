@@ -9,7 +9,11 @@ SET(PREFIX ${CMAKE_INSTALL_PREFIX})
 SET(INC_DIR include)
 INCLUDE_DIRECTORIES(${INC_DIR})
 
+IF (TIZEN_WEARABLE)
+SET(dependents "dlog glib-2.0 capi-base-common bluetooth-api privacy-manager-client")
+ELSE ()
 SET(dependents "dlog glib-2.0 capi-base-common bluetooth-api")
+ENDIF (TIZEN_WEARABLE)
 SET(pc_dependents "capi-base-common")
 
 INCLUDE(FindPkgConfig)

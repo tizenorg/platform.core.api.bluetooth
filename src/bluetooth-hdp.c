@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2013 Samsung Electronics Co., Ltd.
+ * Copyright (c) 2011 Samsung Electronics Co., Ltd All Rights Reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License);
  * you may not use this file except in compliance with the License.
@@ -65,7 +65,7 @@ int bt_hdp_send_data(unsigned int channel, const char *data, unsigned int size)
 	int error = BT_ERROR_NONE;
 
 	BT_CHECK_INIT_STATUS();
-	if (NULL == data) {
+	if (NULL == data || 0 >= size) {
 		BT_ERR("%s", _bt_convert_error_to_string(BT_ERROR_INVALID_PARAMETER));
 	}
 	error = bluetooth_hdp_send_data(channel, data, size);

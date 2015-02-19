@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2013 Samsung Electronics Co., Ltd.
+ * Copyright (c) 2011 Samsung Electronics Co., Ltd All Rights Reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License);
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,24 @@
 #include "bluetooth_private.h"
 
 GList *sending_files;
+static bool is_opp_client_initialized = false;
+
+#define BT_CHECK_OPP_CLIENT_INIT_STATUS() \
+	if (__bt_check_opp_client_init_status() == BT_ERROR_NOT_INITIALIZED) \
+	{ \
+		LOGE("[%s] NOT_INITIALIZED(0x%08x)", __FUNCTION__, BT_ERROR_NOT_INITIALIZED); \
+		return BT_ERROR_NOT_INITIALIZED; \
+	}
+
+int __bt_check_opp_client_init_status(void)
+{
+	if (is_opp_client_initialized != true) {
+		BT_ERR("NOT_INITIALIZED(0x%08x)", BT_ERROR_NOT_INITIALIZED);
+		return BT_ERROR_NOT_INITIALIZED;
+	}
+
+	return BT_ERROR_NONE;
+}
 
 char** __bt_opp_get_file_array(GList *file_list)
 {
@@ -71,9 +89,11 @@ int bt_opp_client_initialize(void)
 	if (error_code != BT_ERROR_NONE) {
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code),
 				error_code);
+		return error_code;
 	}
 
-	return error_code;
+	is_opp_client_initialized = true;
+	return BT_ERROR_NONE;
 }
 
 int bt_opp_client_deinitialize(void)
@@ -81,17 +101,19 @@ int bt_opp_client_deinitialize(void)
 	int error_code = BT_ERROR_NONE;
 
 	BT_CHECK_INIT_STATUS();
+	BT_CHECK_OPP_CLIENT_INIT_STATUS();
 
 	error_code = _bt_get_error_code(bluetooth_opc_deinit());
+	bt_opp_client_clear_files();
 
 	if (error_code != BT_ERROR_NONE) {
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code),
 				error_code);
+		return error_code;
 	}
 
-	bt_opp_client_clear_files();
-
-	return error_code;
+	is_opp_client_initialized = false;
+	return BT_ERROR_NONE;
 }
 
 int bt_opp_client_add_file(const char *file)
@@ -99,12 +121,16 @@ int bt_opp_client_add_file(const char *file)
 	int error_code = BT_ERROR_NONE;
 
 	BT_CHECK_INIT_STATUS();
+	BT_CHECK_OPP_CLIENT_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(file);
 
 	if (access(file, F_OK) == 0) {
 		sending_files = g_list_append(sending_files, strdup(file));
 	} else {
-		error_code = BT_ERROR_INVALID_PARAMETER;
+		if (errno == EACCES || errno == EPERM)
+			error_code = BT_ERROR_PERMISSION_DENIED;
+		else
+			error_code = BT_ERROR_INVALID_PARAMETER;
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code),
 				error_code);
 	}
@@ -119,6 +145,7 @@ int bt_opp_client_clear_files(void)
 	char *c_file = NULL;
 
 	BT_CHECK_INIT_STATUS();
+	BT_CHECK_OPP_CLIENT_INIT_STATUS();
 
 	if (sending_files) {
 		file_num = g_list_length(sending_files);
@@ -150,6 +177,7 @@ int bt_opp_client_push_files(const char *remote_address,
 	char **files = NULL;
 
 	BT_CHECK_INIT_STATUS();
+	BT_CHECK_OPP_CLIENT_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(remote_address);
 
 	_bt_convert_address_to_hex(&addr_hex, remote_address);
@@ -180,6 +208,7 @@ int bt_opp_client_cancel_push(void)
 	int error_code = BT_ERROR_NONE;
 
 	BT_CHECK_INIT_STATUS();
+	BT_CHECK_OPP_CLIENT_INIT_STATUS();
 
 	error_code = _bt_get_error_code(bluetooth_opc_cancel_push());
 

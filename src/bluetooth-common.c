@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2013 Samsung Electronics Co., Ltd.
+ * Copyright (c) 2011 Samsung Electronics Co., Ltd All Rights Reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License);
  * you may not use this file except in compliance with the License.
@@ -29,11 +29,15 @@
 #include "bluetooth-telephony-api.h"
 
 static bool is_initialized = false;
+static bool is_le_initialized = false;
 static bt_event_sig_event_slot_s bt_event_slot_container[] = {
 	{BT_EVENT_STATE_CHANGED, NULL, NULL},
+	{BT_EVENT_LE_STATE_CHANGED, NULL, NULL},
 	{BT_EVENT_NAME_CHANGED, NULL, NULL},
 	{BT_EVENT_VISIBILITY_MODE_CHANGED, NULL, NULL},
+	{BT_EVENT_VISIBILITY_DURATION_CHANGED, NULL, NULL},
 	{BT_EVENT_DEVICE_DISCOVERY_STATE_CHANGED, NULL, NULL},
+	{BT_EVENT_LE_DEVICE_DISCOVERY_STATE_CHANGED, NULL, NULL},
 	{BT_EVENT_BOND_CREATED, NULL, NULL},
 	{BT_EVENT_BOND_DESTROYED, NULL, NULL},
 	{BT_EVENT_AUTHORIZATION_CHANGED, NULL, NULL},
@@ -67,20 +71,36 @@ static bt_event_sig_event_slot_s bt_event_slot_container[] = {
 	{BT_EVENT_AVRCP_SCAN_MODE_CHANGED, NULL, NULL},
 	{BT_EVENT_HID_CONNECTION_STATUS, NULL, NULL},
 	{BT_EVENT_DEVICE_CONNECTION_STATUS, NULL, NULL},
+	{BT_EVENT_GATT_CONNECTION_STATUS, NULL, NULL},
 	{BT_EVENT_GATT_CHARACTERISTIC_DISCOVERED, NULL, NULL},
-	{BT_EVENT_GATT_VALUE_CHANGED, NULL, NULL}
+	{BT_EVENT_GATT_VALUE_CHANGED, NULL, NULL},
+	{BT_EVENT_GATT_READ_CHARACTERISTIC, NULL, NULL},
+	{BT_EVENT_GATT_WRITE_CHARACTERISTIC, NULL, NULL},
+	{BT_EVENT_GATT_CHARACTERISTIC_DESCRIPTOR_DISCOVERED, NULL, NULL},
+	{BT_EVENT_ADVERTISING_STATE_CHANGED, NULL, NULL},
+	{BT_EVENT_MANUFACTURER_DATA_CHANGED, NULL, NULL},
+	{BT_EVENT_CONNECTABLE_CHANGED_EVENT, NULL, NULL},
+	{BT_EVENT_AG_VENDOR_CMD, NULL, NULL},
+	{BT_EVENT_RSSI_ENABLED_EVENT, NULL, NULL},
+	{BT_EVENT_RSSI_ALERT_EVENT, NULL, NULL},
+	{BT_EVENT_GET_RSSI_EVENT, NULL, NULL},
 };
 
 /*
  *  Internal Functions
  */
 static void __bt_event_proxy(int event, bluetooth_event_param_t * param, void *user_data);
+static void __bt_le_event_proxy(int event, bluetooth_event_param_t *param, void *user_data);
 static int __bt_get_cb_index(int event);
 static void __bt_convert_lower_to_upper(char *origin);
 static int __bt_get_bt_device_sdp_info_s(bt_device_sdp_info_s **dest, bt_sdp_info_t *source);
 static void __bt_free_bt_device_sdp_info_s(bt_device_sdp_info_s *sdp_info);
+static int __bt_get_bt_device_connection_info_s(bt_device_connection_info_s **dest, bt_connection_info_t *source);
+static void __bt_free_bt_device_connection_info_s(bt_device_connection_info_s *conn_info);
 static int __bt_get_bt_adapter_device_discovery_info_s(bt_adapter_device_discovery_info_s **discovery_info, bluetooth_device_info_t *source_info);
 static void __bt_free_bt_adapter_device_discovery_info_s(bt_adapter_device_discovery_info_s *discovery_info);
+static int __bt_get_bt_adapter_le_device_discovery_info_s(bt_adapter_le_device_discovery_info_s **le_discovery_info, bluetooth_le_device_info_t *source_info);
+static void __bt_free_bt_adapter_le_device_discovery_info_s(bt_adapter_le_device_discovery_info_s *discovery_info);
 
 /*
  *  Public Functions
@@ -111,14 +131,12 @@ int bt_deinitialize(void)
 	return BT_ERROR_NONE;
 }
 
-
 /*
  *  Common Functions
  */
 int _bt_check_init_status(void)
 {
-	if (is_initialized != true)
-	{
+	if (is_initialized != true) {
 		BT_ERR("NOT_INITIALIZED(0x%08x)", BT_ERROR_NOT_INITIALIZED);
 		return BT_ERROR_NOT_INITIALIZED;
 	}
@@ -147,12 +165,35 @@ bool _bt_check_cb(int events)
 
 int _bt_le_adapter_init(void)
 {
-	return BT_ERROR_NOT_SUPPORTED;
+	if (is_le_initialized)
+		return BT_ERROR_NONE;
+
+	if (bluetooth_le_register_callback(&__bt_le_event_proxy, NULL) != BLUETOOTH_ERROR_NONE) {
+		BT_ERR("OPERATION_FAILED(0x%08x)", BT_ERROR_OPERATION_FAILED);
+		return BT_ERROR_OPERATION_FAILED;
+	}
+	is_le_initialized = true;
+
+	return BT_ERROR_NONE;
 }
 
 int _bt_le_adapter_deinit(void)
 {
-	return BT_ERROR_NOT_SUPPORTED;
+	if (!is_le_initialized) {
+		BT_ERR("NOT_INITIALIZED(0x%08x)", BT_ERROR_NOT_INITIALIZED);
+		return BT_ERROR_NOT_INITIALIZED;
+	}
+
+	if (!_bt_check_cb(BT_EVENT_LE_STATE_CHANGED) &&
+	    !_bt_check_cb(BT_EVENT_LE_DEVICE_DISCOVERY_STATE_CHANGED)) {
+		if (bluetooth_le_unregister_callback() != BLUETOOTH_ERROR_NONE) {
+			BT_ERR("OPERATION_FAILED(0x%08x)", BT_ERROR_OPERATION_FAILED);
+			return BT_ERROR_OPERATION_FAILED;
+		}
+		is_le_initialized = false;
+	}
+
+	return BT_ERROR_NONE;
 }
 
 int _bt_get_error_code(int origin_error)
@@ -176,6 +217,7 @@ int _bt_get_error_code(int origin_error)
 	case BLUETOOTH_ERROR_DEVICE_ALREADY_ENABLED:
 	case BLUETOOTH_ERROR_ALREADY_INITIALIZED:
 	case BLUETOOTH_ERROR_AGENT_DOES_NOT_EXIST:
+	case BLUETOOTH_ERROR_ALREADY_DEACTIVATED:
 		return BT_ERROR_ALREADY_DONE;
 	case BLUETOOTH_ERROR_NOT_PAIRED:
 		return BT_ERROR_REMOTE_DEVICE_NOT_BONDED;
@@ -194,8 +236,12 @@ int _bt_get_error_code(int origin_error)
 		return BT_ERROR_REMOTE_DEVICE_NOT_FOUND;
 	case BLUETOOTH_ERROR_SERVICE_SEARCH_ERROR:
 		return BT_ERROR_SERVICE_SEARCH_FAILED;
+	case BLUETOOTH_ERROR_PERMISSION_DEINED :
+		return BT_ERROR_PERMISSION_DENIED;
 	case BLUETOOTH_ERROR_SERVICE_NOT_FOUND:
 		return BT_ERROR_SERVICE_NOT_FOUND;
+	case BLUETOOTH_ERROR_NOT_INITIALIZED:
+		return BT_ERROR_NOT_INITIALIZED;
 	case BLUETOOTH_ERROR_PARING_FAILED:
 	case BLUETOOTH_ERROR_MAX_CONNECTION:
 	case BLUETOOTH_ERROR_ALREADY_CONNECT:
@@ -240,7 +286,9 @@ int _bt_get_bt_device_info_s(bt_device_info_s **dest_dev, bluetooth_device_info_
 		(*dest_dev)->service_uuid = (char **)malloc(sizeof(char *) * source_dev->service_index);
 		if ((*dest_dev)->service_uuid != NULL) {
 			for (i = 0; i < source_dev->service_index; i++) {
-				(*dest_dev)->service_uuid[i] = strdup(source_dev->uuids[i]);
+				(*dest_dev)->service_uuid[i] =
+					g_strndup(source_dev->uuids[i],
+						BLUETOOTH_UUID_STRING_MAX - 1);
 				if ((*dest_dev)->service_uuid[i] != NULL) {
 					__bt_convert_lower_to_upper((*dest_dev)->service_uuid[i]);
 				}
@@ -253,6 +301,15 @@ int _bt_get_bt_device_info_s(bt_device_info_s **dest_dev, bluetooth_device_info_
 	(*dest_dev)->is_bonded = (bool)source_dev->paired;
 	(*dest_dev)->is_connected = (bool)source_dev->connected;
 	(*dest_dev)->is_authorized = (bool)source_dev->trust;
+
+	(*dest_dev)->manufacturer_data_len = source_dev->manufacturer_data.data_len;
+	if (source_dev->manufacturer_data.data_len > 0) {
+		(*dest_dev)->manufacturer_data = (char *)malloc(source_dev->manufacturer_data.data_len);
+		memcpy((*dest_dev)->manufacturer_data, source_dev->manufacturer_data.data, source_dev->manufacturer_data.data_len);
+	} else {
+		(*dest_dev)->manufacturer_data = (char *)malloc(1);
+		(*dest_dev)->manufacturer_data[0] = 0;
+	}
 
 	return BT_ERROR_NONE;
 }
@@ -273,10 +330,13 @@ void _bt_free_bt_device_info_s(bt_device_info_s *device_info)
 	if (device_info->service_uuid != NULL) {
 		for (i = 0; i < device_info->service_count; i++) {
 			if (device_info->service_uuid[i] != NULL)
-				free(device_info->service_uuid[i]);
+				g_free(device_info->service_uuid[i]);
 		}
 		free(device_info->service_uuid);
 	}
+
+	if (device_info->manufacturer_data != NULL)
+		free(device_info->manufacturer_data);
 
 	free(device_info);
 	device_info = NULL;
@@ -303,12 +363,12 @@ void _bt_convert_address_to_hex(bluetooth_device_address_t *addr_hex, const char
 	int i = 0;
 	unsigned int addr[BLUETOOTH_ADDRESS_LENGTH] = { 0, };
 
-	if (addr_str == NULL)
+	if (addr_str == NULL || addr_str[0] == '\0')
 		return;
 
 	i = sscanf(addr_str, "%X:%X:%X:%X:%X:%X", &addr[0], &addr[1], &addr[2], &addr[3], &addr[4], &addr[5]);
 	if (i != BLUETOOTH_ADDRESS_LENGTH) {
-		BT_ERR("Invalid format string - %s", addr_str);
+		BT_ERR("Invalid format string - [%s]", addr_str);
 	}
 
 	for (i = 0; i < BLUETOOTH_ADDRESS_LENGTH; i++) {
@@ -384,10 +444,7 @@ static int __bt_get_bt_device_sdp_info_s(bt_device_sdp_info_s **dest, bt_sdp_inf
 {
 	int i = 0;
 
-	*dest = (bt_device_sdp_info_s *)malloc(sizeof(bt_device_sdp_info_s));
-	if (*dest == NULL) {
-		return BT_ERROR_OUT_OF_MEMORY;
-	}
+	*dest = (bt_device_sdp_info_s *)g_malloc0(sizeof(bt_device_sdp_info_s));
 
 	if (_bt_convert_address_to_string(&((*dest)->remote_address), &(source->device_addr)) != BT_ERROR_NONE) {
 		__bt_free_bt_device_sdp_info_s(*dest);
@@ -435,8 +492,47 @@ static void __bt_free_bt_device_sdp_info_s(bt_device_sdp_info_s *sdp_info)
 		free(sdp_info->service_uuid);
 	}
 
-	free(sdp_info);
+	g_free(sdp_info);
 	sdp_info = NULL;
+}
+
+static int __bt_get_bt_device_connection_info_s(bt_device_connection_info_s **dest, bt_connection_info_t *source)
+{
+	*dest = (bt_device_connection_info_s *)g_malloc0(sizeof(bt_device_connection_info_s));
+
+	if (_bt_convert_address_to_string(&((*dest)->remote_address), &(source->device_addr)) != BT_ERROR_NONE) {
+		__bt_free_bt_device_connection_info_s(*dest);
+		return BT_ERROR_OUT_OF_MEMORY;
+	}
+
+	switch (source->addr_type) {
+	case 0:
+		(*dest)->link = BT_DEVICE_CONNECTION_LINK_BREDR;
+		break;
+	case 1:
+	case 2:
+		(*dest)->link = BT_DEVICE_CONNECTION_LINK_LE;
+		break;
+	default:
+		(*dest)->link = BT_DEVICE_CONNECTION_LINK_BREDR;
+		break;
+	}
+
+	(*dest)->disconn_reason = source->disc_reason;
+
+	return BT_ERROR_NONE;
+}
+
+static void __bt_free_bt_device_connection_info_s(bt_device_connection_info_s *conn_info)
+{
+	if (conn_info == NULL)
+		return;
+
+	if (conn_info->remote_address != NULL)
+		free(conn_info->remote_address);
+
+	g_free(conn_info);
+	conn_info = NULL;
 }
 
 void _bt_audio_event_proxy(int event, bt_audio_event_param_t *param, void *user_data)
@@ -484,10 +580,12 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 	int i;
 	int call_id;
 	int *avrcp_mode;
+	int *discoverable_timeout;
 	bluetooth_rfcomm_connection_t *connection_ind = NULL;
 	bluetooth_rfcomm_disconnection_t *disconnection_ind = NULL;
 	bt_socket_connection_s rfcomm_connection;
 	bt_device_sdp_info_s *sdp_info = NULL;
+	bt_device_connection_info_s *conn_info = NULL;
 	bt_adapter_device_discovery_info_s *discovery_info = NULL;
 	bt_device_info_s *bonded_device = NULL;
 	bluetooth_rfcomm_connection_request_t *reqeust_ind = NULL;
@@ -496,22 +594,21 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 	bt_opc_transfer_info_t *client_info = NULL;
 	bluetooth_device_address_t *bd_addr = NULL;
 	telephony_event_callid_t *call_data = NULL;
-	bt_device_connection_info_s *conn_info = NULL;
 	char *device_addr = NULL;
 	int error_code = BT_ERROR_NONE;
-	int event_index;
+	int event_index = -1;
 	bluetooth_network_device_info_t *dev_info = NULL;
 	bt_hdp_connected_t *hdp_conn_info = NULL;
 	bt_hdp_disconnected_t *hdp_disconn_info = NULL;
 	bt_hdp_data_ind_t *hdp_data_ind = NULL;
 	bt_gatt_discovered_char_t *svc_char = NULL;
 	bt_gatt_char_value_t *char_val = NULL;
-	event_index = __bt_get_cb_index(event);
+	bt_gatt_char_property_t *char_desc = NULL;
 
+	event_index = __bt_get_cb_index(event);
 	if (event_index == -1 || bt_event_slot_container[event_index].callback == NULL) {
 		return;
 	}
-
 	memset(&rfcomm_connection, 0x00, sizeof(bt_socket_connection_s));
 
 	switch (event) {
@@ -535,6 +632,17 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 		((bt_adapter_visibility_mode_changed_cb)bt_event_slot_container[event_index].callback)
 		    (_bt_get_error_code(param->result), _bt_get_bt_visibility_mode_e(*(bt_adapter_visibility_mode_e *)(param->param_data)), bt_event_slot_container[event_index].user_data);
 		break;
+	case BLUETOOTH_EVENT_DISCOVERABLE_TIMEOUT_CHANGED:
+		BT_INFO("bt_adapter_visibility_duration_changed_cb() will be called");
+		discoverable_timeout = (int *)(param->param_data);
+		((bt_adapter_visibility_duration_changed_cb)bt_event_slot_container[event_index].callback)
+		    (*discoverable_timeout, bt_event_slot_container[event_index].user_data);
+		break;
+	case BLUETOOTH_EVENT_CONNECTABLE_CHANGED:
+		BT_INFO("bt_adapter_connectable_changed_cb() will be called");
+		((bt_adapter_connectable_changed_cb)bt_event_slot_container[event_index].callback)
+			(_bt_get_error_code(param->result), *(bool *)(param->param_data), bt_event_slot_container[event_index].user_data);
+		break;
 	case BLUETOOTH_EVENT_DISCOVERY_STARTED:
 		BT_INFO("bt_adapter_device_discovery_state_changed_cb() will be called with BT_ADAPTER_DEVICE_DISCOVERY_STARTED");
 		((bt_adapter_device_discovery_state_changed_cb) bt_event_slot_container[event_index].callback)
@@ -543,7 +651,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 	case BLUETOOTH_EVENT_DISCOVERY_FINISHED:
 		BT_INFO("bt_adapter_device_discovery_state_changed_cb() will be called with BT_ADAPTER_DEVICE_DISCOVERY_FINISHED");
 		((bt_adapter_device_discovery_state_changed_cb)bt_event_slot_container[event_index].callback)
-		    (BT_ERROR_NONE, BT_ADAPTER_DEVICE_DISCOVERY_FINISHED, NULL, bt_event_slot_container[event_index].user_data);
+		    (_bt_get_error_code(param->result), BT_ADAPTER_DEVICE_DISCOVERY_FINISHED, NULL, bt_event_slot_container[event_index].user_data);
 		break;
 	case BLUETOOTH_EVENT_REMOTE_DEVICE_NAME_UPDATED:
 		BT_INFO("bt_adapter_device_discovery_state_changed_cb() will be called with BT_ADAPTER_DEVICE_DISCOVERY_FOUND");
@@ -556,8 +664,6 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 			    (_bt_get_error_code(param->result), BT_ADAPTER_DEVICE_DISCOVERY_FOUND, NULL, bt_event_slot_container[event_index].user_data);
 		}
 		break;
-	case BLUETOOTH_EVENT_REMOTE_DEVICE_DISAPPEARED:
-                break;
 	case BLUETOOTH_EVENT_BONDING_FINISHED:
 		BT_INFO("bt_device_bond_created_cb() will be called");
 		_bt_get_bt_device_info_s(&bonded_device, (bluetooth_device_info_t *)(param->param_data));
@@ -594,19 +700,17 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 		break;
 	case BLUETOOTH_EVENT_DEVICE_CONNECTED:
 		BT_INFO("bt_device_connection_state_changed_cb() will be called");
-		_bt_convert_address_to_string(&device_addr, (bluetooth_device_address_t *)(param->param_data));
+		__bt_get_bt_device_connection_info_s(&conn_info, (bt_connection_info_t *)(param->param_data));
 		((bt_device_connection_state_changed_cb)bt_event_slot_container[event_index].callback)
 		    (true, conn_info, bt_event_slot_container[event_index].user_data);
-		if (device_addr != NULL)
-			free(device_addr);
+		__bt_free_bt_device_connection_info_s(conn_info);
 		break;
 	case BLUETOOTH_EVENT_DEVICE_DISCONNECTED:
 		BT_INFO("bt_device_connection_state_changed_cb() will be called");
-		_bt_convert_address_to_string(&device_addr, (bluetooth_device_address_t *)(param->param_data));
+		__bt_get_bt_device_connection_info_s(&conn_info, (bt_connection_info_t *)(param->param_data));
 		((bt_device_connection_state_changed_cb)bt_event_slot_container[event_index].callback)
 		    (false, conn_info, bt_event_slot_container[event_index].user_data);
-		if (device_addr != NULL)
-			free(device_addr);
+		__bt_free_bt_device_connection_info_s(conn_info);
 		break;
 	case BLUETOOTH_EVENT_SERVICE_SEARCHED:
 		BT_INFO("bt_device_service_searched_cb() will be called");
@@ -1056,6 +1160,22 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 		if (device_addr != NULL)
 			free(device_addr);
 		break;
+	case BLUETOOTH_EVENT_GATT_CONNECTED:
+		BT_INFO("BLUETOOTH_EVENT_GATT_CONNECTED");
+		bd_addr = (bluetooth_device_address_t *)(param->param_data);
+		_bt_convert_address_to_string(&device_addr, bd_addr);
+		((bt_gatt_connection_state_changed_cb)bt_event_slot_container[event_index].callback)
+		(_bt_get_error_code(param->result), TRUE, device_addr,
+		 bt_event_slot_container[event_index].user_data);
+		break;
+	case BLUETOOTH_EVENT_GATT_DISCONNECTED:
+		BT_INFO("BLUETOOTH_EVENT_GATT_DISCONNECTED");
+		bd_addr = (bluetooth_device_address_t *)(param->param_data);
+		_bt_convert_address_to_string(&device_addr, bd_addr);
+		((bt_gatt_connection_state_changed_cb)bt_event_slot_container[event_index].callback)
+		(_bt_get_error_code(param->result), FALSE, device_addr,
+		 bt_event_slot_container[event_index].user_data);
+		break;
 	case BLUETOOTH_EVENT_GATT_SVC_CHAR_DISCOVERED:
 		BT_INFO("BLUETOOTH_EVENT_GATT_SVC_CHAR_DISCOVERED");
 		svc_char = (bt_gatt_discovered_char_t *)(param->param_data);
@@ -1083,6 +1203,107 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 		 (char_val->char_handle, char_val->char_value, char_val->val_len,
 		  bt_event_slot_container[event_index].user_data);
 
+		break;
+	case BLUETOOTH_EVENT_GATT_READ_CHAR:
+		BT_INFO("BLUETOOTH_EVENT_GATT_READ_CHAR");
+
+		char_val = (bt_gatt_char_value_t *)(param->param_data);
+		((bt_gatt_characteristic_read_cb)bt_event_slot_container[event_index].callback)
+		 (char_val->char_value, char_val->val_len,
+		  bt_event_slot_container[event_index].user_data);
+
+		_bt_unset_cb(BT_EVENT_GATT_READ_CHARACTERISTIC);
+
+		break;
+	case BLUETOOTH_EVENT_GATT_WRITE_CHAR:
+		BT_INFO("BLUETOOTH_EVENT_GATT_WRITE_CHAR");
+
+		((bt_gatt_characteristic_write_cb)bt_event_slot_container[event_index].callback)
+		 (bt_event_slot_container[event_index].user_data);
+
+		_bt_unset_cb(BT_EVENT_GATT_WRITE_CHARACTERISTIC);
+
+		break;
+	case BLUETOOTH_EVENT_GATT_SVC_CHAR_DESC_DISCOVERED:
+		BT_INFO("BLUETOOTH_EVENT_GATT_SVC_CHAR_DESC_DISCOVERED");
+		char_desc = (bt_gatt_char_property_t *)(param->param_data);
+
+		if (char_desc == NULL)
+			return;
+
+		((bt_gatt_characteristic_descriptor_discovered_cb)
+			bt_event_slot_container[event_index].callback)(_bt_get_error_code(param->result),
+			char_desc->format.format, char_desc->val_len, char_desc->description,
+			bt_event_slot_container[event_index].user_data);
+
+		_bt_unset_cb(BT_EVENT_GATT_CHARACTERISTIC_DESCRIPTOR_DISCOVERED);
+
+		break;
+	case BLUETOOTH_EVENT_ADVERTISING_STARTED:
+		BT_INFO("BLUETOOTH_EVENT_ADVERTISING_STARTED");
+
+		((bt_adapter_le_advertising_state_changed_cb)bt_event_slot_container[event_index].callback)
+			(_bt_get_error_code(param->result), NULL, BT_ADAPTER_LE_ADVERTISING_STARTED,
+			bt_event_slot_container[event_index].user_data);
+
+		break;
+	case BLUETOOTH_EVENT_ADVERTISING_STOPPED:
+		BT_INFO("BLUETOOTH_EVENT_ADVERTISING_STOPPED");
+
+		((bt_adapter_le_advertising_state_changed_cb)bt_event_slot_container[event_index].callback)
+			(_bt_get_error_code(param->result), NULL, BT_ADAPTER_LE_ADVERTISING_STOPPED,
+			bt_event_slot_container[event_index].user_data);
+
+		break;
+	default:
+		break;
+	}
+}
+
+
+static void __bt_le_event_proxy(int event, bluetooth_event_param_t *param, void *user_data)
+{
+	bt_socket_connection_s rfcomm_connection;
+	bt_adapter_le_device_discovery_info_s *discovery_info = NULL;
+	int event_index = -1;
+
+	event_index = __bt_get_cb_index(event);
+	if (event_index == -1 || bt_event_slot_container[event_index].callback == NULL) {
+		return;
+	}
+	memset(&rfcomm_connection, 0x00, sizeof(bt_socket_connection_s));
+
+	switch (event) {
+	case BLUETOOTH_EVENT_LE_ENABLED:
+		BT_INFO("BLUETOOTH_EVENT_LE_ENABLED");
+		((bt_adapter_le_state_changed_cb) bt_event_slot_container[event_index].callback)
+		    (_bt_get_error_code(param->result), BT_ADAPTER_LE_ENABLED, bt_event_slot_container[event_index].user_data);
+		break;
+	case BLUETOOTH_EVENT_LE_DISABLED:
+		BT_INFO("BLUETOOTH_EVENT_LE_DISABLED");
+		((bt_adapter_le_state_changed_cb) bt_event_slot_container[event_index].callback)
+		    (_bt_get_error_code(param->result), BT_ADAPTER_LE_DISABLED, bt_event_slot_container[event_index].user_data);
+		break;
+	case BLUETOOTH_EVENT_LE_DISCOVERY_STARTED:
+		BT_INFO("BLUETOOTH_EVENT_LE_DISCOVERY_STARTED");
+		((bt_adapter_le_device_discovery_state_changed_cb) bt_event_slot_container[event_index].callback)
+			(_bt_get_error_code(param->result), BT_ADAPTER_LE_DEVICE_DISCOVERY_STARTED, NULL, bt_event_slot_container[event_index].user_data);
+		break;
+	case BLUETOOTH_EVENT_LE_DISCOVERY_FINISHED:
+		BT_INFO("BLUETOOTH_EVENT_LE_DISCOVERY_FINISHED");
+		((bt_adapter_le_device_discovery_state_changed_cb)bt_event_slot_container[event_index].callback)
+			(_bt_get_error_code(param->result), BT_ADAPTER_LE_DEVICE_DISCOVERY_FINISHED, NULL, bt_event_slot_container[event_index].user_data);
+		break;
+	case BLUETOOTH_EVENT_REMOTE_LE_DEVICE_FOUND:
+		BT_INFO("BLUETOOTH_EVENT_LE_DISCOVERY_FINISHED");
+		if (__bt_get_bt_adapter_le_device_discovery_info_s(&discovery_info, (bluetooth_le_device_info_t *)(param->param_data)) == BT_ERROR_NONE) {
+			((bt_adapter_le_device_discovery_state_changed_cb)bt_event_slot_container[event_index].callback)
+			    (_bt_get_error_code(param->result), BT_ADAPTER_LE_DEVICE_DISCOVERY_FOUND, discovery_info, bt_event_slot_container[event_index].user_data);
+			__bt_free_bt_adapter_le_device_discovery_info_s(discovery_info);
+		} else {
+			((bt_adapter_le_device_discovery_state_changed_cb)bt_event_slot_container[event_index].callback)
+			    (_bt_get_error_code(param->result), BT_ADAPTER_LE_DEVICE_DISCOVERY_FOUND, NULL, bt_event_slot_container[event_index].user_data);
+		}
 		break;
 	default:
 		break;
@@ -1131,6 +1352,51 @@ static int __bt_get_bt_adapter_device_discovery_info_s(bt_adapter_device_discove
 	(*discovery_info)->rssi = (int)source_info->rssi;
 	(*discovery_info)->is_bonded = (bool)source_info->paired;
 
+	(*discovery_info)->appearance = 0;
+
+	(*discovery_info)->manufacturer_data_len = source_info->manufacturer_data.data_len;
+	if ((*discovery_info)->manufacturer_data_len > 0) {
+		(*discovery_info)->manufacturer_data = malloc(source_info->manufacturer_data.data_len);
+		memcpy((*discovery_info)->manufacturer_data, source_info->manufacturer_data.data, source_info->manufacturer_data.data_len);
+	} else {
+		(*discovery_info)->manufacturer_data = NULL;
+	}
+
+	return BT_ERROR_NONE;
+}
+
+static int __bt_get_bt_adapter_le_device_discovery_info_s(
+			bt_adapter_le_device_discovery_info_s **le_discovery_info,
+			bluetooth_le_device_info_t *source_info)
+{
+
+	BT_CHECK_INPUT_PARAMETER(source_info);
+
+	*le_discovery_info = (bt_adapter_le_device_discovery_info_s *)malloc(sizeof(bt_adapter_le_device_discovery_info_s));
+	if (*le_discovery_info == NULL) {
+		return BT_ERROR_OUT_OF_MEMORY;
+	}
+
+	_bt_convert_address_to_string(&((*le_discovery_info)->remote_address), &(source_info->device_address));
+
+	(*le_discovery_info)->address_type = (int)source_info->addr_type;
+	(*le_discovery_info)->rssi = (int)source_info->rssi;
+	(*le_discovery_info)->adv_data_len = source_info->adv_ind_data.data_len;
+	if ((*le_discovery_info)->adv_data_len > 0) {
+		(*le_discovery_info)->adv_data = malloc(source_info->adv_ind_data.data_len);
+		memcpy((*le_discovery_info)->adv_data, source_info->adv_ind_data.data.data, source_info->adv_ind_data.data_len);
+	} else {
+		(*le_discovery_info)->adv_data = NULL;
+	}
+
+	(*le_discovery_info)->scan_data_len = source_info->scan_resp_data.data_len;
+	if ((*le_discovery_info)->scan_data_len > 0) {
+		(*le_discovery_info)->scan_data = malloc(source_info->scan_resp_data.data_len);
+		memcpy((*le_discovery_info)->scan_data, source_info->scan_resp_data.data.data, source_info->scan_resp_data.data_len);
+	} else {
+		(*le_discovery_info)->scan_data = NULL;
+	}
+
 	return BT_ERROR_NONE;
 }
 
@@ -1154,6 +1420,25 @@ static void __bt_free_bt_adapter_device_discovery_info_s(bt_adapter_device_disco
 		}
 		free(discovery_info->service_uuid);
 	}
+	if (discovery_info->manufacturer_data != NULL)
+		free(discovery_info->manufacturer_data);
+
+	free(discovery_info);
+	discovery_info = NULL;
+}
+
+static void __bt_free_bt_adapter_le_device_discovery_info_s(bt_adapter_le_device_discovery_info_s *discovery_info)
+{
+	if (discovery_info == NULL)
+		return;
+
+	if (discovery_info->remote_address != NULL)
+		free(discovery_info->remote_address);
+
+	if (discovery_info->adv_data != NULL)
+		free(discovery_info->adv_data);
+	if (discovery_info->scan_data != NULL)
+		free(discovery_info->scan_data);
 
 	free(discovery_info);
 	discovery_info = NULL;
@@ -1165,15 +1450,24 @@ static int __bt_get_cb_index(int event)
 	case BLUETOOTH_EVENT_ENABLED:
 	case BLUETOOTH_EVENT_DISABLED:
 		return BT_EVENT_STATE_CHANGED;
+	case BLUETOOTH_EVENT_LE_ENABLED:
+	case BLUETOOTH_EVENT_LE_DISABLED:
+		return BT_EVENT_LE_STATE_CHANGED;
 	case BLUETOOTH_EVENT_LOCAL_NAME_CHANGED:
 		return BT_EVENT_NAME_CHANGED;
 	case BLUETOOTH_EVENT_DISCOVERABLE_MODE_CHANGED:
 		return BT_EVENT_VISIBILITY_MODE_CHANGED;
+	case BLUETOOTH_EVENT_DISCOVERABLE_TIMEOUT_CHANGED:
+		return BT_EVENT_VISIBILITY_DURATION_CHANGED;
 	case BLUETOOTH_EVENT_DISCOVERY_STARTED:
 	case BLUETOOTH_EVENT_DISCOVERY_FINISHED:
 	case BLUETOOTH_EVENT_REMOTE_DEVICE_NAME_UPDATED:
 	case BLUETOOTH_EVENT_REMOTE_DEVICE_DISAPPEARED:
 		return BT_EVENT_DEVICE_DISCOVERY_STATE_CHANGED;
+	case BLUETOOTH_EVENT_LE_DISCOVERY_STARTED:
+	case BLUETOOTH_EVENT_LE_DISCOVERY_FINISHED:
+	case BLUETOOTH_EVENT_REMOTE_LE_DEVICE_FOUND:
+		return BT_EVENT_LE_DEVICE_DISCOVERY_STATE_CHANGED;
 	case BLUETOOTH_EVENT_BONDING_FINISHED:
 		return BT_EVENT_BOND_CREATED;
 	case BLUETOOTH_EVENT_BONDED_DEVICE_REMOVED:
@@ -1184,6 +1478,9 @@ static int __bt_get_cb_index(int event)
 	case BLUETOOTH_EVENT_DEVICE_CONNECTED:
 	case BLUETOOTH_EVENT_DEVICE_DISCONNECTED:
 		return BT_EVENT_DEVICE_CONNECTION_STATUS;
+	case BLUETOOTH_EVENT_GATT_CONNECTED:
+	case BLUETOOTH_EVENT_GATT_DISCONNECTED:
+		return BT_EVENT_GATT_CONNECTION_STATUS;
 	case BLUETOOTH_EVENT_SERVICE_SEARCHED:
 		return BT_EVENT_SERVICE_SEARCHED;
 	case BLUETOOTH_EVENT_RFCOMM_DATA_RECEIVED:
@@ -1272,9 +1569,18 @@ static int __bt_get_cb_index(int event)
 	case BLUETOOTH_HID_DISCONNECTED:
 		return  BT_EVENT_HID_CONNECTION_STATUS;
 	case BLUETOOTH_EVENT_GATT_SVC_CHAR_DISCOVERED:
-		return	BT_EVENT_GATT_CHARACTERISTIC_DISCOVERED;
+		return BT_EVENT_GATT_CHARACTERISTIC_DISCOVERED;
 	case BLUETOOTH_EVENT_GATT_CHAR_VAL_CHANGED:
-		return	BT_EVENT_GATT_VALUE_CHANGED;
+		return BT_EVENT_GATT_VALUE_CHANGED;
+	case BLUETOOTH_EVENT_GATT_READ_CHAR:
+		return BT_EVENT_GATT_READ_CHARACTERISTIC;
+	case BLUETOOTH_EVENT_GATT_SVC_CHAR_DESC_DISCOVERED:
+		return BT_EVENT_GATT_CHARACTERISTIC_DESCRIPTOR_DISCOVERED;
+	case BLUETOOTH_EVENT_ADVERTISING_STARTED:
+	case BLUETOOTH_EVENT_ADVERTISING_STOPPED:
+		return BT_EVENT_ADVERTISING_STATE_CHANGED;
+	case BLUETOOTH_EVENT_CONNECTABLE_CHANGED:
+		return BT_EVENT_CONNECTABLE_CHANGED_EVENT;
 	default:
 		return -1;
 	}

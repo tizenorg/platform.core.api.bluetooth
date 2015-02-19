@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2013 Samsung Electronics Co., Ltd.
+ * Copyright (c) 2011 Samsung Electronics Co., Ltd All Rights Reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License);
  * you may not use this file except in compliance with the License.
@@ -98,7 +98,21 @@ int bt_socket_listen(int socket_fd, int max_pending_connections)
 
 int bt_socket_accept(int socket_fd)
 {
+#ifdef ENABLE_TIZEN_2_4
+	int error_code = BT_ERROR_NONE;
+
+	BT_CHECK_INIT_STATUS();
+
+	error_code = _bt_get_error_code(bluetooth_rfcomm_accept_connection(socket_fd));
+	if (error_code != BT_ERROR_NONE) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code),
+				error_code);
+	}
+
+	return error_code;
+#else
 	return BT_ERROR_NOT_SUPPORTED;
+#endif
 }
 
 int bt_socket_reject(int socket_fd)
@@ -156,15 +170,23 @@ int bt_socket_send_data(int socket_fd, const char *data, int length)
 	int ret = 0;
 
 	BT_CHECK_INIT_STATUS();
-	ret = bluetooth_rfcomm_write(socket_fd, data, length);
-	if (ret == BLUETOOTH_ERROR_NOT_IN_OPERATION) {
-		BT_ERR("OPERATION_FAILED(0x%08x)", BT_ERROR_OPERATION_FAILED);
-		return BT_ERROR_OPERATION_FAILED;
-	}
 
-	ret = _bt_get_error_code(ret);
-	if (ret != BT_ERROR_NONE) {
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+	ret = bluetooth_rfcomm_write(socket_fd, data, length);
+	if (ret <= 0) {
+		if (ret == -1) {
+			/* write fail case */
+			if (errno == EACCES || errno == EPERM)
+				set_last_result(BT_ERROR_PERMISSION_DENIED);
+			else if (errno == EAGAIN || errno == EWOULDBLOCK)
+				set_last_result(BT_ERROR_AGAIN);
+			else
+				set_last_result(BT_ERROR_OPERATION_FAILED);
+		} else {
+			ret = _bt_get_error_code(ret);
+			set_last_result(ret);
+		}
+
+		BT_ERR("Write failed, ret = %d", ret);
 	}
 
 	return ret;

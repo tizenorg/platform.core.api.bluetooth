@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2013 Samsung Electronics Co., Ltd.
+ * Copyright (c) 2011 Samsung Electronics Co., Ltd All Rights Reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License);
  * you may not use this file except in compliance with the License.
@@ -100,7 +100,19 @@ typedef enum
 	BT_EVENT_RSSI_ENABLED_EVENT, /**< RSSI Enabled callback */
 	BT_EVENT_RSSI_ALERT_EVENT, /**< RSSI Alert callback */
 	BT_EVENT_GET_RSSI_EVENT, /**< Get RSSI Strength callback */
-
+#ifdef TIZEN_WEARABLE
+	BT_EVENT_PBAP_CONNECTION_STATUS, /**< PBAP connection status callback */
+	BT_EVENT_PBAP_PHONEBOOK_SIZE, /**< PBAP Phonebook Size status callback */
+	BT_EVENT_PBAP_PHONEBOOK_PULL, /**< PBAP Phonebook Pull status callback */
+	BT_EVENT_PBAP_VCARD_LIST, /**< PBAP vCard List status callback */
+	BT_EVENT_PBAP_VCARD_PULL, /**< PBAP vCard Pull status callback */
+	BT_EVENT_PBAP_PHONEBOOK_SEARCH, /**< PBAP Phonebook Search status callback */
+	BT_EVENT_HF_SCO_CONNECTION_STATUS, /**< Audio - HF SCO Connection state change callback */
+	BT_EVENT_HF_SPEAKER_GAIN_CHANGE, /**< Audio - HF Speaker gain change callback */
+	BT_EVENT_HF_CALL_HANDLING_EVENT, /**< Audio - HF call event callback */
+	BT_EVENT_HF_VENDOR_DEP_CMD_EVENT, /**< Audio - HF Vendor Command callback */
+	BT_EVENT_HF_MULTI_CALL_HANDLING_EVENT, /**< Audio - HF 3-way call event callback */
+#endif
 } bt_event_e;
 
 /**
@@ -235,6 +247,14 @@ bt_adapter_visibility_mode_e _bt_get_bt_visibility_mode_e(bluetooth_discoverable
  * @brief Since the Audio call back and event proxy call backs have different prototype it is wrapper function.
  */
 void _bt_audio_event_proxy(int event, bt_audio_event_param_t *param, void *user_data);
+
+#ifdef TIZEN_WEARABLE
+/**
+ * @internal
+ * @brief Since the HF call back and event proxy call backs have different prototype it is wrapper function.
+ */
+void _bt_hf_event_proxy(int event, bt_hf_event_param_t *param, void *user_data);
+#endif
 
 /**
  * @internal
