@@ -1,15 +1,14 @@
-#sbs-git:slp/api/bluetooth capi-network-bluetooth 0.1.0 686c444083e4197845c768e5dd034022b1dfa250
 Name:       capi-network-bluetooth
 Summary:    Network Bluetooth Framework
 Version:    0.1.52
 Release:    1
 Group:      Connectivity/API
-License:    Apache License, Version 2.0
+License:    Apache-2.0
 Source0:    %{name}-%{version}.tar.gz
 Source1001:	%{name}.manifest
 Source1002:	%{name}-devel.manifest
-Requires(post): /sbin/ldconfig
-Requires(postun): /sbin/ldconfig
+#Requires(post): /sbin/ldconfig
+#Requires(postun): /sbin/ldconfig
 
 BuildRequires:  pkgconfig(dbus-glib-1)
 BuildRequires:  pkgconfig(dlog)
@@ -89,7 +88,6 @@ cmake . -DCMAKE_INSTALL_PREFIX=/usr -DFULLVER=%{version} -DMAJORVER=${MAJORVER}
 make %{?jobs:-j%jobs}
 
 %install
-rm -rf %{buildroot}
 %make_install
 install -D -m 0644 LICENSE %{buildroot}%{_datadir}/license/capi-network-bluetooth
 install -D -m 0644 LICENSE %{buildroot}%{_datadir}/license/capi-network-bluetooth-devel

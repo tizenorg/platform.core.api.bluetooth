@@ -98,21 +98,7 @@ int bt_socket_listen(int socket_fd, int max_pending_connections)
 
 int bt_socket_accept(int socket_fd)
 {
-#ifdef ENABLE_TIZEN_2_4
-	int error_code = BT_ERROR_NONE;
-
-	BT_CHECK_INIT_STATUS();
-
-	error_code = _bt_get_error_code(bluetooth_rfcomm_accept_connection(socket_fd));
-	if (error_code != BT_ERROR_NONE) {
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code),
-				error_code);
-	}
-
-	return error_code;
-#else
 	return BT_ERROR_NOT_SUPPORTED;
-#endif
 }
 
 int bt_socket_reject(int socket_fd)

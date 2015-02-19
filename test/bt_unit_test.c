@@ -1305,8 +1305,10 @@ int test_input_callback(void *data)
 			break;
 
 		case BT_UNIT_TEST_FUNCTION_DEVICE_SET_CONNECTION_STAET_CHANGED_CB:
+#if 0
 			ret = bt_device_set_connection_state_changed_cb(__bt_device_connection_state_changed_cb, NULL);
 			TC_PRT("returns %s\n", __bt_get_error_message(ret));
+#endif
 			break;
 
 		case BT_UNIT_TEST_FUNCTION_DEVICE_UNSET_CONNECTION_STAET_CHANGED_CB:
@@ -1991,8 +1993,8 @@ static gboolean key_event_cb(GIOChannel *chan,
 {
 	char buf[BUFFER_LEN] = { 0 };
 
-	unsigned int len = 0;
-	int test_id;
+	gsize len = 0;
+	long test_id;
 	bool is_call_api = false;
 
 	if (is_sub_index)

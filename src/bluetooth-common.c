@@ -596,7 +596,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 	telephony_event_callid_t *call_data = NULL;
 	char *device_addr = NULL;
 	int error_code = BT_ERROR_NONE;
-	int event_index = -1;
+	int event_index;
 	bluetooth_network_device_info_t *dev_info = NULL;
 	bt_hdp_connected_t *hdp_conn_info = NULL;
 	bt_hdp_disconnected_t *hdp_disconn_info = NULL;
@@ -651,7 +651,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 	case BLUETOOTH_EVENT_DISCOVERY_FINISHED:
 		BT_INFO("bt_adapter_device_discovery_state_changed_cb() will be called with BT_ADAPTER_DEVICE_DISCOVERY_FINISHED");
 		((bt_adapter_device_discovery_state_changed_cb)bt_event_slot_container[event_index].callback)
-		    (_bt_get_error_code(param->result), BT_ADAPTER_DEVICE_DISCOVERY_FINISHED, NULL, bt_event_slot_container[event_index].user_data);
+		    (BT_ERROR_NONE, BT_ADAPTER_DEVICE_DISCOVERY_FINISHED, NULL, bt_event_slot_container[event_index].user_data);
 		break;
 	case BLUETOOTH_EVENT_REMOTE_DEVICE_NAME_UPDATED:
 		BT_INFO("bt_adapter_device_discovery_state_changed_cb() will be called with BT_ADAPTER_DEVICE_DISCOVERY_FOUND");
@@ -664,6 +664,8 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 			    (_bt_get_error_code(param->result), BT_ADAPTER_DEVICE_DISCOVERY_FOUND, NULL, bt_event_slot_container[event_index].user_data);
 		}
 		break;
+	case BLUETOOTH_EVENT_REMOTE_DEVICE_DISAPPEARED:
+ 	break;
 	case BLUETOOTH_EVENT_BONDING_FINISHED:
 		BT_INFO("bt_device_bond_created_cb() will be called");
 		_bt_get_bt_device_info_s(&bonded_device, (bluetooth_device_info_t *)(param->param_data));

@@ -65,7 +65,7 @@ int bt_hdp_send_data(unsigned int channel, const char *data, unsigned int size)
 	int error = BT_ERROR_NONE;
 
 	BT_CHECK_INIT_STATUS();
-	if (NULL == data || 0 >= size) {
+	if (NULL == data) {
 		BT_ERR("%s", _bt_convert_error_to_string(BT_ERROR_INVALID_PARAMETER));
 	}
 	error = bluetooth_hdp_send_data(channel, data, size);
