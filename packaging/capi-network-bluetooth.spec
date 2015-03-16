@@ -32,15 +32,7 @@ Group:      Development/Connectivit
 Requires:   %{name} = %{version}-%{release}
 
 %description devel
-Network Bluetooth Framework (DEV).
-
-%package test
-Summary: Network Bluetooth Framework test application
-Group:      Development/Connectivit
-Requires: %{name} = %{version}-%{release}
-
-%description test
-This package is C-API test application.
+Network Bluetooth Framework.
 
 %devel_desc
 
@@ -83,14 +75,13 @@ export FFLAGS+=" -DTELEPHONY_DISABLED"
 %endif
 
 MAJORVER=`echo %{version} | awk 'BEGIN {FS="."}{print $1}'`
-cmake . -DCMAKE_INSTALL_PREFIX=/usr -DFULLVER=%{version} -DMAJORVER=${MAJORVER}
+%cmake . -DFULLVER=%{version} -DMAJORVER=${MAJORVER}
 
 make %{?jobs:-j%jobs}
 
 %install
 %make_install
-install -D -m 0644 LICENSE %{buildroot}%{_datadir}/license/capi-network-bluetooth
-install -D -m 0644 LICENSE %{buildroot}%{_datadir}/license/capi-network-bluetooth-devel
+
 
 %post -p /sbin/ldconfig
 
@@ -100,13 +91,13 @@ install -D -m 0644 LICENSE %{buildroot}%{_datadir}/license/capi-network-bluetoot
 %manifest %{name}.manifest
 %license LICENSE.APLv2 LICENSE
 %{_libdir}/libcapi-network-bluetooth.so.*
-%{_datadir}/license/capi-network-bluetooth
+#%{_datadir}/license/capi-network-bluetooth
 
-%files test
-%manifest bluetooth-test.manifest
-%{_bindir}/bt_unit_test
-%{_bindir}/bt_onoff
-/etc/smack/accesses.d/capi-network-bluetooth-test.efl
+#%files test
+#%manifest bluetooth-test.manifest
+#%{_bindir}/bt_unit_test
+#%{_bindir}/bt_onoff
+#/etc/smack/accesses.d/capi-network-bluetooth-test.efl
 
 %files devel
 %manifest %{name}-devel.manifest
@@ -114,5 +105,5 @@ install -D -m 0644 LICENSE %{buildroot}%{_datadir}/license/capi-network-bluetoot
 %{_includedir}/network/bluetooth_type.h
 %{_libdir}/pkgconfig/capi-network-bluetooth.pc
 %{_libdir}/libcapi-network-bluetooth.so
-%{_datadir}/license/capi-network-bluetooth-devel
+#%{_datadir}/license/capi-network-bluetooth-devel
 

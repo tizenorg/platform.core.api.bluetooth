@@ -41,7 +41,7 @@ const char *spp_uuid = "00001101-0000-1000-8000-00805F9B34FB";
 const char *opp_uuid = "00001105-0000-1000-8000-00805f9b34fb";
 
 static bt_unit_test_table_e current_tc_table;
-static char remote_addr[18] = "F6:FB:8F:D8:C8:7C";
+static char remote_addr[18] = "34:BB:26:5D:78:9C";
 static bool input_automated_test_delay = false;
 
 static int server_fd;
@@ -149,6 +149,7 @@ tc_table_t tc_device[] = {
 	{"bt_device_is_profile_connected"				, BT_UNIT_TEST_FUNCTION_DEVICE_IS_PROFILE_CONNECTED},
 	{"bt_device_set_bond_created_cb"				, BT_UNIT_TEST_FUNCTION_DEVICE_SET_BOND_CREATED_CB},
 	{"bt_device_create_bond" 					, BT_UNIT_TEST_FUNCTION_DEVICE_CREATE_BOND},
+	{"bt_device_destroy_bond" 					, BT_UNIT_TEST_FUNCTION_DEVICE_DESTROY_BOND},
 	{"bt_device_create_bond_by_type"				, BT_UNIT_TEST_FUNCTION_DEVICE_CREATE_BOND_BY_TYPE},
 	{NULL					, 0x0000},
 };
@@ -1342,6 +1343,12 @@ int test_input_callback(void *data)
 		case BT_UNIT_TEST_FUNCTION_DEVICE_CREATE_BOND : {
 			ret = bt_device_create_bond(remote_addr);
 			TC_PRT("returns %s\n", __bt_get_error_message(ret));
+			break;
+		}
+
+		case BT_UNIT_TEST_FUNCTION_DEVICE_DESTROY_BOND : {
+			ret = 		bt_device_destroy_bond(remote_addr);
+			TC_PRT("sudha returns %s\n", __bt_get_error_message(ret));
 			break;
 		}
 

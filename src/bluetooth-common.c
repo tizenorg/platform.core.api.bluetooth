@@ -651,7 +651,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 	case BLUETOOTH_EVENT_DISCOVERY_FINISHED:
 		BT_INFO("bt_adapter_device_discovery_state_changed_cb() will be called with BT_ADAPTER_DEVICE_DISCOVERY_FINISHED");
 		((bt_adapter_device_discovery_state_changed_cb)bt_event_slot_container[event_index].callback)
-		    (BT_ERROR_NONE, BT_ADAPTER_DEVICE_DISCOVERY_FINISHED, NULL, bt_event_slot_container[event_index].user_data);
+		    (_bt_get_error_code(param->result), BT_ADAPTER_DEVICE_DISCOVERY_FINISHED, NULL, bt_event_slot_container[event_index].user_data);
 		break;
 	case BLUETOOTH_EVENT_REMOTE_DEVICE_NAME_UPDATED:
 		BT_INFO("bt_adapter_device_discovery_state_changed_cb() will be called with BT_ADAPTER_DEVICE_DISCOVERY_FOUND");
@@ -664,8 +664,6 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 			    (_bt_get_error_code(param->result), BT_ADAPTER_DEVICE_DISCOVERY_FOUND, NULL, bt_event_slot_container[event_index].user_data);
 		}
 		break;
-	case BLUETOOTH_EVENT_REMOTE_DEVICE_DISAPPEARED:
- 	break;
 	case BLUETOOTH_EVENT_BONDING_FINISHED:
 		BT_INFO("bt_device_bond_created_cb() will be called");
 		_bt_get_bt_device_info_s(&bonded_device, (bluetooth_device_info_t *)(param->param_data));
@@ -1257,6 +1255,14 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 			bt_event_slot_container[event_index].user_data);
 
 		break;
+/*	case BLUETOOTH_EVENT_MANUFACTURER_DATA_CHANGED:
+		BT_INFO("BLUETOOTH_EVENT_MANUFACTURER_DATA_CHANGED");
+
+		((bt_adapter_manufacturer_data_changed_cb)bt_event_slot_container[event_index].callback)
+		 (_bt_get_error_code(param->result, NULL, BLUETOOTH_EVENT_MANUFACTURER_DATA_CHANGED,
+		  bt_event_slot_container[event_index].user_data);
+
+		break;*/
 	default:
 		break;
 	}
@@ -1354,6 +1360,7 @@ static int __bt_get_bt_adapter_device_discovery_info_s(bt_adapter_device_discove
 	(*discovery_info)->rssi = (int)source_info->rssi;
 	(*discovery_info)->is_bonded = (bool)source_info->paired;
 
+#if 0
 	(*discovery_info)->appearance = 0;
 
 	(*discovery_info)->manufacturer_data_len = source_info->manufacturer_data.data_len;
@@ -1363,7 +1370,7 @@ static int __bt_get_bt_adapter_device_discovery_info_s(bt_adapter_device_discove
 	} else {
 		(*discovery_info)->manufacturer_data = NULL;
 	}
-
+#endif
 	return BT_ERROR_NONE;
 }
 
@@ -1464,7 +1471,6 @@ static int __bt_get_cb_index(int event)
 	case BLUETOOTH_EVENT_DISCOVERY_STARTED:
 	case BLUETOOTH_EVENT_DISCOVERY_FINISHED:
 	case BLUETOOTH_EVENT_REMOTE_DEVICE_NAME_UPDATED:
-	case BLUETOOTH_EVENT_REMOTE_DEVICE_DISAPPEARED:
 		return BT_EVENT_DEVICE_DISCOVERY_STATE_CHANGED;
 	case BLUETOOTH_EVENT_LE_DISCOVERY_STARTED:
 	case BLUETOOTH_EVENT_LE_DISCOVERY_FINISHED:
