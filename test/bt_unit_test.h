@@ -193,6 +193,12 @@ typedef struct {
 	int tc_code;
 } tc_table_t;
 
+#ifdef ARCH64
+typedef unsigned long ptr_size_t;
+#else
+typedef unsigned int ptr_size_t;
+#endif
+
 #ifdef __cplusplus
 }
 #endif

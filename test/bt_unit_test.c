@@ -426,7 +426,7 @@ static gboolean __select_index_cb(GIOChannel *chan,
 				gpointer data)
 {
 	char buf[BUFFER_LEN] = { 0 };
-	unsigned int len = 0;
+	ptr_size_t len = 0;
 	int *index = data;
 
 	memset(buf, 0, sizeof(buf));
@@ -974,7 +974,7 @@ void __bt_repeat_test_adapter_state_changed_cb(int result, bt_adapter_state_e ad
 int test_input_callback(void *data)
 {
 	int ret = 0;
-	int test_id = (int)data;
+	int test_id = (ptr_size_t)data;
 
 	switch (current_tc_table) {
 	case BT_UNIT_TEST_TABLE_MAIN: {

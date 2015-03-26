@@ -47,22 +47,23 @@ export CXXFLAGS="$CXXFLAGS -DTIZEN_WEARABLE"
 export FFLAGS="$FFLAGS -DTIZEN_WEARABLE"
 %endif
 
-#%if 0%{?sec_build_binary_debug_enable}
 export CFLAGS="$CFLAGS -DTIZEN_DEBUG_ENABLE"
 export CXXFLAGS="$CXXFLAGS -DTIZEN_DEBUG_ENABLE"
 export FFLAGS="$FFLAGS -DTIZEN_DEBUG_ENABLE"
-#%endif
 
-#%if 0%{?tizen_build_binary_release_type_eng}
 export CFLAGS="$CFLAGS -DTIZEN_ENGINEER_MODE"
 export CXXFLAGS="$CXXFLAGS -DTIZEN_ENGINEER_MODE"
 export FFLAGS="$FFLAGS -DTIZEN_ENGINEER_MODE"
-#%endif
 
 %if "%{?tizen_profile_name}" == "wearable"
 export CFLAGS+=" -DTELEPHONY_DISABLED"
 export CXXFLAGS+=" -DTELEPHONY_DISABLED"
 export FFLAGS+=" -DTELEPHONY_DISABLED"
+%endif
+
+%ifarch aarch64
+echo arch64
+export CFLAGS+=" -DARCH64"
 %endif
 
 %cmake \
