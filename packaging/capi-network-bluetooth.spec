@@ -64,6 +64,8 @@ export FFLAGS+=" -DTELEPHONY_DISABLED"
 %ifarch aarch64
 echo arch64
 export CFLAGS+=" -DARCH64"
+export CXXFLAGS+=" -DARCH64"
+export FFLAGS+=" -DARCH64"
 %endif
 
 %cmake \
