@@ -68,6 +68,13 @@ export CXXFLAGS+=" -DARCH64"
 export FFLAGS+=" -DARCH64"
 %endif
 
+%ifarch x86_64
+echo x86_64
+export CFLAGS+=" -DARCH64"
+export CXXFLAGS+=" -DARCH64"
+export FFLAGS+=" -DARCH64"
+%endif
+
 %cmake \
 %if "%{?tizen_profile_name}" == "wearable"
 	-DTIZEN_WEARABLE=YES \
