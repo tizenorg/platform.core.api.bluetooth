@@ -1498,12 +1498,22 @@ int test_input_callback(void *data)
 			TC_PRT("returns %s\n", __bt_get_error_message(ret));
 			break;
 		case BT_UNIT_TEST_FUNCTION_AUDIO_CONNECT: {
+#ifndef TELEPHONY_DISABLED /* B2_3G */
+			TC_PRT("Connect HSP_HFP");
 			ret = bt_audio_connect(remote_addr,  BT_AUDIO_PROFILE_TYPE_HSP_HFP);
+#else
+			TC_PRT("Connect A2DP");
+			ret = bt_audio_connect(remote_addr,  BT_AUDIO_PROFILE_TYPE_A2DP);
+#endif
 			TC_PRT("returns %s\n", __bt_get_error_message(ret));
 			break;
 		}
 		case BT_UNIT_TEST_FUNCTION_AUDIO_DISCONNECT: {
+#ifndef TELEPHONY_DISABLED /* B2_3G */
 			ret = bt_audio_disconnect(remote_addr,  BT_AUDIO_PROFILE_TYPE_HSP_HFP);
+#else
+			ret = bt_audio_disconnect(remote_addr,  BT_AUDIO_PROFILE_TYPE_A2DP);
+#endif
 			TC_PRT("returns %s\n", __bt_get_error_message(ret));
 			break;
 		}

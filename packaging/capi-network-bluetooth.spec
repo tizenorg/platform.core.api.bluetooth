@@ -75,12 +75,19 @@ export CXXFLAGS+=" -DARCH64"
 export FFLAGS+=" -DARCH64"
 %endif
 
+%if "%{?profile}" == "tv"
+export CFLAGS="$CFLAGS -DTIZEN_TV"
+export CFLAGS+=" -DTELEPHONY_DISABLED"
+export CXXFLAGS+=" -DTELEPHONY_DISABLED"
+export FFLAGS+=" -DTELEPHONY_DISABLED"
+%endif
+
 %cmake \
 %if "%{?tizen_profile_name}" == "wearable"
-	-DTIZEN_WEARABLE=YES \
+       -DTIZEN_WEARABLE=YES \
 %else
 %if "%{?tizen_profile_name}" == "mobile"
-	-DTIZEN_WEARABLE=NO \
+       -DTIZEN_WEARABLE=NO \
 %endif
 %endif
 
