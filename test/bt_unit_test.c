@@ -34,6 +34,7 @@
 #include <dbus/dbus-glib.h>
 
 #include "bluetooth.h"
+#include "bluetooth_internal.h"
 #include "bluetooth-telephony-api.h"
 #include "bt_unit_test.h"
 
