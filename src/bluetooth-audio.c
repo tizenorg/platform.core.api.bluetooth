@@ -19,6 +19,7 @@
 #include <bluetooth-api.h>
 #include <string.h>
 #include "bluetooth.h"
+#include "bluetooth_internal.h"
 #include "bluetooth_private.h"
 #include "bluetooth-audio-api.h"
 #include "bluetooth-telephony-api.h"

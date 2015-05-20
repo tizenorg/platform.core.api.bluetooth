@@ -16,6 +16,7 @@
 
 
 #include <bluetooth.h>
+#include <bluetooth_internal.h>
 #include <dlog.h>
 #include <glib.h>
 #include <string.h>
