@@ -24,6 +24,7 @@
 #include <tizen_error.h>
 
 #include "bluetooth_type.h"
+#include "bluetooth_internal.h"
 
 #ifdef __cplusplus
 extern "C"
