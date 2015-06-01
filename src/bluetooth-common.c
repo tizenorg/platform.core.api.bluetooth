@@ -24,6 +24,7 @@
 #include <bluetooth-api.h>
 
 #include "bluetooth.h"
+#include "bluetooth_extention.h"
 #include "bluetooth_private.h"
 #include "bluetooth-media-control.h"
 #include "bluetooth-telephony-api.h"

@@ -114,6 +114,8 @@ make %{?jobs:-j%jobs}
 %{_includedir}/network/bluetooth.h
 %{_includedir}/network/bluetooth_internal.h
 %{_includedir}/network/bluetooth_type.h
+%{_includedir}/network/bluetooth_extention.h
+%{_includedir}/network/bluetooth_type_extention.h
 %{_libdir}/pkgconfig/capi-network-bluetooth.pc
 %{_libdir}/libcapi-network-bluetooth.so
 #%{_datadir}/license/capi-network-bluetooth-devel
