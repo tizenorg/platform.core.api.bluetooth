@@ -131,6 +131,17 @@ typedef enum {
 	BT_ADAPTER_LE_ADVERTISING_STARTED, /**< Bluetooth advertising is started */
 } bt_adapter_le_advertising_state_e;
 
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
+ * @brief  Enumerations of the Bluetooth advertising mode.
+ * @since_tizen 2.3.1
+ */
+typedef enum
+{
+	BT_ADAPTER_LE_ADVERTISING_MODE_BALANCED,  /**< Balanced advertising mode */
+	BT_ADAPTER_LE_ADVERTISING_MODE_LOW_LATENCY,  /**< Low latency advertising mode */
+	BT_ADAPTER_LE_ADVERTISING_MODE_LOW_ENERGY  /**< Low energy advertising mode */
+} bt_adapter_le_advertising_mode_e;
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
@@ -681,6 +692,25 @@ typedef struct
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
+ * @brief Structure of le scan result information.
+ * @since_tizen 2.3.1
+ *
+ * @see bt_adapter_le_start_scan()
+ */
+typedef struct
+{
+	char *remote_address;	/**< The address of remote device */
+	bt_device_address_type_e address_type;	/**< The address type of remote device */
+	int rssi;		/**< The strength indicator of received signal  */
+	int adv_data_len;	/**< advertising indication data length */
+	char *adv_data;		/**< advertising indication data */
+	int scan_data_len;	/**< scan response data length */
+	char *scan_data;	/**< scan response data */
+} bt_adapter_le_device_scan_result_info_s;
+
+/**
+ * @deprecated Deprecated since 2.3.1
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
  * @brief Structure of advertising parameters
  * @since_tizen 2.3
  *
@@ -947,6 +977,21 @@ typedef void (*bt_adapter_connectable_changed_cb)
  */
 typedef void (*bt_adapter_le_device_discovery_state_changed_cb)
 	(int result, bt_adapter_le_device_discovery_state_e discovery_state, bt_adapter_le_device_discovery_info_s *discovery_info, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
+ * @brief  Called when the LE advertisement has been found.
+ * @since_tizen 2.3.1
+ *
+ * @param[in] result The result of the LE scan
+ * @param[in] info The information of the found LE advertisement.
+ * @param[in] user_data The user data passed from the start function
+ *
+ * @see bt_adapter_le_start_scan()
+ *
+ */
+typedef void (*bt_adapter_le_scan_result_cb)(int result,
+		bt_adapter_le_device_scan_result_info_s *info, void *user_data);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
