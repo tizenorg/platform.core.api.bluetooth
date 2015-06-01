@@ -19,6 +19,7 @@
 
 #include <glib.h>
 #include "bluetooth_type.h"
+#include "bluetooth_type_internal.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -744,111 +745,6 @@ int bt_opp_server_initialize(const char *destination, bt_opp_server_push_request
 /**
  * @internal
  * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_AG_MODULE
- * @brief Opens a SCO(Synchronous Connection Oriented link) to connected remote device, asynchronously.
- * @since_tizen 2.3
- * @privlevel platform
- * @privilege %http://tizen.org/privilege/bluetooth.admin
- * @return 0 on success, otherwise a negative error value.
- * @retval #BT_ERROR_NONE  Successful
- * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_NOT_ENABLED  Not enabled
- * @retval #BT_ERROR_REMOTE_DEVICE_NOT_BONDED  Remote device is not bonded
- * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
- * @retval #BT_ERROR_ALREADY_DONE  Operation is already done
- * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
- * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
- * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
- *
- * @pre The Bluetooth audio device must be connected with bt_audio_connect().
- * @post bt_ag_sco_state_changed_cb() will be invoked.
- * @see bt_ag_close_sco()
- * @see bt_ag_sco_state_changed_cb()
- * @see bt_audio_connect()
- */
-int bt_ag_open_sco(void);
-
-/**
- * @internal
- * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_AG_MODULE
- * @brief Closes an opened SCO(Synchronous Connection Oriented link), asynchronously.
- * @since_tizen 2.3
- * @privlevel platform
- * @privilege %http://tizen.org/privilege/bluetooth.admin
- * @return 0 on success, otherwise a negative error value.
- * @retval #BT_ERROR_NONE  Successful
- * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_NOT_ENABLED  Not enabled
- * @retval #BT_ERROR_REMOTE_DEVICE_NOT_BONDED  Remote device is not bonded
- * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
- * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
- * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
- *
- * @pre The SCO must be opened with bt_ag_open_sco().
- * @post bt_ag_sco_state_changed_cb() will be invoked.
- * @see bt_ag_open_sco()
- * @see bt_ag_sco_state_changed_cb()
- */
-int bt_ag_close_sco(void);
-
-/**
- * @internal
- * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_AG_MODULE
- * @brief Checks whether an opened SCO(Synchronous Connection Oriented link) exists or not.
- * @since_tizen 2.3
- * @param[out] opened The SCO status: (@c true = opened, @c  false = not opened)
- * @return 0 on success, otherwise a negative error value.
- * @retval #BT_ERROR_NONE  Successful
- * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
- * @retval #BT_ERROR_NOT_ENABLED  Not enabled
- * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
- *
- * @pre The Bluetooth audio service must be initialized with bt_audio_initialize().
- * @see bt_ag_open_sco()
- * @see bt_ag_close_sco()
- */
-int bt_ag_is_sco_opened(bool *opened);
-
-/**
- * @internal
- * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_AG_MODULE
- * @brief  Registers a callback function that will be invoked when the SCO(Synchronous Connection Oriented link) state is changed.
- * @since_tizen 2.3
- * @param[in] callback The callback function to register
- * @param[in] user_data The user data to be passed to the callback function
- * @return   0 on success, otherwise a negative error value.
- * @retval #BT_ERROR_NONE  Successful
- * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
- * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
- *
- * @pre The Bluetooth audio service must be initialized with bt_audio_initialize().
- * @see bt_audio_initialize()
- * @see bt_ag_sco_state_changed_cb()
- * @see bt_ag_unset_sco_state_changed_cb()
- */
-int bt_ag_set_sco_state_changed_cb(bt_ag_sco_state_changed_cb callback, void *user_data);
-
-/**
- * @internal
- * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_AG_MODULE
- * @brief  Unregisters a callback function that will be invoked when the SCO(Synchronous Connection Oriented link) state is changed.
- * @since_tizen 2.3
- * @return   0 on success, otherwise a negative error value.
- * @retval #BT_ERROR_NONE  Successful
- * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
- *
- * @pre The Bluetooth audio service must be initialized with bt_audio_initialize().
- * @see bt_audio_initialize()
- * @see bt_ag_sco_state_changed_cb()
- * @see bt_ag_set_sco_state_changed_cb()
- */
-int bt_ag_unset_sco_state_changed_cb(void);
-
-/**
- * @internal
- * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_AG_MODULE
  * @brief Notifies the call event to the remote bluetooth device.
  * @since_tizen 2.3
  * @privlevel platform
@@ -897,30 +793,6 @@ int bt_ag_notify_call_event(bt_ag_call_event_e event, unsigned int call_id, cons
  * @see bt_audio_connect()
  */
 int bt_ag_notify_call_list(bt_call_list_h list);
-
-/**
- * @internal
- * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_AG_MODULE
- * @brief Notifies the state of voice recognition.
- * @since_tizen 2.3
- * @privlevel platform
- * @privilege %http://tizen.org/privilege/bluetooth.admin
- * @param[in] state  The state of voice recognition: (@c true = enabled, @c  false = disabled)
- * @return 0 on success, otherwise a negative error value.
- * @retval #BT_ERROR_NONE  Successful
- * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
- * @retval #BT_ERROR_NOT_ENABLED  Not enabled
- * @retval #BT_ERROR_REMOTE_DEVICE_NOT_BONDED  Remote device is not bonded
- * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
- * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
- * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
- * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
- *
- * @pre The Bluetooth audio device must be connected with bt_audio_connect().
- * @see bt_audio_connect()
- */
-int bt_ag_notify_voice_recognition_state(bool state);
 
 /**
  * @internal

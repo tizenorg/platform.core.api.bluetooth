@@ -25,6 +25,7 @@
 
 #include "bluetooth_type.h"
 #include "bluetooth_internal.h"
+#include "bluetooth_extention.h"
 
 #ifdef __cplusplus
 extern "C"
