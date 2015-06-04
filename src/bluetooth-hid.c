@@ -27,6 +27,28 @@
 
 static bool is_hid_host_initialized = false;
 
+#ifdef TIZEN_HID_HOST_DISABLE
+#define BT_CHECK_HID_HOST_SUPPORT() \
+	{ \
+		BT_CHECK_BT_SUPPORT(); \
+		LOGE("[%s] NOT_SUPPORTED(0x%08x)", __FUNCTION__, BT_ERROR_NOT_SUPPORTED); \
+		return BT_ERROR_NOT_SUPPORTED; \
+	}
+#else
+#define BT_CHECK_HID_HOST_SUPPORT()
+#endif
+
+#ifdef TIZEN_HID_DEVICE_DISABLE
+#define BT_CHECK_HID_DEVICE_SUPPORT() \
+        { \
+                BT_CHECK_BT_SUPPORT(); \
+                LOGE("[%s] NOT_SUPPORTED(0x%08x)", __FUNCTION__, BT_ERROR_NOT_SUPPORTED); \
+                return BT_ERROR_NOT_SUPPORTED; \
+        }
+#else
+#define BT_CHECK_HID_DEVICE_SUPPORT()
+#endif
+
 #define BT_CHECK_HID_HOST_INIT_STATUS() \
 	if (__bt_check_hid_host_init_status() == BT_ERROR_NOT_INITIALIZED) \
 	{ \
@@ -49,6 +71,7 @@ int bt_hid_host_initialize(bt_hid_host_connection_state_changed_cb connection_cb
 {
 	int error;
 
+	BT_CHECK_HID_HOST_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(connection_cb);
 
@@ -69,6 +92,7 @@ int bt_hid_host_deinitialize()
 {
 	int error;
 
+	BT_CHECK_HID_HOST_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_HID_HOST_INIT_STATUS();
 
@@ -90,6 +114,7 @@ int bt_hid_host_connect(const char *remote_address)
 	int error;
 	bluetooth_device_address_t addr_hex = { {0,} };
 
+	BT_CHECK_HID_HOST_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_HID_HOST_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(remote_address);
@@ -109,6 +134,7 @@ int bt_hid_host_disconnect(const char *remote_address)
 	int error;
 	bluetooth_device_address_t addr_hex = { {0,} };
 
+	BT_CHECK_HID_HOST_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_HID_HOST_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(remote_address);

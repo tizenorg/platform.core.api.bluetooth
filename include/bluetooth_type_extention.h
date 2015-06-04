@@ -15,8 +15,8 @@
  */
 
 
-#ifndef __TIZEN_NETWORK_BLUETOOTH_TYPE_EXTENSION_H__
-#define __TIZEN_NETWORK_BLUETOOTH_TYPE_EXTENSION_H__
+#ifndef __TIZEN_NETWORK_BLUETOOTH_TYPE_EXTENTION_H__
+#define __TIZEN_NETWORK_BLUETOOTH_TYPE_EXTENTION_H__
 
  #ifdef __cplusplus
 extern "C"
@@ -24,7 +24,7 @@ extern "C"
 #endif /* __cplusplus */
 
 /**
- * @file bluetooth_type_extension.h
+ * @file bluetooth_type_extention.h
  */
 
 /**
@@ -52,4 +52,4 @@ typedef void (*bt_ag_sco_state_changed_cb) (int result, bool opened, void *user_
 }
 #endif /* __cplusplus */
 
-#endif // __TIZEN_NETWORK_BLUETOOTH_TYPE_EXTENSION_H__
+#endif // __TIZEN_NETWORK_BLUETOOTH_TYPE_EXTENTION_H__

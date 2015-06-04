@@ -667,8 +667,9 @@ int bt_adapter_set_remote_oob_data(const char *remote_address,
 int bt_adapter_remove_remote_oob_data(const char *remote_address);
 
 /**
+ * @deprecated Deprecated since 2.3.1
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
- * @brief Starts the LE device discovery for a BT_ADAPTER_DEVICE_DISCOVERY_LE type.
+ * @brief Starts the LE device discovery.
  * @since_tizen 2.3
  * @privlevel public
  * @privilege %http://tizen.org/privilege/bluetooth
@@ -690,7 +691,6 @@ int bt_adapter_remove_remote_oob_data(const char *remote_address);
  * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
  *
  * @pre The state of local Bluetooth must be #BT_ADAPTER_ENABLED.
- * or must be #BT_ADAPTER_LE_ENABLED.
  * @post This function invokes bt_adapter_le_device_discovery_state_changed_cb().
  *
  * @see bt_adapter_le_is_discovering()
@@ -701,6 +701,7 @@ int bt_adapter_remove_remote_oob_data(const char *remote_address);
 int bt_adapter_le_start_device_discovery(void);
 
 /**
+ * @deprecated Deprecated since 2.3.1
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
  * @brief Stops the LE device discovery, asynchronously.
  * @since_tizen 2.3
@@ -728,6 +729,7 @@ int bt_adapter_le_start_device_discovery(void);
 int bt_adapter_le_stop_device_discovery(void);
 
 /**
+ * @deprecated Deprecated since 2.3.1
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
  * @brief Checks for the LE device discovery is in progress or not.
  * @since_tizen 2.3
@@ -747,7 +749,6 @@ int bt_adapter_le_stop_device_discovery(void);
  * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
  *
  * @pre The state of local Bluetooth must be #BT_ADAPTER_ENABLED.
- * or must be #BT_ADAPTER_LE_ENABLED.
  *
  * @see bt_adapter_le_start_device_discovery()
  * @see bt_adapter_le_stop_device_discovery()
@@ -755,6 +756,7 @@ int bt_adapter_le_stop_device_discovery(void);
 int bt_adapter_le_is_discovering(bool *is_discovering);
 
 /**
+ * @deprecated Deprecated since 2.3.1
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
  * @brief  Registers a callback function to be invoked when the LE device discovery state changes.
  * @since_tizen 2.3
@@ -778,6 +780,7 @@ int bt_adapter_le_is_discovering(bool *is_discovering);
 int bt_adapter_le_set_device_discovery_state_changed_cb(bt_adapter_le_device_discovery_state_changed_cb callback, void *user_data);
 
 /**
+ * @deprecated Deprecated since 2.3.1
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
  * @brief	Unregisters the callback function.
  * @since_tizen 2.3
@@ -793,6 +796,254 @@ int bt_adapter_le_set_device_discovery_state_changed_cb(bt_adapter_le_device_dis
  * @see bt_adapter_le_set_device_discovery_state_changed_cb()
  */
 int bt_adapter_le_unset_device_discovery_state_changed_cb(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
+ * @brief Starts the LE scan to find LE advertisement.
+ * @since_tizen 2.3.1
+ * @privlevel public
+ * @privilege %http://tizen.org/privilege/bluetooth
+ *
+ * @details If a LE advertisement is found, bt_adapter_le_scan_result_cb() will be invoked.
+ *
+ * @param[in] cb The callback to report the result of this function
+ * @param[in] user_data The user data to be passed when callback is called
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_NOW_IN_PROGRESS  Operation is now in progress
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The state of local Bluetooth must be #BT_ADAPTER_ENABLED.
+ * @post This function invokes bt_adapter_le_scan_result_cb().
+ *
+ * @see bt_adapter_le_scan_result_cb()
+ */
+int bt_adapter_le_start_scan(bt_adapter_le_scan_result_cb cb, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
+ * @brief Stops the LE scan.
+ * @since_tizen 2.3.1
+ * @privlevel public
+ * @privilege %http://tizen.org/privilege/bluetooth
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_NOT_IN_PROGRESS  Operation is not in progress
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The LE scan must be in progress with bt_adapter_le_start_scan().
+ *
+ * @see bt_adapter_le_start_scan()
+ */
+int bt_adapter_le_stop_scan(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
+ * @brief Gets the service UUID list from the scan result information
+ * @since_tizen 2.3.1
+ *
+ * @remarks The @a uuids must be iterated as count and each pointed data must be released with free().
+ * Then uuids must be released with free(). \n
+ * 16-bit service UUID or 128-bit service UUID is supported. (e.g. 180F, 0000180F-0000-1000-8000-00805F9B34FB)
+ *
+ * @param[in] info The scan result information
+ * @param[in] pkt_type The packet type
+ * @param[out] uuids The list of string of the service uuid
+ * @param[out] count The count of the service UUIDs
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NO_DATA  No data available
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ *
+ * @see bt_adapter_le_scan_result_cb()
+ */
+int bt_adapter_le_get_scan_result_service_uuids(const bt_adapter_le_device_scan_result_info_s *info,
+			bt_adapter_le_packet_type_e pkt_type, char ***uuids, int *count);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
+ * @brief Gets the device name from the scan result information
+ * @since_tizen 2.3.1
+ *
+ * @remarks The @a name must be released with free() by you.
+ *
+ * @param[in] info The scan result information
+ * @param[in] pkt_type The packet type
+ * @param[out] name The device name
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NO_DATA  No data available
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ *
+ * @see bt_adapter_le_scan_result_cb()
+ */
+int bt_adapter_le_get_scan_result_device_name(const bt_adapter_le_device_scan_result_info_s *info,
+			bt_adapter_le_packet_type_e pkt_type, char **name);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
+ * @brief Gets the transmission power level from the scan result information
+ * @since_tizen 2.3.1
+ *
+ * @param[in] info The scan result information
+ * @param[in] pkt_type The packet type
+ * @param[out] power_level The transmission power level in dBm
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NO_DATA  No data available
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ *
+ * @see bt_adapter_le_scan_result_cb()
+ */
+int bt_adapter_le_get_scan_result_tx_power_level(const bt_adapter_le_device_scan_result_info_s *info,
+			bt_adapter_le_packet_type_e pkt_type, int *power_level);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
+ * @brief Gets the service solicitation UUID list from the scan result information
+ * @since_tizen 2.3.1
+ *
+ * @remarks The @a uuids must be iterated as count and each pointed data must be released with free().
+ * Then uuids must be released with free(). \n
+ * 16-bit service solicitation UUID or 128-bit service solicitaion UUID is supported.
+ * (e.g. 180F, 0000180F-0000-1000-8000-00805F9B34FB)
+ *
+ * @param[in] info The scan result information
+ * @param[in] pkt_type The packet type
+ * @param[out] uuids The list of string of the service solicitation uuid
+ * @param[out] count The count of the service UUIDs
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NO_DATA  No data available
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ *
+ * @see bt_adapter_le_scan_result_cb()
+ */
+int bt_adapter_le_get_scan_result_service_solicitation_uuids(const bt_adapter_le_device_scan_result_info_s *info,
+			bt_adapter_le_packet_type_e pkt_type, char ***uuids, int *count);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
+ * @brief Gets the service data list from the scan result information
+ * @since_tizen 2.3.1
+ *
+ * @remarks The @a data_list must be released with bt_adapter_le_free_service_data_list() by you .
+ *
+ * @param[in] info The scan result information
+ * @param[in] pkt_type The packet type
+ * @param[out] data_list The list of the service data
+ * @param[out] count The count of the service data list
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NO_DATA  No data available
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ *
+ * @see bt_adapter_le_scan_result_cb()
+ */
+int bt_adapter_le_get_scan_result_service_data_list(const bt_adapter_le_device_scan_result_info_s *info,
+			bt_adapter_le_packet_type_e pkt_type, bt_adapter_le_service_data_s **data_list, int *count);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_MODULE
+ * @brief Frees service data list.
+ * @since_tizen 2.3.1
+ *
+ * @param[in] data_list The list of the service data
+ * @param[in] count The count of the service data list
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_adapter_le_get_scan_result_service_data_list()
+ */
+int bt_adapter_le_free_service_data_list(bt_adapter_le_service_data_s *data_list, int count);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
+ * @brief Gets the appearance from the scan result information
+ * @since_tizen 2.3.1
+ *
+ * @param[in] info The scan result information
+ * @param[in] pkt_type The packet type
+ * @param[out] appearance The appearance
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NO_DATA  No data available
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ *
+ * @see bt_adapter_le_scan_result_cb()
+ */
+int bt_adapter_le_get_scan_result_appearance(const bt_adapter_le_device_scan_result_info_s *info,
+			bt_adapter_le_packet_type_e pkt_type, int *appearance);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
+ * @brief Gets the manufacturer data from the scan result information
+ * @since_tizen 2.3.1
+ *
+ * @remarks The @a manufacturer_data must be released with free() by you.
+ *
+ * @param[in] info The scan result information
+ * @param[in] pkt_type The packet type
+ * @param[out] manufacturer_id The manufacturer ID
+ * @param[out] manufacturer_data The manufacturer data (byte array)
+ * @param[out] manufacturer_data_len The length of manufacturer data
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NO_DATA  No data available
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ *
+ * @see bt_adapter_le_scan_result_cb()
+ */
+int bt_adapter_le_get_scan_result_manufacturer_data(const bt_adapter_le_device_scan_result_info_s *info,
+			bt_adapter_le_packet_type_e pkt_type, int *manufacturer_id, char **manufacturer_data, int *manufacturer_data_len);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
@@ -834,16 +1085,20 @@ int bt_adapter_le_create_advertiser(bt_advertiser_h *advertiser);
 int bt_adapter_le_destroy_advertiser(bt_advertiser_h advertiser);
 
 /**
+ * @deprecated Deprecated since 2.3.1
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
  * @brief Set the data to be advertised or responded to scan request from LE scanning device.
  *        The maximum advertised or responded data size is 31 bytes
  *        including data type and system wide data.
  * @since_tizen 2.3
  *
+ * @remarks In case the data_type is local name or tx power level, you don't need to input data
+ * because the data value is written automatically by system.
+ *
  * @param[in] advertiser The handle of advertiser
  * @param[in] pkt_type The packet type
  * @param[in] data_type The data type that is included in packet
- * @param[in] data The data to be advertised or be responded to scan request from LE scanning device
+ * @param[in] data The data to be advertised or be responded to scan request from LE scanning device, no need in case of LOCAL_NAME or TX_POWER_LEVEL
  * @param[in] data_size The size of data to be set.
  *
  * @return 0 on success, otherwise a negative error value.
@@ -856,7 +1111,6 @@ int bt_adapter_le_destroy_advertiser(bt_advertiser_h advertiser);
  *
  * @pre The Bluetooth service must be initialized with bt_initialize().
  *
- * @see bt_adapter_le_remove_advertising_data()
  * @see bt_adapter_le_clear_advertising_data()
  */
 int bt_adapter_le_add_advertising_data(bt_advertiser_h advertiser,
@@ -864,6 +1118,202 @@ int bt_adapter_le_add_advertising_data(bt_advertiser_h advertiser,
 		void *data, unsigned int data_size);
 
 /**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
+ * @brief Add a service UUID to advertise or scan response data.
+ *        The maximum advertised or responded data size is 31 bytes
+ *        including data type and system wide data.
+ * @since_tizen 2.3.1
+ *
+ * @remarks 16-bit UUID or 128-bit UUID is supported. (e.g. 180F, 0000180F-0000-1000-8000-00805F9B34FB)
+ *
+ * @param[in] advertiser The handle of advertiser
+ * @param[in] pkt_type The packet type
+ * @param[in] uuid The string of the service UUID.
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_QUOTA_EXCEEDED  Quota exceeded
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ *
+ * @see bt_adapter_le_clear_advertising_data()
+ */
+int bt_adapter_le_add_advertising_service_uuid(bt_advertiser_h advertiser,
+		bt_adapter_le_packet_type_e pkt_type, const char *uuid);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
+ * @brief Add a service solicitation UUID to advertise or scan response data.
+ *        The maximum advertised or responded data size is 31 bytes
+ *        including data type and system wide data.
+ * @since_tizen 2.3.1
+ *
+ * @remarks 16-bit service solicitation UUID or 128-bit service solicitation UUID is supported.
+ * (e.g. 180F, 0000180F-0000-1000-8000-00805F9B34FB)
+ *
+ * @param[in] advertiser The handle of advertiser
+ * @param[in] pkt_type The packet type
+ * @param[in] uuid The string of the service solicitation UUID.
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_QUOTA_EXCEEDED  Quota exceeded
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ *
+ * @see bt_adapter_le_clear_advertising_data()
+ */
+int bt_adapter_le_add_advertising_service_solicitation_uuid(bt_advertiser_h advertiser,
+		bt_adapter_le_packet_type_e pkt_type, const char *uuid);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
+ * @brief Add service data to advertise or scan response data.
+ *        The maximum advertised or responded data size is 31 bytes
+ *        including data type and system wide data.
+ * @since_tizen 2.3.1
+ *
+ * @remarks 16-bit UUID is supported. (e.g. 180F)
+ *
+ * @param[in] advertiser The handle of advertiser
+ * @param[in] pkt_type The packet type
+ * @param[in] uuid 16-bit UUID of the service
+ * @param[in] service_data The service data
+ * @param[in] service_data_len The data length of service data
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_QUOTA_EXCEEDED  Quota exceeded
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ *
+ * @see bt_adapter_le_clear_advertising_data()
+ */
+int bt_adapter_le_add_advertising_service_data(bt_advertiser_h advertiser,
+		bt_adapter_le_packet_type_e pkt_type, const char *uuid,
+		const char *service_data, int service_data_len);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
+ * @brief Sets the external appearance of this device to advertise or scan response data.
+ *        Please refer to the adopted Bluetooth specification for the the appearance.
+ * @since_tizen 2.3.1
+ *
+ * @param[in] advertiser The handle of advertiser
+ * @param[in] pkt_type The packet type
+ * @param[in] appearance The external appearance of device
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_QUOTA_EXCEEDED  Quota exceeded
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ *
+ * @see bt_adapter_le_clear_advertising_data()
+ */
+int bt_adapter_le_set_advertising_appearance(bt_advertiser_h advertiser,
+		bt_adapter_le_packet_type_e pkt_type, int appearance);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
+ * @brief Add manufacturer specific data to advertise or scan response data.
+ *        Please refer to the Bluetooth Assigned Numbers provided by the Bluetooth SIG for a list of existing company identifiers.
+ *        The maximum advertised or responded data size is 31 bytes
+ *        including data type and system wide data.
+ * @since_tizen 2.3.1
+ *
+ *
+ * @param[in] advertiser The handle of advertiser
+ * @param[in] pkt_type The packet type
+ * @param[in] manufacturer_id Manufacturer identifier
+ * @param[in] manufacturer_data The manufacturer specific data
+ * @param[in] manufacturer_data_len The data length of manufacturer data
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_QUOTA_EXCEEDED  Quota exceeded
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ *
+ * @see bt_adapter_le_clear_advertising_data()
+ */
+int bt_adapter_le_add_advertising_manufacturer_data(bt_advertiser_h advertiser,
+		bt_adapter_le_packet_type_e pkt_type, int manufacturer_id, const char *manufacturer_data, int manufacturer_data_len);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
+ * @brief Set whether the device name should be included in advertise or scan response data.
+ *        The maximum advertised or responded data size is 31 bytes
+ *        including data type and system wide data.
+ * @since_tizen 2.3.1
+ *
+ * @param[in] advertiser The handle of advertiser
+ * @param[in] pkt_type The packet type
+ * @param[in] include_name Whether the device name should be included
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_QUOTA_EXCEEDED  Quota exceeded
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ *
+ * @see bt_adapter_le_clear_advertising_data()
+ */
+int bt_adapter_le_set_advertising_device_name(bt_advertiser_h advertiser,
+		bt_adapter_le_packet_type_e pkt_type, bool include_name);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
+ * @brief Set whether the transmission power level should be included in advertise or scan response data.
+ *        The maximum advertised or responded data size is 31 bytes
+ *        including data type and system wide data.
+ * @since_tizen 2.3.1
+ *
+ * @param[in] advertiser The handle of advertiser
+ * @param[in] pkt_type The packet type
+ * @param[in] include_tx_power Whether the transmission power level should be included
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_QUOTA_EXCEEDED  Quota exceeded
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ *
+ * @see bt_adapter_le_clear_advertising_data()
+ */
+int bt_adapter_le_set_advertising_tx_power_level(bt_advertiser_h advertiser,
+		bt_adapter_le_packet_type_e pkt_type, bool include_tx_power);
+
+/**
+ * @deprecated Deprecated since 2.3.1
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
  * @brief Unset the data to be advertised or responded to scan request from LE scanning device.
  * @since_tizen 2.3
@@ -904,11 +1354,11 @@ int bt_adapter_le_remove_advertising_data(bt_advertiser_h advertiser,
  * @pre The Bluetooth service must be initialized with bt_initialize().
  *
  * @see bt_adapter_le_add_advertising_data()
- * @see bt_adapter_le_remove_advertising_data()
  */
 int bt_adapter_le_clear_advertising_data(bt_advertiser_h advertiser, bt_adapter_le_packet_type_e pkt_type);
 
 /**
+ * @deprecated Deprecated since 2.3.1
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
  * @brief Start advertising with passed advertiser and advertising parameters.
  * @since_tizen 2.3
@@ -943,6 +1393,7 @@ int bt_adapter_le_clear_advertising_data(bt_advertiser_h advertiser, bt_adapter_
  */
 int bt_adapter_le_start_advertising(bt_advertiser_h advertiser, bt_adapter_le_advertising_params_s *adv_params,
 		bt_adapter_le_advertising_state_changed_cb cb, void *user_data);
+
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
  * @brief Stops the advertising.
@@ -962,13 +1413,96 @@ int bt_adapter_le_start_advertising(bt_advertiser_h advertiser, bt_adapter_le_ad
  * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
  * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
  *
- * @pre The advertising must be going on with bt_adapter_le_start_advertising().
+ * @pre The advertising must be going on with bt_adapter_le_start_advertising_new().
  * @post This function invokes bt_adapter_le_advertising_state_changed_cb().
  *
- * @see bt_adapter_le_start_advertising()
+ * @see bt_adapter_le_start_advertising_new()
  * @see bt_adapter_le_advertising_state_changed_cb()
  */
 int bt_adapter_le_stop_advertising(bt_advertiser_h advertiser);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
+ * @brief Start advertising with passed advertiser and advertising parameters.
+ * @since_tizen 2.3.1
+ * @privlevel public
+ * @privilege %http://tizen.org/privilege/bluetooth
+ *
+ * @details Once Bluetooth advertising is started, nearby Bluetooth LE(Low Energy) supported
+ * devices can know this device's existence. And one of them can make a connection reqeust,
+ * if it is allowed.
+ *
+ * @param[in] advertiser The handle of advertiser
+ * @param[in] cb The callback to report the result of this function
+ * @param[in] user_data The user data to be passed when callback is called
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_NOW_IN_PROGRESS  Operation is now in progress
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ * @post This function invokes bt_adapter_le_advertising_state_changed_cb().
+ *
+ * @see bt_adapter_le_stop_advertising()
+ * @see bt_adapter_le_advertising_state_changed_cb()
+ */
+int bt_adapter_le_start_advertising_new(bt_advertiser_h advertiser, bt_adapter_le_advertising_state_changed_cb cb, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
+ * @brief Set advertising mode to control the advertising power and latency.
+ * @since_tizen 2.3.1
+ * @privlevel public
+ * @privilege %http://tizen.org/privilege/bluetooth
+ *
+ * @param[in] advertiser The handle of advertiser
+ * @param[in] mode The mode of advertising
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_NOW_IN_PROGRESS  Operation is now in progress
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ *
+ * @see bt_adapter_le_start_advertising_new()
+ */
+int bt_adapter_le_set_advertising_mode(bt_advertiser_h advertiser, bt_adapter_le_advertising_mode_e mode);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
+ * @brief Set whether the advertising type should be connectable or non-connectable
+ * @since_tizen 2.3.1
+ * @privlevel public
+ * @privilege %http://tizen.org/privilege/bluetooth
+ *
+ * @param[in] advertiser The handle of advertiser
+ * @param[in] connectable The type of advertising
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_NOW_IN_PROGRESS  Operation is now in progress
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ *
+ * @see bt_adapter_le_start_advertising_new()
+ */
+int bt_adapter_le_set_advertising_connectable(bt_advertiser_h advertiser, bool connectable);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DEVICE_MODULE
@@ -1481,7 +2015,6 @@ int bt_socket_listen_and_accept_rfcomm(int socket_fd, int max_pending_connection
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
  * @retval #BT_ERROR_NOT_ENABLED  Not enabled
- * @retval #BT_ERROR_REMOTE_DEVICE_NOT_BONDED  Remote device not bonded
  * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
  * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
  * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
@@ -1958,7 +2491,6 @@ int bt_hid_host_deinitialize(void);
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
  * @retval #BT_ERROR_NOT_ENABLED  Not enabled
- * @retval #BT_ERROR_REMOTE_DEVICE_NOT_BONDED  Remote device is not bonded
  * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
  * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
  * @retval #BT_ERROR_NOT_SUPPORTED   Not supported
@@ -2006,7 +2538,6 @@ int bt_hid_host_disconnect(const char *remote_address);
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
- * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
  * @retval #BT_ERROR_NOT_SUPPORTED   Not supported
  *
  * @pre The Bluetooth service must be initialized with bt_initialize().
@@ -2023,7 +2554,6 @@ int bt_audio_initialize(void);
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
- * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
  * @retval #BT_ERROR_NOT_SUPPORTED   Not supported
  *
  * @pre The Bluetooth audio service must be initialized with bt_audio_initialize().
@@ -2046,7 +2576,6 @@ int bt_audio_deinitialize(void);
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
  * @retval #BT_ERROR_NOT_ENABLED  Not enabled
- * @retval #BT_ERROR_REMOTE_DEVICE_NOT_BONDED  Remote device is not bonded
  * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
  * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
  * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
@@ -2118,359 +2647,6 @@ int bt_audio_set_connection_state_changed_cb(bt_audio_connection_state_changed_c
  * @see bt_audio_set_connection_state_changed_cb()
  */
 int bt_audio_unset_connection_state_changed_cb(void);
-
-/**
- * @internal
- * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
- * @brief Initializes the Bluetooth AVRCP(Audio/Video Remote Control Profile) service.
- * @since_tizen 2.3
- * @remarks This function must be called before Bluetooth AVRCP service. \n
- * You must free all resources of the this service by calling bt_avrcp_target_deinitialize()
- * if Bluetooth AVRCP service is no longer needed.
- * @param[in] callback The callback function called when the connection state is changed
- * @param[in] user_data The user data to be passed to the callback function
- * @return 0 on success, otherwise a negative error value.
- * @retval #BT_ERROR_NONE  Successful
- * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
- * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
- * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
- *
- * @pre The Bluetooth service must be initialized with bt_initialize().
- * @see bt_initialize()
- * @see bt_avrcp_target_deinitialize()
- */
-int bt_avrcp_target_initialize(bt_avrcp_target_connection_state_changed_cb callback, void *user_data);
-
-/**
- * @internal
- * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
- * @brief Deinitializes the Bluetooth AVRCP(Audio/Video Remote Control Profile) service.
- * @since_tizen 2.3
- * @return 0 on success, otherwise a negative error value.
- * @retval #BT_ERROR_NONE  Successful
- * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
- *
- * @pre The Bluetooth audio service must be initialized with bt_avrcp_target_initialize().
- * @see bt_avrcp_target_initialize()
- */
-int bt_avrcp_target_deinitialize(void);
-
-/**
- * @internal
- * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
- * @brief  Notifies the equalize state to the remote device.
- * @since_tizen 2.3
- * @privlevel platform
- * @privilege %http://tizen.org/privilege/bluetooth.admin
- * @param[in] state The state of equalizer
- * @return   0 on success, otherwise a negative error value.
- * @retval #BT_ERROR_NONE  Successful
- * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
- * @retval #BT_ERROR_NOT_ENABLED  Not enabled
- * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
- * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
- * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
- * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
- *
- * @pre The remote device must be connected.
- * @see bt_avrcp_target_connection_state_changed_cb()
- * @see bt_avrcp_target_initialize()
- */
-int bt_avrcp_target_notify_equalizer_state(bt_avrcp_equalizer_state_e state);
-
-/**
- * @internal
- * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
- * @brief  Notifies the repeat mode to the remote device.
- * @since_tizen 2.3
- * @privlevel platform
- * @privilege %http://tizen.org/privilege/bluetooth.admin
- * @param[in] mode The repeat mode
- * @return   0 on success, otherwise a negative error value.
- * @retval #BT_ERROR_NONE  Successful
- * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
- * @retval #BT_ERROR_NOT_ENABLED  Not enabled
- * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
- * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
- * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
- * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
- *
- * @pre The remote device must be connected.
- * @see bt_avrcp_target_connection_state_changed_cb()
- * @see bt_avrcp_target_initialize()
- */
-int bt_avrcp_target_notify_repeat_mode(bt_avrcp_repeat_mode_e mode);
-
-/**
- * @internal
- * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
- * @brief  Notifies the shuffle mode to the remote device.
- * @since_tizen 2.3
- * @privlevel platform
- * @privilege %http://tizen.org/privilege/bluetooth.admin
- * @param[in] mode The repeat mode
- * @return   0 on success, otherwise a negative error value.
- * @retval #BT_ERROR_NONE  Successful
- * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
- * @retval #BT_ERROR_NOT_ENABLED  Not enabled
- * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
- * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
- * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
- * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
- *
- * @pre The remote device must be connected.
- * @see bt_avrcp_target_connection_state_changed_cb()
- * @see bt_avrcp_target_initialize()
- */
-int bt_avrcp_target_notify_shuffle_mode(bt_avrcp_shuffle_mode_e mode);
-
-/**
- * @internal
- * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
- * @brief  Notifies the scan mode to the remote device.
- * @since_tizen 2.3
- * @privlevel platform
- * @privilege %http://tizen.org/privilege/bluetooth.admin
- * @param[in] mode The scan mode
- * @return   0 on success, otherwise a negative error value.
- * @retval #BT_ERROR_NONE  Successful
- * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
- * @retval #BT_ERROR_NOT_ENABLED  Not enabled
- * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
- * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
- * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
- * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
- *
- * @pre The remote device must be connected.
- * @see bt_avrcp_target_connection_state_changed_cb()
- * @see bt_avrcp_target_initialize()
- */
-int bt_avrcp_target_notify_scan_mode(bt_avrcp_scan_mode_e mode);
-
-/**
- * @internal
- * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
- * @brief  Notifies the player state to the remote device.
- * @since_tizen 2.3
- * @privlevel platform
- * @privilege %http://tizen.org/privilege/bluetooth.admin
- * @param[in] state The player state
- * @return   0 on success, otherwise a negative error value.
- * @retval #BT_ERROR_NONE  Successful
- * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
- * @retval #BT_ERROR_NOT_ENABLED  Not enabled
- * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
- * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
- * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
- * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
- *
- * @pre The remote device must be connected.
- * @see bt_avrcp_target_connection_state_changed_cb()
- * @see bt_avrcp_target_initialize()
- */
-int bt_avrcp_target_notify_player_state(bt_avrcp_player_state_e state);
-
-/**
- * @internal
- * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
- * @brief  Notifies the current position of song to the remote device.
- * @since_tizen 2.3
- * @privlevel platform
- * @privilege %http://tizen.org/privilege/bluetooth.admin
- * @param[in] position The current position in milliseconds
- * @return  0 on success, otherwise a negative error value.
- * @retval #BT_ERROR_NONE  Successful
- * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
- * @retval #BT_ERROR_NOT_ENABLED  Not enabled
- * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
- * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
- * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
- * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
- *
- * @pre The remote device must be connected.
- * @see bt_avrcp_target_connection_state_changed_cb()
- * @see bt_avrcp_target_initialize()
- */
-int bt_avrcp_target_notify_position(unsigned int position);
-
-/**
- * @internal
- * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
- * @brief  Notifies the track to the remote device.
- * @since_tizen 2.3
- * @privlevel platform
- * @privilege %http://tizen.org/privilege/bluetooth.admin
- * @param[in] title The title of track
- * @param[in] artist The artist of track
- * @param[in] album The album of track
- * @param[in] genre The genre of track
- * @param[in] track_num The track number
- * @param[in] total_tracks The number of all tracks
- * @param[in] duration The duration of track in milliseconds
- * @return   0 on success, otherwise a negative error value.
- * @retval #BT_ERROR_NONE  Successful
- * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
- * @retval #BT_ERROR_NOT_ENABLED  Not enabled
- * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
- * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
- * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
- * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
- *
- * @pre The remote device must be connected.
- * @see bt_avrcp_target_connection_state_changed_cb()
- * @see bt_avrcp_target_initialize()
- */
-int bt_avrcp_target_notify_track(const char *title, const char *artist, const char *album, const char *genre, unsigned int track_num, unsigned int total_tracks, unsigned int duration);
-
-/**
- * @internal
- * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
- * @brief  Registers a callback function that will be invoked when the equalizer state is changed by the remote control device.
- * @since_tizen 2.3
- * @param[in] callback The callback function to register
- * @param[in] user_data The user data to be passed to the callback function
- * @return   0 on success, otherwise a negative error value.
- * @retval #BT_ERROR_NONE  Successful
- * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
- * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
- *
- * @pre The Bluetooth service must be initialized by bt_initialize().
- * @see bt_initialize()
- * @see bt_avrcp_unset_equalizer_state_changed_cb()
- */
-int bt_avrcp_set_equalizer_state_changed_cb(bt_avrcp_equalizer_state_changed_cb callback, void *user_data);
-
-/**
- * @internal
- * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
- * @brief  Unregisters a callback function that will be invoked when the equalizer state is changed by the remote control device.
- * @since_tizen 2.3
- * @return   0 on success, otherwise a negative error value.
- * @retval #BT_ERROR_NONE  Successful
- * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
- *
- * @pre The Bluetooth service must be initialized by bt_initialize().
- * @see bt_initialize()
- * @see bt_avrcp_set_equalizer_state_changed_cb()
- */
-int bt_avrcp_unset_equalizer_state_changed_cb(void);
-
-/**
- * @internal
- * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
- * @brief  Registers a callback function that will be invoked when the repeat mode is changed by the remote control device.
- * @since_tizen 2.3
- * @param[in] callback The callback function to register
- * @param[in] user_data The user data to be passed to the callback function
- * @return   0 on success, otherwise a negative error value.
- * @retval #BT_ERROR_NONE  Successful
- * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
- * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
- *
- * @pre The Bluetooth service must be initialized by bt_initialize().
- * @see bt_initialize()
- * @see bt_avrcp_unset_repeat_mode_changed_cb()
- */
-int bt_avrcp_set_repeat_mode_changed_cb(bt_avrcp_repeat_mode_changed_cb callback, void *user_data);
-
-/**
- * @internal
- * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
- * @brief  Unregisters a callback function that will be invoked when the repeat mode is changed by the remote control device.
- * @since_tizen 2.3
- * @return   0 on success, otherwise a negative error value.
- * @retval #BT_ERROR_NONE  Successful
- * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
- *
- * @pre The Bluetooth service must be initialized by bt_initialize().
- * @see bt_initialize()
- * @see bt_avrcp_set_repeat_mode_changed_cb()
- */
-int bt_avrcp_unset_repeat_mode_changed_cb(void);
-
-/**
- * @internal
- * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
- * @brief  Registers a callback function that will be invoked when the shuffle mode is changed by the remote control device.
- * @since_tizen 2.3
- * @param[in] callback The callback function to register
- * @param[in] user_data The user data to be passed to the callback function
- * @return   0 on success, otherwise a negative error value.
- * @retval #BT_ERROR_NONE  Successful
- * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
- * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
- *
- * @pre The Bluetooth service must be initialized by bt_initialize().
- * @see bt_initialize()
- * @see bt_avrcp_unset_shuffle_mode_changed_cb()
- */
-int bt_avrcp_set_shuffle_mode_changed_cb(bt_avrcp_shuffle_mode_changed_cb callback, void *user_data);
-
-/**
- * @internal
- * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
- * @brief  Unregisters a callback function that will be invoked when the shuffle mode is changed by the remote control device.
- * @since_tizen 2.3
- * @return   0 on success, otherwise a negative error value.
- * @retval #BT_ERROR_NONE  Successful
- * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
- *
- * @pre The Bluetooth service must be initialized by bt_initialize().
- * @see bt_initialize()
- * @see bt_avrcp_set_shuffle_mode_changed_cb()
- */
-int bt_avrcp_unset_shuffle_mode_changed_cb(void);
-
-/**
- * @internal
- * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
- * @brief  Registers a callback function that will be invoked when the scan mode is changed by the remote control device.
- * @since_tizen 2.3
- * @param[in] callback The callback function to register
- * @param[in] user_data The user data to be passed to the callback function
- * @return   0 on success, otherwise a negative error value.
- * @retval #BT_ERROR_NONE  Successful
- * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
- * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
- *
- * @pre The Bluetooth service must be initialized by bt_initialize().
- * @see bt_initialize()
- * @see bt_avrcp_unset_scan_mode_changed_cb()
- */
-int bt_avrcp_set_scan_mode_changed_cb(bt_avrcp_scan_mode_changed_cb callback, void *user_data);
-
-/**
- * @internal
- * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
- * @brief  Unregisters a callback function that will be invoked when the scan mode is changed by the remote control device.
- * @since_tizen 2.3
- * @return   0 on success, otherwise a negative error value.
- * @retval #BT_ERROR_NONE  Successful
- * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
- *
- * @pre The Bluetooth service must be initialized by bt_initialize().
- * @see bt_initialize()
- * @see bt_avrcp_set_scan_mode_changed_cb()
- */
-int bt_avrcp_unset_scan_mode_changed_cb(void);
-
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
@@ -2862,7 +3038,6 @@ int bt_hdp_unregister_sink_app(const char *app_id);
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
  * @retval #BT_ERROR_NOT_ENABLED  Not enabled
- * @retval #BT_ERROR_REMOTE_DEVICE_NOT_BONDED  Remote device is not bonded
  * @retval #BT_ERROR_OUT_OF_MEMORY  Out of memory
  * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
  * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
@@ -2992,6 +3167,7 @@ int bt_hdp_set_data_received_cb(bt_hdp_data_received_cb callback, void *user_dat
 int bt_hdp_unset_data_received_cb(void);
 
 /**
+ * @deprecated Deprecated since 2.3.1. Use bt_gatt_client_foreach_services or bt_gatt_client_get_service instead.
  * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
  * @brief  Gets the primary services of GATT(Generic Attribute Profile).
  * @since_tizen 2.3
@@ -3006,7 +3182,7 @@ int bt_hdp_unset_data_received_cb(void);
  * @retval  #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval  #BT_ERROR_NOT_ENABLED  Not enabled
  * @retval  #BT_ERROR_OPERATION_FAILED  Operation failed
- * @retva l #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval  #BT_ERROR_PERMISSION_DENIED  Permission denied
  * @retval  #BT_ERROR_NOT_SUPPORTED  Not supported
  *
  * @pre  The state of local Bluetooth must be #BT_ADAPTER_ENABLED.
@@ -3016,6 +3192,7 @@ int bt_hdp_unset_data_received_cb(void);
 int bt_gatt_foreach_primary_services(const char *remote_address, bt_gatt_primary_service_cb callback, void *user_data);
 
 /**
+ * @deprecated Deprecated since 2.3.1. This function call is not required because characteristic discovery is happened automatically.
  * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
  * @brief  Discovers the characteristics in service, asynchronously.
  * @since_tizen 2.3
@@ -3039,6 +3216,7 @@ int bt_gatt_foreach_primary_services(const char *remote_address, bt_gatt_primary
 int bt_gatt_discover_characteristics(bt_gatt_attribute_h service, bt_gatt_characteristics_discovered_cb callback, void *user_data);
 
 /**
+ * @deprecated Deprecated since 2.3.1. Use bt_gatt_get_uuid instead.
  * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
  * @brief  Gets the UUID of service.
  * @since_tizen 2.3
@@ -3061,6 +3239,7 @@ int bt_gatt_discover_characteristics(bt_gatt_attribute_h service, bt_gatt_charac
 int bt_gatt_get_service_uuid(bt_gatt_attribute_h service, char **uuid);
 
 /**
+ * @deprecated Deprecated since 2.3.1. Use bt_gatt_service_foreach_included_services or bt_gatt_service_get_included_service instead.
  * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
  * @brief  Gets the included services in service.
  * @since_tizen 2.3
@@ -3085,6 +3264,7 @@ int bt_gatt_get_service_uuid(bt_gatt_attribute_h service, char **uuid);
 int bt_gatt_foreach_included_services(bt_gatt_attribute_h service, bt_gatt_included_service_cb callback, void *user_data);
 
 /**
+ * @deprecated Deprecated since 2.3.1. Use bt_gatt_client_set_characteristic_value_changed_cb instead.
  * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
  * @brief  Registers a callback function that will be invoked when a characteristic value is changed.
  * @since_tizen 2.3
@@ -3102,6 +3282,7 @@ int bt_gatt_foreach_included_services(bt_gatt_attribute_h service, bt_gatt_inclu
 int bt_gatt_set_characteristic_changed_cb(bt_gatt_characteristic_changed_cb callback, void *user_data);
 
 /**
+ * @deprecated Deprecated since 2.3.1. Use bt_gatt_client_unset_characteristic_value_changed_cb instead.
  * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
  * @brief  Unregisters a callback function that will be invoked when a characteristic is changed.
  * @since_tizen 2.3
@@ -3116,6 +3297,7 @@ int bt_gatt_set_characteristic_changed_cb(bt_gatt_characteristic_changed_cb call
 int bt_gatt_unset_characteristic_changed_cb(void);
 
 /**
+ * @deprecated Deprecated since 2.3.1. Use bt_gatt_client_set_characteristic_value_changed_cb instead.
  * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
  * @brief  Watches all the characteristic value changes of the service
  * @since_tizen 2.3
@@ -3135,6 +3317,7 @@ int bt_gatt_unset_characteristic_changed_cb(void);
 int bt_gatt_watch_characteristic_changes(bt_gatt_attribute_h service);
 
 /**
+ * @deprecated Deprecated since 2.3.1. Use bt_gatt_client_unset_characteristic_value_changed_cb instead.
  * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
  * @brief  Remove watching of all the characteristic value changes of the service
  * @since_tizen 2.3
@@ -3153,8 +3336,8 @@ int bt_gatt_watch_characteristic_changes(bt_gatt_attribute_h service);
  */
 int bt_gatt_unwatch_characteristic_changes(bt_gatt_attribute_h service);
 
-
 /**
+ * @deprecated Deprecated since 2.3.1. Use bt_gatt_get_value or bt_gatt_get_uuid after bt_gatt_client_read_value instead.
  * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
  * @brief  Gets the characteristic declaration.
  * @since_tizen 2.3
@@ -3180,6 +3363,7 @@ int bt_gatt_unwatch_characteristic_changes(bt_gatt_attribute_h service);
 int bt_gatt_get_characteristic_declaration(bt_gatt_attribute_h characteristic, char **uuid, unsigned char **value, int *value_length);
 
 /**
+ * @deprecated Deprecated since 2.3.1. Use bt_gatt_set_value and bt_gatt_client_write_value instead.
  * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
  * @brief  Sets the value of characteristic.
  * @since_tizen 2.3
@@ -3202,6 +3386,7 @@ int bt_gatt_get_characteristic_declaration(bt_gatt_attribute_h characteristic, c
 int bt_gatt_set_characteristic_value(bt_gatt_attribute_h characteristic, const unsigned char *value, int value_length);
 
 /**
+ * @deprecated Deprecated since 2.3.1. Use bt_gatt_set_value and bt_gatt_client_write_value instead.
  * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
  * @brief  Sets the value of characteristic request.
  * @since_tizen 2.3
@@ -3210,13 +3395,13 @@ int bt_gatt_set_characteristic_value(bt_gatt_attribute_h characteristic, const u
  * @param[in]  characteristic  The attribute handle of characteristic
  * @param[in]  value  The value of characteristic (byte array)
  * @param[in]  value_length  The length of value
-  * @param[in]  callback  The result callback
+ * @param[in]  callback  The result callback
  * @return  0 on success, otherwise a negative error value.
  * @retval  #BT_ERROR_NONE  Successful
  * @retval  #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval  #BT_ERROR_INVALID_PARAMETER  Invalid parameter
  * @retval  #BT_ERROR_OPERATION_FAILED  Operation failed
- * @retva l #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval  #BT_ERROR_PERMISSION_DENIED  Permission denied
  * @retval  #BT_ERROR_NOT_SUPPORTED  Not supported
  *
  * @pre  The state of local Bluetooth must be #BT_ADAPTER_ENABLED.
@@ -3226,6 +3411,7 @@ int bt_gatt_set_characteristic_value_request(bt_gatt_attribute_h characteristic,
 				int value_length, bt_gatt_characteristic_write_cb callback);
 
 /**
+* @deprecated Deprecated since 2.3.1. GATT handle clone is not allowed. Instead, all handles for client role must be got from GATT client handle.
 * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
 * @brief  Clones the attribute handle.
 * @since_tizen 2.3
@@ -3243,6 +3429,7 @@ int bt_gatt_set_characteristic_value_request(bt_gatt_attribute_h characteristic,
 int bt_gatt_clone_attribute_handle(bt_gatt_attribute_h* clone, bt_gatt_attribute_h origin);
 
 /**
+* @deprecated Deprecated since 2.3.1. GATT handle clone and destroy are not allowed.
 * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
 * @brief  Destroys the attribute handle.
 * @since_tizen 2.3
@@ -3257,6 +3444,7 @@ int bt_gatt_clone_attribute_handle(bt_gatt_attribute_h* clone, bt_gatt_attribute
 int bt_gatt_destroy_attribute_handle(bt_gatt_attribute_h handle);
 
 /**
+ * @deprecated Deprecated since 2.3.1. Use gatt_client_read_value instead.
  * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
  * @brief  Reads the value of characteristic from remote device
  * @since_tizen 2.3
@@ -3279,6 +3467,7 @@ int bt_gatt_read_characteristic_value(bt_gatt_attribute_h char_handle,
 		bt_gatt_characteristic_read_cb callback);
 
 /**
+ * @deprecated Deprecated since 2.3.1. This function call is not required because descriptor discovery is happened automatically.
  * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
  * @brief  Discovers the characteristic descriptors of a characteristic within its definition, asynchronously.
  * @since_tizen 2.3
@@ -3302,6 +3491,569 @@ int bt_gatt_read_characteristic_value(bt_gatt_attribute_h char_handle,
 int bt_gatt_discover_characteristic_descriptor(bt_gatt_attribute_h characteristic_handle,
 		bt_gatt_characteristic_descriptor_discovered_cb callback,
 		void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Gets the value of a characteristic or descriptor's GATT handle
+ * @since_tizen 2.3.1
+ *
+ * @remarks @a value must be released using free(). \n
+ * When @a gatt_handle is associated with bt_gatt_client_h, bt_gatt_client_read_value() must be used prior to this function \n
+ * in order to get the remote device's current value.
+ *
+ * @param[in] gatt_handle The handle of a characteristic or descriptor
+ * @param[out] value The value of @a gatt_handle. It is a byte stream type.
+ * @param[out] value_length The length of @a value
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ */
+int bt_gatt_get_value(bt_gatt_h gatt_handle, char **value, int *value_length);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Gets the value of a characteristic or descriptor's GATT handle as an integer type
+ * @since_tizen 2.3.1
+ *
+ * @remarks This function returns a locally saved value in @a gatt_handle. \n
+ * When @a gatt_handle is associated with bt_gatt_client_h, bt_gatt_client_read_value() must be used prior to this function \n
+ * in order to get the remote device's current value.
+ *
+ * @param[in] gatt_handle The handle of a characteristic or descriptor
+ * @param[in] type The type of a saved value in @a gatt_handle
+ * @param[in] offset The offset from where a value will be read from @a gatt_handle as an integer type
+ * @param[out] value The integer type's value of @a gatt_handle
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ */
+int bt_gatt_get_int_value(bt_gatt_h gatt_handle, bt_data_type_int_e type,
+			int offset, int *value);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Gets the value of a characteristic or descriptor's GATT handle as a float type
+ * @since_tizen 2.3.1
+ *
+ * @remarks This function returns a locally saved value in @a gatt_handle. \n
+ * When @a gatt_handle is associated with bt_gatt_client_h, bt_gatt_client_read_value() must be used prior to this function \n
+ * in order to get the remote device's current value.
+ *
+ * @param[in] gatt_handle  The handle of a characteristic or descriptor
+ * @param[in] type The type of a saved value in @a gatt_handle
+ * @param[in] offset The offset from where a value will be read from @a gatt_handle as an integer type
+ * @param[out] value The float type's value of @a gatt_handle
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ */
+int bt_gatt_get_float_value(bt_gatt_h gatt_handle, bt_data_type_float_e type,
+			int offset, float *value);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Updates the value of a characteristic or descriptor's GATT handle
+ * @since_tizen 2.3.1
+ *
+ * @remarks This function updates a value of @a gatt_handle locally. \n
+ * When @a gatt_handle is associated with bt_gatt_client_h, bt_gatt_client_write_value() can be used after this function \n
+ * in order to update the remote device's value. \n
+ *
+ * @param[in] gatt_handle The handle of a characteristic or descriptor
+ * @param[in] value The value to be updated
+ * @param[in] value_length The length of @a value
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ */
+int bt_gatt_set_value(bt_gatt_h gatt_handle, const char *value, int value_length);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Updates the value of a characteristic or descriptor's GATT handle using a integer type's value
+ * @since_tizen 2.3.1
+ *
+ * @remarks This function updates a value of @a gatt_handle locally. \n
+ * When @a gatt_handle is associated with bt_gatt_client_h, bt_gatt_client_write_value() can be used after this function \n
+ * in order to update the remote device's value. \n
+ *
+ * @param[in] gatt_handle The handle of a characteristic or descriptor
+ * @param[in] type @a value will be saved in @a gatt_handle as this type
+ * @param[in] value The integer type's value to be updated
+ * @param[in] offset The offset from where @a value will be saved in @a gatt_handle
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ */
+int bt_gatt_set_int_value(bt_gatt_h gatt_handle, bt_data_type_int_e type,
+			int value, int offset);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Updates the value of a characteristic or descriptor's GATT handle using a float type's value
+ * @since_tizen 2.3.1
+ *
+ * @remarks This function updates a value of @a gatt_handle locally. \n
+ * When @a gatt_handle is associated with bt_gatt_client_h, bt_gatt_client_write_value() can be used after this function \n
+ * in order to update the remote device's value. \n
+ *
+ * @param[in] gatt_handle The handle of a characteristic or descriptor
+ * @param[in] type @a mantissa and @a exponent will be saved in @a gatt_handle as this type
+ * @param[in] mantissa The mantissa of float type's value to be updated
+ * @param[in] exponent The exponent of float type's value to be updated
+ * @param[in] offset The offset from where @a mantissa and @a exponent will be saved in @a gatt_handle
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ */
+int bt_gatt_set_float_value(bt_gatt_h gatt_handle, bt_data_type_float_e type,
+			int mantissa, int exponent, int offset);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Gets the UUID of a service, characteristic or descriptor's GATT handle
+ * @since_tizen 2.3.1
+ *
+ * @remarks @a uuid must be released using free(). \n
+ * 16-bit UUID or 128-bit UUID is supported. (e.g. 2A19, 00002A19-0000-1000-8000-00805F9B34FB)
+ *
+ * @param[in] gatt_handle The handle of a service, characteristic or descriptor
+ * @param[out] uuid The string of the UUID of @a gatt_handle
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ */
+int bt_gatt_get_uuid(bt_gatt_h gatt_handle, char **uuid);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Gets the type of GATT handle
+ * @since_tizen 2.3.1
+ *
+ * @param[in] gatt_handle The GATT handle
+ * @param[out] gatt_type The type of @a gatt_handle
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ */
+int bt_gatt_get_type(bt_gatt_h gatt_handle, bt_gatt_type_e *gatt_type);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Gets the GATT client handle which the specified service belongs to
+ * @since_tizen 2.3.1
+ *
+ * @remark This function doesn't allocate new memory for GATT client handle.
+ * The returned GATT client handle is the same one which was got from bt_gatt_client_create().
+ * So if it is destroyed by bt_gatt_client_destroy(), all related GATT handles are freed also.
+ *
+ * @param[in] service The service's GATT handle
+ * @param[out] client The GATT client handle which @a service belongs to
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_client_create()
+ */
+int bt_gatt_service_get_client(bt_gatt_h service, bt_gatt_client_h *client);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Gets a characteristic's GATT handle which has specific UUID
+ * @since_tizen 2.3.1
+ *
+ * @remark The returned GATT handle must not be freed by application.
+ * It will be freed when an associated client is destroyed by bt_gatt_client_destroy().
+ * If there are multiple characteristics which have same UUID, only the first matched one will be returned.
+ *
+ * @param[in] service The service's GATT handle
+ * @param[in] uuid The characteristic's GATT handle which has this UUID will be returned if it exists
+ * @param[out] characteristic The characteristic's GATT handle which has @a uuid if it exists
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NO_DATA  No data available
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ */
+int bt_gatt_service_get_characteristic(bt_gatt_h service, const char *uuid,
+					bt_gatt_h *characteristic);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Invokes @a callback function on each characteristic that belongs to the specified service
+ * @since_tizen 2.3.1
+ *
+ * @param[in] service The service's GATT handle
+ * @param[in] callback The function to be invoked on each characteristic
+ * @param[in] user_data The user data to be passed to @a callback function
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_foreach_cb()
+ */
+int bt_gatt_service_foreach_characteristics(bt_gatt_h service,
+					bt_gatt_foreach_cb callback, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Gets an included service's GATT handle which has specific UUID
+ * @since_tizen 2.3.1
+ *
+ * @remark The returned GATT handle must not be freed by application.
+ * It will be freed when an associated client is destroyed by bt_gatt_client_destroy().
+ * If there are multiple included services which have same UUID, only the first matched one will be returned.
+ *
+ * @param[in] service The service's GATT handle
+ * @param[in] uuid The included service's GATT handle which has this UUID will be returned if it exists
+ * @param[out] included_service The included service's GATT handle which has @a uuid if it exists
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NO_DATA  No data available
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ */
+int bt_gatt_service_get_included_service(bt_gatt_h service, const char *uuid,
+						bt_gatt_h *included_service);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Invokes @a callback function on each included service that belongs to the specified service
+ * @since_tizen 2.3.1
+ *
+ * @param[in] service The service's GATT handle
+ * @param[in] callback The function to be invoked on each included service
+ * @param[in] user_data The user data to be passed to the callback function
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_foreach_cb()
+ */
+int bt_gatt_service_foreach_included_services(bt_gatt_h service,
+					bt_gatt_foreach_cb callback, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Gets the service's GATT handle which the specified characteristic belongs to
+ * @since_tizen 2.3.1
+ *
+ * @remark The returned GATT handle must not be freed by application.
+ * It will be freed when an associated client is destroyed by bt_gatt_client_destroy().
+ *
+ * @param[in] characteristic The characteristic's GATT handle
+ * @param[out] service The service's GATT handle which @a characteristic belongs to
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ */
+int bt_gatt_characteristic_get_service(bt_gatt_h characteristic, bt_gatt_h *service);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Gets the properties which a characteristic's GATT handle has
+ * @since_tizen 2.3.1
+ *
+ * @param[in] characteristic The characteristic's GATT handle
+ * @param[out] properties The properties which a characteristic's GATT handle has
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_property_e
+ */
+int bt_gatt_characteristic_get_properties(bt_gatt_h characteristic, int *properties);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief Gets the write type of the specified characteristic
+ * @since_tizen 2.3.1
+ *
+ * @param[in] characteristic The characteristic's GATT handle
+ * @param[out] write_type The write type of the specified characteristic
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_write_type_e
+ */
+int bt_gatt_characteristic_get_write_type(bt_gatt_h characteristic,
+					bt_gatt_write_type_e *write_type);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Updates the write type of the specified charateristic
+ * @since_tizen 2.3.1
+ *
+ * @param[in] characteristic The characteristic's GATT handle
+ * @param[in] write_type The write type to be updated
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_client_write_value()
+ * @see bt_gatt_write_type_e
+ */
+int bt_gatt_characteristic_set_write_type(bt_gatt_h characteristic,
+					bt_gatt_write_type_e write_type);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Gets a descriptor's GATT handle which has specific UUID
+ * @since_tizen 2.3.1
+ *
+ * @remark The returned GATT handle must not be freed by application.
+ * It will be freed when an associated client is destroyed by bt_gatt_client_destroy().
+ * If there are multiple descriptors which have same UUID, only the first matched one will be returned.
+ *
+ * @param[in] characteristic The characteristic's GATT handle
+ * @param[in] uuid The descriptor's GATT handle which has this UUID will be returned if it exists
+ * @param[out] descriptor The descriptor's GATT handle which has @a uuid if it exists
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NO_DATA  No data available
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ */
+int bt_gatt_characteristic_get_descriptor(bt_gatt_h characteristic, const char *uuid,
+						bt_gatt_h *descriptor);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Invokes @a callback function on each descriptor that belongs to the specified characteristic
+ * @since_tizen 2.3.1
+ *
+ * @param[in] characteristic The characteristic's GATT handle
+ * @param[in] callback The function to be invoked on each descriptor
+ * @param[in] user_data The user data to be passed to @a callback function
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_foreach_cb()
+ */
+int bt_gatt_characteristic_foreach_descriptors(bt_gatt_h characteristic,
+					bt_gatt_foreach_cb callback, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Gets the characteristic's GATT handle which the specified descriptor belongs to
+ * @since_tizen 2.3.1
+ *
+ * @remark The returned GATT handle must not be freed by application.
+ * It will be freed when an associated client is destroyed by bt_gatt_client_destroy().
+ *
+ * @param[in] descriptor The descriptor's GATT handle
+ * @param[out] characteristic The characteristic's GATT handle which @a descriptor belongs to
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ */
+int bt_gatt_descriptor_get_characteristic(bt_gatt_h descriptor, bt_gatt_h *characteristic);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Creates the GATT client handle
+ * @since_tizen 2.3.1
+ *
+ * @remark The GATT client handle must be freed by bt_gatt_client_destroy() after use
+ *
+ * @param[in] remote_address The address of the remote device
+ * @param[out] client The created GATT client's handle
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_OUT_OF_MEMORY  Out of memory
+ * @retval #BT_ERROR_ALREADY_DONE  Operation is already done
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_client_destroy()
+ */
+int bt_gatt_client_create(const char *remote_address, bt_gatt_client_h *client);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Destroys the GATT client's handle
+ * @since_tizen 2.3.1
+ *
+ * @remark All related service, characteristic and descriptor's GATT handles are freed also
+ *
+ * @param[in] client The GATT client's handle
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_client_create()
+ */
+int bt_gatt_client_destroy(bt_gatt_client_h client);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Gets the address of remote device
+ * @since_tizen 2.3.1
+ *
+ * @param[in] client The created GATT client's handle
+ * @param[out] remote_address The address of the remote device which is associated with @a client
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_client_create()
+ */
+int bt_gatt_client_get_remote_address(bt_gatt_client_h client,
+					char **remote_address);
+
+/**
+ * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Reads the value of a characteristic or descriptor from the remote device asynchronously
+ * @since_tizen 2.3.1
+ * @privlevel public
+ * @privilege %http://tizen.org/privilege/bluetooth
+ *
+ * @param[in] gatt_handle The GATT handle of a characteristic or descriptor
+ * @param[in] callback When a read request is completed, this callback function will be called
+ * @param[in] user_data The user data to be passed to @a callback function
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE	Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_NOW_IN_PROGRESS  Operation now in progress
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_client_create()
+ * @see bt_gatt_client_request_completed_cb()
+ */
+int bt_gatt_client_read_value(bt_gatt_h gatt_handle,
+		bt_gatt_client_request_completed_cb callback, void *user_data);
+
+/**
+ * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Writes the value of a characteristic or descriptor to the remote device asynchronously
+ * @since_tizen 2.3.1
+ * @privlevel public
+ * @privilege %http://tizen.org/privilege/bluetooth
+ *
+ * @param[in] gatt_handle The GATT handle of a characteristic or descriptor
+ * @param[in] callback When a write request is completed, this callback function will be called
+ * @param[in] user_data The user data to be passed to @a callback function
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE	Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_NOW_IN_PROGRESS  Operation now in progress
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_client_create()
+ * @see bt_gatt_characteristic_set_write_type()
+ * @see bt_gatt_set_value()
+ * @see bt_gatt_set_int_value()
+ * @see bt_gatt_set_float_value()
+ * @see bt_gatt_client_request_completed_cb()
+ */
+int bt_gatt_client_write_value(bt_gatt_h gatt_handle,
+		bt_gatt_client_request_completed_cb callback, void *user_data);
+
+/**
+ * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Registers a callback function to be invoked when the characteristic value is changed on the remote device
+ * @since_tizen 2.3.1
+ *
+ * @param[in] characteristic The characteristic's GATT handle
+ * @param[in] callback The callback to be invoked when the value is changed and it is informed
+ * @param[in] user_data The user data to be passed to @a callback function
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE	Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_client_characteristic_value_changed_cb()
+ * @see bt_gatt_client_unset_characteristic_value_change()
+ */
+int bt_gatt_client_set_characteristic_value_changed_cb(bt_gatt_h characteristic,
+		bt_gatt_client_characteristic_value_changed_cb callback,
+		void *user_data);
+
+/**
+ * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Unregisters a callback function to be invoked when the characteristic value is changed on the remote device
+ * @since_tizen 2.3.1
+ *
+ * @param[in] characteristic The characteristic's GATT handle, whose value change will not be informed
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE	Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_client_set_characteristic_value_changed_cb()
+ */
+int bt_gatt_client_unset_characteristic_value_changed_cb(bt_gatt_h characteristic);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Gets a service's GATT handle which has specific UUID
+ * @since_tizen 2.3.1
+ *
+ * @remark The returned GATT handle must not be freed by application.
+ * It will be freed when an associated client is destroyed by bt_gatt_client_destroy().
+ * If there are multiple services which have same UUID, only the first matched one will be returned.
+ *
+ * @param[in] client The GATT client's handle
+ * @param[in] uuid The serivce's GATT handle which has this UUID will be returned if it exists
+ * @param[out] service The service's GATT handle which has @a uuid if it exists
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NO_DATA  No data available
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ */
+int bt_gatt_client_get_service(bt_gatt_client_h client, const char *uuid,
+				bt_gatt_h *service);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Invokes @a callback function on each service that belongs to the specified GATT client
+ * @since_tizen 2.3.1
+ *
+ * @param[in] client The GATT client's handle
+ * @param[in] callback The function to be invoked on each service
+ * @param[in] user_data The user data to be passed to @a callback function
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_foreach_cb()
+ */
+int bt_gatt_client_foreach_services(bt_gatt_client_h client,
+				    bt_gatt_foreach_cb callback, void *user_data);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
