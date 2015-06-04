@@ -19,7 +19,7 @@
 #define __TIZEN_NETWORK_BLUETOOTH_EXTENSION_H__
 
 #include "bluetooth_type.h"
-#include "bluetooth_type_extention.h"
+#include "bluetooth_type_extension.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -76,6 +76,7 @@ int bt_ag_open_sco(void);
 int bt_ag_close_sco(void);
 
 /**
+ * @internal
  * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_AG_MODULE
  * @brief Checks whether an opened SCO(Synchronous Connection Oriented link) exists or not.
  * @since_tizen 2.3
@@ -94,6 +95,7 @@ int bt_ag_close_sco(void);
 int bt_ag_is_sco_opened(bool *opened);
 
 /**
+ * @internal
  * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_AG_MODULE
  * @brief  Registers a callback function that will be invoked when the SCO(Synchronous Connection Oriented link) state is changed.
  * @since_tizen 2.3
@@ -113,6 +115,7 @@ int bt_ag_is_sco_opened(bool *opened);
 int bt_ag_set_sco_state_changed_cb(bt_ag_sco_state_changed_cb callback, void *user_data);
 
 /**
+ * @internal
  * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_AG_MODULE
  * @brief  Unregisters a callback function that will be invoked when the SCO(Synchronous Connection Oriented link) state is changed.
  * @since_tizen 2.3
@@ -129,6 +132,7 @@ int bt_ag_set_sco_state_changed_cb(bt_ag_sco_state_changed_cb callback, void *us
 int bt_ag_unset_sco_state_changed_cb(void);
 
 /**
+ * @internal
  * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_AG_MODULE
  * @brief Notifies the state of voice recognition.
  * @since_tizen 2.3
@@ -159,5 +163,5 @@ int bt_ag_notify_voice_recognition_state(bool state);
 }
 #endif /* __cplusplus */
 
-#endif // __TIZEN_NETWORK_BLUETOOTH_EXTENSION_H__
+#endif // __TIZEN_NETWORK_BLUETOOTH_EXTENTION_H__
 

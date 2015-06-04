@@ -20,6 +20,7 @@
 #include <bluetooth-api.h>
 
 #include "bluetooth.h"
+#include "bluetooth_internal.h"
 #include "bluetooth_private.h"
 
 int bt_device_create_bond(const char *device_address)
@@ -27,6 +28,7 @@ int bt_device_create_bond(const char *device_address)
 	bluetooth_device_address_t addr_hex = { {0,} };
 	int error_code = BT_ERROR_NONE;
 
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(device_address);
 
@@ -44,6 +46,8 @@ int bt_device_create_bond_by_type(const char *device_address,
 {
 	bluetooth_device_address_t addr_hex = { {0,} };
 	int error_code = BT_ERROR_NONE;
+
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(device_address);
 
@@ -60,6 +64,7 @@ int bt_device_cancel_bonding(void)
 {
 	int error_code = BT_ERROR_NONE;
 
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	error_code = _bt_get_error_code(bluetooth_cancel_bonding());
 	if (error_code != BT_ERROR_NONE) {
@@ -74,6 +79,7 @@ int bt_device_destroy_bond(const char *device_address)
 	bluetooth_device_address_t addr_hex = { {0,} };
 	int error_code = BT_ERROR_NONE;
 
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(device_address);
 
@@ -91,6 +97,7 @@ int bt_device_set_alias(const char *device_address, const char *alias)
 	bluetooth_device_address_t addr_hex = { {0,} };
 	int error_code = BT_ERROR_NONE;
 
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(device_address);
 	BT_CHECK_INPUT_PARAMETER(alias);
@@ -109,6 +116,7 @@ int bt_device_set_authorization(const char *device_address, bt_device_authorizat
 	gboolean trusted = FALSE;
 	int error_code = BT_ERROR_NONE;
 
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(device_address);
 
@@ -128,6 +136,7 @@ int bt_device_start_service_search(const char *device_address)
 	bluetooth_device_address_t addr_hex = { {0,} };
 	int ret = 0;
 
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(device_address);
 
@@ -148,6 +157,7 @@ int bt_device_cancel_service_search(void)
 {
 	int ret = 0;
 
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	ret = _bt_get_error_code(bluetooth_cancel_service_search());
 	if (ret != BT_ERROR_NONE) {
@@ -168,6 +178,7 @@ int bt_device_foreach_connected_profiles(const char *remote_address, bt_device_c
 			BT_PROFILE_AG, BT_PROFILE_GATT, BT_PROFILE_NAP_SERVER,
 			0};
 
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(remote_address);
 	BT_CHECK_INPUT_PARAMETER(callback);
@@ -201,6 +212,7 @@ int bt_device_is_profile_connected(const char *remote_address, bt_profile_e bt_p
 	int ret;
 	gboolean is_connected = FALSE;
 
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(remote_address);
 
@@ -221,6 +233,7 @@ int bt_device_is_profile_connected(const char *remote_address, bt_profile_e bt_p
 
 int bt_device_set_bond_created_cb(bt_device_bond_created_cb callback, void *user_data)
 {
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(callback);
 	_bt_set_cb(BT_EVENT_BOND_CREATED, callback, user_data);
@@ -230,6 +243,7 @@ int bt_device_set_bond_created_cb(bt_device_bond_created_cb callback, void *user
 
 int bt_device_set_bond_destroyed_cb(bt_device_bond_destroyed_cb callback, void *user_data)
 {
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(callback);
 	_bt_set_cb(BT_EVENT_BOND_DESTROYED, callback, user_data);
@@ -239,6 +253,7 @@ int bt_device_set_bond_destroyed_cb(bt_device_bond_destroyed_cb callback, void *
 
 int bt_device_set_authorization_changed_cb(bt_device_authorization_changed_cb callback, void *user_data)
 {
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(callback);
 	_bt_set_cb(BT_EVENT_AUTHORIZATION_CHANGED, callback, user_data);
@@ -248,6 +263,7 @@ int bt_device_set_authorization_changed_cb(bt_device_authorization_changed_cb ca
 
 int bt_device_set_service_searched_cb(bt_device_service_searched_cb callback, void *user_data)
 {
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(callback);
 	_bt_set_cb(BT_EVENT_SERVICE_SEARCHED, callback, user_data);
@@ -255,8 +271,22 @@ int bt_device_set_service_searched_cb(bt_device_service_searched_cb callback, vo
 	return BT_ERROR_NONE;
 }
 
+int bt_device_get_connection_state(const char *remote_address,
+		bt_device_connection_link_type_e link_type, bool *connected)
+{
+	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(remote_address);
+	BT_CHECK_INPUT_PARAMETER(connected);
+
+	/* Will implement after synch bluetooth-frwk */
+
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
 int bt_device_set_connection_state_changed_cb(bt_device_connection_state_changed_cb callback, void *user_data)
 {
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(callback);
 	_bt_set_cb(BT_EVENT_DEVICE_CONNECTION_STATUS, callback, user_data);
@@ -266,6 +296,7 @@ int bt_device_set_connection_state_changed_cb(bt_device_connection_state_changed
 
 int bt_device_unset_bond_created_cb(void)
 {
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	_bt_unset_cb(BT_EVENT_BOND_CREATED);
 	return BT_ERROR_NONE;
@@ -273,6 +304,7 @@ int bt_device_unset_bond_created_cb(void)
 
 int bt_device_unset_bond_destroyed_cb(void)
 {
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	_bt_unset_cb(BT_EVENT_BOND_DESTROYED);
 	return BT_ERROR_NONE;
@@ -280,6 +312,7 @@ int bt_device_unset_bond_destroyed_cb(void)
 
 int bt_device_unset_authorization_changed_cb(void)
 {
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	_bt_unset_cb(BT_EVENT_AUTHORIZATION_CHANGED);
 	return BT_ERROR_NONE;
@@ -287,6 +320,7 @@ int bt_device_unset_authorization_changed_cb(void)
 
 int bt_device_unset_service_searched_cb(void)
 {
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	_bt_unset_cb(BT_EVENT_SERVICE_SEARCHED);
 	return BT_ERROR_NONE;
@@ -294,6 +328,7 @@ int bt_device_unset_service_searched_cb(void)
 
 int bt_device_unset_connection_state_changed_cb(void)
 {
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	_bt_unset_cb(BT_EVENT_DEVICE_CONNECTION_STATUS);
 	return BT_ERROR_NONE;
@@ -306,6 +341,7 @@ int bt_device_le_conn_update(const char *device_address,
 	bluetooth_le_conn_update_t param= { 0 };
 	int ret = BT_ERROR_NONE;
 
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(device_address);
 	BT_CHECK_INPUT_PARAMETER(parameters);
@@ -329,15 +365,17 @@ int bt_device_get_service_mask_from_uuid_list(char **uuids,
 				      int no_of_service,
 				      bt_service_class_t *service_mask_list)
 {
-	BT_DBG("Get service mask from uuid list");
-	BT_CHECK_INPUT_PARAMETER(uuids);
-	BT_CHECK_INPUT_PARAMETER(service_mask_list);
-
 	int i = 0;
 	unsigned int service = 0;
 	char **parts = NULL;
 	bt_service_class_t service_mask = 0;
 
+	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_INPUT_PARAMETER(uuids);
+	BT_CHECK_INPUT_PARAMETER(service_mask_list);
+	BT_CHECK_INIT_STATUS();
+
+	BT_DBG("Get service mask from uuid list");
 	BT_DBG("no_of_service = %d", no_of_service);
 
 	for (i = 0; i < no_of_service; i++) {
@@ -385,7 +423,7 @@ int bt_device_get_service_mask_from_uuid_list(char **uuids,
 			break;
 
 		case BLUETOOTH_AUDIO_SOURCE_UUID:
-			service_mask |= BT_SC_NONE;
+			service_mask |= BT_SC_A2DP_SOURCE_SERVICE_MASK;
 			break;
 
 		case BLUETOOTH_AUDIO_SINK_UUID:
@@ -402,10 +440,6 @@ int bt_device_get_service_mask_from_uuid_list(char **uuids,
 
 		case BLUETOOTH_AV_REMOTE_CONTROL_TARGET_UUID:
 			service_mask |= BT_SC_NONE;
-			break;
-
-		case BLUETOOTH_ADVANCED_AUDIO_PROFILE_UUID:
-			service_mask |= BT_SC_A2DP_SERVICE_MASK;
 			break;
 
 		case BLUETOOTH_AV_REMOTE_CONTROL_UUID:

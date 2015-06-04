@@ -47,6 +47,7 @@ typedef enum
 	BT_ERROR_NOT_SUPPORTED = TIZEN_ERROR_NETWORK_CLASS|0x0111, /**< Not Supported */
 	BT_ERROR_PERMISSION_DENIED = TIZEN_ERROR_NETWORK_CLASS|0x0112, /**< Permission denied */
 	BT_ERROR_QUOTA_EXCEEDED = TIZEN_ERROR_NETWORK_CLASS|0x0113, /**< Quota exceeded */
+	BT_ERROR_NO_DATA = TIZEN_ERROR_NETWORK_CLASS|0x0114, /**< No data available */
 	BT_ERROR_NOT_INITIALIZED = TIZEN_ERROR_NETWORK_CLASS|0x0101, /**< Local adapter not initialized */
 	BT_ERROR_NOT_ENABLED = TIZEN_ERROR_NETWORK_CLASS|0x0102, /**< Local adapter not enabled */
 	BT_ERROR_ALREADY_DONE = TIZEN_ERROR_NETWORK_CLASS|0x0103, /**< Operation already done  */
@@ -74,6 +75,7 @@ typedef enum
 } bt_adapter_state_e;
 
 /**
+ * @internal
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
  * @brief  Enumerations of the Bluetooth adapter le state.
  * @since_tizen 2.3
@@ -110,9 +112,11 @@ typedef enum
 } bt_adapter_device_discovery_state_e;
 
 /**
+ * @deprecated Deprecated since 2.3.1
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
  * @brief Enumerations of the discovery state of Bluetooth LE device.
  * @since_tizen 2.3
+ *
  */
 typedef enum
 {
@@ -159,6 +163,7 @@ typedef enum {
 } bt_adapter_le_advertising_filter_policy_e;
 
 /**
+ * @deprecated Deprecated since 2.3.1
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
  * @brief  Enumerations of the Bluetooth advertising type.
  * @since_tizen 2.3
@@ -182,13 +187,14 @@ typedef enum {
 } bt_adapter_le_packet_type_e;
 
 /**
+ * @deprecated Deprecated since 2.3.1
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
  * @brief  Enumerations of the Bluetooth LE data type
  *         that can be included in LE packets.
  * @since_tizen 2.3
  */
 typedef enum {
-	BT_ADAPTER_LE_PACKET_DATA_COMP_LIST_16_BIT_SERVICE_CLASS_UUIDS = 0x03, /**< 16 bit UUID */
+	BT_ADAPTER_LE_PACKET_DATA_COMP_LIST_16_BIT_SERVICE_CLASS_UUIDS = 0x03, /**< Complete list of 16 bit UUIDs */
 	BT_ADAPTER_LE_PACKET_DATA_MANUFACTURER_SPECIFIC_DATA = 0xff, /**< Manufacturer data */
 } bt_adapter_le_packet_data_type_e;
 
@@ -236,13 +242,14 @@ typedef enum
 typedef enum
 {
     BT_PROFILE_RFCOMM = 0x01, /**< RFCOMM Profile */
-    BT_PROFILE_A2DP = 0x02, /**< Advanced Audio Distribution Profile */
+    BT_PROFILE_A2DP = 0x02, /**< Advanced Audio Distribution Profile Source role */
     BT_PROFILE_HSP = 0x04, /**< Headset Profile */
     BT_PROFILE_HID = 0x08, /**< Human Interface Device Profile */
     BT_PROFILE_NAP = 0x10, /**< Network Access Point Profile */
     BT_PROFILE_AG = 0x20, /**< Audio Gateway Profile */
     BT_PROFILE_GATT = 0x40, /**< Generic Attribute Profile */
     BT_PROFILE_NAP_SERVER = 0x80, /**< NAP server Profile */
+    BT_PROFILE_A2DP_SINK = 0x100, /**< Advanced Audio Distribution Profile Sink role */
 } bt_profile_e;
 
 /**
@@ -285,6 +292,7 @@ typedef enum {
 	BT_SC_AVRCP_SERVICE_MASK = 0x00080000, /**< AVRCP service class */
 	BT_SC_PBAP_SERVICE_MASK = 0x00100000, /**< PBAP service class */
 	BT_SC_HID_SERVICE_MASK = 0x00200000, /**< HID service class */
+	BT_SC_A2DP_SOURCE_SERVICE_MASK = 0x00400000, /**< A2DP SOURCE service class */
 	BT_SC_ALL_SERVICE_MASK = 0x00FFFFFF, /**< ALL service class */
 	BT_SC_MAX /**< MAX service class */
 } bt_service_class_t;
@@ -469,6 +477,7 @@ typedef enum {
     BT_AUDIO_PROFILE_TYPE_HSP_HFP,  /**< HSP(Headset Profile) and HFP(Hands-Free Profile) */
     BT_AUDIO_PROFILE_TYPE_A2DP,  /**< A2DP(Advanced Audio Distribution Profile) */
     BT_AUDIO_PROFILE_TYPE_AG,  /**< AG(Audio Gateway) */
+    BT_AUDIO_PROFILE_TYPE_A2DP_SINK,  /**< A2DP(Advanced Audio Distribution Profile) sink role */
 } bt_audio_profile_type_e;
 
 /**
@@ -530,10 +539,9 @@ typedef enum {
 } bt_ag_call_state_e;
 
 /**
- * @internal
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Enumerations for the equalizer state
- * @since_tizen 2.3
+ * @since_tizen 2.4
  */
 typedef enum {
     BT_AVRCP_EQUALIZER_STATE_OFF = 0x01,  /**< Equalizer Off */
@@ -541,10 +549,9 @@ typedef enum {
 } bt_avrcp_equalizer_state_e;
 
 /**
- * @internal
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Enumerations for the repeat mode
- * @since_tizen 2.3
+ * @since_tizen 2.4
  */
 typedef enum {
     BT_AVRCP_REPEAT_MODE_OFF = 0x01,  /**< Repeat Off */
@@ -554,10 +561,9 @@ typedef enum {
 } bt_avrcp_repeat_mode_e;
 
 /**
- * @internal
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Enumerations for the shuffle mode
- * @since_tizen 2.3
+ * @since_tizen 2.4
  */
 typedef enum {
     BT_AVRCP_SHUFFLE_MODE_OFF = 0x01,  /**< Shuffle Off */
@@ -566,10 +572,9 @@ typedef enum {
 } bt_avrcp_shuffle_mode_e;
 
 /**
- * @internal
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Enumerations for the scan mode
- * @since_tizen 2.3
+ * @since_tizen 2.4
  */
 typedef enum {
     BT_AVRCP_SCAN_MODE_OFF = 0x01,  /**< Scan Off */
@@ -578,10 +583,9 @@ typedef enum {
 } bt_avrcp_scan_mode_e;
 
 /**
- * @internal
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Enumerations for the player state
- * @since_tizen 2.3
+ * @since_tizen 2.4
  */
 typedef enum {
     BT_AVRCP_PLAYER_STATE_STOPPED = 0x00,  /**< Stopped */
@@ -602,6 +606,77 @@ typedef enum {
 } bt_hdp_channel_type_e;
 
 /**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Enumerations of the integer type for GATT handle's value
+ * @since_tizen 2.3.1
+ */
+typedef enum {
+	BT_DATA_TYPE_SINT8,  /**< 8 bit signed int type */
+	BT_DATA_TYPE_SINT16,  /**< 16 bit signed int type */
+	BT_DATA_TYPE_SINT32,  /**< 32 bit signed int type */
+	BT_DATA_TYPE_UINT8,  /**< 8 bit unsigned int type */
+	BT_DATA_TYPE_UINT16,  /**< 16 bit unsigned int type */
+	BT_DATA_TYPE_UINT32  /**< 32 bit unsigned int type */
+} bt_data_type_int_e;
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Enumerations of the float type for GATT handle's value
+ * @since_tizen 2.3.1
+ */
+typedef enum {
+	BT_DATA_TYPE_FLOAT,  /**< 32 bit float type */
+	BT_DATA_TYPE_SFLOAT  /**< 16 bit float type */
+} bt_data_type_float_e;
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Enumerations of the write type
+ * @since_tizen 2.3.1
+ */
+typedef enum {
+	BT_GATT_WRITE_TYPE_WRITE_NO_RESPONSE,  /**< Write without response type */
+	BT_GATT_WRITE_TYPE_WRITE  /**< Write type */
+} bt_gatt_write_type_e;
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Enumerations of the GATT handle's type
+ * @since_tizen 2.3.1
+ */
+typedef enum {
+	BT_GATT_TYPE_SERVICE = 0x01,  /**< GATT service type */
+	BT_GATT_TYPE_CHARACTERISTIC = 0x02,  /** GATT characteristic type */
+	BT_GATT_TYPE_DESCRIPTOR = 0x03,  /** GATT descriptor type */
+} bt_gatt_type_e;
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Enumerations of the service type
+ * @since_tizen 2.3.1
+ */
+typedef enum {
+	BT_GATT_SERVICE_TYPE_PRIMARY = 0x01,  /**< GATT primary service type */
+	BT_GATT_SERVICE_TYPE_SECONDARY = 0x02,  /**< GATT secondary service type */
+} bt_gatt_service_type_e;
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Enumerations of the characteristic's property
+ * @since_tizen 2.3.1
+ */
+typedef enum {
+	BT_GATT_PROPERTY_BROADCAST = 0x01,  /**< Broadcast property */
+	BT_GATT_PROPERTY_READ = 0x02,  /**< Read property */
+	BT_GATT_PROPERTY_WRITE_WITHOUT_RESPONSE = 0x04,  /**< Write without response property */
+	BT_GATT_PROPERTY_WRITE = 0x08,  /**< Write property */
+	BT_GATT_PROPERTY_NOTIFY = 0x10,  /**< Notify property */
+	BT_GATT_PROPERTY_INDICATE = 0x20,  /**< Indicate property */
+	BT_GATT_PROPERTY_AUTHENTICATED_SIGNED_WRITES = 0x40,  /**< Authenticated signed writes property */
+	BT_GATT_PROPERTY_EXTENDED_PROPERTIES = 0x80,  /**< Extended properties */
+} bt_gatt_property_e;
+
+/**
  * @ingroup CAPI_NETWORK_BLUETOOTH_PAN_PANU_MODULE
  * @brief  Enumerations for the types of PAN(Personal Area Networking) service
  * @since_tizen 2.3
@@ -618,6 +693,7 @@ typedef enum {
 typedef void* bt_advertiser_h;
 
 /**
+ * @deprecated Deprecated since 2.3.1. Use bt_gatt_h instead.
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
  * @brief  The attribute handle of GATT(Generic Attribute Profile)
  * @since_tizen 2.3
@@ -686,6 +762,7 @@ typedef struct
 } bt_adapter_device_discovery_info_s;
 
 /**
+ * @deprecated Deprecated since 2.3.1
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
  * @brief Structure of le device discovery information.
  * @since_tizen 2.3
@@ -728,7 +805,6 @@ typedef struct
  * @brief Structure of advertising parameters
  * @since_tizen 2.3
  *
- * @see #bt_class_s
  * @see bt_adapter_le_advertising_state_changed_cb()
  * @see bt_adapter_le_start_advertising()
  */
@@ -740,6 +816,20 @@ typedef struct {
 	char filter_policy; /* Advertising filter policy */
 	char type; /* Advertising type */
 } bt_adapter_le_advertising_params_s;
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
+ * @brief LE service data structure
+ * @since_tizen 2.3.1
+ *
+ * @see bt_adapter_le_get_scan_result_service_data()
+ */
+typedef struct
+{
+	char *service_uuid;	/**< 16 bit UUID of the service data */
+	char *service_data;	/**< Service data */
+	int service_data_len;	/**< Service data length */
+} bt_adapter_le_service_data_s;
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DEVICE_MODULE
@@ -966,6 +1056,7 @@ typedef void (*bt_adapter_connectable_changed_cb)
 	(int result, bool connectable, void *user_data);
 
 /**
+ * @deprecated Deprecated since 2.3.1
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
  * @brief  Called when the state of LE device discovery changes.
  * @since_tizen 2.3
@@ -1017,7 +1108,7 @@ typedef void (*bt_adapter_le_scan_result_cb)(int result,
  * @param[out] adv_state The advertiser state to be changed
  * @param[out] user_data The user data passed from the start function
  *
- * @see bt_adapter_le_start_advertising()
+ * @see bt_adapter_le_start_advertising_new()
  * @see bt_adapter_le_stop_advertising()
  */
 typedef void (*bt_adapter_le_advertising_state_changed_cb)(int result,
@@ -1097,6 +1188,7 @@ typedef bool (*bt_device_connected_profile)(bt_profile_e profile, void *user_dat
 typedef void (*bt_device_bond_destroyed_cb)(int result, char *remote_address, void *user_data);
 
 /**
+ * @internal
  * @ingroup CAPI_NETWORK_BLUETOOTH_DEVICE_MODULE
  * @brief  Called when the authorization of device changes.
  * @since_tizen 2.3
@@ -1115,7 +1207,7 @@ typedef void (*bt_device_authorization_changed_cb)
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DEVICE_MODULE
- * @brief
+ * @brief  Called when the process of service search finishes.
  * @since_tizen 2.3
  *
  * @remark
@@ -1216,6 +1308,7 @@ typedef void (*bt_socket_connection_requested_cb) (int socket_fd, const char *re
 typedef void (*bt_opp_server_push_requested_cb)(const char *file, int size, void *user_data);
 
 /**
+ * @internal
  * @ingroup CAPI_NETWORK_BLUETOOTH_OPP_SERVER_MODULE
  * @brief  Called when an OPP connection is requested.
  * @since_tizen 2.3
@@ -1499,6 +1592,7 @@ typedef void (*bt_hdp_disconnected_cb) (int result, const char *remote_address, 
 typedef void (*bt_hdp_data_received_cb) (unsigned int channel, const char *data, unsigned int size, void *user_data);
 
 /**
+ * @deprecated Deprecated since 2.3.1. Use bt_gatt_foreach_cb instead.
  * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
  * @brief  Called when you get the primary services repeatedly.
  * @since_tizen 2.3
@@ -1513,6 +1607,7 @@ typedef void (*bt_hdp_data_received_cb) (unsigned int channel, const char *data,
 typedef bool (*bt_gatt_primary_service_cb) (bt_gatt_attribute_h service, void *user_data);
 
 /**
+ * @deprecated Deprecated since 2.3.1. This is not required because characteristic discovery is happened automatically.
  * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
  * @brief  Called after the characteristics are discovered by bt_gatt_discover_characteristics().
  * @since_tizen 2.3
@@ -1531,6 +1626,7 @@ typedef bool (*bt_gatt_primary_service_cb) (bt_gatt_attribute_h service, void *u
 typedef bool (*bt_gatt_characteristics_discovered_cb) (int result, int index, int total, bt_gatt_attribute_h characteristic, void *user_data);
 
 /**
+ * @deprecated Deprecated since 2.3.1. Use bt_gatt_foreach_cb instead.
  * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
  * @brief  Called when you get the included services repeatedly.
  * @since_tizen 2.3
@@ -1545,6 +1641,7 @@ typedef bool (*bt_gatt_characteristics_discovered_cb) (int result, int index, in
 typedef bool (*bt_gatt_included_service_cb) (bt_gatt_attribute_h service, void *user_data);
 
 /**
+ * @deprecated Deprecated since 2.3.1. Use bt_gatt_client_characteristic_value_changed_cb instead.
  * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
  * @brief  Called when a characteristic in service is changed.
  * @since_tizen 2.3
@@ -1559,6 +1656,7 @@ typedef bool (*bt_gatt_included_service_cb) (bt_gatt_attribute_h service, void *
 typedef void (*bt_gatt_characteristic_changed_cb) (bt_gatt_attribute_h characteristic, unsigned char *value, int value_length, void *user_data);
 
 /**
+ * @deprecated Deprecated since 2.3.1. Use bt_gatt_client_request_completed_cb instead.
  * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
  * @brief  Called when a characteristic value is written.
  * @since_tizen 2.3
@@ -1568,6 +1666,7 @@ typedef void (*bt_gatt_characteristic_changed_cb) (bt_gatt_attribute_h character
 typedef void (*bt_gatt_characteristic_write_cb) (void *user_data);
 
 /**
+ * @deprecated Deprecated since 2.3.1. Use bt_gatt_client_request_completed_cb instead.
  * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
  * @brief  Called when a characteristic value is read.
  * @since_tizen 2.3
@@ -1581,6 +1680,7 @@ typedef void (*bt_gatt_characteristic_read_cb) (unsigned char *value,
 			int value_length, void *user_data);
 
 /**
+ * @deprecated Deprecated since 2.3.1. This is not required because descriptor discovery is happened automatically.
  * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
  * @brief  Called after the characteristics descriptors are discovered by bt_gatt_discover_characteristic_descriptor().
  * @since_tizen 2.3
@@ -1597,6 +1697,58 @@ typedef void (*bt_gatt_characteristic_read_cb) (unsigned char *value,
 typedef void (*bt_gatt_characteristic_descriptor_discovered_cb) (int result,
 		unsigned char characteristic_format, int total,
 		bt_gatt_attribute_h characteristic_descriptor, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Called when you get GATT handles repeatedly
+ * @since_tizen 2.3.1
+ *
+ * @param[in] total The total number of GATT handles to be called
+ * @param[in] index The index of current GATT handle. It starts from 0.
+ * @param[in] gatt_handle The GATT handle
+ * @param[in] user_data The user data passed from the foreach function
+ *
+ * @see bt_gatt_service_foreach_characteristics()
+ * @see bt_gatt_service_foreach_included_services()
+ * @see bt_gatt_characteristic_foreach_descriptors()
+ * @see bt_gatt_server_foreach_services()
+ * @see bt_gatt_client_foreach_services()
+ */
+typedef bool (*bt_gatt_foreach_cb) (int total, int index, bt_gatt_h gatt_handle,
+				    void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Called when the client request(e.g. read / write) has been completed
+ * @since_tizen 2.3.1
+ *
+ * @param[in] result The result of a request
+ * @param[in] request_handle The requesting GATT handle
+ * @param[in] user_data The user data passed from the requesting function
+ *
+ * @see bt_gatt_client_read_value()
+ * @see bt_gatt_client_write_value()
+ */
+typedef void (*bt_gatt_client_request_completed_cb) (int result,
+		bt_gatt_h request_handle, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Called when a value of a watched characteristic's GATT handle has been changed
+ * @since_tizen 2.3.1
+ *
+ * @remarks After this function is returned, a changed vlaue is automatically
+ * applied to @a characteristic. Before that, @a characteristic has an old value.
+ *
+ * @param[in] characteristic The characteristic's GATT handle of which value change is informed. It has an old value.
+ * @param[in] value The new value
+ * @param[in] len The length of @a value
+ * @param[in] user_data The user data passed from the registering function
+ *
+ * @see bt_gatt_client_set_characteristic_value_changed_cb()
+ */
+typedef void (*bt_gatt_client_characteristic_value_changed_cb) (bt_gatt_h characteristic,
+		char *value, int len, void *user_data);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE

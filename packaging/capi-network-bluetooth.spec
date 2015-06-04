@@ -47,6 +47,10 @@ export CXXFLAGS="$CXXFLAGS -DTIZEN_WEARABLE"
 export FFLAGS="$FFLAGS -DTIZEN_WEARABLE"
 %endif
 
+export CFLAGS="$CFLAGS -DBT_ENABLE_LEGACY_GATT_CLIENT"
+export CXXFLAGS="$CXXFLAGS -DBT_ENABLE_LEGACY_GATT_CLIENT"
+export FFLAGS="$FFLAGS -DBT_ENABLE_LEGACY_GATT_CLIENT"
+
 export CFLAGS="$CFLAGS -DTIZEN_DEBUG_ENABLE"
 export CXXFLAGS="$CXXFLAGS -DTIZEN_DEBUG_ENABLE"
 export FFLAGS="$FFLAGS -DTIZEN_DEBUG_ENABLE"
@@ -115,8 +119,8 @@ make %{?jobs:-j%jobs}
 %{_includedir}/network/bluetooth_internal.h
 %{_includedir}/network/bluetooth_type.h
 %{_includedir}/network/bluetooth_type_internal.h
-%{_includedir}/network/bluetooth_extention.h
-%{_includedir}/network/bluetooth_type_extention.h
+%{_includedir}/network/bluetooth_extension.h
+%{_includedir}/network/bluetooth_type_extension.h
 %{_libdir}/pkgconfig/capi-network-bluetooth.pc
 %{_libdir}/libcapi-network-bluetooth.so
 #%{_datadir}/license/capi-network-bluetooth-devel

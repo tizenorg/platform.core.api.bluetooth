@@ -161,9 +161,10 @@
  * @section CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE_HEADER Required Header
  *  \#include <bluetooth.h>
  *
- * @section CAPI_NETWORK_BLUETOOTH_DEVICE_MODULE_OVERVIEW Overview
+ * @section CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE_OVERVIEW Overview
+ * Bluetooth stack architecture has been changed. Thus, GATT APIs defined in Tizen 2.3 are deprecated and new GATT client APIs are defined.
  *
- * @section CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE_MODULE_FEATURE Related Features
+ * @section CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE_FEATURE Related Features
  * This API is related with the following features:\n
  *  - http://tizen.org/feature/network.bluetooth\n
  *  - http://tizen.org/feature/network.bluetooth.le\n
@@ -198,7 +199,6 @@
  * @section CAPI_NETWORK_BLUETOOTH_DEVICE_MODULE_FEATURE Related Features
  * This API is related with the following features:\n
  *  - http://tizen.org/feature/network.bluetooth\n
- *  - http://tizen.org/feature/network.bluetooth.le\n
  *
  * It is recommended to design feature related codes in your application for reliability.\n
  *
@@ -676,7 +676,8 @@
  * Two roles are defined for devices that implement GATT.
  * The @a Server is the device that accepts incoming commands and requests from the client and sends responses, indications and notifications to a client.
  * The @a Client is the device that initiates commands and requests towards the server and can receive responses, indications and notifications sent by the server.
- * This API supports the @a Client role in GATT.
+ * This API supports the @a Client role in GATT. \n
+ * Bluetooth stack architecture has been changed. Thus, GATT APIs defined in Tizen 2.3 are deprecated and new GATT client APIs are defined.
  *
  * @section CAPI_NETWORK_BLUETOOTH_GATT_MODULE_FEATURE Related Features
  * This API is related with the following features:\n

@@ -27,6 +27,17 @@
 GList *sending_files;
 static bool is_opp_client_initialized = false;
 
+#ifdef TIZEN_OPP_CLIENT_DISABLE
+#define BT_CHECK_OPP_CLIENT_SUPPORT() \
+	{ \
+		BT_CHECK_BT_SUPPORT(); \
+		LOGE("[%s] NOT_SUPPORTED(0x%08x)", __FUNCTION__, BT_ERROR_NOT_SUPPORTED); \
+		return BT_ERROR_NOT_SUPPORTED; \
+	}
+#else
+#define BT_CHECK_OPP_CLIENT_SUPPORT()
+#endif
+
 #define BT_CHECK_OPP_CLIENT_INIT_STATUS() \
 	if (__bt_check_opp_client_init_status() == BT_ERROR_NOT_INITIALIZED) \
 	{ \
@@ -82,6 +93,7 @@ int bt_opp_client_initialize(void)
 {
 	int error_code = BT_ERROR_NONE;
 
+	BT_CHECK_OPP_CLIENT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
 	error_code = _bt_get_error_code(bluetooth_opc_init());
@@ -100,6 +112,7 @@ int bt_opp_client_deinitialize(void)
 {
 	int error_code = BT_ERROR_NONE;
 
+	BT_CHECK_OPP_CLIENT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_OPP_CLIENT_INIT_STATUS();
 
@@ -120,9 +133,11 @@ int bt_opp_client_add_file(const char *file)
 {
 	int error_code = BT_ERROR_NONE;
 
+	BT_CHECK_OPP_CLIENT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_OPP_CLIENT_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(file);
+	BT_CHECK_ADAPTER_STATUS();
 
 	if (access(file, F_OK) == 0) {
 		sending_files = g_list_append(sending_files, strdup(file));
@@ -144,8 +159,10 @@ int bt_opp_client_clear_files(void)
 	int file_num = 0;
 	char *c_file = NULL;
 
+	BT_CHECK_OPP_CLIENT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_OPP_CLIENT_INIT_STATUS();
+	BT_CHECK_ADAPTER_STATUS();
 
 	if (sending_files) {
 		file_num = g_list_length(sending_files);
@@ -176,6 +193,7 @@ int bt_opp_client_push_files(const char *remote_address,
 	bluetooth_device_address_t addr_hex = { {0,} };
 	char **files = NULL;
 
+	BT_CHECK_OPP_CLIENT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_OPP_CLIENT_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(remote_address);
@@ -207,6 +225,7 @@ int bt_opp_client_cancel_push(void)
 {
 	int error_code = BT_ERROR_NONE;
 
+	BT_CHECK_OPP_CLIENT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_OPP_CLIENT_INIT_STATUS();
 

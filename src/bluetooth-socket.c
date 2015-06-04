@@ -27,6 +27,7 @@ int bt_socket_create_rfcomm(const char *uuid, int *socket_fd)
 {
 	int ret = 0;
 
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(uuid);
 	BT_CHECK_INPUT_PARAMETER(socket_fd);
@@ -46,6 +47,7 @@ int bt_socket_destroy_rfcomm(int socket_fd)
 {
 	int error_code = BT_ERROR_NONE;
 
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	error_code = _bt_get_error_code(bluetooth_rfcomm_remove_socket(socket_fd));
 	if (error_code != BT_ERROR_NONE) {
@@ -58,6 +60,7 @@ int bt_socket_destroy_rfcomm(int socket_fd)
 
 int bt_socket_is_service_used(const char* service_uuid, bool *used)
 {
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(service_uuid);
 	BT_CHECK_INPUT_PARAMETER(used);
@@ -71,6 +74,7 @@ int bt_socket_listen_and_accept_rfcomm(int socket_fd, int max_pending_connection
 {
 	int error_code = BT_ERROR_NONE;
 
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	error_code = _bt_get_error_code(bluetooth_rfcomm_listen_and_accept(socket_fd, max_pending_connections));
 	if (error_code != BT_ERROR_NONE) {
@@ -85,6 +89,7 @@ int bt_socket_listen(int socket_fd, int max_pending_connections)
 {
 	int error_code = BT_ERROR_NONE;
 
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
 	error_code = _bt_get_error_code(bluetooth_rfcomm_listen(socket_fd, max_pending_connections));
@@ -98,6 +103,11 @@ int bt_socket_listen(int socket_fd, int max_pending_connections)
 
 int bt_socket_accept(int socket_fd)
 {
+	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_INIT_STATUS();
+
+	/* Will implement after synch bluetooth-frwk */
+
 	return BT_ERROR_NOT_SUPPORTED;
 }
 
@@ -105,6 +115,7 @@ int bt_socket_reject(int socket_fd)
 {
 	int error_code = BT_ERROR_NONE;
 
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
 	error_code = _bt_get_error_code(bluetooth_rfcomm_reject_connection(socket_fd));
@@ -116,11 +127,49 @@ int bt_socket_reject(int socket_fd)
 	return error_code;
 }
 
+int bt_socket_create_rfcomm_ex(const char *uuid, const char *bus_name, const char *object_path)
+{
+	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(uuid);
+	BT_CHECK_INPUT_PARAMETER(bus_name);
+	BT_CHECK_INPUT_PARAMETER(object_path);
+
+	/* Will implement after synch bluetooth-frwk */
+
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
+int bt_socket_destroy_rfcomm_ex(const char *uuid)
+{
+	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(uuid);
+
+	/* Will implement after synch bluetooth-frwk */
+
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
+int bt_socket_listen_and_accept_rfcomm_ex(const char *uuid, int max_pending_connections, const char* bus_name, const char *object_path)
+{
+	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(uuid);
+	BT_CHECK_INPUT_PARAMETER(bus_name);
+	BT_CHECK_INPUT_PARAMETER(object_path);
+
+	/* Will implement after synch bluetooth-frwk */
+
+	return BT_ERROR_NOT_SUPPORTED;
+}
+
 int bt_socket_connect_rfcomm(const char *remote_address, const char *remote_port_uuid)
 {
 	bluetooth_device_address_t addr_hex = { {0,} };
 	int error_code = BT_ERROR_NONE;
 
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(remote_address);
 	BT_CHECK_INPUT_PARAMETER(remote_port_uuid);
@@ -140,6 +189,7 @@ int bt_socket_disconnect_rfcomm(int socket_fd)
 {
 	int error_code = BT_ERROR_NONE;
 
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
 	error_code = _bt_get_error_code(bluetooth_rfcomm_disconnect(socket_fd));
@@ -155,6 +205,7 @@ int bt_socket_send_data(int socket_fd, const char *data, int length)
 {
 	int ret = 0;
 
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
 	ret = bluetooth_rfcomm_write(socket_fd, data, length);
@@ -180,6 +231,7 @@ int bt_socket_send_data(int socket_fd, const char *data, int length)
 
 int bt_socket_set_data_received_cb(bt_socket_data_received_cb callback, void *user_data)
 {
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(callback);
 	_bt_set_cb(BT_EVENT_DATA_RECEIVED, callback, user_data);
@@ -188,6 +240,7 @@ int bt_socket_set_data_received_cb(bt_socket_data_received_cb callback, void *us
 
 int bt_socket_unset_data_received_cb(void)
 {
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	_bt_unset_cb(BT_EVENT_DATA_RECEIVED);
 	return BT_ERROR_NONE;
@@ -195,6 +248,7 @@ int bt_socket_unset_data_received_cb(void)
 
 int bt_socket_set_connection_requested_cb(bt_socket_connection_requested_cb callback, void *user_data)
 {
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(callback);
 	_bt_set_cb(BT_EVENT_RFCOMM_CONNECTION_REQUESTED, callback, user_data);
@@ -203,6 +257,7 @@ int bt_socket_set_connection_requested_cb(bt_socket_connection_requested_cb call
 
 int bt_socket_unset_connection_requested_cb(void)
 {
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	_bt_unset_cb(BT_EVENT_RFCOMM_CONNECTION_REQUESTED);
 	return BT_ERROR_NONE;
@@ -210,6 +265,7 @@ int bt_socket_unset_connection_requested_cb(void)
 
 int bt_socket_set_connection_state_changed_cb(bt_socket_connection_state_changed_cb callback, void *user_data)
 {
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(callback);
 	_bt_set_cb(BT_EVENT_CONNECTION_STATE_CHANGED, callback, user_data);
@@ -218,6 +274,7 @@ int bt_socket_set_connection_state_changed_cb(bt_socket_connection_state_changed
 
 int bt_socket_unset_connection_state_changed_cb(void)
 {
+	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	_bt_unset_cb(BT_EVENT_CONNECTION_STATE_CHANGED);
 	return BT_ERROR_NONE;

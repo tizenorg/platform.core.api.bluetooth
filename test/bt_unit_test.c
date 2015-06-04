@@ -35,7 +35,7 @@
 
 #include "bluetooth.h"
 #include "bluetooth_internal.h"
-#include "bluetooth_extention.h"
+#include "bluetooth_extension.h"
 #include "bluetooth-telephony-api.h"
 #include "bt_unit_test.h"
 

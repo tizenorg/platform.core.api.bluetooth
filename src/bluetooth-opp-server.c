@@ -24,6 +24,18 @@
 
 static bool is_opp_server_initialized = false;
 
+#ifdef TIZEN_OPP_SERVER_DISABLE
+#define BT_CHECK_OPP_SERVER_SUPPORT() \
+	{ \
+		BT_CHECK_BT_SUPPORT(); \
+		LOGE("[%s] NOT_SUPPORTED(0x%08x)", __FUNCTION__, BT_ERROR_NOT_SUPPORTED); \
+		return BT_ERROR_NOT_SUPPORTED; \
+	}
+#else
+#define BT_CHECK_OPP_SERVER_SUPPORT()
+#endif
+
+
 #define BT_CHECK_OPP_SERVER_INIT_STATUS() \
 	if (__bt_check_opp_server_init_status() == BT_ERROR_NOT_INITIALIZED) \
 	{ \
@@ -47,6 +59,7 @@ int bt_opp_server_initialize(const char *destination,
 {
 	int error_code = BT_ERROR_NONE;
 
+	BT_CHECK_OPP_SERVER_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(destination);
 
@@ -70,6 +83,7 @@ int bt_opp_server_initialize_by_connection_request(const char *destination,
 {
 	int error_code = BT_ERROR_NONE;
 
+	BT_CHECK_OPP_SERVER_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(destination);
 
@@ -91,6 +105,7 @@ int bt_opp_server_deinitialize(void)
 {
 	int error_code = BT_ERROR_NONE;
 
+	BT_CHECK_OPP_SERVER_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_OPP_SERVER_INIT_STATUS();
 
@@ -122,6 +137,7 @@ int bt_opp_server_accept(bt_opp_server_transfer_progress_cb progress_cb,
 {
 	int error_code = BT_ERROR_NONE;
 
+	BT_CHECK_OPP_SERVER_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_OPP_SERVER_INIT_STATUS();
 
@@ -151,6 +167,7 @@ int bt_opp_server_reject(void)
 {
 	int error_code = BT_ERROR_NONE;
 
+	BT_CHECK_OPP_SERVER_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_OPP_SERVER_INIT_STATUS();
 
@@ -177,6 +194,7 @@ int bt_opp_server_set_destination(const char *destination)
 {
 	int error_code = BT_ERROR_NONE;
 
+	BT_CHECK_OPP_SERVER_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_OPP_SERVER_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(destination);
@@ -194,6 +212,7 @@ int bt_opp_server_cancel_transfer(int transfer_id)
 {
 	int error_code = BT_ERROR_NONE;
 
+	BT_CHECK_OPP_SERVER_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_OPP_SERVER_INIT_STATUS();
 
