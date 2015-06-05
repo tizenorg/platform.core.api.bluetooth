@@ -1155,14 +1155,7 @@ int bt_adapter_le_create_advertiser(bt_advertiser_h *advertiser)
 		return BT_ERROR_OUT_OF_MEMORY;
 	}
 
-/*   Need to fix the build error in x64 bit
-[  340s] /home/abuild/rpmbuild/BUILD/capi-network-bluetooth-0.1.52/src/bluetooth-adapter.c:1157:18: error: cast from pointer to integer of different size [-Werror=pointer-to-int-cast]
-[  340s]   __adv->handle = (int)__adv;
-*/
-
-#if 0
-	__adv->handle = (int)__adv;
-#endif
+	__adv->handle = GPOINTER_TO_INT(__adv);
 
 	*advertiser = (bt_advertiser_h)__adv;
 
