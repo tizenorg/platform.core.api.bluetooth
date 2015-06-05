@@ -1664,7 +1664,7 @@ int bt_adapter_le_add_advertising_service_data(bt_advertiser_h advertiser,
 	int uuid_bit;
 	char *uuid_ptr;
 	int byte_len;
-	char *converted_uuid;
+	char *converted_uuid = NULL;
 
 	BT_CHECK_LE_SUPPORT();
 	BT_CHECK_INIT_STATUS();
