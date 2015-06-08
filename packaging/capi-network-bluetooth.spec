@@ -35,6 +35,14 @@ Network Bluetooth Framework.
 
 %devel_desc
 
+%package test
+Summary: Network Bluetooth Framework test application
+Group:   TO_BE/FILLED
+Requires: %{name} = %{version}-%{release}
+
+%description test
+This package is C-API test application.
+
 %prep
 %setup -q
 cp %{SOURCE1001} %{SOURCE1002} .
@@ -106,9 +114,9 @@ make %{?jobs:-j%jobs}
 %{_libdir}/libcapi-network-bluetooth.so.*
 #%{_datadir}/license/capi-network-bluetooth
 
-#%files test
+%files test
 #%manifest bluetooth-test.manifest
-#%{_bindir}/bt_unit_test
+%{_bindir}/bt_unit_test
 #%{_bindir}/bt_onoff
 #/etc/smack/accesses.d/capi-network-bluetooth-test.efl
 
