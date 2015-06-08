@@ -103,12 +103,18 @@ int bt_socket_listen(int socket_fd, int max_pending_connections)
 
 int bt_socket_accept(int socket_fd)
 {
+	int error_code = BT_ERROR_NONE;
+
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	/* Will implement after synch bluetooth-frwk */
+	error_code = _bt_get_error_code(bluetooth_rfcomm_accept_connection(socket_fd));
+	if (error_code != BT_ERROR_NONE) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code),
+				error_code);
+	}
 
-	return BT_ERROR_NOT_SUPPORTED;
+	return error_code;
 }
 
 int bt_socket_reject(int socket_fd)
@@ -129,39 +135,57 @@ int bt_socket_reject(int socket_fd)
 
 int bt_socket_create_rfcomm_ex(const char *uuid, const char *bus_name, const char *object_path)
 {
+	int error_code = BT_ERROR_NONE;
+
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(uuid);
 	BT_CHECK_INPUT_PARAMETER(bus_name);
 	BT_CHECK_INPUT_PARAMETER(object_path);
 
-	/* Will implement after synch bluetooth-frwk */
+	error_code = bluetooth_rfcomm_create_socket_ex(uuid, bus_name, object_path);
+	if (error_code != BT_ERROR_NONE) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code),
+				error_code);
+	}
 
-	return BT_ERROR_NOT_SUPPORTED;
+	return error_code;
 }
 
 int bt_socket_destroy_rfcomm_ex(const char *uuid)
 {
+	int error_code = BT_ERROR_NONE;
+
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(uuid);
 
-	/* Will implement after synch bluetooth-frwk */
+	error_code = _bt_get_error_code(bluetooth_rfcomm_remove_socket_ex(uuid));
+	if (error_code != BT_ERROR_NONE) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code),
+				error_code);
+	}
 
-	return BT_ERROR_NOT_SUPPORTED;
+	return error_code;
 }
 
 int bt_socket_listen_and_accept_rfcomm_ex(const char *uuid, int max_pending_connections, const char* bus_name, const char *object_path)
 {
+	int error_code = BT_ERROR_NONE;
+
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(uuid);
 	BT_CHECK_INPUT_PARAMETER(bus_name);
 	BT_CHECK_INPUT_PARAMETER(object_path);
 
-	/* Will implement after synch bluetooth-frwk */
+	error_code = _bt_get_error_code(bluetooth_rfcomm_listen_and_accept_ex(uuid, max_pending_connections, bus_name, object_path));
+	if (error_code != BT_ERROR_NONE) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code),
+				error_code);
+	}
 
-	return BT_ERROR_NOT_SUPPORTED;
+	return error_code;
 }
 
 int bt_socket_connect_rfcomm(const char *remote_address, const char *remote_port_uuid)

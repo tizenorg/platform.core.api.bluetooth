@@ -274,14 +274,46 @@ int bt_device_set_service_searched_cb(bt_device_service_searched_cb callback, vo
 int bt_device_get_connection_state(const char *remote_address,
 		bt_device_connection_link_type_e link_type, bool *connected)
 {
+	int ret;
+	bluetooth_device_address_t addr_hex = { {0,} };
+	bluetooth_connected_link_t connected_link = BLUETOOTH_CONNECTED_LINK_NONE;
+
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(remote_address);
 	BT_CHECK_INPUT_PARAMETER(connected);
 
-	/* Will implement after synch bluetooth-frwk */
+	if (link_type != BT_DEVICE_CONNECTION_LINK_BREDR &&
+	    link_type != BT_DEVICE_CONNECTION_LINK_LE)
+		return BT_ERROR_INVALID_PARAMETER;
 
-	return BT_ERROR_NOT_SUPPORTED;
+	_bt_convert_address_to_hex(&addr_hex, remote_address);
+
+	ret = _bt_get_error_code(bluetooth_get_connected_link_type(&addr_hex, &connected_link));
+	if (ret != BT_ERROR_NONE) {
+		BT_ERR("%s(0x%08x) : Failed to run function",
+				_bt_convert_error_to_string(ret), ret);
+		return ret;
+	}
+
+	if (connected_link == BLUETOOTH_CONNECTED_LINK_BREDR_LE) {
+		*connected = true;
+		return BT_ERROR_NONE;
+	}
+
+	if (link_type == BT_DEVICE_CONNECTION_LINK_BREDR) {
+		if (connected_link == BLUETOOTH_CONNECTED_LINK_BREDR)
+			*connected = true;
+		else
+			*connected = false;
+	} else if (link_type == BT_DEVICE_CONNECTION_LINK_LE) {
+		if (connected_link == BLUETOOTH_CONNECTED_LINK_LE)
+			*connected = true;
+		else
+			*connected = false;
+	}
+
+	return BT_ERROR_NONE;
 }
 
 int bt_device_set_connection_state_changed_cb(bt_device_connection_state_changed_cb callback, void *user_data)

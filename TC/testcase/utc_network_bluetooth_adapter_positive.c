@@ -153,6 +153,7 @@ int get_value_from_file(void)
 			return 0;
 		}
 	}
+	fclose(fp);
 	return -1;
 }
 

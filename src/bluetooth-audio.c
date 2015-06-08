@@ -132,6 +132,15 @@ int bt_audio_initialize(void)
 		return error;
 	}
 
+#ifdef TIZEN_WEARABLE
+	error = bluetooth_hf_init(_bt_hf_event_proxy, NULL);
+	error = _bt_get_error_code(error);
+	if (BT_ERROR_NONE != error) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
+		return error;
+	}
+#endif
+
 #ifndef TELEPHONY_DISABLED /* B2_3G */
 	error = bluetooth_telephony_init((void *)_bt_telephony_event_proxy, NULL);
 	error = _bt_convert_telephony_error_code(error);
@@ -152,6 +161,15 @@ int bt_audio_deinitialize(void)
 	BT_CHECK_AUDIO_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_AUDIO_INIT_STATUS();
+
+#ifdef TIZEN_WEARABLE
+	error = bluetooth_hf_deinit();
+	error = _bt_get_error_code(error);
+	if (BT_ERROR_NONE != error) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
+		return error;
+	}
+#endif
 
 	error = bluetooth_audio_deinit();
 	error = _bt_get_error_code(error);
@@ -211,6 +229,14 @@ int bt_audio_connect(const char *remote_address, bt_audio_profile_type_e type)
 	case BT_AUDIO_PROFILE_TYPE_A2DP:
 		error = bluetooth_av_connect(&addr_hex);
 		break;
+#ifdef TIZEN_WEARABLE
+	case BT_AUDIO_PROFILE_TYPE_AG:
+		error = bluetooth_hf_connect(&addr_hex);
+		break;
+#endif
+	case BT_AUDIO_PROFILE_TYPE_A2DP_SINK:
+		error = bluetooth_av_source_connect(&addr_hex);
+		break;
 	case BT_AUDIO_PROFILE_TYPE_ALL:
 	default:
 		error = bluetooth_audio_connect(&addr_hex);
@@ -252,6 +278,14 @@ int bt_audio_disconnect(const char *remote_address, bt_audio_profile_type_e type
 #endif
 	case BT_AUDIO_PROFILE_TYPE_A2DP:
 		error = bluetooth_av_disconnect(&addr_hex);
+		break;
+#ifdef TIZEN_WEARABLE
+	case BT_AUDIO_PROFILE_TYPE_AG:
+		error = bluetooth_hf_disconnect(&addr_hex);
+		break;
+#endif
+	case BT_AUDIO_PROFILE_TYPE_A2DP_SINK:
+		error = bluetooth_av_source_disconnect(&addr_hex);
 		break;
 	case BT_AUDIO_PROFILE_TYPE_ALL:
 	default:
@@ -618,13 +652,24 @@ int bt_ag_unset_dtmf_transmitted_cb(void)
 
 int bt_ag_is_connected(bool *connected)
 {
+	int error;
+	gboolean is_connected = false;
+
 	BT_CHECK_HFP_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(connected);
 
-	/* Will implement after synch bluetooth-frwk */
+	error = bluetooth_telephony_is_connected(&is_connected);
+	error = _bt_get_error_code(error);
+	if (error != BT_ERROR_NONE)
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
 
-	return BT_ERROR_NOT_SUPPORTED;
+	if (is_connected)
+		*connected = true;
+	else
+		*connected = false;
+
+	return error;
 }
 
 int bt_call_list_create(bt_call_list_h *list)

@@ -760,6 +760,7 @@ int bt_adapter_set_device_discovery_state_changed_cb(bt_adapter_device_discovery
 	return ret;
 }
 
+#ifndef TIZEN_WEARABLE
 int bt_adapter_le_set_device_discovery_state_changed_cb(bt_adapter_le_device_discovery_state_changed_cb callback, void *user_data)
 {
 	BT_CHECK_LE_SUPPORT();
@@ -770,6 +771,7 @@ int bt_adapter_le_set_device_discovery_state_changed_cb(bt_adapter_le_device_dis
 	_bt_set_cb(BT_EVENT_LE_DEVICE_DISCOVERY_STATE_CHANGED, callback, user_data);
 	return BT_ERROR_NONE;
 }
+#endif
 
 int bt_adapter_unset_state_changed_cb(void)
 {
@@ -835,6 +837,7 @@ int bt_adapter_unset_device_discovery_state_changed_cb(void)
 	return BT_ERROR_NONE;
 }
 
+#ifndef TIZEN_WEARABLE
 int bt_adapter_le_unset_device_discovery_state_changed_cb(void)
 {
 	BT_CHECK_LE_SUPPORT();
@@ -843,6 +846,7 @@ int bt_adapter_le_unset_device_discovery_state_changed_cb(void)
 	_bt_le_adapter_deinit();
 	return BT_ERROR_NONE;
 }
+#endif
 
 int bt_adapter_start_device_discovery(void)
 {
@@ -889,6 +893,7 @@ int bt_adapter_is_discovering(bool *is_discovering)
 	}
 }
 
+#ifndef TIZEN_WEARABLE
 int bt_adapter_le_start_device_discovery(void)
 {
 	int error_code = BT_ERROR_NONE;
@@ -933,6 +938,7 @@ int bt_adapter_le_is_discovering(bool *is_discovering)
 		return ret;
 	}
 }
+#endif
 
 int bt_adapter_get_local_oob_data(unsigned char **hash, unsigned char **randomizer,
 					int *hash_len, int *randomizer_len)
@@ -1176,10 +1182,12 @@ int bt_adapter_le_destroy_advertiser(bt_advertiser_h advertiser)
 
 	_bt_unset_cb(BT_EVENT_ADVERTISING_STATE_CHANGED);
 
-	error_code = bluetooth_set_advertising(FALSE);
+	error_code = bluetooth_set_advertising(__adv->handle, FALSE);
 	ret = _bt_get_error_code(error_code);
 	if (ret != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+
+	advertiser_list = g_slist_remove(advertiser_list, __adv);
 
 	/* Free advertising data */
 	g_free(__adv->adv_data);
@@ -1874,6 +1882,7 @@ int bt_adapter_le_clear_advertising_data(bt_advertiser_h advertiser,
 	return ret;
 }
 
+#ifndef TIZEN_WEARABLE
 int bt_adapter_le_start_advertising(bt_advertiser_h advertiser,
 		bt_adapter_le_advertising_params_s *adv_params,
 		bt_adapter_le_advertising_state_changed_cb cb, void *user_data)
@@ -1891,7 +1900,7 @@ int bt_adapter_le_start_advertising(bt_advertiser_h advertiser,
 
 	if (__adv->adv_data_len > 0 && __adv->adv_data) {
 		memcpy(adv.data, __adv->adv_data, __adv->adv_data_len);
-		error_code = bluetooth_set_advertising_data(&adv, __adv->adv_data_len);
+		error_code = bluetooth_set_advertising_data(__adv->handle, &adv, __adv->adv_data_len);
 		ret = _bt_get_error_code(error_code);
 		if (ret != BT_ERROR_NONE) {
 			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
@@ -1901,7 +1910,7 @@ int bt_adapter_le_start_advertising(bt_advertiser_h advertiser,
 
 	if (__adv->scan_rsp_data_len > 0 && __adv->scan_rsp_data) {
 		memcpy(resp.data, __adv->scan_rsp_data, __adv->scan_rsp_data_len);
-		error_code = bluetooth_set_scan_response_data(&resp, __adv->scan_rsp_data_len);
+		error_code = bluetooth_set_scan_response_data(__adv->handle, &resp, __adv->scan_rsp_data_len);
 		ret = _bt_get_error_code(error_code);
 		if (ret != BT_ERROR_NONE) {
 			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
@@ -1910,13 +1919,13 @@ int bt_adapter_le_start_advertising(bt_advertiser_h advertiser,
 	}
 
 	if (adv_params == NULL) {
-		error_code = bluetooth_set_advertising(TRUE);
+		error_code = bluetooth_set_advertising(__adv->handle, TRUE);
 	} else {
 		param.interval_min = adv_params->interval_min;
 		param.interval_max = adv_params->interval_max;
 		param.filter_policy = BT_ADAPTER_LE_ADVERTISING_FILTER_DEFAULT;
 		param.type = BT_ADAPTER_LE_ADVERTISING_CONNECTABLE;
-		error_code = bluetooth_set_custom_advertising(TRUE, &param);
+		error_code = bluetooth_set_custom_advertising(__adv->handle, TRUE, &param);
 	}
 
 	ret = _bt_get_error_code(error_code);
@@ -1929,16 +1938,18 @@ int bt_adapter_le_start_advertising(bt_advertiser_h advertiser,
 
 	return ret;
 }
+#endif
 
 int bt_adapter_le_stop_advertising(bt_advertiser_h advertiser)
 {
 	int ret = BT_ERROR_NONE;
+	bt_advertiser_s *__adv = (bt_advertiser_s *)advertiser;
 
 	BT_CHECK_LE_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(advertiser);
 
-	ret = _bt_get_error_code(bluetooth_set_advertising(FALSE));
+	ret = _bt_get_error_code(bluetooth_set_advertising(__adv->handle, FALSE));
 	if (ret != BT_ERROR_NONE) {
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
 	}
@@ -1963,7 +1974,7 @@ int bt_adapter_le_start_advertising_new(bt_advertiser_h advertiser,
 
 	if (__adv->adv_data_len > 0 && __adv->adv_data) {
 		memcpy(adv.data, __adv->adv_data, __adv->adv_data_len);
-		error_code = bluetooth_set_advertising_data(&adv, __adv->adv_data_len);
+		error_code = bluetooth_set_advertising_data(__adv->handle, &adv, __adv->adv_data_len);
 		ret = _bt_get_error_code(error_code);
 		if (ret != BT_ERROR_NONE) {
 			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
@@ -1973,7 +1984,7 @@ int bt_adapter_le_start_advertising_new(bt_advertiser_h advertiser,
 
 	if (__adv->scan_rsp_data_len > 0 && __adv->scan_rsp_data) {
 		memcpy(resp.data, __adv->scan_rsp_data, __adv->scan_rsp_data_len);
-		error_code = bluetooth_set_scan_response_data(&resp, __adv->scan_rsp_data_len);
+		error_code = bluetooth_set_scan_response_data(__adv->handle, &resp, __adv->scan_rsp_data_len);
 		ret = _bt_get_error_code(error_code);
 		if (ret != BT_ERROR_NONE) {
 			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
@@ -1992,7 +2003,7 @@ int bt_adapter_le_start_advertising_new(bt_advertiser_h advertiser,
 	param.interval_max = interval;
 	param.filter_policy = __adv->adv_params.filter_policy;
 	param.type = __adv->adv_params.type;
-	error_code = bluetooth_set_custom_advertising(TRUE, &param);
+	error_code = bluetooth_set_custom_advertising(__adv->handle, TRUE, &param);
 
 	ret = _bt_get_error_code(error_code);
 	if (ret != BT_ERROR_NONE) {
@@ -2029,37 +2040,78 @@ void _bt_adapter_le_invoke_advertising_state_cb(int handle, int result, bt_adapt
 int bt_adapter_le_set_advertising_mode(bt_advertiser_h advertiser,
 		bt_adapter_le_advertising_mode_e mode)
 {
+	int error_code = BT_ERROR_NONE;
+	bt_advertiser_s *__adv = (bt_advertiser_s *)advertiser;
+
 	BT_CHECK_LE_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(advertiser);
 
-	/* Will implement after synch bluetooth-frwk */
-	
-	return BT_ERROR_NOT_SUPPORTED;
+	if (mode < BT_ADAPTER_LE_ADVERTISING_MODE_BALANCED ||
+		mode > BT_ADAPTER_LE_ADVERTISING_MODE_LOW_ENERGY)
+		return BT_ERROR_INVALID_PARAMETER;
 
+	error_code = _bt_get_error_code(bluetooth_check_privilege_advertising_parameter());
+	if (error_code != BT_ERROR_NONE) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
+		return BT_ERROR_PERMISSION_DENIED;
+	}
+
+	// TODO : Before set the mode, check the inprogress status
+	__adv->adv_params.mode = mode;
+
+	return error_code;
 }
 
 int bt_adapter_le_set_advertising_filter_policy(bt_advertiser_h advertiser,
 		bt_adapter_le_advertising_filter_policy_e filter_policy)
 {
+	int error_code = BT_ERROR_NONE;
+	bt_advertiser_s *__adv = (bt_advertiser_s *)advertiser;
+
 	BT_CHECK_LE_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(advertiser);
 
-	/* Will implement after synch bluetooth-frwk */
-	
-	return BT_ERROR_NOT_SUPPORTED;
+	if (filter_policy < BT_ADAPTER_LE_ADVERTISING_FILTER_DEFAULT ||
+		filter_policy > BT_ADAPTER_LE_ADVERTISING_FILTER_ALLOW_SCAN_CONN_WL)
+		return BT_ERROR_INVALID_PARAMETER;
+
+	error_code = _bt_get_error_code(bluetooth_check_privilege_advertising_parameter());
+	if (error_code != BT_ERROR_NONE) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
+		return BT_ERROR_PERMISSION_DENIED;
+	}
+
+	// TODO : Before set the filter policy, check the inprogress status
+	__adv->adv_params.filter_policy = filter_policy;
+
+	return error_code;
 }
 
 int bt_adapter_le_set_advertising_connectable(bt_advertiser_h advertiser, bool connectable)
 {
+	int error_code = BT_ERROR_NONE;
+	bt_advertiser_s *__adv = (bt_advertiser_s *)advertiser;
+
 	BT_CHECK_LE_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(advertiser);
 
-	/* Will implement after synch bluetooth-frwk */
-	
-	return BT_ERROR_NOT_SUPPORTED;
+	error_code = _bt_get_error_code(bluetooth_check_privilege_advertising_parameter());
+	if (error_code != BT_ERROR_NONE) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
+		return BT_ERROR_PERMISSION_DENIED;
+	}
+
+	if (connectable)
+		__adv->adv_params.type = BT_ADAPTER_LE_ADVERTISING_CONNECTABLE;
+	else
+		__adv->adv_params.type = BT_ADAPTER_LE_ADVERTISING_SCANNABLE;
+
+	// TODO : Before set the type, check the inprogress status
+
+	return error_code;
 }
 
 int bt_adapter_le_enable_privacy(bool enable_privacy)
@@ -2077,7 +2129,7 @@ int bt_adapter_le_enable_privacy(bool enable_privacy)
 	return error_code;
 }
 
-#if 0
+
 static void __bt_adapter_le_convert_scan_filter(bluetooth_le_scan_filter_t *dest, bt_le_scan_filter_s *src)
 {
 	int bit;
@@ -2179,7 +2231,6 @@ static void __bt_adapter_le_convert_scan_filter(bluetooth_le_scan_filter_t *dest
 		}
 	}
 }
-#endif
 
 int bt_adapter_le_start_scan(bt_adapter_le_scan_result_cb cb, void *user_data)
 {
@@ -2966,32 +3017,64 @@ int bt_adapter_le_scan_filter_set_manufacturer_data_with_mask(bt_scan_filter_h s
 
 int bt_adapter_le_register_scan_filter(bt_scan_filter_h scan_filter)
 {
+	int error_code = BT_ERROR_NONE;
+	bt_le_scan_filter_s *__filter = (bt_le_scan_filter_s*)scan_filter;
+	bluetooth_le_scan_filter_t filter;
+
 	BT_CHECK_LE_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(scan_filter);
+	if (bluetooth_is_le_scanning() == TRUE) {
+		BT_ERR("NOW_IN_PROGRESS(0x%08x)", BT_ERROR_NOW_IN_PROGRESS);
+		return BT_ERROR_NOW_IN_PROGRESS;
+	}
 
-	/* Will implement after synch bluetooth-frwk */
+	__bt_adapter_le_convert_scan_filter(&filter, __filter);
 
-	return BT_ERROR_NOT_SUPPORTED;
+	error_code = _bt_get_error_code(bluetooth_register_scan_filter(&filter, &__filter->slot_id));
+	if (error_code != BT_ERROR_NONE) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
+	}
+
+	return error_code;
 }
 
 int bt_adapter_le_unregister_scan_filter(bt_scan_filter_h scan_filter)
 {
+	int error_code = BT_ERROR_NONE;
+	bt_le_scan_filter_s *__filter = (bt_le_scan_filter_s*)scan_filter;
+
 	BT_CHECK_LE_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(scan_filter);
+	if (bluetooth_is_le_scanning() == TRUE) {
+		BT_ERR("NOW_IN_PROGRESS(0x%08x)", BT_ERROR_NOW_IN_PROGRESS);
+		return BT_ERROR_NOW_IN_PROGRESS;
+	}
 
-	/* Will implement after synch bluetooth-frwk */
+	error_code = _bt_get_error_code(bluetooth_unregister_scan_filter(__filter->slot_id));
+	if (error_code != BT_ERROR_NONE) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
+	}
 
-	return BT_ERROR_NOT_SUPPORTED;
+	return BT_ERROR_NONE;
 }
 
 int bt_adapter_le_unregister_all_scan_filters(void)
 {
+	int error_code = BT_ERROR_NONE;
+
 	BT_CHECK_LE_SUPPORT();
 	BT_CHECK_INIT_STATUS();
+	if (bluetooth_is_le_scanning() == TRUE) {
+		BT_ERR("NOW_IN_PROGRESS(0x%08x)", BT_ERROR_NOW_IN_PROGRESS);
+		return BT_ERROR_NOW_IN_PROGRESS;
+	}
 
-	/* Will implement after synch bluetooth-frwk */
+	error_code = _bt_get_error_code(bluetooth_unregister_all_scan_filters());
+	if (error_code != BT_ERROR_NONE) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
+	}
 
-	return BT_ERROR_NOT_SUPPORTED;
+	return BT_ERROR_NONE;
 }

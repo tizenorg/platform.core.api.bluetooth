@@ -22,7 +22,6 @@ BuildRequires:  pkgconfig(privacy-manager-client)
 
 BuildRequires:  cmake
 
-
 %description
 Network Bluetooth Framework
 

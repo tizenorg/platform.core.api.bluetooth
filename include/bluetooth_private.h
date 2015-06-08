@@ -103,11 +103,13 @@ typedef enum
 	BT_EVENT_GATT_CLIENT_READ_DESCRIPTOR, /**< GATT descriptor value read callback */
 	BT_EVENT_GATT_CLIENT_WRITE_DESCRIPTOR, /**< GATT descriptor value write callback */
 	BT_EVENT_GATT_SERVER_READ_REQUESTED, /**< GATT Characteristic/Descriptor Read Requested callback*/
+#ifdef BT_ENABLE_LEGACY_GATT_CLIENT
 	BT_EVENT_GATT_CLIENT_CHARACTERISTIC_DISCOVERED_LEGACY, /**< GATT characteristic discovered callback */
 	BT_EVENT_GATT_CLIENT_CHARACTERISTIC_DESCRIPTOR_DISCOVERED_LEGACY, /**< GATT characteristic descriptor discovered callback */
 	BT_EVENT_GATT_CLIENT_VALUE_CHANGED_LEGACY, /**< GATT characteristic value changed callback */
 	BT_EVENT_GATT_CLIENT_READ_CHARACTERISTIC_LEGACY, /**< GATT characteristic value read callback */
 	BT_EVENT_GATT_CLIENT_WRITE_CHARACTERISTIC_LEGACY, /**< GATT characteristic value write callback */
+#endif
 	BT_EVENT_ADVERTISING_STATE_CHANGED, /**< Advertising state changed callback */
 	BT_EVENT_MANUFACTURER_DATA_CHANGED, /**< Manufacturer data changed callback */
 	BT_EVENT_CONNECTABLE_CHANGED_EVENT, /**< Adapter connectable changed callback */
@@ -471,11 +473,15 @@ void _bt_hid_event_proxy(int event, hid_event_param_t *param, void *user_data);
 
 void _bt_adapter_le_invoke_advertising_state_cb(int handle, int result, bt_adapter_le_advertising_state_e adv_state);
 
+#ifdef BT_ENABLE_LEGACY_GATT_CLIENT
 bool _bt_gatt_is_legacy_client_mode(void);
+#endif
 
 const GSList* _bt_gatt_get_client_list(void);
 
 const GSList* _bt_gatt_get_server_list(void);
+
+int _bt_gatt_client_update_all(bt_gatt_client_h client);
 
 /* HID device related type */
 typedef struct

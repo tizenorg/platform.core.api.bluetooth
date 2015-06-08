@@ -129,6 +129,7 @@ const GSList* _bt_gatt_get_server_list(void)
 	return gatt_server_list;
 }
 
+#ifdef BT_ENABLE_LEGACY_GATT_CLIENT
 bool _bt_gatt_is_legacy_client_mode(void)
 {
 	if (gatt_client_list) {
@@ -231,11 +232,17 @@ int bt_gatt_get_service_uuid(bt_gatt_attribute_h service, char **uuid)
 	} else {
 		*uuid = g_strdup(property.uuid);
 
-		if (property.handle_info.count != 0 && property.handle_info.handle) {
-			for (i = 0; i < property.handle_info.count; i++) {
-				g_free(property.handle_info.handle[i]);
+		if (property.include_handles.count != 0 && property.include_handles.handle) {
+			for (i = 0; i < property.include_handles.count; i++) {
+				g_free(property.include_handles.handle[i]);
 			}
-			g_free(property.handle_info.handle);
+			g_free(property.include_handles.handle);
+		}
+		if (property.char_handle.count != 0 && property.char_handle.handle) {
+			for (i = 0; i < property.char_handle.count; i++) {
+				g_free(property.char_handle.handle[i]);
+			}
+			g_free(property.char_handle.handle);
 		}
 	}
 
@@ -263,24 +270,30 @@ int bt_gatt_foreach_included_services(bt_gatt_attribute_h service,
 	if (ret != BT_ERROR_NONE) {
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
 	} else {
-		if (property.handle_info.count == 0 ||
-		     property.handle_info.handle == NULL) {
+		if (property.char_handle.count != 0 && property.char_handle.handle) {
+			for (i = 0; i < property.char_handle.count; i++) {
+				g_free(property.char_handle.handle[i]);
+			}
+			g_free(property.char_handle.handle);
+		}
+		if (property.include_handles.count == 0 ||
+		     property.include_handles.handle == NULL) {
 			return ret;
 		}
 
-		for (i = 0; i < property.handle_info.count; i++) {
-			if (property.handle_info.handle[i] == NULL)
+		for (i = 0; i < property.include_handles.count; i++) {
+			if (property.include_handles.handle[i] == NULL)
 				continue;
 
 			if (foreach_call == true &&
-			    !callback((bt_gatt_attribute_h)property.handle_info.handle[i],
+			    !callback((bt_gatt_attribute_h)property.include_handles.handle[i],
 					user_data)) {
 				foreach_call = false;
 			}
 
-			g_free(property.handle_info.handle[i]);
+			g_free(property.include_handles.handle[i]);
 		}
-		g_free(property.handle_info.handle);
+		g_free(property.include_handles.handle);
 	}
 	return ret;
 }
@@ -496,6 +509,7 @@ int bt_gatt_discover_characteristic_descriptor(bt_gatt_attribute_h characteristi
 
 	return ret;
 }
+#endif
 
 int bt_gatt_connect(const char *address, bool auto_connect)
 {
@@ -766,6 +780,15 @@ static int __convert_unsigned_bytes_to_int32(char b0, char b1, char b2, char b3)
 		 + (__convert_unsigned_byte_to_int(b2) << 16) + (__convert_unsigned_byte_to_int(b3) << 24);
 }
 
+static double power(int x, int n)
+{
+	/* pow() cannot not referenced. */
+	if(n == 0)
+		return 1;
+	else
+		return x*power(x,n-1);
+}
+
 static float __convert_bytes_to_short_float(char b0, char b1)
 {
 	int mantissa;
@@ -774,7 +797,7 @@ static float __convert_bytes_to_short_float(char b0, char b1)
 	mantissa = __convert_unsigned_to_signed(__convert_unsigned_byte_to_int(b0)
 		+ ((__convert_unsigned_byte_to_int(b1) & 0x0F) << 8), 12);
 	exponent = __convert_unsigned_to_signed(__convert_unsigned_byte_to_int(b1) >> 4, 4);
-	tmp = pow(10, exponent);
+	tmp = power(10, exponent);
 
 	return (float)(mantissa * tmp);
 }
@@ -786,7 +809,7 @@ float __convert_bytes_to_float(char b0, char b1, char b2, char b3)
 	mantissa = __convert_unsigned_to_signed(__convert_unsigned_byte_to_int(b0)
 	                + (__convert_unsigned_byte_to_int(b1) << 8)
 	                + (__convert_unsigned_byte_to_int(b2) << 16), 24);
-	exponent = pow(10, b3);
+	exponent = power(10, b3);
 
 	return (float)(mantissa * exponent);
 }
@@ -1986,12 +2009,20 @@ int bt_gatt_server_unregister_all_services(bt_gatt_server_h server)
 int bt_gatt_server_send_response(int request_id,
 		int offset, char *value, int value_length)
 {
+	int ret = BT_ERROR_NONE;
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(value);
 
-	/* Will implement after synch bluetooth-frwk */
-	
-	return BT_ERROR_NOT_SUPPORTED;
+	if (value_length <= 0)
+		return BT_ERROR_INVALID_PARAMETER;
+
+	ret = _bt_get_error_code(bluetooth_gatt_send_response(request_id, offset, value, value_length));
+
+	if (ret != BT_ERROR_NONE) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+	}
+
+	return ret;
 }
 
 int bt_gatt_server_notify(bt_gatt_h characteristic, bool need_confirm,
@@ -2098,6 +2129,10 @@ int bt_gatt_client_create(const char *remote_address, bt_gatt_client_h *client)
 	*client = (bt_gatt_client_h)client_s;
 	gatt_client_list = g_slist_append(gatt_client_list, client_s);
 
+
+	if (_bt_gatt_client_update_all(*client) == BT_ERROR_NONE)
+			client_s->services_discovered = true;
+
 	return ret;
 }
 
@@ -2202,14 +2237,68 @@ int bt_gatt_client_read_value(bt_gatt_h gatt_handle,
 int bt_gatt_client_write_value(bt_gatt_h gatt_handle,
 		bt_gatt_client_request_completed_cb callback, void *user_data)
 {
+	int ret = BT_ERROR_NONE;
+	bt_gatt_common_s *c = (bt_gatt_common_s *)gatt_handle;
+	bt_gatt_client_cb_data_s *cb_data;
+
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(gatt_handle);
 	BT_CHECK_INPUT_PARAMETER(callback);
 
-	/* Will implement after synch bluetooth-frwk */
-	
-	return BT_ERROR_NOT_SUPPORTED;
+	if (__bt_gatt_client_is_in_progress()) {
+		BT_ERR("Operation is in progress");
+		return BT_ERROR_NOW_IN_PROGRESS;
+	}
+
+	cb_data = malloc(sizeof(bt_gatt_client_cb_data_s));
+	if (cb_data == NULL) {
+		BT_ERR("Cannot alloc cb_data");
+		return BT_ERROR_OPERATION_FAILED;
+	}
+
+	cb_data->gatt_handle = gatt_handle;
+	cb_data->user_data = user_data;
+
+	if (c->type == BT_GATT_TYPE_CHARACTERISTIC) {
+		bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)gatt_handle;
+
+		BT_DBG("path : %s", chr->path);
+		if (chr->write_type == BT_GATT_WRITE_TYPE_WRITE)
+			ret = _bt_get_error_code(bluetooth_gatt_set_characteristics_value_by_type(
+					chr->path, (guint8 *)chr->value, chr->value_length,
+					BT_GATT_PROPERTY_WRITE));
+		else if (chr->write_type == BT_GATT_WRITE_TYPE_WRITE_NO_RESPONSE)
+			ret = _bt_get_error_code(bluetooth_gatt_set_characteristics_value_by_type(
+					chr->path, (guint8 *)chr->value, chr->value_length,
+					BT_GATT_PROPERTY_WRITE_WITHOUT_RESPONSE));
+		else {
+			BT_ERR("Unknow write type : %d", chr->write_type);
+			ret = BT_ERROR_OPERATION_FAILED;
+		}
+		if (ret != BT_ERROR_NONE) {
+			g_free(cb_data);
+			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+		} else {
+			_bt_set_cb(BT_EVENT_GATT_CLIENT_WRITE_CHARACTERISTIC, callback, cb_data);
+		}
+	} else if (c->type == BT_GATT_TYPE_DESCRIPTOR) {
+		bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s *)gatt_handle;
+
+		ret = _bt_get_error_code(bluetooth_gatt_write_descriptor_value(desc->path,
+						(guint8 *)desc->value, desc->value_length));
+		if (ret != BT_ERROR_NONE) {
+			g_free(cb_data);
+			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+		} else {
+			_bt_set_cb(BT_EVENT_GATT_CLIENT_WRITE_DESCRIPTOR, callback, cb_data);
+		}
+	} else {
+		BT_ERR("Invalid handle type for write ");
+		g_free(cb_data);
+	}
+
+	return ret;
 }
 
 static const bt_gatt_client_h __find_gatt_client(const char *remote_address)

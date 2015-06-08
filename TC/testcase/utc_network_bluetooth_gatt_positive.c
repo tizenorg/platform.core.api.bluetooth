@@ -105,9 +105,11 @@ int get_value_from_file(void)
 		if (strcasecmp(token, "BT_ADDR_LE") == 0) {
 			token = strtok(NULL, "=");
 			remote_address = strdup(token);
+			fclose(fp);
 			return 0;
 		}
 	}
+	fclose(fp);
 	return -1;
 }
 
