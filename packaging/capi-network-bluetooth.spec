@@ -115,7 +115,7 @@ make %{?jobs:-j%jobs}
 #%{_datadir}/license/capi-network-bluetooth
 
 %files test
-#%manifest bluetooth-test.manifest
+%manifest %{name}.manifest
 %{_bindir}/bt_unit_test
 #%{_bindir}/bt_onoff
 #/etc/smack/accesses.d/capi-network-bluetooth-test.efl
