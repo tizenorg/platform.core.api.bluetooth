@@ -103,6 +103,8 @@ static int __get_gatt_handle_by_uuid(GSList *list, const char *uuid,
 		bt_gatt_common_s *common = (bt_gatt_common_s *)l->data;
 
 		uuid128_b = __convert_uuid_to_uuid128(common->uuid);
+		if (uuid128_b == NULL)
+			continue;
 		if (g_ascii_strcasecmp(uuid128_a, uuid128_b) == 0) {
 			g_free(uuid128_b);
 			break;
