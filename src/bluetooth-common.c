@@ -1898,8 +1898,6 @@ static int __bt_get_bt_adapter_device_discovery_info_s(bt_adapter_device_discove
 
 	(*discovery_info)->rssi = (int)source_info->rssi;
 	(*discovery_info)->is_bonded = (bool)source_info->paired;
-
-#if 0
 	(*discovery_info)->appearance = 0;
 
 	(*discovery_info)->manufacturer_data_len = source_info->manufacturer_data.data_len;
@@ -1909,7 +1907,7 @@ static int __bt_get_bt_adapter_device_discovery_info_s(bt_adapter_device_discove
 	} else {
 		(*discovery_info)->manufacturer_data = NULL;
 	}
-#endif
+
 	return BT_ERROR_NONE;
 }
 
