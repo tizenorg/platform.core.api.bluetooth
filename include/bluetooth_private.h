@@ -138,36 +138,6 @@ typedef enum {
 	BT_GATT_ROLE_CLIENT = 0x02,
 } bt_gatt_role_e;
 
-#ifdef TIZEN_WEARABLE
-/**
- * @internal
- */
-typedef enum {
-	BT_ADAPTER_LE_ADVERTISING_CONNECTABLE = 0x00, /**< Connectable undirected advertising (ADV_IND) */
-	BT_ADAPTER_LE_ADVERTISING_CONNECTABLE_DIRECT_HIGH = 0x01, /* @Deprecated since Tizen 2.4 */
-	BT_ADAPTER_LE_ADVERTISING_SCANNABLE = 0x02, /**< Scannable undirected advertising (ADV_SCAN_IND) */
-	BT_ADAPTER_LE_ADVERTISING_NON_CONNECTABLE = 0x03, /**< Non connectable undirected advertising (ADV_NONCOND_IND) */
-	BT_ADAPTER_LE_ADVERTISING_CONNECTABLE_DIRECT_LOW = 0x04, /* @Deprecated since Tizen 2.4 */
-} bt_adapter_le_advertising_type_e;
-
-/**
- * @internal
- */
-typedef enum {
-	BT_ADAPTER_LE_PACKET_DATA_INCOMP_LIST_16_BIT_SERVICE_CLASS_UUIDS = 0x02, /**<Incomplete list of 16 bit UUIDs */
-	BT_ADAPTER_LE_PACKET_DATA_COMP_LIST_16_BIT_SERVICE_CLASS_UUIDS = 0x03, /**< Complete list of 16 bit UUIDs */
-	BT_ADAPTER_LE_PACKET_DATA_INCOMP_LIST_128_BIT_SERVICE_CLASS_UUIDS = 0x06, /**< Incomplete list of 128 bit UUIDs */
-	BT_ADAPTER_LE_PACKET_DATA_COMP_LIST_128_BIT_SERVICE_CLASS_UUIDS = 0x07, /**< Complete list of 128 bit UUID */
-	BT_ADAPTER_LE_PACKET_DATA_LOCAL_NAME = 0x09, /**<local device name */
-	BT_ADAPTER_LE_PACKET_DATA_TX_POWER_LEVEL = 0x0a, /**< TX-Power level*/
-	BT_ADAPTER_LE_PACKET_DATA_16_BIT_SERVICE_SOLICITATION_UUIDS = 0x14, /**< List of 16-bit Service Solicitation UUIDs*/
-	BT_ADAPTER_LE_PACKET_DATA_128_BIT_SERVICE_SOLICITATION_UUIDS = 0x15, /**< List of 128-bit Service Solicitation UUIDs*/
-	BT_ADAPTER_LE_PACKET_DATA_SERVICE_DATA = 0x16, /**< Service data */
-	BT_ADAPTER_LE_PACKET_DATA_APPEARANCE = 0x19, /**< Appearance*/
-	BT_ADAPTER_LE_PACKET_DATA_MANUFACTURER_SPECIFIC_DATA = 0xff, /**< Manufacturer data */
-} bt_adapter_le_packet_data_type_e;
-#endif
-
 /**
  * @internal
  */

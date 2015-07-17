@@ -16,7 +16,7 @@ BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(vconf)
 BuildRequires:  pkgconfig(bluetooth-api)
 BuildRequires:  pkgconfig(capi-base-common)
-%if "%{?tizen_profile_name}" == "wearable"
+%if "%{?profile}" == "wearable"
 BuildRequires:  pkgconfig(privacy-manager-client)
 %endif
 
@@ -48,10 +48,10 @@ This package is C-API test application.
 cp %{SOURCE1001} %{SOURCE1002} .
 
 %build
-%if "%{?tizen_profile_name}" == "wearable"
-export CFLAGS="$CFLAGS -DTIZEN_WEARABLE"
-export CXXFLAGS="$CXXFLAGS -DTIZEN_WEARABLE"
-export FFLAGS="$FFLAGS -DTIZEN_WEARABLE"
+%if "%{?profile}" == "wearable"
+#export CFLAGS="$CFLAGS -DTIZEN_WEARABLE"
+#export CXXFLAGS="$CXXFLAGS -DTIZEN_WEARABLE"
+#export FFLAGS="$FFLAGS -DTIZEN_WEARABLE"
 %endif
 
 export CFLAGS="$CFLAGS -DBT_ENABLE_LEGACY_GATT_CLIENT"
@@ -66,7 +66,7 @@ export CFLAGS="$CFLAGS -DTIZEN_ENGINEER_MODE"
 export CXXFLAGS="$CXXFLAGS -DTIZEN_ENGINEER_MODE"
 export FFLAGS="$FFLAGS -DTIZEN_ENGINEER_MODE"
 
-%if "%{?tizen_profile_name}" == "wearable"
+%if "%{?profile}" == "wearable"
 export CFLAGS+=" -DTELEPHONY_DISABLED"
 export CXXFLAGS+=" -DTELEPHONY_DISABLED"
 export FFLAGS+=" -DTELEPHONY_DISABLED"
@@ -87,10 +87,10 @@ export FFLAGS+=" -DARCH64"
 %endif
 
 %cmake \
-%if "%{?tizen_profile_name}" == "wearable"
-	-DTIZEN_WEARABLE=YES \
+%if "%{?profile}" == "wearable"
+#	-DTIZEN_WEARABLE=YES \
 %else
-%if "%{?tizen_profile_name}" == "mobile"
+%if "%{?profile}" == "mobile"
 	-DTIZEN_WEARABLE=NO \
 %endif
 %endif
