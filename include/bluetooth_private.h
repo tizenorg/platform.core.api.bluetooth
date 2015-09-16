@@ -110,6 +110,7 @@ typedef enum
 	BT_EVENT_GATT_CLIENT_READ_CHARACTERISTIC_LEGACY, /**< GATT characteristic value read callback */
 	BT_EVENT_GATT_CLIENT_WRITE_CHARACTERISTIC_LEGACY, /**< GATT characteristic value write callback */
 #endif
+	BT_EVENT_LE_DATA_LENGTH_CHANGED, /** LE data length changed callback */
 	BT_EVENT_ADVERTISING_STATE_CHANGED, /**< Advertising state changed callback */
 	BT_EVENT_MANUFACTURER_DATA_CHANGED, /**< Manufacturer data changed callback */
 	BT_EVENT_CONNECTABLE_CHANGED_EVENT, /**< Adapter connectable changed callback */
@@ -453,6 +454,76 @@ const GSList* _bt_gatt_get_server_list(void);
 
 int _bt_gatt_client_update_all(bt_gatt_client_h client);
 
+/* HID device related type */
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_LE_MODULE
+ * @brief Reads the maximum data length of LE packets supported by the controller.
+ * @since_tizen 3.0
+ *
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_initialize
+ */
+int bt_adapter_le_read_maximum_data_length(
+		int *max_tx_octets, int *max_tx_time,
+		int *max_rx_octets, int *max_rx_time);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_LE_MODULE
+ * @brief Writes the Host suggested default data length of LE packets to the controller.
+ * @since_tizen 3.0
+ *
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_initialize
+ */
+int bt_adapter_le_write_host_suggested_default_data_length(
+	const unsigned int def_tx_Octets,  const unsigned int def_tx_Time);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_LE_MODULE
+ * @brief Reads the Host suggested data length values of LE packets from the controller.
+ * @since_tizen 3.0
+ *
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_initialize
+ */
+int bt_adapter_le_read_suggested_default_data_length(
+	unsigned int *def_tx_Octets,  unsigned int *def_tx_Time);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_LE_MODULE
+ * @brief Allows the host to suggest to controller, the data length parameters to be used
+ * for a given LE Connection.
+ * @since_tizen 3.0
+ *
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_initialize
+ */
+int bt_device_le_set_data_length(const char *remote_address,
+	unsigned int max_tx_Octets,  unsigned int max_tx_Time);
+
+/**
+ * @internal
+ * @brief LE data length changed callback
+ */
+typedef void (*_bt_le_set_data_length_changed_cb)
+		(int result, const char *remote_address, int max_tx_octets,
+		int max_tx_time, int max_rx_octets, int max_rx_time, void *user_data);
+
+int bt_device_le_set_data_length_change_cb(
+	_bt_le_set_data_length_changed_cb callback, void *user_data);
 #ifdef __cplusplus
 }
 #endif

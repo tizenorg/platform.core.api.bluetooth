@@ -619,6 +619,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 	bt_hdp_data_ind_t *hdp_data_ind = NULL;
 	bt_gatt_char_value_t *char_val = NULL;
 	media_metadata_attributes_t *metadata = NULL;
+	bt_le_data_length_params_t  *data_length_info = NULL;
 
 	event_index = __bt_get_cb_index(event);
 
@@ -1561,6 +1562,19 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 		  bt_event_slot_container[event_index].user_data);
 
 		break;
+	case BLUETOOTH_EVENT_LE_DATA_LENGTH_CHANGED:
+		BT_INFO("__bt_le_set_data_length_changed_cb() will be called");
+		data_length_info = (bt_le_data_length_params_t *)(param->param_data);
+		_bt_convert_address_to_string(&device_addr, &data_length_info->device_address);
+
+		((_bt_le_set_data_length_changed_cb)bt_event_slot_container[event_index].callback)
+		(_bt_get_error_code(param->result), device_addr, data_length_info->max_tx_octets,
+		data_length_info->max_tx_time, data_length_info->max_rx_octets, data_length_info->max_rx_time,
+		bt_event_slot_container[event_index].user_data);
+
+		if (device_addr != NULL)
+			free(device_addr);
+		break;
 #ifdef TIZEN_WEARABLE
 	case BLUETOOTH_PBAP_CONNECTED: {
 		bt_pbap_enabled_cb cb = bt_event_slot_container[event_index].callback;
@@ -2248,6 +2262,8 @@ static int __bt_get_cb_index(int event)
 		return BT_EVENT_MANUFACTURER_DATA_CHANGED;
 	case BLUETOOTH_EVENT_CONNECTABLE_CHANGED:
 		return BT_EVENT_CONNECTABLE_CHANGED_EVENT;
+	case BLUETOOTH_EVENT_LE_DATA_LENGTH_CHANGED:
+		return BT_EVENT_LE_DATA_LENGTH_CHANGED;
 #ifdef TIZEN_WEARABLE
 	case BLUETOOTH_PBAP_CONNECTED:
 		return BT_EVENT_PBAP_CONNECTION_STATUS;
