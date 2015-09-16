@@ -3080,3 +3080,81 @@ int bt_adapter_le_unregister_all_scan_filters(void)
 
 	return BT_ERROR_NONE;
 }
+
+int bt_adapter_le_read_maximum_data_length(
+		int *max_tx_octets, int *max_tx_time,
+		int *max_rx_octets, int *max_rx_time)
+{
+	int ret = BT_ERROR_NONE;
+
+	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_INIT_STATUS();
+
+	bluetooth_le_read_maximum_data_length_t max_le_datalength;
+
+	ret = _bt_get_error_code(
+		bluetooth_le_read_maximum_data_length(&max_le_datalength));
+
+	if (ret != BT_ERROR_NONE) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+		return ret;
+	}
+
+	*max_tx_octets = max_le_datalength.max_tx_octets;
+	*max_tx_time = max_le_datalength.max_tx_time;
+	*max_rx_octets = max_le_datalength.max_rx_octets;
+	*max_rx_time = max_le_datalength.max_rx_time;
+
+	return ret;
+}
+
+int bt_adapter_le_write_host_suggested_default_data_length(
+	const unsigned int def_tx_Octets, const unsigned int def_tx_Time)
+{
+	int ret = BT_ERROR_NONE;
+
+	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_INIT_STATUS();
+
+	/*Range for host suggested txtime is 0x001B-0x00FB  and
+	txocets is 0x0148- 0x0848 as per BT 4.2 spec*/
+	if (((def_tx_Octets < 27 || def_tx_Octets > 251) ||
+		(def_tx_Time < 328 || def_tx_Time > 2120)) ||
+		((def_tx_Octets < 0x001B || def_tx_Octets > 0x00FB) ||
+		(def_tx_Time < 0x0148 || def_tx_Time > 0x0848))) {
+		return BT_ERROR_INVALID_PARAMETER;
+	}
+
+	ret = _bt_get_error_code(
+		bluetooth_le_write_host_suggested_default_data_length(
+					def_tx_Octets, def_tx_Time));
+
+	if (ret != BT_ERROR_NONE)
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+
+	return ret;
+}
+
+int bt_adapter_le_read_suggested_default_data_length(
+	unsigned int *def_tx_Octets,  unsigned int *def_tx_Time)
+{
+	int ret = BT_ERROR_NONE;
+
+	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_INIT_STATUS();
+
+	bluetooth_le_read_host_suggested_data_length_t data_values;
+
+	ret = _bt_get_error_code(
+		bluetooth_le_read_suggested_default_data_length(&data_values));
+
+	if (ret != BT_ERROR_NONE) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+		return ret;
+	}
+
+	*def_tx_Octets = data_values.def_tx_octets;
+	*def_tx_Time = data_values.def_tx_time;
+
+	return ret;
+}
