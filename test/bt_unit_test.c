@@ -201,6 +201,9 @@ tc_table_t tc_adapter_le[] = {
 	{"bt_adapter_le_set_device_discovery_state_changed_cb"		, BT_UNIT_TEST_FUNCTION_ADAPTER_LE_SET_DEVICE_DISCOVERY_STATE_CHANGED_CB},
 	{"bt_adapter_le_unset_device_discovery_state_changed_cb"	, BT_UNIT_TEST_FUNCTION_ADAPTER_LE_UNSET_DEVICE_DISCOVERY_STATE_CHANGED_CB},
 #endif
+	{"bt_adater_le_read_maximum_data_length",		BT_UNIT_TEST_FUNCTION_ADAPTER_LE_READ_MAXIMUM_DATA_LENGTH},
+	{"bt_adater_le_wite_host_suggested_def_data_length",		BT_UNIT_TEST_FUNCTION_ADAPTER_LE_WRITE_HOST_SUGGESTED_DEFAULT_DATA_LENGTH},
+	{"bt_adater_le_read_host_suggested_def_data_length",		BT_UNIT_TEST_FUNCTION_ADAPTER_LE_READ_HOST_SUGGESTED_DEFAULT_DATA_LENGTH},
 	{"Select this menu to set parameters and then select the function again."			, BT_UNIT_TEST_FUNCTION_ACTIVATE_FLAG_TO_SET_PARAMETERS},
 	{NULL					, 0x0000},
 };
@@ -221,6 +224,8 @@ tc_table_t tc_device[] = {
 	{"bt_device_create_bond" 					, BT_UNIT_TEST_FUNCTION_DEVICE_CREATE_BOND},
 	{"bt_device_create_bond_by_type"				, BT_UNIT_TEST_FUNCTION_DEVICE_CREATE_BOND_BY_TYPE},
 	{"bt_device_destroy_bond"					, BT_UNIT_TEST_FUNCTION_DEVICE_DESTROY_BOND},
+	{"bt_device_le_set_data_length"                       		, BT_UNIT_TEST_FUNCTION_LE_DEVICE_SET_DATA_LENGTH},
+	{"bt_device_le_data_length_changed_cb",		BT_UNIT_TEST_FUNCTION_LE_DEVICE_DATA_LENGTH_CHANGED_CB},
 	{"Select this menu to set parameters and then select the function again."			, BT_UNIT_TEST_FUNCTION_ACTIVATE_FLAG_TO_SET_PARAMETERS},
 	{NULL					, 0x0000},
 };
@@ -1056,6 +1061,14 @@ static void __bt_socket_connection_state_changed_cb(int result,
 	}
 }
 
+static void __bt_le_set_data_length_changed_cb(int result, const char *remote_address, int max_tx_octets,
+		int max_tx_time, int max_rx_octets, int max_rx_time,void *user_data)
+{
+	TC_PRT("__bt_le_set_data_length_changed_cb \n");
+	TC_PRT("max_tx_octets: %d  max_tx_time: %d  max_rx_octets: %d  max_rx_time: %d",
+			max_tx_octets, max_tx_time, max_rx_octets, max_rx_time);
+	TC_PRT("result: %s", __bt_get_error_message(result));
+}
 void __bt_opp_client_push_responded_cb(int result,
 					const char *remote_address,
 					void *user_data)
@@ -3320,7 +3333,76 @@ int test_input_callback(void *data)
 			TC_PRT("returns %s\n", __bt_get_error_message(ret));
 			break;
 #endif
+		case BT_UNIT_TEST_FUNCTION_ADAPTER_LE_READ_MAXIMUM_DATA_LENGTH: {
 
+			TC_PRT("Read Maximum LE Data length");
+
+			int max_tx_octects = 0;
+			int max_rx_octects = 0;
+			int max_tx_time = 0;
+			int max_rx_time = 0;
+			ret = bt_adapter_le_read_maximum_data_length(
+				&max_tx_octects, &max_tx_time,
+				&max_rx_octects, &max_rx_time);
+			TC_PRT("max data length values are  %d %d %d %d",
+				max_tx_octects, max_tx_time,
+				max_rx_octects, max_rx_time);
+			TC_PRT("returns %s\n", __bt_get_error_message(ret));
+
+			break;
+		}
+		case BT_UNIT_TEST_FUNCTION_ADAPTER_LE_WRITE_HOST_SUGGESTED_DEFAULT_DATA_LENGTH: {
+
+			TC_PRT("Testing: Write Host suggested default LE Data length");
+
+			unsigned int def_tx_octects = 30;
+			unsigned int def_tx_time = 330;
+			ret = bt_adapter_le_write_host_suggested_default_data_length(
+				def_tx_octects, def_tx_time);
+			TC_PRT("returns %s\n", __bt_get_error_message(ret));
+
+			break;
+		}
+		case BT_UNIT_TEST_FUNCTION_ADAPTER_LE_READ_HOST_SUGGESTED_DEFAULT_DATA_LENGTH: {
+
+			TC_PRT("Read host suggested default LE Data length");
+
+			unsigned int def_tx_octets = 0;
+			unsigned 	int def_tx_time = 0;
+			ret = bt_adapter_le_read_suggested_default_data_length(
+				&def_tx_octets, &def_tx_time);
+			TC_PRT("host suggested default le data length values are  %d %d",
+					def_tx_octets, def_tx_time);
+
+			TC_PRT("returns %s\n", __bt_get_error_message(ret));
+			break;
+		}
+
+		case BT_UNIT_TEST_FUNCTION_LE_DEVICE_SET_DATA_LENGTH: {
+
+			TC_PRT("Set LE Data length paramters cmd");
+
+			unsigned int tx_octets = 50;
+			unsigned 	int tx_time = 500;
+
+			TC_PRT("settting le data length values  tx octects: %d  tx time: %d",
+			tx_octets, tx_time);
+			ret = bt_device_le_set_data_length(remote_addr,
+				tx_octets, tx_time);
+			TC_PRT("returns %s\n", __bt_get_error_message(ret));
+
+			break;
+		}
+		case BT_UNIT_TEST_FUNCTION_LE_DEVICE_DATA_LENGTH_CHANGED_CB: {
+
+			TC_PRT("Setting LE Data length change callback");
+
+			ret = bt_device_le_set_data_length_change_cb(__bt_le_set_data_length_changed_cb,
+				NULL);
+			TC_PRT("returns %s\n", __bt_get_error_message(ret));
+
+			break;
+		}
 		case BT_UNIT_TEST_FUNCTION_ACTIVATE_FLAG_TO_SET_PARAMETERS:
 			need_to_set_params = true;
 			TC_PRT("Select the function again");

@@ -574,3 +574,45 @@ int bt_device_get_service_mask_from_uuid_list(char **uuids,
 
 	return BT_ERROR_NONE;
 }
+int bt_device_le_set_data_length(const char *remote_address,
+		unsigned int max_tx_Octets,  unsigned int max_tx_Time)
+{
+	int ret = BT_ERROR_NONE;
+
+	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(remote_address);
+
+	bluetooth_device_address_t addr_hex = {{0,}};
+
+	//Range for host suggested txtime is 0x001B-0x00FB  and
+	// txocets is 0x0148- 0x0848 as per BT 4.2 spec
+	if (((max_tx_Octets < 27 && max_tx_Octets > 251) &&
+		(max_tx_Time < 328 && max_tx_Time > 2120)) ||
+		((max_tx_Octets < 0x001B && max_tx_Octets > 0x00FB)
+		&& (max_tx_Time < 0x0148 && max_tx_Time > 0x0848))) {
+		return BT_ERROR_INVALID_PARAMETER;
+	}
+
+	_bt_convert_address_to_hex(&addr_hex, remote_address);
+
+	ret = _bt_get_error_code(bluetooth_le_set_data_length(
+					&addr_hex,
+					max_tx_Octets,
+					max_tx_Time));
+
+	if (ret != BT_ERROR_NONE)
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+
+	return ret;
+}
+
+int bt_device_le_set_data_length_change_cb(
+	_bt_le_set_data_length_changed_cb callback, void *user_data)
+{
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(callback);
+	_bt_set_cb(BT_EVENT_LE_DATA_LENGTH_CHANGED, callback, user_data);
+
+	return BT_ERROR_NONE;
+}
