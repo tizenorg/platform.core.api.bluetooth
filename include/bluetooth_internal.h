@@ -18,7 +18,6 @@
 #ifndef __TIZEN_NETWORK_BLUETOOTH_INTERNAL_H__
 #define __TIZEN_NETWORK_BLUETOOTH_INTERNAL_H__
 
-#include <glib.h>
 #include "bluetooth_type.h"
 #include "bluetooth_type_internal.h"
 
