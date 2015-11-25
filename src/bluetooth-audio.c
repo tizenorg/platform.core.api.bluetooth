@@ -256,6 +256,9 @@ int bt_audio_connect(const char *remote_address, bt_audio_profile_type_e type)
 		error = bluetooth_hf_connect(&addr_hex);
 		break;
 #endif
+	case BT_AUDIO_PROFILE_TYPE_A2DP_SINK:
+		error = bluetooth_av_source_connect(&addr_hex);
+		break;
 	case BT_AUDIO_PROFILE_TYPE_ALL:
 	default:
 		error = bluetooth_audio_connect(&addr_hex);
@@ -310,6 +313,9 @@ int bt_audio_disconnect(const char *remote_address, bt_audio_profile_type_e type
 		error = bluetooth_hf_disconnect(&addr_hex);
 		break;
 #endif
+	case BT_AUDIO_PROFILE_TYPE_A2DP_SINK:
+		error = bluetooth_av_source_disconnect(&addr_hex);
+		break;
 	case BT_AUDIO_PROFILE_TYPE_ALL:
 	default:
 		error = bluetooth_audio_disconnect(&addr_hex);
