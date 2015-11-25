@@ -174,6 +174,7 @@ tc_table_t tc_adapter_le[] = {
 	{"bt_adapter_le_set_scan_mode"				, BT_UNIT_TEST_FUNCTION_ADAPTER_LE_SET_SCAN_MODE},
 	{"bt_adapter_le_start_scan"				, BT_UNIT_TEST_FUNCTION_ADAPTER_LE_START_SCAN},
 	{"bt_adapter_le_stop_scan"				, BT_UNIT_TEST_FUNCTION_ADAPTER_LE_STOP_SCAN},
+	{"bt_adapter_le_is_scanning"				, BT_UNIT_TEST_FUNCTION_ADAPTER_LE_IS_SCANNING},
 #ifndef TIZEN_WEARABLE
 	{"bt_adapter_le_start_device_discovery"				, BT_UNIT_TEST_FUNCTION_ADAPTER_LE_START_DEVICE_DISCOVERY},
 	{"bt_adapter_le_stop_device_discovery"				, BT_UNIT_TEST_FUNCTION_ADAPTER_LE_STOP_DEVICE_DISCOVERY},
@@ -2885,6 +2886,12 @@ int test_input_callback(void *data)
 			TC_PRT("returns %s\n", __bt_get_error_message(ret));
 			break;
 
+		case BT_UNIT_TEST_FUNCTION_ADAPTER_LE_IS_SCANNING: {
+			bool is_scanning = FALSE;
+			ret = bt_adapter_le_is_scanning(&is_scanning);
+			TC_PRT("returns %s with scanning value as %d \n", __bt_get_error_message(ret), is_scanning);
+			break;
+		}
 #ifndef TIZEN_WEARABLE
 		case BT_UNIT_TEST_FUNCTION_ADAPTER_LE_START_DEVICE_DISCOVERY:
 			ret = bt_adapter_le_start_device_discovery();
