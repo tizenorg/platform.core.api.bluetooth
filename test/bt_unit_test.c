@@ -415,6 +415,14 @@ tc_table_t tc_hid[] = {
 	{"bt_hid_host_deinitialize"					, BT_UNIT_TEST_FUNCTION_HID_HOST_DEINITIALIZE},
 	{"bt_hid_host_connect"						, BT_UNIT_TEST_FUNCTION_HID_HOST_CONNECT},
 	{"bt_hid_host_disconnect"					, BT_UNIT_TEST_FUNCTION_HID_HOST_DISCONNECT},
+	{"bt_hid_device_activate"					, BT_UNIT_TEST_FUNCTION_HID_DEVICE_ACTIVATE},
+	{"bt_hid_device_connect"					, BT_UNIT_TEST_FUNCTION_HID_DEVICE_CONNECT},
+	{"bt_hid_device_disconnect"					, BT_UNIT_TEST_FUNCTION_HID_DEVICE_DISCONNECT},
+	{"bt_hid_device_deactivate"					, BT_UNIT_TEST_FUCNTION_HID_DEVICE_DEACTIVATE},
+	{"bt_hid_device_send_mouse_event"			, BT_UNIT_TEST_FUNCTION_HID_DEVICE_SEND_MOUSE_EVENT},
+	{"bt_hid_device_send_key_event"			, BT_UNIT_TEST_FUNCTION_HID_DEVICE_SEND_KEY_EVENT},
+	{"bt_hid_device_set_data_received_cb	"		, BT_UNIT_TEST_FUNCTION_HID_DEVICE_SET_DATA_RECEIVED_CB},
+	{"bt_hid_device_unset_data_received_cd"		, BT_UNIT_TEST_FUNCTION_HID_DEVICE_UNSET_DATA_RECEIVED_CB},
 	{"Select this menu to set parameters and then select the function again."			, BT_UNIT_TEST_FUNCTION_ACTIVATE_FLAG_TO_SET_PARAMETERS},
 	{NULL					, 0x0000},
 };
@@ -1022,6 +1030,85 @@ static void __bt_socket_data_received_cb(bt_socket_received_data_s *data, void *
 	TC_PRT("Socket fd: %d", data->socket_fd);
 	TC_PRT("Data: %s", data->data);
 	TC_PRT("Size: %d", data->data_size);
+}
+
+static void __bt_hid_device_data_received_cb(const bt_hid_device_received_data_s *data, void *user_data)
+{
+	TC_PRT("+");
+	char val = 0x01;
+	int ret = 0;
+	if (data == NULL) {
+		TC_PRT("No received data");
+		return;
+	}
+	TC_PRT("Address: %s", data->address);
+	TC_PRT("Type: %d", data->type);
+	TC_PRT("Param: %d", data->param);
+	switch(data->type) {
+		case BT_HID_HEADER_HANDSHAKE:
+			TC_PRT("HANDSHAKE data");
+			break;
+		case BT_HID_HEADER_HID_CONTROL:
+			TC_PRT("HID Control data");
+			ret = bt_hid_device_disconnect(remote_addr);
+			TC_PRT("ret %d", ret);
+			break;
+		case BT_HID_HEADER_GET_REPORT:
+			TC_PRT("GET_REPORT data");
+			TC_PRT("ReportId %d", data->data[1]);
+			bt_hid_key_data_s send_data;
+			/* Will send character 'a' */
+			char	pressedkey[8]	 = { 4, 0, 0, 0,  0, 0, 0, 0 };
+			memcpy(send_data.key, pressedkey, 8);
+			send_data.modify = 0;
+			if (data->data[1] == 0x02) {
+			ret = bt_hid_device_reply_to_report(remote_addr,BT_HID_HEADER_GET_REPORT,
+						BT_HID_PARAM_DATA_RTYPE_INPUT,
+						(const char*)&send_data, sizeof(send_data));
+			} else if (data->data[1] == 0x01) {
+				TC_PRT("Send Mouse Event");
+			} else {
+				TC_PRT("Invalid ReportId");
+				val = BT_HID_HANDSHAKE_ERR_INVALID_REPORT_ID;
+				ret = bt_hid_device_reply_to_report(remote_addr,BT_HID_HEADER_HANDSHAKE,
+						BT_HID_PARAM_DATA_RTYPE_INPUT,
+						&val, sizeof(val));
+			}
+			TC_PRT("ret %d", ret);
+			break;
+		case BT_HID_HEADER_SET_REPORT:
+			TC_PRT("SET_REPORT data");
+			break;
+		case BT_HID_HEADER_DATA:
+			TC_PRT("TRANs DATA");
+			break;
+		case BT_HID_HEADER_GET_PROTOCOL:
+			TC_PRT("GET PROTOCOL");
+			ret = bt_hid_device_reply_to_report(remote_addr,BT_HID_HEADER_GET_PROTOCOL,
+						BT_HID_PARAM_DATA_RTYPE_INPUT,
+						&val, sizeof(val));
+			TC_PRT("ret %d", ret);
+			break;
+		case BT_HID_HEADER_SET_PROTOCOL:
+			TC_PRT("SET PROTOCOL");
+			val = BT_HID_HANDSHAKE_SUCCESSFUL;
+			ret = bt_hid_device_reply_to_report(remote_addr,BT_HID_HEADER_HANDSHAKE,
+						BT_HID_PARAM_DATA_RTYPE_INPUT,
+						&val, sizeof(val));
+			TC_PRT("ret %d", ret);
+			break;
+		default:
+			TC_PRT("Unkonw");
+			break;
+	}
+	switch(data->param) {
+		case BT_HID_PARAM_DATA_RTYPE_INPUT:
+			TC_PRT("Input Report");
+			break;
+		case BT_HID_PARAM_DATA_RTYPE_OUTPUT:
+			TC_PRT("Output Report");
+			break;
+	}
 }
 
 static void __bt_socket_connection_requested_cb(int socket_fd, const char *remote_address, void *user_data)
@@ -1711,6 +1798,15 @@ void __bt_hid_host_connection_state_changed_cb(int result,
 {
 	TC_PRT("__bt_hid_host_connection_state_changed_cb: called");
 	TC_PRT("result: %s", __bt_get_error_message(result));
+}
+
+void __bt_hid_device_connection_state_changed_cb(int result,
+		bool connected, const char *remote_address, void *user_data)
+{
+	TC_PRT("__bt_hid_device_connection_state_changed_cb:");
+	TC_PRT("result: %s", __bt_get_error_message(result));
+	TC_PRT("Remote Address %s", remote_address);
+	TC_PRT("Connected %d", connected);
 }
 
 #ifdef TIZEN_WEARABLE
@@ -5081,6 +5177,118 @@ int test_input_callback(void *data)
 		}
 		case BT_UNIT_TEST_FUNCTION_HID_HOST_DISCONNECT: {
 			ret = bt_hid_host_disconnect(remote_addr);
+			TC_PRT("returns %s\n", __bt_get_error_message(ret));
+			break;
+		}
+		case BT_UNIT_TEST_FUNCTION_HID_DEVICE_ACTIVATE: {
+			ret = bt_hid_device_activate(__bt_hid_device_connection_state_changed_cb,
+											NULL);
+			TC_PRT("returns %s", __bt_get_error_message(ret));
+			break;
+		}
+		case BT_UNIT_TEST_FUNCTION_HID_DEVICE_CONNECT: {
+			ret = bt_hid_device_connect(remote_addr);
+			TC_PRT("returns %s", __bt_get_error_message(ret));
+			break;
+		}
+		case BT_UNIT_TEST_FUCNTION_HID_DEVICE_DEACTIVATE: {
+			ret = bt_hid_device_deactivate();
+			TC_PRT("returns %s\n", __bt_get_error_message(ret));
+			break;
+		}
+		case BT_UNIT_TEST_FUNCTION_HID_DEVICE_DISCONNECT: {
+			ret = bt_hid_device_disconnect(remote_addr);
+			TC_PRT("return %s", __bt_get_error_message(ret));
+			break;
+		}
+		case BT_UNIT_TEST_FUNCTION_HID_DEVICE_SEND_MOUSE_EVENT: {
+			bt_hid_mouse_data_s send_data;
+			int i;
+
+			send_data.button = 1;
+			send_data.axis_z  = 0x00;
+
+			send_data.axis_x = 10;
+			send_data.axis_y = 0;
+			for (i = 0; i < 30; i++) {
+				usleep(30000);
+				ret = bt_hid_device_send_mouse_event(remote_addr,&send_data);
+				if (ret < 0)
+					TC_PRT("returns %d\n", ret);
+			}
+			send_data.axis_x = 0;
+			send_data.axis_y = 10;
+			for (i = 0; i < 30; i++) {
+				usleep(30000);
+				ret = bt_hid_device_send_mouse_event(remote_addr,&send_data);
+				if (ret < 0)
+					TC_PRT("returns %d\n", ret);
+			}
+			send_data.axis_x = -10;
+			send_data.axis_y = 0;
+			for (i = 0; i < 60; i++) {
+				usleep(30000);
+				ret = bt_hid_device_send_mouse_event(remote_addr,&send_data);
+				if (ret < 0)
+					TC_PRT("returns %d\n", ret);
+			}
+			send_data.axis_x = 0;
+			send_data.axis_y = -10;
+			for (i = 0; i < 60; i++) {
+				usleep(30000);
+				ret = bt_hid_device_send_mouse_event(remote_addr,&send_data);
+				if (ret < 0)
+					TC_PRT("returns %d\n", ret);
+			}
+			send_data.axis_x = 10;
+			send_data.axis_y = 0;
+			for (i = 0; i < 60; i++) {
+				usleep(30000);
+				ret = bt_hid_device_send_mouse_event(remote_addr,&send_data);
+				if (ret < 0)
+					TC_PRT("returns %d\n", ret);
+			}
+			send_data.axis_x = 0;
+			send_data.axis_y = 10;
+			for (i = 0; i < 30; i++) {
+				usleep(30000);
+				ret = bt_hid_device_send_mouse_event(remote_addr,&send_data);
+				if (ret < 0)
+					TC_PRT("returns %d\n", ret);
+			}
+			send_data.axis_x = -10;
+			send_data.axis_y = 0;
+			for (i = 0; i < 30; i++) {
+				usleep(30000);
+				ret = bt_hid_device_send_mouse_event(remote_addr,&send_data);
+				if (ret < 0)
+					TC_PRT("returns %d\n", ret);
+			}
+			TC_PRT("Completed");
+
+			break;
+		}
+		case BT_UNIT_TEST_FUNCTION_HID_DEVICE_SEND_KEY_EVENT: {
+			bt_hid_key_data_s send_data;
+			/* Will send character 'a' */
+			char	pressedkey[8]	 = { 4, 0, 0, 0,  0, 0, 0, 0 };
+			char	pressedkey1[8]	 = { 0, 0, 0, 0,  0, 0, 0, 0 };
+			memcpy(send_data.key, pressedkey, 8);
+			send_data.modify = 0;
+			ret = bt_hid_device_send_key_event(remote_addr,&send_data);
+			TC_PRT("returns %d\n", ret);
+			memcpy(send_data.key, pressedkey1, 8);
+			ret = bt_hid_device_send_key_event(remote_addr,&send_data);
+			TC_PRT("returns %d\n", ret);
+			break;
+		}
+		case BT_UNIT_TEST_FUNCTION_HID_DEVICE_SET_DATA_RECEIVED_CB: {
+			ret = bt_hid_device_set_data_received_cb(__bt_hid_device_data_received_cb, NULL);
+			TC_PRT("returns %s\n", __bt_get_error_message(ret));
+			break;
+		}
+		case BT_UNIT_TEST_FUNCTION_HID_DEVICE_UNSET_DATA_RECEIVED_CB: {
+			ret = bt_hid_device_unset_data_received_cb();
 			TC_PRT("returns %s\n", __bt_get_error_message(ret));
 			break;
 		}
