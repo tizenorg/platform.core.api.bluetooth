@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 #ifndef __TIZEN_NETWORK_BLUETOOTH_INTERNAL_H__
 #define __TIZEN_NETWORK_BLUETOOTH_INTERNAL_H__
 
@@ -524,6 +523,32 @@ int bt_adapter_le_set_state_changed_cb(bt_adapter_le_state_changed_cb callback, 
  * @see bt_adapter_le_set_state_changed_cb()
  */
 int bt_adapter_le_unset_state_changed_cb(void);
+
+/**
+ * @internal
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
+ * @brief Checks for the LE scanning is in progress or not.
+ * @since_tizen 2.3.1
+ *
+ * @remarks If Bluetooth LE scanning is in progress, other operations are not allowed and
+ * you have to either stop the LE scanning operation, or wait for it to be finished,
+ * before performing other operations.
+
+ * @param[out] is_scanning The scanning status: (@c true = in progress , @c  false = not in progress )
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The state of local Bluetooth must be #BT_ADAPTER_ENABLED.
+ * @see bt_adapter_le_start_scan
+ * @see bt_adapter_le_stop_scan
+ */
+int bt_adapter_le_is_scanning(bool *is_scanning);
 
 /**
  * @internal

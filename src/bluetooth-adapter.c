@@ -920,17 +920,17 @@ int bt_adapter_le_stop_device_discovery(void)
 	return error_code;
 }
 
-int bt_adapter_le_is_discovering(bool *is_discovering)
+int bt_adapter_le_is_scanning(bool *is_scanning)
 {
 	int ret = 0;
 
 	BT_CHECK_LE_SUPPORT();
 	BT_CHECK_INIT_STATUS();
-	BT_CHECK_INPUT_PARAMETER(is_discovering);
+	BT_CHECK_INPUT_PARAMETER(is_scanning);
 
 	ret = bluetooth_is_le_discovering();
 	if (ret >= BLUETOOTH_ERROR_BASE) {
-		*is_discovering = (ret == 1) ? true : false;
+		*is_scanning = (ret == 1) ? true : false;
 		return BT_ERROR_NONE;
 	} else {
 		ret = _bt_get_error_code(ret);
