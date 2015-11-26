@@ -24,6 +24,7 @@
 
 #include "bluetooth.h"
 #include "bluetooth_private.h"
+#include "bluetooth_internal.h"
 
 static bool is_hid_host_initialized = false;
 
@@ -205,6 +206,7 @@ int bt_hid_device_connect(const char *remote_address)
 	int error;
 	BT_CHECK_HID_DEVICE_SUPPORT();
 	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(remote_address);
 	BT_DBG("+");
 	error = bluetooth_hid_device_connect(remote_address);
 	error = _bt_get_error_code(error);
@@ -219,6 +221,7 @@ int bt_hid_device_disconnect(const char *remote_address)
 	int error;
 	BT_CHECK_HID_DEVICE_SUPPORT();
 	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(remote_address);
 	error = bluetooth_hid_device_disconnect(remote_address);
 	error = _bt_get_error_code(error);
 	if (error != BT_ERROR_NONE)
@@ -232,6 +235,8 @@ int bt_hid_device_send_mouse_event(const char *remote_address,
 	int ret;
 	BT_CHECK_HID_DEVICE_SUPPORT();
 	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(remote_address);
+	BT_CHECK_INPUT_PARAMETER(mouse_data);
 
 	ret = bluetooth_hid_device_send_mouse_event(remote_address,
 			*(hid_send_mouse_event_t*)mouse_data);
@@ -261,6 +266,8 @@ int bt_hid_device_send_key_event(const char *remote_address,
 	int ret;
 	BT_CHECK_HID_DEVICE_SUPPORT();
 	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(remote_address);
+	BT_CHECK_INPUT_PARAMETER(key_data);
 
 	ret = bluetooth_hid_device_send_key_event(remote_address,
 			*(hid_send_key_event_t*)key_data);
@@ -292,6 +299,8 @@ int bt_hid_device_reply_to_report(const char *remote_address,
 	int ret;
 	BT_CHECK_HID_DEVICE_SUPPORT();
 	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(remote_address);
+
 	ret = bluetooth_hid_device_reply_to_report(remote_address, htype,
 				ptype, data, data_len);
 	if (ret <= 0) {
@@ -323,7 +332,7 @@ int bt_hid_device_set_data_received_cb(bt_hid_device_data_received_cb callback, 
 	return BT_ERROR_NONE;
 }
 
-int bt_hid_device_unset_data_received_cb()
+int bt_hid_device_unset_data_received_cb(void)
 {
 	BT_CHECK_HID_DEVICE_SUPPORT();
 	BT_CHECK_INIT_STATUS();
