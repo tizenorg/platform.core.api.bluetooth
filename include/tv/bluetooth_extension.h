@@ -163,5 +163,5 @@ int bt_ag_notify_voice_recognition_state(bool state);
 }
 #endif /* __cplusplus */
 
-#endif // __TIZEN_NETWORK_BLUETOOTH_EXTENTION_H__
+#endif // __TIZEN_NETWORK_BLUETOOTH_EXTENSION_H__
 

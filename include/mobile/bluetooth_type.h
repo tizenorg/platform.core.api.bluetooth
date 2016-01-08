@@ -75,18 +75,6 @@ typedef enum
 } bt_adapter_state_e;
 
 /**
- * @internal
- * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
- * @brief  Enumerations of the Bluetooth adapter le state.
- * @since_tizen 2.3
- */
-typedef enum
-{
-	BT_ADAPTER_LE_DISABLED = 0x00, /**< Bluetooth le is disabled */
-	BT_ADAPTER_LE_ENABLED, /**< Bluetooth le is enabled */
-} bt_adapter_le_state_e;
-
-/**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_MODULE
  * @brief Enumerations of the Bluetooth visibility mode.
  * @since_tizen 2.3
@@ -477,11 +465,10 @@ typedef enum {
     BT_AUDIO_PROFILE_TYPE_HSP_HFP,  /**< HSP(Headset Profile) and HFP(Hands-Free Profile) */
     BT_AUDIO_PROFILE_TYPE_A2DP,  /**< A2DP(Advanced Audio Distribution Profile) */
     BT_AUDIO_PROFILE_TYPE_AG,  /**< AG(Audio Gateway) */
-    BT_AUDIO_PROFILE_TYPE_A2DP_SINK,  /**< A2DP(Advanced Audio Distribution Profile) sink role */
+    BT_AUDIO_PROFILE_TYPE_A2DP_SINK,  /**< A2DP(Advanced Audio Distribution Profile) Sink role */
 } bt_audio_profile_type_e;
 
 /**
- * @internal
  * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_AG_MODULE
  * @brief  Enumerations for the call handling event
  * @since_tizen 2.3
@@ -493,7 +480,6 @@ typedef enum {
 } bt_ag_call_handling_event_e;
 
 /**
- * @internal
  * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_AG_MODULE
  * @brief  Enumerations for the multi call handling event
  * @since_tizen 2.3
@@ -505,38 +491,6 @@ typedef enum {
     BT_AG_MULTI_CALL_HANDLING_EVENT_MERGE_CALLS,  /**< Request to add a held call to the conversation */
     BT_AG_MULTI_CALL_HANDLING_EVENT_EXPLICIT_CALL_TRANSFER,  /**< Request to let a user who has two calls to connect these two calls together and release its connections to both other parties */
 } bt_ag_multi_call_handling_event_e;
-
-/**
- * @internal
- * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_AG_MODULE
- * @brief  Enumerations for the call state
- * @since_tizen 2.3
- */
-typedef enum {
-    BT_AG_CALL_EVENT_IDLE = 0x00,  /**< Idle */
-    BT_AG_CALL_EVENT_ANSWERED,  /**< Answered */
-    BT_AG_CALL_EVENT_HELD,  /**< Held */
-    BT_AG_CALL_EVENT_RETRIEVED,  /**< Retrieved */
-    BT_AG_CALL_EVENT_DIALING,  /**< Dialing */
-    BT_AG_CALL_EVENT_ALERTING,  /**< Alerting */
-    BT_AG_CALL_EVENT_INCOMING,  /**< Incoming */
-} bt_ag_call_event_e;
-
-/**
- * @internal
- * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_AG_MODULE
- * @brief  Enumerations for the call state
- * @since_tizen 2.3
- */
-typedef enum {
-    BT_AG_CALL_STATE_IDLE = 0x00,  /**< Idle state */
-    BT_AG_CALL_STATE_ACTIVE,  /**< Active state */
-    BT_AG_CALL_STATE_HELD,  /**< Held state */
-    BT_AG_CALL_STATE_DIALING,  /**< Dialing state */
-    BT_AG_CALL_STATE_ALERTING,  /**< Alerting state */
-    BT_AG_CALL_STATE_INCOMING,  /**< Incoming state */
-    BT_AG_CALL_STATE_WAITING,  /**< Waiting for connected indication event after answering an incoming call*/
-} bt_ag_call_state_e;
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
@@ -684,47 +638,6 @@ typedef enum {
 typedef enum {
     BT_PANU_SERVICE_TYPE_NAP = 0,  /**< Network Access Point */
 } bt_panu_service_type_e;
-
-/**
- * @ingroup CAPI_NETWORK_BLUETOOTH_HID_MODULE
- * @brief  Enumerations for the types of HID header type
- * @since_tizen 3.0
- */
-typedef enum {
-        BT_HID_HEADER_HANDSHAKE,
-        BT_HID_HEADER_HID_CONTROL,
-        BT_HID_HEADER_GET_REPORT,
-        BT_HID_HEADER_SET_REPORT,
-        BT_HID_HEADER_GET_PROTOCOL,
-        BT_HID_HEADER_SET_PROTOCOL,
-        BT_HID_HEADER_DATA,
-        BT_HID_HEADER_UNKNOWN
-} bluetooth_hid_header_type_t;
-
-/**
- * @ingroup CAPI_NETWORK_BLUETOOTH_HID_MODULE
- * @brief  Enumerations for the types of HID param type
- * @since_tizen 3.0
- */
-typedef enum {
-        BT_HID_PARAM_DATA_RTYPE_INPUT,
-        BT_HID_PARAM_DATA_RTYPE_OUTPUT
-} bluetooth_hid_param_type_t;
-
-/**
- * @ingroup CAPI_NETWORK_BLUETOOTH_HID_MODULE
- * @brief  Enumerations for the types of HID handshake type
- * @since_tizen 3.0
- */
-typedef enum {
-	BT_HID_HANDSHAKE_SUCCESSFUL = 0x00, /**< Handshake error code none */
-	BT_HID_HANDSHAKE_NOT_READY, /**< Handshake error code Not Ready */
-	BT_HID_HANDSHAKE_ERR_INVALID_REPORT_ID, /**< Handshake error code send invalid report id */
-	BT_HID_HANDSHAKE_ERR_UNSUPPORTED_REQUEST, /**< Handshake error code request unsupported request */
-	BT_HID_HANDSHAKE_ERR_INVALID_PARAMETER, /**< Handshake error code received invalid parameter */
-	BT_HID_HANDSHAKE_ERR_UNKNOWN = 0x0e, /**< unkown error */
-	BT_HID_HANDSHAKE_ERR_FATAL /**< Fatal error */
-} bluetooth_hid_handshake_type_t;
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
@@ -926,21 +839,6 @@ typedef struct
 } bt_device_connection_info_s;
 
 /**
- * @ingroup CAPI_NETWORK_BLUETOOTH_DEVICE_MODULE
- * @brief Device LE connection update structure.
- * @since_tizen 2.3
- *
- * @see bt_device_le_conn_update()
- */
-typedef struct
-{
-       unsigned int interval_min;   /**< Minimum value for the connection event interval (msec) */
-       unsigned int interval_max;   /**< Maximum value for the connection event interval (msec) */
-       unsigned int latency;   /**< Slave latency (msec) */
-       unsigned int time_out;   /**< Supervision timeout (msec) */
-} bt_le_conn_update_s;
-
-/**
  * @ingroup CAPI_NETWORK_BLUETOOTH_SOCKET_MODULE
  * @brief Rfcomm connection data used for exchanging data between Bluetooth devices.
  * @since_tizen 2.3
@@ -972,74 +870,6 @@ typedef struct
 	int data_size;	/**< The length of the received data */
 	char *data;	/**< The received data */
 } bt_socket_received_data_s;
-
-/**
- * @ingroup CAPI_NETWORK_BLUETOOTH_HID_MODULE
- * @brief  HID Mouse data type; used to send mouse event
- * @since_tizen 3.0
- *
- * @see bt_hid_device_send_mouse_event()
- */
-typedef struct
-{
-        unsigned char btcode;
-        unsigned char rep_id;
-        unsigned char button;
-        signed char axis_x;
-        signed char axis_y;
-        signed char axis_z;
-} bt_hid_mouse_data_s;
-
-/**
- * @ingroup CAPI_NETWORK_BLUETOOTH_HID_MODULE
- * @brief  HID Key data; used to send HID key event
- * @since_tizen 3.0
- *
- * @see bt_hid_device_send_key_event()
- */
-typedef struct
-{
-        unsigned char btcode;
-        unsigned char rep_id;
-        unsigned char modify;
-        unsigned char key[8];
-} bt_hid_key_data_s;
-
-typedef struct
-{
-        const char *address;
-        bluetooth_hid_header_type_t type;
-        bluetooth_hid_param_type_t param;
-        int data_size;  /**< The length of the received data */
-        const char *data;     /**< The received data */
-} bt_hid_device_received_data_s;
-
-/**
- * @ingroup CAPI_NETWORK_BLUETOOTH_HID_MODULE
- * @brief  Called when the HID Device connection state changes.
- * @since_tizen 3.0
- *
- * @param[in]   result  The result of the HID device state changing
- * @param[in]   connected  Whether the device is connected
- * @param[in]   user_data  The user data passed from the callback registration function
- *
- * @see bt_hid_device_activate()
- */
-typedef void (*bt_hid_device_connection_state_changed_cb) (int result,
-		bool connected, const char *remote_address, void *user_data);
-
-/**
- * @ingroup CAPI_NETWORK_BLUETOOTH_HID_MODULE
- * @brief  Called when any data is received from host device.
- * @since_tizen 3.0
- *
- * @param[in]   data  The callback to be set/called upon data receive
- * @param[in]   user_data  The user data passed from the callback registration function
- *
- * @see bt_hid_device_set_data_received_cb()
- */
-typedef void (*bt_hid_device_data_received_cb)(const bt_hid_device_received_data_s *data,
-		void *user_data);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_MODULE
@@ -1145,26 +975,6 @@ typedef void (*bt_adapter_device_discovery_state_changed_cb)
 typedef bool (*bt_adapter_bonded_device_cb)(bt_device_info_s *device_info, void *user_data);
 
 /**
- * @internal
- * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_MODULE
- * @brief  Called when the connectable state changes.
- * @since_tizen 2.3
- *
- * @param[in] result The result of the connectable state changing
- * @param[in] connectable The connectable to be changed
- * @param[in] user_data The user data passed from the callback registration function
- *
- * @pre This function will be invoked when the connectable state of local Bluetooth adapter changes
- * if you register this callback using bt_adapter_set_connectable_changed_cb().
- *
- * @see bt_adapter_set_connectable()
- * @see bt_adapter_set_connectable_changed_cb()
- * @see bt_adapter_unset_connectable_changed_cb()
- */
-typedef void (*bt_adapter_connectable_changed_cb)
-	(int result, bool connectable, void *user_data);
-
-/**
  * @deprecated Deprecated since 2.3.1
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
  * @brief  Called when the state of LE device discovery changes.
@@ -1224,23 +1034,6 @@ typedef void (*bt_adapter_le_advertising_state_changed_cb)(int result,
 		bt_advertiser_h advertiser, bt_adapter_le_advertising_state_e adv_state, void *user_data);
 
 /**
- * @internal
- * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
- * @brief  Called when the Bluetooth adapter le state changes.
- * @since_tizen 2.3
- *
- * @param[in]   result  The result of the adapter state changing
- * @param[in]   adapter_le_state  The adapter le state to be changed
- * @param[in]   user_data  The user data passed from the callback registration function
- * @pre Either bt_adapter_le_enable() or bt_adapter_le_disable() will invoke this callback if you register this callback using bt_adapter_le_set_state_changed_cb().
- * @see bt_adapter_le_enable()
- * @see bt_adapter_le_disable()
- * @see bt_adapter_le_set_state_changed_cb()
- * @see bt_adapter_le_unset_state_changed_cb()
- */
-typedef void (*bt_adapter_le_state_changed_cb)(int result, bt_adapter_le_state_e adapter_le_state, void *user_data);
-
-/**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DEVICE_MODULE
  * @brief Called when the process of creating bond finishes.
  * @since_tizen 2.3
@@ -1297,7 +1090,6 @@ typedef bool (*bt_device_connected_profile)(bt_profile_e profile, void *user_dat
 typedef void (*bt_device_bond_destroyed_cb)(int result, char *remote_address, void *user_data);
 
 /**
- * @internal
  * @ingroup CAPI_NETWORK_BLUETOOTH_DEVICE_MODULE
  * @brief  Called when the authorization of device changes.
  * @since_tizen 2.3
@@ -1384,40 +1176,19 @@ typedef void (*bt_socket_connection_state_changed_cb)
 	(int result, bt_socket_connection_state_e connection_state, bt_socket_connection_s *connection, void *user_data);
 
 /**
- * @internal
  * @ingroup CAPI_NETWORK_BLUETOOTH_SOCKET_MODULE
  * @brief  Called when a RFCOMM connection is requested.
  * @since_tizen 2.3
  *
- * @details You must call bt_socket_accept() if you want to accept. Otherwise, you must call bt_socket_reject().
  * @param[in] socket_fd  The file descriptor of socket on which a connection is requested
  * @param[in] remote_address  The address of remote device
  * @param[in] user_data The user data passed from the callback registration function
- * @pre If you register this callback function by bt_socket_set_connection_requested_cb() and listen a socket by bt_socket_listen(),
+ * @pre If you register this callback function by bt_socket_set_connection_requested_cb(),
  * bt_socket_connection_requested_cb() will be invoked.
- * @see bt_socket_listen()
- * @see bt_socket_accept()
- * @see bt_socket_reject()
  */
 typedef void (*bt_socket_connection_requested_cb) (int socket_fd, const char *remote_address, void *user_data);
 
 /**
- * @internal
- * @ingroup CAPI_NETWORK_BLUETOOTH_OPP_SERVER_MODULE
- * @brief  Called when the push is requested.
- * @since_tizen 2.3
- *
- * @details You must call bt_opp_server_accept() if you want to accept.
- * Otherwise, you must call bt_opp_server_reject().
- * @param[in] file  The path of file to be pushed
- * @param[in] size The file size (bytes)
- * @param[in] user_data The user data passed from the callback registration function
- * @see bt_opp_server_initialize()
- */
-typedef void (*bt_opp_server_push_requested_cb)(const char *file, int size, void *user_data);
-
-/**
- * @internal
  * @ingroup CAPI_NETWORK_BLUETOOTH_OPP_SERVER_MODULE
  * @brief  Called when an OPP connection is requested.
  * @since_tizen 2.3
@@ -1820,7 +1591,6 @@ typedef void (*bt_gatt_characteristic_descriptor_discovered_cb) (int result,
  * @see bt_gatt_service_foreach_characteristics()
  * @see bt_gatt_service_foreach_included_services()
  * @see bt_gatt_characteristic_foreach_descriptors()
- * @see bt_gatt_server_foreach_services()
  * @see bt_gatt_client_foreach_services()
  */
 typedef bool (*bt_gatt_foreach_cb) (int total, int index, bt_gatt_h gatt_handle,
@@ -1910,6 +1680,65 @@ typedef void (*bt_nap_connection_state_changed_cb) (bool connected, const char *
  */
 typedef void (*bt_panu_connection_state_changed_cb) (int result, bool connected, const char *remote_address, bt_panu_service_type_e type, void *user_data);
 
+/* HID device related type */
+typedef struct
+{
+        unsigned char btcode;
+        unsigned char rep_id;
+        unsigned char button;
+        signed char axis_x;
+        signed char axis_y;
+        signed char axis_z;
+} bt_hid_mouse_data_s;
+
+typedef struct
+{
+        unsigned char btcode;
+        unsigned char rep_id;
+        unsigned char modify;
+        unsigned char key[8];
+} bt_hid_key_data_s;
+
+typedef enum {
+        BT_HID_HEADER_HANDSHAKE,
+        BT_HID_HEADER_HID_CONTROL,
+        BT_HID_HEADER_GET_REPORT,
+        BT_HID_HEADER_SET_REPORT,
+        BT_HID_HEADER_GET_PROTOCOL,
+        BT_HID_HEADER_SET_PROTOCOL,
+        BT_HID_HEADER_DATA,
+        BT_HID_HEADER_UNKNOWN
+} bluetooth_hid_header_type_t;
+
+typedef enum {
+        BT_HID_PARAM_DATA_RTYPE_INPUT,
+        BT_HID_PARAM_DATA_RTYPE_OUTPUT
+} bluetooth_hid_param_type_t;
+
+typedef enum {
+	BT_HID_HANDSHAKE_SUCCESSFUL = 0x00, /**< Handshake error code none */
+	BT_HID_HANDSHAKE_NOT_READY, /**< Handshake error code Not Ready */
+	BT_HID_HANDSHAKE_ERR_INVALID_REPORT_ID, /**< Handshake error code send invalid report id */
+	BT_HID_HANDSHAKE_ERR_UNSUPPORTED_REQUEST, /**< Handshake error code request unsupported request */
+	BT_HID_HANDSHAKE_ERR_INVALID_PARAMETER, /**< Handshake error code received invalid parameter */
+	BT_HID_HANDSHAKE_ERR_UNKNOWN = 0x0e, /**< unkown error */
+	BT_HID_HANDSHAKE_ERR_FATAL /**< Fatal error */
+} bluetooth_hid_handshake_type_t;
+
+typedef struct
+{
+        const char *address;
+        bluetooth_hid_header_type_t type;
+        bluetooth_hid_param_type_t param;
+        int data_size;  /**< The length of the received data */
+        const char *data;     /**< The received data */
+} bt_hid_device_received_data_s;
+
+typedef void (*bt_hid_device_connection_state_changed_cb) (int result,
+                bool connected, const char *remote_address, void *user_data);
+
+typedef void (*bt_hid_device_data_received_cb)(const bt_hid_device_received_data_s *data, void *user_data);
+/* HID device related type */
 
 #ifdef __cplusplus
 }

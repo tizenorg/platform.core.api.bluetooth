@@ -205,9 +205,13 @@ int bt_adapter_get_version(char **version)
 
 #define BT_ADAPTER_FIRMWARE_INFO_FILE_PATH "/var/lib/bluetooth/bcmtool_log"
 #define BT_ADAPTER_STACK_INFO_FILE_PATH "/usr/etc/bluetooth/stack_info"
+#define BT_ADAPTER_MAX_BUFFER_SIZE (32767 * 1000)
 
 int bt_adapter_get_local_info(char **chipset, char **firmware, char **stack_version, char **profiles)
 {
+	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_INIT_STATUS();
+
 	int ret = BT_ERROR_NONE;
 	FILE *fp = NULL;
 	char *buf = NULL;
@@ -353,6 +357,12 @@ int bt_adapter_get_local_info(char **chipset, char **firmware, char **stack_vers
 	}
 	info_size = info_end - info_start;
 
+	if (info_size < 0 || info_size > BT_ADAPTER_MAX_BUFFER_SIZE) {
+		BT_ERR("info size is incorrect: %ld", info_size);
+		ret = BT_ERROR_OPERATION_FAILED;
+		goto ERROR;
+	}
+
 	local_stack_version = (char *)malloc(sizeof(char) * (info_size + 1));
 	if (local_stack_version == NULL) {
 		ret = BT_ERROR_OUT_OF_MEMORY;
@@ -365,6 +375,12 @@ int bt_adapter_get_local_info(char **chipset, char **firmware, char **stack_vers
 
 	info_start = info_end + 2;
 	info_size = lsize - info_size - 3;
+
+	if (info_size < 0 || info_size > BT_ADAPTER_MAX_BUFFER_SIZE) {
+		BT_ERR("info size is incorrect: %ld", info_size);
+		ret = BT_ERROR_OPERATION_FAILED;
+		goto ERROR;
+	}
 
 	local_profiles = (char *)malloc(sizeof(char) * (info_size + 1));
 	if (local_profiles == NULL) {
@@ -920,17 +936,17 @@ int bt_adapter_le_stop_device_discovery(void)
 	return error_code;
 }
 
-int bt_adapter_le_is_scanning(bool *is_scanning)
+int bt_adapter_le_is_discovering(bool *is_discovering)
 {
 	int ret = 0;
 
 	BT_CHECK_LE_SUPPORT();
 	BT_CHECK_INIT_STATUS();
-	BT_CHECK_INPUT_PARAMETER(is_scanning);
+	BT_CHECK_INPUT_PARAMETER(is_discovering);
 
 	ret = bluetooth_is_le_discovering();
 	if (ret >= BLUETOOTH_ERROR_BASE) {
-		*is_scanning = (ret == 1) ? true : false;
+		*is_discovering = (ret == 1) ? true : false;
 		return BT_ERROR_NONE;
 	} else {
 		ret = _bt_get_error_code(ret);
@@ -1160,7 +1176,6 @@ int bt_adapter_le_create_advertiser(bt_advertiser_h *advertiser)
 		BT_ERR("OUT_OF_MEMORY(0x%08x)", BT_ERROR_OUT_OF_MEMORY);
 		return BT_ERROR_OUT_OF_MEMORY;
 	}
-
 	__adv->handle = GPOINTER_TO_INT(__adv);
 
 	*advertiser = (bt_advertiser_h)__adv;
@@ -1229,7 +1244,9 @@ static int __bt_remove_ad_data_by_type(char *in_data, unsigned int in_len,
 	if (i + len > in_len) {
 		BT_ERR("Invalid advertising data");
 		return BT_ERROR_OPERATION_FAILED;
-	} else if (len == 0) {
+	} else if (len == 0 &&
+			in_type != BT_ADAPTER_LE_ADVERTISING_DATA_LOCAL_NAME &&
+			in_type != BT_ADAPTER_LE_ADVERTISING_DATA_TX_POWER_LEVEL) {
 		BT_INFO("AD Type 0x%02x data is not set", in_type);
 		return BT_ERROR_OPERATION_FAILED;
 	}
@@ -1379,6 +1396,9 @@ static int __bt_convert_string_to_uuid(const char *string, char **uuid, int *bit
 		unsigned short val;
 		char *stop;
 		data = g_malloc0(sizeof(char) * 2);
+		if (data == NULL)
+			return BT_ERROR_OUT_OF_MEMORY;
+
 		val = strtol(string, &stop, 16);
 		val = htons(val);
 		memcpy(data, &val, 2);
@@ -1401,10 +1421,8 @@ static int __bt_convert_string_to_uuid(const char *string, char **uuid, int *bit
 
 		ret = sscanf(string, "%08x-%04hx-%04hx-%04hx-%08x%04hx",
 					&val0, &val1, &val2, &val3, &val4, &val5);
-		if (ret != 6) {
-			g_free(data);
+		if (ret != 6)
 			return BT_ERROR_OPERATION_FAILED;
-		}
 
 		val0 = htonl(val0);
 		val1 = htons(val1);
@@ -2130,7 +2148,6 @@ int bt_adapter_le_enable_privacy(bool enable_privacy)
 	}
 	return error_code;
 }
-
 
 static void __bt_adapter_le_convert_scan_filter(bluetooth_le_scan_filter_t *dest, bt_le_scan_filter_s *src)
 {
@@ -3157,4 +3174,18 @@ int bt_adapter_le_read_suggested_default_data_length(
 	*def_tx_Time = data_values.def_tx_time;
 
 	return ret;
+}
+
+int bt_adapter_set_authentication_req_cb(bt_adapter_authentication_req_cb callback, void *user_data)
+{
+	BT_CHECK_INIT_STATUS();
+	_bt_set_cb(BT_EVENT_AUTHENTICATION_REQUEST, callback, user_data);
+	return BT_ERROR_NONE;
+}
+
+int bt_adapter_unset_authentication_req_cb(void)
+{
+	BT_CHECK_INIT_STATUS();
+	_bt_unset_cb(BT_EVENT_AUTHENTICATION_REQUEST);
+	return BT_ERROR_NONE;
 }
