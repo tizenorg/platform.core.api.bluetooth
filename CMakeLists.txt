@@ -7,14 +7,27 @@ SET(CMAKE_INSTALL_PREFIX /usr)
 SET(PREFIX ${CMAKE_INSTALL_PREFIX})
 
 SET(INC_DIR include)
-INCLUDE_DIRECTORIES(${INC_DIR})
-
-IF (TIZEN_WEARABLE)
-SET(dependents "dlog glib-2.0 capi-base-common bluetooth-api privacy-manager-client")
+IF (TIZEN_TV)
+	INCLUDE_DIRECTORIES(${INC_DIR}/tv)
 ELSE ()
-SET(dependents "dlog glib-2.0 capi-base-common bluetooth-api")
-ENDIF (TIZEN_WEARABLE)
-SET(pc_dependents "capi-base-common")
+	INCLUDE_DIRECTORIES(${INC_DIR})
+	IF (TIZEN_WEARABLE)
+		INCLUDE_DIRECTORIES(${INC_DIR}/wearable)
+	ELSE ()
+		INCLUDE_DIRECTORIES(${INC_DIR}/mobile)
+	ENDIF (TIZEN_WEARABLE)
+ENDIF (TIZEN_TV)
+
+IF (TIZEN_TV)
+SET(dependents "dlog glib-2.0 capi-base-common bluetooth-tv-api db-util")
+ELSE ()
+	IF (TIZEN_WEARABLE)
+		SET(dependents "dlog glib-2.0 capi-base-common bluetooth-api privacy-manager-client")
+	ELSE ()
+		SET(dependents "dlog glib-2.0 capi-base-common bluetooth-api")
+	ENDIF (TIZEN_WEARABLE)
+ENDIF (TIZEN_TV)
+SET(pc_dependents "capi-base-common glib-2.0")
 
 INCLUDE(FindPkgConfig)
 pkg_check_modules(${fw_name} REQUIRED ${dependents})
@@ -34,6 +47,24 @@ ADD_DEFINITIONS("-DTIZEN_DEBUG")
 
 SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--as-needed -Wl,--rpath=${LIB_INSTALL_DIR}")
 
+IF (TIZEN_TV)
+SET(SOURCES
+tv_src/bluetooth-common.c
+tv_src/bluetooth-adapter.c
+tv_src/bluetooth-device.c
+tv_src/bluetooth-socket.c
+tv_src/bluetooth-opp-server.c
+tv_src/bluetooth-opp-client.c
+tv_src/bluetooth-pan.c
+tv_src/bluetooth-hdp.c
+tv_src/bluetooth-hid.c
+tv_src/bluetooth-audio.c
+tv_src/bluetooth-avrcp.c
+tv_src/bluetooth-gatt.c
+tv_src/bluetooth-dut.c
+tv_src/bluetooth-sync3d.c
+)
+ELSE ()
 SET(SOURCES
 src/bluetooth-common.c
 src/bluetooth-adapter.c
@@ -47,7 +78,12 @@ src/bluetooth-hid.c
 src/bluetooth-audio.c
 src/bluetooth-avrcp.c
 src/bluetooth-gatt.c
+src/bluetooth-ipsp.c
 )
+IF (TIZEN_WEARABLE)
+LIST(APPEND SOURCES src/bluetooth-pbap.c)
+ENDIF (TIZEN_WEARABLE)
+ENDIF (TIZEN_TV)
 
 ADD_LIBRARY(${fw_name} SHARED ${SOURCES})
 
@@ -61,12 +97,35 @@ SET_TARGET_PROPERTIES(${fw_name}
 )
 
 INSTALL(TARGETS ${fw_name} DESTINATION ${LIB_INSTALL_DIR})
+
 INSTALL(
         DIRECTORY ${INC_DIR}/ DESTINATION include/network
         FILES_MATCHING
         PATTERN "*_private.h" EXCLUDE
         PATTERN "${INC_DIR}/*.h"
         )
+IF (TIZEN_TV)
+INSTALL(
+        DIRECTORY ${INC_DIR}/tv/ DESTINATION include/network
+        FILES_MATCHING
+        PATTERN "${INC_DIR}/tv/*.h"
+        )
+
+ELSE ()
+	IF (TIZEN_WEARABLE)
+	INSTALL(
+	        DIRECTORY ${INC_DIR}/wearable/ DESTINATION include/network
+	        FILES_MATCHING
+	        PATTERN "${INC_DIR}/wearable/*.h"
+	        )
+	ELSE ()
+	INSTALL(
+	        DIRECTORY ${INC_DIR}/mobile/ DESTINATION include/network
+	        FILES_MATCHING
+	        PATTERN "${INC_DIR}/mobile/*.h"
+	        )
+	ENDIF (TIZEN_WEARABLE)
+ENDIF (TIZEN_TV)
 
 SET(PC_NAME ${fw_name})
 SET(PC_REQUIRED ${pc_dependents})
@@ -79,7 +138,10 @@ CONFIGURE_FILE(
 )
 INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${fw_name}.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 
+IF (TIZEN_TV)
+ELSE ()
 ADD_SUBDIRECTORY(test)
+ENDIF (TIZEN_TV)
 
 IF(UNIX)
 

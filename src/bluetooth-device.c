@@ -238,6 +238,8 @@ int bt_device_set_bond_created_cb(bt_device_bond_created_cb callback, void *user
 	BT_CHECK_INPUT_PARAMETER(callback);
 	_bt_set_cb(BT_EVENT_BOND_CREATED, callback, user_data);
 
+	BT_DBG("+");
+
 	return BT_ERROR_NONE;
 }
 
@@ -247,6 +249,8 @@ int bt_device_set_bond_destroyed_cb(bt_device_bond_destroyed_cb callback, void *
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(callback);
 	_bt_set_cb(BT_EVENT_BOND_DESTROYED, callback, user_data);
+
+	BT_DBG("+");
 
 	return BT_ERROR_NONE;
 }
@@ -331,6 +335,9 @@ int bt_device_unset_bond_created_cb(void)
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	_bt_unset_cb(BT_EVENT_BOND_CREATED);
+
+	BT_DBG("+");
+
 	return BT_ERROR_NONE;
 }
 
@@ -339,6 +346,9 @@ int bt_device_unset_bond_destroyed_cb(void)
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	_bt_unset_cb(BT_EVENT_BOND_DESTROYED);
+
+	BT_DBG("+");
+
 	return BT_ERROR_NONE;
 }
 
@@ -370,7 +380,7 @@ int bt_device_le_conn_update(const char *device_address,
             const bt_le_conn_update_s *parameters)
 {
 	bluetooth_device_address_t addr_hex = { {0,} };
-	bluetooth_le_conn_update_t param= { 0 };
+	bluetooth_le_connection_param_t param = { 0 };
 	int ret = BT_ERROR_NONE;
 
 	BT_CHECK_BT_SUPPORT();
@@ -382,7 +392,7 @@ int bt_device_le_conn_update(const char *device_address,
 	param.interval_min = parameters->interval_min;
 	param.interval_max = parameters->interval_max;
 	param.latency = parameters->latency;
-	param.time_out = parameters->time_out;
+	param.timeout = parameters->time_out;
 
 	ret = _bt_get_error_code(bluetooth_le_conn_update(&addr_hex, &param));
 
@@ -574,6 +584,30 @@ int bt_device_get_service_mask_from_uuid_list(char **uuids,
 
 	return BT_ERROR_NONE;
 }
+
+int bt_passkey_reply(char *passkey, bool authentication_reply)
+{
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(passkey);
+	int error_code = BT_ERROR_NONE;
+	error_code = _bt_get_error_code(bluetooth_passkey_reply(passkey, authentication_reply));
+	if (error_code != BT_ERROR_NONE) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
+	}
+	return error_code;
+}
+
+int bt_passkey_confirmation_reply(bool confirmation_reply)
+{
+	BT_CHECK_INIT_STATUS();
+
+	int error_code = BT_ERROR_NONE;
+	error_code = _bt_get_error_code(bluetooth_passkey_confirmation_reply(confirmation_reply));
+	if (error_code != BT_ERROR_NONE) {
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
+	}
+	return error_code;
+}
 int bt_device_le_set_data_length(const char *remote_address,
 		unsigned int max_tx_Octets,  unsigned int max_tx_Time)
 {
@@ -587,10 +621,8 @@ int bt_device_le_set_data_length(const char *remote_address,
 
 	//Range for host suggested txtime is 0x001B-0x00FB  and
 	// txocets is 0x0148- 0x0848 as per BT 4.2 spec
-	if (((max_tx_Octets < 27 || max_tx_Octets > 251) ||
-		(max_tx_Time < 328 || max_tx_Time > 2120)) ||
-		((max_tx_Octets < 0x001B || max_tx_Octets > 0x00FB)
-		|| (max_tx_Time < 0x0148 || max_tx_Time > 0x0848))) {
+	if ((max_tx_Octets < 0x001B || max_tx_Octets > 0x00FB)
+		&& (max_tx_Time < 0x0148 || max_tx_Time > 0x0848)) {
 		return BT_ERROR_INVALID_PARAMETER;
 	}
 

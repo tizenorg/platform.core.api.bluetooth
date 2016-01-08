@@ -176,6 +176,16 @@ int bt_audio_initialize(void)
 	else
 		is_audio_ag_initialized = true;
 #endif
+
+	/* There is no success case for 3 profiles */
+	if (!is_audio_a2dp_initialized &&
+#ifdef TIZEN_WEARABLE
+		!is_audio_hf_initialized &&
+#endif
+		 !is_audio_ag_initialized) {
+		return BT_ERROR_OPERATION_FAILED;
+	}
+
 	return BT_ERROR_NONE;
 }
 
@@ -190,16 +200,16 @@ int bt_audio_deinitialize(void)
 	error = _bt_get_error_code(error);
 	if (BT_ERROR_NONE != error)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
-	else
-		is_audio_a2dp_initialized = false;
+
+	is_audio_a2dp_initialized = false;
 
 #ifdef TIZEN_WEARABLE
 	error = bluetooth_hf_deinit();
 	error = _bt_get_error_code(error);
 	if (BT_ERROR_NONE != error)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
-	else
-		is_audio_hf_initialized = false;
+
+	is_audio_hf_initialized = false;
 #endif
 
 #ifndef TELEPHONY_DISABLED /* B2_3G */
@@ -207,8 +217,8 @@ int bt_audio_deinitialize(void)
 	error = _bt_convert_telephony_error_code(error);
 	if (BT_ERROR_NONE != error)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
-	else
-		is_audio_ag_initialized = false;
+
+	is_audio_ag_initialized = false;
 #endif
 
 	return BT_ERROR_NONE;
