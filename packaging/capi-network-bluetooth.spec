@@ -14,7 +14,12 @@ BuildRequires:  pkgconfig(dbus-glib-1)
 BuildRequires:  pkgconfig(dlog)
 BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(vconf)
+%if "%{?profile}" == "tv"
+BuildRequires:  pkgconfig(bluetooth-tv-api)
+BuildRequires:  pkgconfig(db-util)
+%else
 BuildRequires:  pkgconfig(bluetooth-api)
+%endif
 BuildRequires:  pkgconfig(capi-base-common)
 %if "%{?profile}" == "wearable"
 BuildRequires:  pkgconfig(privacy-manager-client)
@@ -48,6 +53,10 @@ This package is C-API test application.
 cp %{SOURCE1001} %{SOURCE1002} .
 
 %build
+export CFLAGS="$CFLAGS -DTIZEN_DEBUG_ENABLE -DTIZEN_ENGINEER_MODE"
+export CXXFLAGS="$CXXFLAGS -DTIZEN_DEBUG_ENABLE -DTIZEN_ENGINEER_MODE"
+export FFLAGS="$FFLAGS -DTIZEN_DEBUG_ENABLE -DTIZEN_ENGINEER_MODE"
+
 %if "%{?profile}" == "wearable"
 #export CFLAGS="$CFLAGS -DTIZEN_WEARABLE"
 #export CXXFLAGS="$CXXFLAGS -DTIZEN_WEARABLE"
@@ -68,17 +77,13 @@ export CXXFLAGS="$CXXFLAGS -DTIZEN_HFP_DISABLE"
 export FFLAGS="$FFLAGS -DTIZEN_HFP_DISABLE"
 %endif
 
+export CFLAGS="$CFLAGS -DBT_ENABLE_LEGACY_GATT_CLIENT -DTIZEN_AUDIO_HF_DISABLE -DTIZEN_IPSP_SUPPORT"
+export CXXFLAGS="$CXXFLAGS -DBT_ENABLE_LEGACY_GATT_CLIENT -DTIZEN_AUDIO_HF_DISABLE -DTIZEN_IPSP_SUPPORT"
+export FFLAGS="$FFLAGS -DBT_ENABLE_LEGACY_GATT_CLIENT -DTIZEN_AUDIO_HF_DISABLE -DTIZEN_IPSP_SUPPORT"
+
 export CFLAGS="$CFLAGS -DBT_ENABLE_LEGACY_GATT_CLIENT"
 export CXXFLAGS="$CXXFLAGS -DBT_ENABLE_LEGACY_GATT_CLIENT"
 export FFLAGS="$FFLAGS -DBT_ENABLE_LEGACY_GATT_CLIENT"
-
-export CFLAGS="$CFLAGS -DTIZEN_DEBUG_ENABLE"
-export CXXFLAGS="$CXXFLAGS -DTIZEN_DEBUG_ENABLE"
-export FFLAGS="$FFLAGS -DTIZEN_DEBUG_ENABLE"
-
-export CFLAGS="$CFLAGS -DTIZEN_ENGINEER_MODE"
-export CXXFLAGS="$CXXFLAGS -DTIZEN_ENGINEER_MODE"
-export FFLAGS="$FFLAGS -DTIZEN_ENGINEER_MODE"
 
 %if "%{?profile}" == "wearable"
 export CFLAGS+=" -DTELEPHONY_DISABLED"
@@ -104,8 +109,12 @@ export FFLAGS+=" -DARCH64"
 %if "%{?profile}" == "wearable"
 #	-DTIZEN_WEARABLE=YES \
 %else
+%if "%{?tizen_profile_name}" == "tv"
+	-DTIZEN_TV=YES \
+%else
 %if "%{?profile}" == "mobile"
 	-DTIZEN_WEARABLE=NO \
+%endif
 %endif
 %endif
 
@@ -115,7 +124,10 @@ MAJORVER=`echo %{version} | awk 'BEGIN {FS="."}{print $1}'`
 make %{?jobs:-j%jobs}
 
 %install
+rm -rf %{buildroot}
 %make_install
+install -D -m 0644 LICENSE %{buildroot}%{_datadir}/license/capi-network-bluetooth
+install -D -m 0644 LICENSE %{buildroot}%{_datadir}/license/capi-network-bluetooth-devel
 
 
 %post -p /sbin/ldconfig
@@ -124,9 +136,14 @@ make %{?jobs:-j%jobs}
 
 %files
 %manifest %{name}.manifest
-%license LICENSE.APLv2 LICENSE
+#%license LICENSE.APLv2 LICENSE
+%ifarch aarch64
+/usr/lib/libcapi-network-bluetooth.so.*
+%else
 %{_libdir}/libcapi-network-bluetooth.so.*
-#%{_datadir}/license/capi-network-bluetooth
+%endif
+%{_datadir}/license/capi-network-bluetooth
+%{_datadir}/license/capi-network-bluetooth-devel
 
 %files test
 %manifest %{name}.manifest
@@ -142,9 +159,13 @@ make %{?jobs:-j%jobs}
 %{_includedir}/network/bluetooth_type_internal.h
 %{_includedir}/network/bluetooth_extension.h
 %{_includedir}/network/bluetooth_type_extension.h
-%{_includedir}/network/bluetooth_extention.h
-%{_includedir}/network/bluetooth_type_extention.h
+
+%ifarch aarch64
+/usr/lib/pkgconfig/capi-network-bluetooth.pc
+/usr/lib/libcapi-network-bluetooth.so
+%else
 %{_libdir}/pkgconfig/capi-network-bluetooth.pc
 %{_libdir}/libcapi-network-bluetooth.so
+%endif
 #%{_datadir}/license/capi-network-bluetooth-devel
 

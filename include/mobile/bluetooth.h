@@ -24,8 +24,6 @@
 #include <tizen_error.h>
 
 #include "bluetooth_type.h"
-#include "bluetooth_internal.h"
-#include "bluetooth_extension.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -2134,7 +2132,7 @@ int bt_socket_unset_data_received_cb(void);
  * @retval #BT_ERROR_NOT_SUPPORTED   Not supported
  *
  * @pre The Bluetooth service must be initialized with bt_initialize().
- * @post If you listen a socket by bt_socket_listen(), bt_socket_connection_requested_cb() will be invoked.
+ * @post bt_socket_connection_requested_cb() will be invoked.
  * @see bt_initialize()
  * @see bt_socket_unset_connection_requested_cb()
  */
@@ -2231,7 +2229,6 @@ int bt_opp_server_initialize_by_connection_request(const char *destination, bt_o
  * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
  * @retval #BT_ERROR_NOT_SUPPORTED   Not supported
  *
- * @see  bt_opp_server_initialize()
  * @see  bt_opp_server_deinitialize()
  */
 int bt_opp_server_deinitialize(void);
@@ -2318,8 +2315,6 @@ int bt_opp_server_cancel_transfer(int transfer_id);
  * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
  * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
  * @retval #BT_ERROR_NOT_SUPPORTED   Not supported
- *
- * @see  bt_opp_server_initialize()
  */
 int bt_opp_server_set_destination(const char *destination);
 
@@ -2688,8 +2683,8 @@ int bt_avrcp_target_deinitialize(void);
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Notifies the equalize state to the remote device.
  * @since_tizen 2.4
- * @privlevel platform
- * @privilege %http://tizen.org/privilege/bluetooth.admin
+ * @privlevel public
+ * @privilege %http://tizen.org/privilege/bluetooth
  * @param[in] state The state of equalizer
  * @return   0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
@@ -2711,8 +2706,8 @@ int bt_avrcp_target_notify_equalizer_state(bt_avrcp_equalizer_state_e state);
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Notifies the repeat mode to the remote device.
  * @since_tizen 2.4
- * @privlevel platform
- * @privilege %http://tizen.org/privilege/bluetooth.admin
+ * @privlevel public
+ * @privilege %http://tizen.org/privilege/bluetooth
  * @param[in] mode The repeat mode
  * @return   0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
@@ -2734,8 +2729,8 @@ int bt_avrcp_target_notify_repeat_mode(bt_avrcp_repeat_mode_e mode);
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Notifies the shuffle mode to the remote device.
  * @since_tizen 2.4
- * @privlevel platform
- * @privilege %http://tizen.org/privilege/bluetooth.admin
+ * @privlevel public
+ * @privilege %http://tizen.org/privilege/bluetooth
  * @param[in] mode The repeat mode
  * @return   0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
@@ -2757,8 +2752,8 @@ int bt_avrcp_target_notify_shuffle_mode(bt_avrcp_shuffle_mode_e mode);
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Notifies the scan mode to the remote device.
  * @since_tizen 2.4
- * @privlevel platform
- * @privilege %http://tizen.org/privilege/bluetooth.admin
+ * @privlevel public
+ * @privilege %http://tizen.org/privilege/bluetooth
  * @param[in] mode The scan mode
  * @return   0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
@@ -2780,8 +2775,8 @@ int bt_avrcp_target_notify_scan_mode(bt_avrcp_scan_mode_e mode);
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Notifies the player state to the remote device.
  * @since_tizen 2.4
- * @privlevel platform
- * @privilege %http://tizen.org/privilege/bluetooth.admin
+ * @privlevel public
+ * @privilege %http://tizen.org/privilege/bluetooth
  * @param[in] state The player state
  * @return   0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
@@ -2803,8 +2798,8 @@ int bt_avrcp_target_notify_player_state(bt_avrcp_player_state_e state);
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Notifies the current position of song to the remote device.
  * @since_tizen 2.4
- * @privlevel platform
- * @privilege %http://tizen.org/privilege/bluetooth.admin
+ * @privlevel public
+ * @privilege %http://tizen.org/privilege/bluetooth
  * @param[in] position The current position in milliseconds
  * @return  0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
@@ -2826,8 +2821,8 @@ int bt_avrcp_target_notify_position(unsigned int position);
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Notifies the track to the remote device.
  * @since_tizen 2.4
- * @privlevel platform
- * @privilege %http://tizen.org/privilege/bluetooth.admin
+ * @privlevel public
+ * @privilege %http://tizen.org/privilege/bluetooth
  * @param[in] title The title of track
  * @param[in] artist The artist of track
  * @param[in] album The album of track
@@ -3939,6 +3934,7 @@ int bt_gatt_client_get_remote_address(bt_gatt_client_h client,
  * @retval #BT_ERROR_NONE	Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
  * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
  * @retval #BT_ERROR_NOW_IN_PROGRESS  Operation now in progress
  * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
@@ -3964,6 +3960,7 @@ int bt_gatt_client_read_value(bt_gatt_h gatt_handle,
  * @retval #BT_ERROR_NONE	Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
  * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
  * @retval #BT_ERROR_NOW_IN_PROGRESS  Operation now in progress
  * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied

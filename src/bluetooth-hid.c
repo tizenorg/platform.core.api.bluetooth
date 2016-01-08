@@ -207,7 +207,6 @@ int bt_hid_device_connect(const char *remote_address)
 	BT_CHECK_HID_DEVICE_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(remote_address);
-	BT_DBG("+");
 	error = bluetooth_hid_device_connect(remote_address);
 	error = _bt_get_error_code(error);
 	if (BT_ERROR_NONE != error) {
