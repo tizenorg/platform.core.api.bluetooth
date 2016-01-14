@@ -15,7 +15,7 @@ BuildRequires:  pkgconfig(dlog)
 BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(vconf)
 %if "%{?profile}" == "tv"
-BuildRequires:  pkgconfig(bluetooth-tv-api)
+BuildRequires:  pkgconfig(bluetooth-api)
 BuildRequires:  pkgconfig(db-util)
 %else
 BuildRequires:  pkgconfig(bluetooth-api)
@@ -109,7 +109,7 @@ export FFLAGS+=" -DARCH64"
 %if "%{?profile}" == "wearable"
 #	-DTIZEN_WEARABLE=YES \
 %else
-%if "%{?tizen_profile_name}" == "tv"
+%if "%{?profile}" == "tv"
 	-DTIZEN_TV=YES \
 %else
 %if "%{?profile}" == "mobile"
@@ -143,7 +143,9 @@ install -D -m 0644 LICENSE %{buildroot}%{_datadir}/license/capi-network-bluetoot
 
 %files test
 %manifest %{name}.manifest
+%if "%{?profile}" != "tv"
 %{_bindir}/bt_unit_test
+%endif
 #%{_bindir}/bt_onoff
 #/etc/smack/accesses.d/capi-network-bluetooth-test.efl
 

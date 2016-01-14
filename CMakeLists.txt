@@ -8,7 +8,8 @@ SET(PREFIX ${CMAKE_INSTALL_PREFIX})
 
 SET(INC_DIR include)
 IF (TIZEN_TV)
-	INCLUDE_DIRECTORIES(${INC_DIR}/tv)
+    INCLUDE_DIRECTORIES(${INC_DIR})
+    INCLUDE_DIRECTORIES(${INC_DIR}/tv)
 ELSE ()
 	INCLUDE_DIRECTORIES(${INC_DIR})
 	IF (TIZEN_WEARABLE)
@@ -19,7 +20,7 @@ ELSE ()
 ENDIF (TIZEN_TV)
 
 IF (TIZEN_TV)
-SET(dependents "dlog glib-2.0 capi-base-common bluetooth-tv-api db-util")
+SET(dependents "dlog glib-2.0 capi-base-common bluetooth-api db-util")
 ELSE ()
 	IF (TIZEN_WEARABLE)
 		SET(dependents "dlog glib-2.0 capi-base-common bluetooth-api privacy-manager-client")
@@ -49,20 +50,19 @@ SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--as-needed -Wl,--rpath=${LIB_INSTALL_DIR}")
 
 IF (TIZEN_TV)
 SET(SOURCES
-tv_src/bluetooth-common.c
-tv_src/bluetooth-adapter.c
-tv_src/bluetooth-device.c
-tv_src/bluetooth-socket.c
-tv_src/bluetooth-opp-server.c
-tv_src/bluetooth-opp-client.c
-tv_src/bluetooth-pan.c
-tv_src/bluetooth-hdp.c
-tv_src/bluetooth-hid.c
-tv_src/bluetooth-audio.c
-tv_src/bluetooth-avrcp.c
-tv_src/bluetooth-gatt.c
-tv_src/bluetooth-dut.c
-tv_src/bluetooth-sync3d.c
+src/bluetooth-common.c
+src/bluetooth-adapter.c
+src/bluetooth-device.c
+src/bluetooth-socket.c
+src/bluetooth-opp-server.c
+src/bluetooth-opp-client.c
+src/bluetooth-pan.c
+src/bluetooth-hdp.c
+src/bluetooth-hid.c
+src/bluetooth-audio.c
+src/bluetooth-avrcp.c
+src/bluetooth-gatt.c
+src/bluetooth-ipsp.c
 )
 ELSE ()
 SET(SOURCES
