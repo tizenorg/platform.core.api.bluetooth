@@ -18,6 +18,11 @@
 #ifndef __TIZEN_NETWORK_BLUETOOTH_TYPE_H__
 #define __TIZEN_NETWORK_BLUETOOTH_TYPE_H__
 
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdbool.h>
+#include <tizen_error.h>
+
  #ifdef __cplusplus
 extern "C"
 {
