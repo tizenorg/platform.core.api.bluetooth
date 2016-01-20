@@ -977,7 +977,7 @@ int bt_adapter_le_get_scan_result_service_data_list(const bt_adapter_le_device_s
 			bt_adapter_le_packet_type_e pkt_type, bt_adapter_le_service_data_s **data_list, int *count);
 
 /**
- * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_MODULE
+ * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
  * @brief Frees service data list.
  * @since_tizen 2.3.1
  *
