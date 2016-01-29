@@ -162,3 +162,13 @@ int _bt_le_ipsp_unset_connection_state_changed_cb(void)
 	_bt_unset_cb(BT_EVENT_IPSP_CONNECTION_STATUS);
 	return BT_ERROR_NONE;
 }
+
+int _bt_le_ipsp_set_connection_bt_iface_info_cb(_bt_le_ipsp_connection_bt_iface_info_cb callback, void *user_data)
+{
+	BT_CHECK_IPSP_SUPPORT();
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(callback);
+	_bt_set_cb(BT_EVENT_IPSP_CONNECTION_BT_IFACE_INFO, callback, user_data);
+
+	return BT_ERROR_NONE;
+}
