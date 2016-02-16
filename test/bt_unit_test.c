@@ -44,14 +44,14 @@ const char *hid_uuid = "00001124-0000-1000-8000-00805f9b34fb";
 const char *opp_uuid = "00001105-0000-1000-8000-00805f9b34fb";
 const char *custom_uuid = "fa87c0d0-afac-11de-8a39-0800200c9a66";
 
-// Temporary HPS UUIDs. SIG has to define the UUIDs yet.
-#define HPS_UUID "00001900-0000-1000-8000-00805f9b34fb"
-#define HTTP_URI_UUID "00001901-0000-1000-8000-00805f9b34fb"
-#define HTTP_HDR_UUID "00001902-0000-1000-8000-00805f9b34fb"
-#define HTTP_ENTITY_UUID "00001903-0000-1000-8000-00805f9b34fb"
-#define HTTP_CP_UUID "00001904-0000-1000-8000-00805f9b34fb"
-#define HTTP_STATUS_UUID "00001905-0000-1000-8000-00805f9b34fb"
-#define HTTP_SECURITY_UUID "00001906-0000-1000-8000-00805f9b34fb"
+/* HPS UUIDs. defined by SIG */
+#define HPS_UUID "1823"
+#define HTTP_URI_UUID "2ab6"
+#define HTTP_HDR_UUID "2ab7"
+#define HTTP_ENTITY_UUID "2ab9"
+#define HTTP_CP_UUID "2aba"
+#define HTTP_STATUS_UUID "2ab8"
+#define HTTP_SECURITY_UUID "2abb"
 #define HTTP_STATUS_DESC_UUID "2902"
 
 static bt_unit_test_table_e current_tc_table;
