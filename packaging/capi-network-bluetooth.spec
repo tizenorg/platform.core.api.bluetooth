@@ -21,10 +21,6 @@ BuildRequires:  pkgconfig(db-util)
 BuildRequires:  pkgconfig(bluetooth-api)
 %endif
 BuildRequires:  pkgconfig(capi-base-common)
-%if "%{?profile}" == "wearable"
-BuildRequires:  pkgconfig(privacy-manager-client)
-%endif
-
 BuildRequires:  cmake
 
 %description

@@ -22,9 +22,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <arpa/inet.h>
-#ifdef TIZEN_WEARABLE
-#include <privacy_checker_client.h>
-#endif
 #include <bluetooth-api.h>
 
 #include "bluetooth.h"
@@ -49,18 +46,6 @@ int bt_adapter_enable(void)
 	int error_code = BT_ERROR_NONE;
 
 	BT_CHECK_BT_SUPPORT();
-#ifdef TIZEN_WEARABLE
-	static const char* PRIVILEGE_ID_BLUETOOTH_ADMIN = "http://tizen.org/privilege/bluetooth.admin";
-
-	error_code =  privacy_checker_check_by_privilege(PRIVILEGE_ID_BLUETOOTH_ADMIN);
-	if (error_code != PRIV_MGR_ERROR_SUCCESS) {
-		privacy_checker_finalize();
-		BT_ERR("PERMISSION_DENIED(0x%08x)", error_code);
-		return BT_ERROR_PERMISSION_DENIED;
-	}
-	privacy_checker_finalize();
-#endif
-
 	BT_CHECK_INIT_STATUS();
 	error_code = _bt_get_error_code(bluetooth_enable_adapter());
 	if (error_code != BT_ERROR_NONE) {
