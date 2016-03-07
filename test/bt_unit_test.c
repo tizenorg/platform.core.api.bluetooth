@@ -362,6 +362,7 @@ tc_table_t tc_gatt[] = {
 	{"bt_gatt_server_initialize"				, BT_UNIT_TEST_FUNCTION_GATT_SERVER_INITIALIZE},
 	{"bt_gatt_server_deinitilaize"				, BT_UNIT_TEST_FUNCTION_GATT_SERVER_DEINITIALIZE},
 	{"bt_gatt_server_unregister_all_services"		, BT_UNIT_TEST_FUNCTION_GATT_SERVER_UNREGISTER_ALL_SERVICES},
+	{"bt_gatt_server_foreach_services"			, BT_UNIT_TEST_FUNCTION_GATT_SERVER_FOREACH_SERVICES},
 	{"Register Battery Service"				, BT_UNIT_TEST_FUNCTION_GATT_SERVER_REGISTER_BATTERY_SVC},
 	{"Change Battery Level"					, BT_UNIT_TEST_FUNCTION_GATT_SERVER_CHANGE_BATTERY_LEVEL},
 	{"Register Heart Rate Service"				, BT_UNIT_TEST_FUNCTION_GATT_SERVER_REGISTER_HEART_RATE_SVC},
@@ -1835,6 +1836,22 @@ void __bt_gatt_server_value_changed_cb(char *remote_address,
 		printf("%d ", value[i]);
 	}
 	printf("\n");
+}
+
+bool __bt_gatt_server_foreach_svc_cb(int total, int index, bt_gatt_h svc_handle, void *data)
+{
+	char *uuid = NULL;
+	char *str = NULL;
+
+	bt_gatt_get_uuid(svc_handle, &uuid);
+	bt_gatt_get_uuid_specification_name(uuid, &str);
+
+	TC_PRT("[%d / %d] %s (%s)", index, total, str ? str : "Unknown", uuid);
+
+	g_free(str);
+	g_free(uuid);
+
+	return true;
 }
 
 #ifdef BT_ENABLE_LEGACY_GATT_CLIENT
@@ -5285,6 +5302,12 @@ int test_input_callback(void *data)
 			}
 			ret = bt_gatt_set_value(custom_h.chr, char_value, 4);
 			TC_PRT("returns  %s\n", __bt_get_error_message(ret));
+			break;
+		}
+		case BT_UNIT_TEST_FUNCTION_GATT_SERVER_FOREACH_SERVICES: {
+			ret = bt_gatt_server_foreach_services(server,
+			__bt_gatt_server_foreach_svc_cb, (void *)test_id);
+			TC_PRT("bt_gatt_server_foreach_services: %s\n", __bt_get_error_message(ret));
 			break;
 		}
 		case BT_UNIT_TEST_FUNCTION_ANCS_PAIR: {
