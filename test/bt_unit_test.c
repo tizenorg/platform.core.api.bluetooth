@@ -5305,8 +5305,13 @@ int test_input_callback(void *data)
 			break;
 		}
 		case BT_UNIT_TEST_FUNCTION_GATT_SERVER_FOREACH_SERVICES: {
+#ifdef ARCH64
+			ret = bt_gatt_server_foreach_services(server,
+			__bt_gatt_server_foreach_svc_cb, (void *)(uintptr_t)test_id);
+#else
 			ret = bt_gatt_server_foreach_services(server,
 			__bt_gatt_server_foreach_svc_cb, (void *)test_id);
+#endif
 			TC_PRT("bt_gatt_server_foreach_services: %s\n", __bt_get_error_message(ret));
 			break;
 		}
