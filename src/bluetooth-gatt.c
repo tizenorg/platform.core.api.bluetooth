@@ -48,7 +48,7 @@ static bool is_gatt_server_initialized = false;
 		LOGE("[%s] NOT_INITIALIZED(0x%08x)", __FUNCTION__, BT_ERROR_NOT_INITIALIZED); \
 		return BT_ERROR_NOT_INITIALIZED; \
 	}
-
+//LCOV_EXCL_START
 int __bt_check_gatt_server_init_status(void)
 {
 	if (is_gatt_server_initialized != true) {
@@ -140,7 +140,7 @@ bool _bt_gatt_is_legacy_client_mode(void)
 	BT_INFO("Legacy GATT Client APIs");
 	return true;
 }
-
+//LCOV_EXCL_STOP
 int bt_gatt_foreach_primary_services(const char *remote_address,
 				bt_gatt_primary_service_cb callback,
 				void *user_data)
@@ -564,7 +564,7 @@ int bt_gatt_unset_connection_state_changed_cb(void)
 	_bt_unset_cb(BT_EVENT_GATT_CONNECTION_STATUS);
 	return BT_ERROR_NONE;
 }
-
+//LCOV_EXCL_START
 int bt_gatt_get_uuid_specification_name(const char *uuid, char **name)
 {
 	BT_CHECK_GATT_SUPPORT();
@@ -866,7 +866,7 @@ int bt_gatt_destroy(bt_gatt_h gatt_handle)
 
 	return BT_ERROR_NONE;
 }
-
+//LCOV_EXCL_STOP
 int bt_gatt_get_value(bt_gatt_h gatt_handle, char **value, int *value_length)
 {
 	bt_gatt_common_s *handle = (bt_gatt_common_s*)gatt_handle;
@@ -1254,7 +1254,7 @@ int bt_gatt_set_float_value(bt_gatt_h gatt_handle, bt_data_type_float_e type,
 
 	return BT_ERROR_NONE;
 }
-
+//LCOV_EXCL_START
 int bt_gatt_get_permissions(bt_gatt_h gatt_handle, int *permissions)
 {
 	bt_gatt_common_s *handle = (bt_gatt_common_s*)gatt_handle;
@@ -1301,7 +1301,7 @@ int bt_gatt_set_permissions(bt_gatt_h gatt_handle, int permissions)
 
 	return BT_ERROR_NONE;
 }
-
+//LCOV_EXCL_STOP
 int bt_gatt_get_uuid(bt_gatt_h gatt_handle, char **uuid)
 {
 	bt_gatt_common_s *handle = (bt_gatt_common_s*)gatt_handle;
@@ -1331,7 +1331,7 @@ int bt_gatt_get_type(bt_gatt_h gatt_handle, bt_gatt_type_e *gatt_type)
 
 	return BT_ERROR_NONE;
 }
-
+//LCOV_EXCL_START
 int bt_gatt_service_create(const char *uuid, bt_gatt_service_type_e type,
 			   bt_gatt_h *service)
 {
@@ -1432,7 +1432,7 @@ int bt_gatt_service_get_server(bt_gatt_h service, bt_gatt_server_h *server)
 
 	return BT_ERROR_NONE;
 }
-
+//LCOV_EXCL_STOP
 int bt_gatt_service_get_client(bt_gatt_h service, bt_gatt_client_h *client)
 {
 	bt_gatt_service_s *svc = (bt_gatt_service_s *)service;
@@ -1557,7 +1557,7 @@ int bt_gatt_service_foreach_included_services(bt_gatt_h service,
 
 	return BT_ERROR_NONE;
 }
-
+//LCOV_EXCL_START
 int bt_gatt_characteristic_create(const char *uuid, int permissions,
 				int properties, const char *value, int value_length,
 				bt_gatt_h *characteristic)
@@ -1641,7 +1641,7 @@ int bt_gatt_characteristic_add_descriptor(bt_gatt_h characteristic,
 
 	return BT_ERROR_NONE;
 }
-
+//LCOV_EXCL_STOP
 int bt_gatt_characteristic_get_service(bt_gatt_h characteristic, bt_gatt_h *service)
 {
 	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)characteristic;
@@ -1790,7 +1790,7 @@ int bt_gatt_characteristic_foreach_descriptors(bt_gatt_h characteristic,
 
 	return BT_ERROR_NONE;
 }
-
+//LCOV_EXCL_START
 int bt_gatt_descriptor_create(const char *uuid, int permissions,
 				const char *value, int value_length,
 				bt_gatt_h *descriptor)
@@ -1843,7 +1843,7 @@ fail:
 
 	return ret;
 }
-
+//LCOV_EXCL_STOP
 int bt_gatt_descriptor_get_characteristic(bt_gatt_h descriptor, bt_gatt_h *characteristic)
 {
 	bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s *)descriptor;
@@ -1858,7 +1858,7 @@ int bt_gatt_descriptor_get_characteristic(bt_gatt_h descriptor, bt_gatt_h *chara
 
 	return BT_ERROR_NONE;
 }
-
+//LCOV_EXCL_START
 int bt_gatt_server_initialize(void)
 {
 	BT_CHECK_INIT_STATUS();
@@ -2226,7 +2226,7 @@ int bt_gatt_server_foreach_services(bt_gatt_server_h server,
 
 	return BT_ERROR_NONE;
 }
-
+//LCOV_EXCL_STOP
 int bt_gatt_client_create(const char *remote_address, bt_gatt_client_h *client)
 {
 	int ret = BT_ERROR_NONE;

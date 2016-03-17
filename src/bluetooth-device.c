@@ -375,7 +375,7 @@ int bt_device_unset_connection_state_changed_cb(void)
 	_bt_unset_cb(BT_EVENT_DEVICE_CONNECTION_STATUS);
 	return BT_ERROR_NONE;
 }
-
+//LCOV_EXCL_START
 int bt_device_le_conn_update(const char *device_address,
             const bt_le_conn_update_s *parameters)
 {
@@ -402,7 +402,7 @@ int bt_device_le_conn_update(const char *device_address,
 
 	return ret;
 }
-
+//LCOV_EXCL_STOP
 int bt_device_get_service_mask_from_uuid_list(char **uuids,
 				      int no_of_service,
 				      bt_service_class_t *service_mask_list)
@@ -439,7 +439,7 @@ int bt_device_get_service_mask_from_uuid_list(char **uuids,
 		case BLUETOOTH_LAP_PROFILE_UUID:
 			service_mask |= BT_SC_LAP_SERVICE_MASK;
 			break;
-
+//LCOV_EXCL_START
 		case BLUETOOTH_DUN_PROFILE_UUID:
 			service_mask |= BT_SC_DUN_SERVICE_MASK;
 			break;
@@ -563,7 +563,7 @@ int bt_device_get_service_mask_from_uuid_list(char **uuids,
 		case BLUETOOTH_OBEX_PRINTING_STATUS_UUID:
 			service_mask |= BT_SC_BPP_SERVICE_MASK;
 			break;
-
+//LCOV_EXCL_STOP
 		case BLUETOOTH_HCR_PROFILE_UUID:
 			service_mask |= BT_SC_NONE;
 			break;
@@ -585,6 +585,7 @@ int bt_device_get_service_mask_from_uuid_list(char **uuids,
 	return BT_ERROR_NONE;
 }
 
+//LCOV_EXCL_START
 int bt_passkey_reply(char *passkey, bool authentication_reply)
 {
 	BT_CHECK_INIT_STATUS();
@@ -648,3 +649,4 @@ int bt_device_le_set_data_length_change_cb(
 
 	return BT_ERROR_NONE;
 }
+//LCOV_EXCL_STOP

@@ -84,7 +84,7 @@ int bt_socket_listen_and_accept_rfcomm(int socket_fd, int max_pending_connection
 
 	return error_code;
 }
-
+//LCOV_EXCL_START
 int bt_socket_listen(int socket_fd, int max_pending_connections)
 {
 	int error_code = BT_ERROR_NONE;
@@ -187,7 +187,7 @@ int bt_socket_listen_and_accept_rfcomm_ex(const char *uuid, int max_pending_conn
 
 	return error_code;
 }
-
+//LCOV_EXCL_STOP
 int bt_socket_connect_rfcomm(const char *remote_address, const char *remote_port_uuid)
 {
 	bluetooth_device_address_t addr_hex = { {0,} };

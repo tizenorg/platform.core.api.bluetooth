@@ -251,6 +251,7 @@ int bt_avrcp_target_notify_track(const char *title, const char *artist, const ch
 	return error;
 }
 
+//LCOV_EXCL_START
 int bt_avrcp_control_initialize(bt_avrcp_control_connection_state_changed_cb callback,
 								void *user_data)
 {
@@ -558,6 +559,7 @@ int bt_avrcp_control_free_track_info(bt_avrcp_metadata_attributes_info_s *track)
 	g_free((gpointer)track);
 	return BT_ERROR_NONE;
 }
+//LCOV_EXCL_STOP
 
 int bt_avrcp_set_equalizer_state_changed_cb(bt_avrcp_equalizer_state_changed_cb callback, void *user_data)
 {
@@ -627,6 +629,7 @@ int bt_avrcp_unset_scan_mode_changed_cb(void)
 	return BT_ERROR_NONE;
 }
 
+//LCOV_EXCL_START
 int bt_avrcp_set_song_position_changed_cb(bt_avrcp_song_position_changed_cb callback, void *user_data)
 {
 	BT_CHECK_AVRCP_SUPPORT();
@@ -677,3 +680,4 @@ int bt_avrcp_unset_track_info_changed_cb(void)
 	_bt_unset_cb(BT_EVENT_AVRCP_TRACK_INFO_CHANGED);
 	return BT_ERROR_NONE;
 }
+//LCOV_EXCL_STOP

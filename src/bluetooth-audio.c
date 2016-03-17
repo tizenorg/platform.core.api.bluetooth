@@ -358,6 +358,7 @@ int bt_audio_unset_connection_state_changed_cb(void)
 	return BT_ERROR_NONE;
 }
 
+//LCOV_EXCL_START
 int bt_ag_notify_speaker_gain(int gain)
 {
 	int error;
@@ -477,6 +478,7 @@ int bt_ag_unset_speaker_gain_changed_cb(void)
 		_bt_unset_cb(BT_EVENT_AG_SPEAKER_GAIN_CHANGE);
 	return BT_ERROR_NONE;
 }
+//LCOV_EXCL_STOP
 
 int bt_ag_open_sco(void)
 {
@@ -542,6 +544,7 @@ int bt_ag_unset_sco_state_changed_cb(void)
 	return BT_ERROR_NONE;
 }
 
+//LCOV_EXCL_START
 int bt_ag_notify_call_event(bt_ag_call_event_e event, unsigned int call_id, const char *phone_number)
 {
 	int error;
@@ -606,6 +609,7 @@ int bt_ag_notify_call_list(bt_call_list_h list)
 	}
 	return error;
 }
+//LCOV_EXCL_STOP
 
 int bt_ag_notify_voice_recognition_state(bool state)
 {
@@ -625,6 +629,7 @@ int bt_ag_notify_voice_recognition_state(bool state)
 	return error;
 }
 
+//LCOV_EXCL_START
 int bt_ag_set_call_handling_event_cb(bt_ag_call_handling_event_cb callback,
 					void *user_data)
 {
@@ -814,6 +819,7 @@ int bt_a2dp_set_content_protection(bool status)
 	}
 	return error;
 }
+//LCOV_EXCL_STOP
 
 #ifdef TIZEN_WEARABLE
 int bt_hf_initialize(void)

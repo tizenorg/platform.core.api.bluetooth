@@ -52,7 +52,7 @@ int __bt_check_opp_server_init_status(void)
 
 	return BT_ERROR_NONE;
 }
-
+//LCOV_EXCL_START
 int bt_opp_server_initialize(const char *destination,
 			bt_opp_server_push_requested_cb push_requested_cb,
 			void *user_data)
@@ -76,7 +76,7 @@ int bt_opp_server_initialize(const char *destination,
 	is_opp_server_initialized = true;
 	return BT_ERROR_NONE;
 }
-
+//LCOV_EXCL_STOP
 int bt_opp_server_initialize_by_connection_request(const char *destination,
 			bt_opp_server_connection_requested_cb connection_requested_cb,
 			void *user_data)

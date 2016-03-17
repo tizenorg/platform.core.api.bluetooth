@@ -149,7 +149,7 @@ int bt_hid_host_disconnect(const char *remote_address)
 	}
 	return error;
 }
-
+//LCOV_EXCL_START
 int bt_hid_device_activate(bt_hid_device_connection_state_changed_cb callback, void * user_data)
 {
 	int error;
@@ -338,3 +338,4 @@ int bt_hid_device_unset_data_received_cb(void)
 	_bt_unset_cb(BT_EVENT_HID_DEVICE_DATA_RECEIVED);
 	return BT_ERROR_NONE;
 }
+//LCOV_EXCL_STOP

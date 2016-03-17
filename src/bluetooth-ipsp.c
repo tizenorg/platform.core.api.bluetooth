@@ -43,7 +43,7 @@ static bool is_ipsp_initialized = false;
 		LOGE("[%s] NOT_INITIALIZED(0x%08x)", __FUNCTION__, BT_ERROR_NOT_INITIALIZED); \
 		return BT_ERROR_NOT_INITIALIZED; \
 	}
-
+//LCOV_EXCL_START
 int __bt_check_ipsp_init_status(void)
 {
 	if (is_ipsp_initialized != true) {
@@ -162,3 +162,4 @@ int _bt_le_ipsp_unset_connection_state_changed_cb(void)
 	_bt_unset_cb(BT_EVENT_IPSP_CONNECTION_STATUS);
 	return BT_ERROR_NONE;
 }
+//LCOV_EXCL_STOP
