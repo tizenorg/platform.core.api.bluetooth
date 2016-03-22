@@ -2303,7 +2303,7 @@ int test_set_params(int test_id, char *param)
 
 			if (param_index > 0) {
 				g_test_param.params[param_index - 1] = g_malloc0(strlen(param) + 1);
-				strcpy(g_test_param.params[param_index - 1], param);
+				strncpy(g_test_param.params[param_index - 1], param, strlen(param));
 			}
 
 			if (param_index == g_test_param.param_count) {
@@ -2332,7 +2332,7 @@ int test_set_params(int test_id, char *param)
 
 			if (param_index > 0) {
 				g_test_param.params[param_index - 1] = g_malloc0(strlen(param) + 1);
-				strcpy(g_test_param.params[param_index - 1], param);
+				strncpy(g_test_param.params[param_index - 1], param, strlen(param));
 			}
 
 			if (param_index == g_test_param.param_count) {
@@ -2376,7 +2376,7 @@ int test_set_params(int test_id, char *param)
 
 			if (param_index > 0) {
 				g_test_param.params[param_index - 1] = g_malloc0(strlen(param) + 1);
-				strcpy(g_test_param.params[param_index - 1], param);
+				strncpy(g_test_param.params[param_index - 1], param, strlen(param));
 			}
 
 			if (param_index == g_test_param.param_count) {
@@ -6928,7 +6928,6 @@ int main()
 {
 	GIOChannel *key_io;
 
-//	g_type_init();
 	current_tc_table = BT_UNIT_TEST_TABLE_MAIN;
 
 	key_io = g_io_channel_unix_new(fileno(stdin));
