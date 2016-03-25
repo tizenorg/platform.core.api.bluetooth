@@ -1439,6 +1439,7 @@ static int __bt_convert_string_to_uuid(const char *string, char **uuid, int *bit
 
 		*uuid = data;
 		*bit = 128;
+		g_free(data);
 	} else {
 		BT_ERR("Invalid UUID");
 		return BT_ERROR_INVALID_PARAMETER;
