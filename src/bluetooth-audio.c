@@ -155,7 +155,7 @@ int bt_audio_initialize(void)
 	error = bluetooth_audio_init(_bt_audio_event_proxy, NULL);
 	error = _bt_get_error_code(error);
 	if (BT_ERROR_NONE != error)
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); //LCOV_EXCL_LINE
 	else
 		is_audio_a2dp_initialized = true;
 
@@ -172,7 +172,7 @@ int bt_audio_initialize(void)
 	error = bluetooth_telephony_init((void *)_bt_telephony_event_proxy, NULL);
 	error = _bt_convert_telephony_error_code(error);
 	if (BT_ERROR_NONE != error)
-		BT_ERR("[%s] (0x%08x)", _bt_convert_error_to_string(error), error);
+		BT_ERR("[%s] (0x%08x)", _bt_convert_error_to_string(error), error); //LCOV_EXCL_LINE
 	else
 		is_audio_ag_initialized = true;
 #endif
@@ -199,7 +199,7 @@ int bt_audio_deinitialize(void)
 	error = bluetooth_audio_deinit();
 	error = _bt_get_error_code(error);
 	if (BT_ERROR_NONE != error)
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); //LCOV_EXCL_LINE
 
 	is_audio_a2dp_initialized = false;
 
@@ -231,7 +231,7 @@ int bt_audio_connect(const char *remote_address, bt_audio_profile_type_e type)
 
 	BT_CHECK_AUDIO_SUPPORT();
 	BT_CHECK_INIT_STATUS();
-
+//LCOV_EXCL_START
 	if (type == BT_AUDIO_PROFILE_TYPE_HSP_HFP) {
 		BT_CHECK_HFP_SUPPORT();
 		BT_CHECK_AG_INIT_STATUS();
@@ -280,6 +280,7 @@ int bt_audio_connect(const char *remote_address, bt_audio_profile_type_e type)
 	}
 	return error;
 }
+//LCOV_EXCL_STOP
 
 int bt_audio_disconnect(const char *remote_address, bt_audio_profile_type_e type)
 {
@@ -288,7 +289,7 @@ int bt_audio_disconnect(const char *remote_address, bt_audio_profile_type_e type
 
 	BT_CHECK_AUDIO_SUPPORT();
 	BT_CHECK_INIT_STATUS();
-
+//LCOV_EXCL_START
 	if (type == BT_AUDIO_PROFILE_TYPE_HSP_HFP) {
 		BT_CHECK_HFP_SUPPORT();
 		BT_CHECK_AG_INIT_STATUS();
@@ -337,6 +338,7 @@ int bt_audio_disconnect(const char *remote_address, bt_audio_profile_type_e type
 	}
 	return error;
 }
+//LCOV_EXCL_STOP
 
 int bt_audio_set_connection_state_changed_cb(bt_audio_connection_state_changed_cb callback, void *user_data)
 {
@@ -486,13 +488,13 @@ int bt_ag_open_sco(void)
 
 	BT_CHECK_HFP_SUPPORT();
 	BT_CHECK_INIT_STATUS();
-	BT_CHECK_AG_INIT_STATUS();
+	BT_CHECK_AG_INIT_STATUS(); //LCOV_EXCL_START
 	error = bluetooth_telephony_audio_open();
 	error = _bt_convert_telephony_error_code(error);
 	if (error != BT_ERROR_NONE) {
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
 	}
-	return error;
+	return error; //LCOV_EXCL_STOP
 }
 
 int bt_ag_close_sco(void)
@@ -501,25 +503,25 @@ int bt_ag_close_sco(void)
 
 	BT_CHECK_HFP_SUPPORT();
 	BT_CHECK_INIT_STATUS();
-	BT_CHECK_AG_INIT_STATUS();
+	BT_CHECK_AG_INIT_STATUS(); //LCOV_EXCL_START
 	error = bluetooth_telephony_audio_close();
 	error = _bt_convert_telephony_error_code(error);
 	if (error != BT_ERROR_NONE) {
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
 	}
-	return error;
+	return error; //LCOV_EXCL_STOP
 }
 
 int bt_ag_is_sco_opened(bool *opened)
 {
 	BT_CHECK_HFP_SUPPORT();
 	BT_CHECK_INIT_STATUS();
-	BT_CHECK_AG_INIT_STATUS();
+	BT_CHECK_AG_INIT_STATUS(); //LCOV_EXCL_START
 	BT_CHECK_INPUT_PARAMETER(opened);
 	if (bluetooth_telephony_is_sco_connected())
 		*opened = true;
 	else
-		*opened = false;
+		*opened = false; //LCOV_EXCL_STOP
 	return BT_ERROR_NONE;
 }
 
@@ -528,20 +530,20 @@ int bt_ag_set_sco_state_changed_cb(bt_ag_sco_state_changed_cb callback,
 {
 	BT_CHECK_HFP_SUPPORT();
 	BT_CHECK_INIT_STATUS();
-	BT_CHECK_AG_INIT_STATUS();
+	BT_CHECK_AG_INIT_STATUS(); //LCOV_EXCL_START
 	BT_CHECK_INPUT_PARAMETER(callback);
 	_bt_set_cb(BT_EVENT_AG_SCO_CONNECTION_STATUS, callback, user_data);
-	return BT_ERROR_NONE;
+	return BT_ERROR_NONE; //LCOV_EXCL_STOP
 }
 
 int bt_ag_unset_sco_state_changed_cb(void)
 {
 	BT_CHECK_HFP_SUPPORT();
 	BT_CHECK_INIT_STATUS();
-	BT_CHECK_AG_INIT_STATUS();
+	BT_CHECK_AG_INIT_STATUS(); //LCOV_EXCL_START
 	if (_bt_check_cb(BT_EVENT_AG_SCO_CONNECTION_STATUS) == true)
 		_bt_unset_cb(BT_EVENT_AG_SCO_CONNECTION_STATUS);
-	return BT_ERROR_NONE;
+	return BT_ERROR_NONE; //LCOV_EXCL_STOP
 }
 
 //LCOV_EXCL_START
@@ -617,7 +619,7 @@ int bt_ag_notify_voice_recognition_state(bool state)
 
 	BT_CHECK_HFP_SUPPORT();
 	BT_CHECK_INIT_STATUS();
-	BT_CHECK_AG_INIT_STATUS();
+	BT_CHECK_AG_INIT_STATUS(); //LCOV_EXCL_START
 	if (state)
 		error = bluetooth_telephony_start_voice_recognition();
 	else
@@ -626,7 +628,7 @@ int bt_ag_notify_voice_recognition_state(bool state)
 	if (error != BT_ERROR_NONE) {
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
 	}
-	return error;
+	return error; //LCOV_EXCL_STOP
 }
 
 //LCOV_EXCL_START

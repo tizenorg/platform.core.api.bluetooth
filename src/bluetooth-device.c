@@ -32,7 +32,7 @@ int bt_device_create_bond(const char *device_address)
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(device_address);
 
-	_bt_convert_address_to_hex(&addr_hex, device_address);
+	_bt_convert_address_to_hex(&addr_hex, device_address); //LCOV_EXCL_START
 	error_code = _bt_get_error_code(bluetooth_bond_device(&addr_hex));
 	if (error_code != BT_ERROR_NONE) {
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
@@ -58,7 +58,7 @@ int bt_device_create_bond_by_type(const char *device_address,
 	}
 
 	return error_code;
-}
+} //LCOV_EXCL_STOP
 
 int bt_device_cancel_bonding(void)
 {
@@ -66,12 +66,12 @@ int bt_device_cancel_bonding(void)
 
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
-	error_code = _bt_get_error_code(bluetooth_cancel_bonding());
-	if (error_code != BT_ERROR_NONE) {
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
+	error_code = _bt_get_error_code(bluetooth_cancel_bonding()); //LCOV_EXCL_LINE
+	if (error_code != BT_ERROR_NONE) { //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code); //LCOV_EXCL_LINE
 	}
 
-	return error_code;
+	return error_code; //LCOV_EXCL_LINE
 }
 
 int bt_device_destroy_bond(const char *device_address)
@@ -81,15 +81,15 @@ int bt_device_destroy_bond(const char *device_address)
 
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
-	BT_CHECK_INPUT_PARAMETER(device_address);
+	BT_CHECK_INPUT_PARAMETER(device_address); //LCOV_EXCL_LINE
 
-	_bt_convert_address_to_hex(&addr_hex, device_address);
-	error_code = _bt_get_error_code(bluetooth_unbond_device(&addr_hex));
-	if (error_code != BT_ERROR_NONE) {
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
+	_bt_convert_address_to_hex(&addr_hex, device_address); //LCOV_EXCL_LINE
+	error_code = _bt_get_error_code(bluetooth_unbond_device(&addr_hex)); //LCOV_EXCL_LINE
+	if (error_code != BT_ERROR_NONE) { //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code); //LCOV_EXCL_LINE
 	}
 
-	return error_code;
+	return error_code; //LCOV_EXCL_LINE
 }
 
 int bt_device_set_alias(const char *device_address, const char *alias)
@@ -100,14 +100,14 @@ int bt_device_set_alias(const char *device_address, const char *alias)
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(device_address);
-	BT_CHECK_INPUT_PARAMETER(alias);
+	BT_CHECK_INPUT_PARAMETER(alias); //LCOV_EXCL_LINE
 
-	_bt_convert_address_to_hex(&addr_hex, device_address);
-	error_code = _bt_get_error_code(bluetooth_set_alias(&addr_hex, alias));
-	if (error_code != BT_ERROR_NONE) {
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
+	_bt_convert_address_to_hex(&addr_hex, device_address); //LCOV_EXCL_LINE
+	error_code = _bt_get_error_code(bluetooth_set_alias(&addr_hex, alias)); //LCOV_EXCL_LINE
+	if (error_code != BT_ERROR_NONE) { //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code); //LCOV_EXCL_LINE
 	}
-	return error_code;
+	return error_code; //LCOV_EXCL_LINE
 }
 
 int bt_device_set_authorization(const char *device_address, bt_device_authorization_e authorization)
@@ -120,15 +120,15 @@ int bt_device_set_authorization(const char *device_address, bt_device_authorizat
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(device_address);
 
-	_bt_convert_address_to_hex(&addr_hex, device_address);
-	if (authorization == BT_DEVICE_AUTHORIZED)
-		trusted = TRUE;
+	_bt_convert_address_to_hex(&addr_hex, device_address); //LCOV_EXCL_LINE
+	if (authorization == BT_DEVICE_AUTHORIZED) //LCOV_EXCL_LINE
+		trusted = TRUE; //LCOV_EXCL_LINE
 
-	error_code = _bt_get_error_code(bluetooth_authorize_device(&addr_hex, trusted));
-	if (error_code != BT_ERROR_NONE) {
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
+	error_code = _bt_get_error_code(bluetooth_authorize_device(&addr_hex, trusted)); //LCOV_EXCL_LINE
+	if (error_code != BT_ERROR_NONE) { //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code); //LCOV_EXCL_LINE
 	}
-	return error_code;
+	return error_code; //LCOV_EXCL_LINE
 }
 
 int bt_device_start_service_search(const char *device_address)
@@ -140,7 +140,7 @@ int bt_device_start_service_search(const char *device_address)
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(device_address);
 
-	_bt_convert_address_to_hex(&addr_hex, device_address);
+	_bt_convert_address_to_hex(&addr_hex, device_address); //LCOV_EXCL_START
 	ret = _bt_get_error_code(bluetooth_search_service(&addr_hex));
 
 	/* In service search, BT_ERROR_SERVICE_SEARCH_FAILED is returned instead of BT_ERROR_OPERATION_FAILED. */
@@ -164,7 +164,7 @@ int bt_device_cancel_service_search(void)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
 	}
 
-	return ret;
+	return ret; //LCOV_EXCL_STOP
 }
 
 int bt_device_foreach_connected_profiles(const char *remote_address, bt_device_connected_profile callback, void *user_data)
@@ -181,25 +181,25 @@ int bt_device_foreach_connected_profiles(const char *remote_address, bt_device_c
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(remote_address);
-	BT_CHECK_INPUT_PARAMETER(callback);
+	BT_CHECK_INPUT_PARAMETER(callback); //LCOV_EXCL_LINE
 
-	_bt_convert_address_to_hex(&addr_hex, remote_address);
+	_bt_convert_address_to_hex(&addr_hex, remote_address); //LCOV_EXCL_LINE
 
 	while (profiles[i] != 0) {
 		ret = _bt_get_error_code(bluetooth_is_device_connected(&addr_hex,
 								profiles[i],
 								&is_connected));
-		if (ret != BT_ERROR_NONE) {
-			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+		if (ret != BT_ERROR_NONE) { //LCOV_EXCL_LINE
+			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret); //LCOV_EXCL_LINE
 			return ret;
 		}
 
-		if (is_connected == TRUE) {
-			if (!callback(profiles[i], user_data))
+		if (is_connected == TRUE) { //LCOV_EXCL_LINE
+			if (!callback(profiles[i], user_data)) //LCOV_EXCL_LINE
 				break;
 		}
 
-		i++;
+		i++; //LCOV_EXCL_LINE
 	}
 
 	return BT_ERROR_NONE;
@@ -223,7 +223,7 @@ int bt_device_is_profile_connected(const char *remote_address, bt_profile_e bt_p
 	*connected_status = is_connected ? true : false;
 
 	if (ret != BT_ERROR_NONE) {
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret); //LCOV_EXCL_LINE
 		return ret;
 	}
 
@@ -274,7 +274,7 @@ int bt_device_set_service_searched_cb(bt_device_service_searched_cb callback, vo
 
 	return BT_ERROR_NONE;
 }
-
+//LCOV_EXCL_START
 int bt_device_get_connection_state(const char *remote_address,
 		bt_device_connection_link_type_e link_type, bool *connected)
 {
@@ -319,7 +319,7 @@ int bt_device_get_connection_state(const char *remote_address,
 
 	return BT_ERROR_NONE;
 }
-
+//LCOV_EXCL_STOP
 int bt_device_set_connection_state_changed_cb(bt_device_connection_state_changed_cb callback, void *user_data)
 {
 	BT_CHECK_BT_SUPPORT();
@@ -424,8 +424,8 @@ int bt_device_get_service_mask_from_uuid_list(char **uuids,
 		parts = g_strsplit(uuids[i], "-", -1);
 
 		if (parts == NULL || parts[0] == NULL) {
-			g_strfreev(parts);
-			continue;
+			g_strfreev(parts); //LCOV_EXCL_LINE
+			continue; //LCOV_EXCL_LINE
 		}
 
 		service = g_ascii_strtoull(parts[0], NULL, 16);
@@ -437,8 +437,8 @@ int bt_device_get_service_mask_from_uuid_list(char **uuids,
 			break;
 
 		case BLUETOOTH_LAP_PROFILE_UUID:
-			service_mask |= BT_SC_LAP_SERVICE_MASK;
-			break;
+			service_mask |= BT_SC_LAP_SERVICE_MASK; //LCOV_EXCL_LINE
+			break; //LCOV_EXCL_LINE
 //LCOV_EXCL_START
 		case BLUETOOTH_DUN_PROFILE_UUID:
 			service_mask |= BT_SC_DUN_SERVICE_MASK;

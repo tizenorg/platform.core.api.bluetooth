@@ -427,7 +427,7 @@ int bt_adapter_get_name(char **name)
 
 	*name = strdup(loc_name.name);
 	if (*name == NULL) {
-		BT_ERR("OUT_OF_MEMORY(0x%08x)", BT_ERROR_OUT_OF_MEMORY);
+		BT_ERR("OUT_OF_MEMORY(0x%08x)", BT_ERROR_OUT_OF_MEMORY); //LCOV_EXCL_LINE
 		return BT_ERROR_OUT_OF_MEMORY;
 	}
 
@@ -592,22 +592,22 @@ int bt_adapter_foreach_bonded_device(bt_adapter_bonded_device_cb foreach_cb, voi
 
 	dev_list = g_ptr_array_new();
 	if (dev_list == NULL) {
-		BT_ERR("OUT_OF_MEMORY(0x%08x)", BT_ERROR_OUT_OF_MEMORY);
+		BT_ERR("OUT_OF_MEMORY(0x%08x)", BT_ERROR_OUT_OF_MEMORY); //LCOV_EXCL_LINE
 		return BT_ERROR_OUT_OF_MEMORY;
 	}
 
 	ret = _bt_get_error_code(bluetooth_get_bonded_device_list(&dev_list));
 	if (ret != BT_ERROR_NONE) {
-		BT_ERR("%s(0x%08x) : Failed to get bonded device list", _bt_convert_error_to_string(ret), ret);
+		BT_ERR("%s(0x%08x) : Failed to get bonded device list", _bt_convert_error_to_string(ret), ret); //LCOV_EXCL_LINE
 		return ret;
 	}
 
-	for (i = 0; i < dev_list->len; i++) {
+	for (i = 0; i < dev_list->len; i++) { //LCOV_EXCL_LINE
 		ptr = g_ptr_array_index(dev_list, i);
 		if (ptr != NULL) {
 			ret = _bt_get_bt_device_info_s(&dev_info, (bluetooth_device_info_t *)ptr);
 			if (ret != BT_ERROR_NONE) {
-				BT_ERR("%s(0x%08x) : Failed to get device info", _bt_convert_error_to_string(ret), ret);
+				BT_ERR("%s(0x%08x) : Failed to get device info", _bt_convert_error_to_string(ret), ret); //LCOV_EXCL_LINE
 				break;
 			}
 
@@ -615,9 +615,9 @@ int bt_adapter_foreach_bonded_device(bt_adapter_bonded_device_cb foreach_cb, voi
 				_bt_free_bt_device_info_s(dev_info);
 				break;
 			}
-			_bt_free_bt_device_info_s(dev_info);
+			_bt_free_bt_device_info_s(dev_info); //LCOV_EXCL_LINE
 		} else {
-			BT_ERR("OPERATION_FAILED(0x%08x)", BT_ERROR_OPERATION_FAILED);
+			BT_ERR("OPERATION_FAILED(0x%08x)", BT_ERROR_OPERATION_FAILED); //LCOV_EXCL_LINE
 			ret = BT_ERROR_OPERATION_FAILED;
 			break;
 		}
@@ -637,7 +637,7 @@ int bt_adapter_get_bonded_device_info(const char *remote_address, bt_device_info
 
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
-	BT_CHECK_INPUT_PARAMETER(remote_address);
+	BT_CHECK_INPUT_PARAMETER(remote_address); //LCOV_EXCL_START
 
 	info = (bluetooth_device_info_t *)malloc(sizeof(bluetooth_device_info_t));
 	if (info == NULL)
@@ -648,19 +648,19 @@ int bt_adapter_get_bonded_device_info(const char *remote_address, bt_device_info
 	ret = _bt_get_error_code(bluetooth_get_bonded_device(&addr_hex, info));
 	if (ret != BT_ERROR_NONE) {
 		BT_ERR("%s(0x%08x) : Failed to run function",
-					_bt_convert_error_to_string(ret), ret);
+					_bt_convert_error_to_string(ret), ret); //LCOV_EXCL_LINE
 	} else {
 		ret = _bt_get_bt_device_info_s(device_info, info);
 		if (ret != BT_ERROR_NONE) {
 			BT_ERR("%s(0x%08x) : Failed to get device info",
 						_bt_convert_error_to_string(ret),
-						ret);
+						ret); //LCOV_EXCL_LINE
 		}
 	}
 
 	free(info);
 
-	return ret;
+	return ret; //LCOV_EXCL_STOP
 }
 
 int bt_adapter_free_device_info(bt_device_info_s *device_info)
@@ -669,9 +669,9 @@ int bt_adapter_free_device_info(bt_device_info_s *device_info)
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(device_info);
 
-	_bt_free_bt_device_info_s(device_info);
+	_bt_free_bt_device_info_s(device_info); //LCOV_EXCL_LINE
 
-	return BT_ERROR_NONE;
+	return BT_ERROR_NONE; //LCOV_EXCL_LINE
 }
 
 int bt_adapter_is_service_used(const char *service_uuid, bool *used)
@@ -687,9 +687,9 @@ int bt_adapter_is_service_used(const char *service_uuid, bool *used)
 	if (strcmp(service_uuid, OPP_UUID) == 0) {
 		*used = bluetooth_obex_server_is_activated();
 	} else {
-		ret = _bt_get_error_code(bluetooth_is_service_used(service_uuid,
+		ret = _bt_get_error_code(bluetooth_is_service_used(service_uuid, //LCOV_EXCL_LINE
 							&is_used));
-		*used = is_used ? true : false;
+		*used = is_used ? true : false; //LCOV_EXCL_LINE
 	}
 
 	if (ret != BT_ERROR_NONE) { //LCOV_EXCL_LINE
@@ -715,6 +715,7 @@ int bt_adapter_set_state_changed_cb(bt_adapter_state_changed_cb callback, void *
 	return ret;
 }
 
+//LCOV_EXCL_START
 int bt_adapter_le_set_state_changed_cb(bt_adapter_le_state_changed_cb callback, void *user_data)
 {
 	BT_CHECK_BT_SUPPORT();
@@ -725,6 +726,7 @@ int bt_adapter_le_set_state_changed_cb(bt_adapter_le_state_changed_cb callback, 
 	_bt_set_cb(BT_EVENT_LE_STATE_CHANGED, callback, user_data);
 	return BT_ERROR_NONE;
 }
+//LCOV_EXCL_STOP
 
 int bt_adapter_set_name_changed_cb(bt_adapter_name_changed_cb callback, void *user_data)
 {
@@ -792,6 +794,7 @@ int bt_adapter_unset_state_changed_cb(void)
 	return BT_ERROR_NONE;
 }
 
+//LCOV_EXCL_START
 int bt_adapter_le_unset_state_changed_cb(void)
 {
 	BT_CHECK_LE_SUPPORT();
@@ -800,6 +803,7 @@ int bt_adapter_le_unset_state_changed_cb(void)
 	_bt_le_adapter_deinit();
 	return BT_ERROR_NONE;
 }
+//LCOV_EXCL_STOP
 
 int bt_adapter_unset_name_changed_cb(void)
 {
@@ -898,9 +902,9 @@ int bt_adapter_is_discovering(bool *is_discovering)
 		*is_discovering = (ret == 1) ? true : false;
 		return BT_ERROR_NONE;
 	} else {
-		ret = _bt_get_error_code(ret);
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
-		return ret;
+		ret = _bt_get_error_code(ret); //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret); //LCOV_EXCL_LINE
+		return ret; //LCOV_EXCL_LINE
 	}
 }
 
@@ -944,9 +948,9 @@ int bt_adapter_le_is_discovering(bool *is_discovering)
 		*is_discovering = (ret == 1) ? true : false;
 		return BT_ERROR_NONE;
 	} else {
-		ret = _bt_get_error_code(ret);
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
-		return ret;
+		ret = _bt_get_error_code(ret); //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret); //LCOV_EXCL_LINE
+		return ret; //LCOV_EXCL_LINE
 	}
 }
 #endif
@@ -973,7 +977,7 @@ int bt_adapter_get_local_oob_data(unsigned char **hash, unsigned char **randomiz
 		*hash_len = BLUETOOTH_OOB_DATA_LENGTH;
 		*randomizer_len = BLUETOOTH_OOB_DATA_LENGTH;
 	} else {
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret); //LCOV_EXCL_LINE
 	}
 	return ret;
 }
@@ -988,7 +992,7 @@ int bt_adapter_set_remote_oob_data(const char *remote_address,
 
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
-	BT_CHECK_INPUT_PARAMETER(remote_address);
+	BT_CHECK_INPUT_PARAMETER(remote_address); //LCOV_EXCL_START
 
 	_bt_convert_address_to_hex(&addr_hex, remote_address);
 
@@ -999,7 +1003,7 @@ int bt_adapter_set_remote_oob_data(const char *remote_address,
 		oob_data.randomizer_len = randomizer_len;
 	}
 
-	ret = _bt_get_error_code(bluetooth_oob_add_remote_data(&addr_hex, &oob_data));
+	ret = _bt_get_error_code(bluetooth_oob_add_remote_data(&addr_hex, &oob_data)); //LCOV_EXCL_STOP
 	if (BT_ERROR_NONE != ret) { //LCOV_EXCL_LINE
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret); //LCOV_EXCL_LINE
 	} //LCOV_EXCL_LINE
@@ -1015,13 +1019,13 @@ int bt_adapter_remove_remote_oob_data(const char *remote_address)
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(remote_address);
 
-	_bt_convert_address_to_hex(&addr_hex, remote_address);
+	_bt_convert_address_to_hex(&addr_hex, remote_address); //LCOV_EXCL_LINE
 
-	ret = _bt_get_error_code(bluetooth_oob_remove_remote_data(&addr_hex));
+	ret = _bt_get_error_code(bluetooth_oob_remove_remote_data(&addr_hex)); //LCOV_EXCL_LINE
 	if (BT_ERROR_NONE != ret) { //LCOV_EXCL_LINE
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret); //LCOV_EXCL_LINE
 	} //LCOV_EXCL_LINE
-	return ret;
+	return ret; //LCOV_EXCL_LINE
 }
 
 //LCOV_EXCL_START
@@ -1169,8 +1173,8 @@ int bt_adapter_le_create_advertiser(bt_advertiser_h *advertiser)
 
 	__adv = (bt_advertiser_s*)g_malloc0(sizeof(bt_advertiser_s));
 	if (__adv == NULL) {
-		BT_ERR("OUT_OF_MEMORY(0x%08x)", BT_ERROR_OUT_OF_MEMORY);
-		return BT_ERROR_OUT_OF_MEMORY;
+		BT_ERR("OUT_OF_MEMORY(0x%08x)", BT_ERROR_OUT_OF_MEMORY); //LCOV_EXCL_LINE
+		return BT_ERROR_OUT_OF_MEMORY; //LCOV_EXCL_LINE
 	}
 	__adv->handle = GPOINTER_TO_INT(__adv);
 
@@ -1196,7 +1200,7 @@ int bt_adapter_le_destroy_advertiser(bt_advertiser_h advertiser)
 	error_code = bluetooth_set_advertising(__adv->handle, FALSE);
 	ret = _bt_get_error_code(error_code);
 	if (ret != BT_ERROR_NONE)
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret); //LCOV_EXCL_LINE
 
 	advertiser_list = g_slist_remove(advertiser_list, __adv);
 
@@ -1219,11 +1223,11 @@ static int __bt_remove_ad_data_by_type(char *in_data, unsigned int in_len,
 	int type = 0;
 	char *p;
 
-	for (i = 0; i < in_len; i++) {
+	for (i = 0; i < in_len; i++) { //LCOV_EXCL_LINE
 		len = in_data[i];
 		if (len <= 0 || i + 1 >= in_len) {
-			BT_ERR("Invalid advertising data");
-			return BT_ERROR_OPERATION_FAILED;
+			BT_ERR("Invalid advertising data"); //LCOV_EXCL_LINE
+			return BT_ERROR_OPERATION_FAILED; //LCOV_EXCL_LINE
 		}
 
 		type = in_data[i + 1];
@@ -1233,18 +1237,18 @@ static int __bt_remove_ad_data_by_type(char *in_data, unsigned int in_len,
 			break;
 		}
 
-		i += len;
-		len = 0;
+		i += len; //LCOV_EXCL_LINE
+		len = 0; //LCOV_EXCL_LINE
 	}
 
 	if (i + len > in_len) {
-		BT_ERR("Invalid advertising data");
-		return BT_ERROR_OPERATION_FAILED;
+		BT_ERR("Invalid advertising data"); //LCOV_EXCL_LINE
+		return BT_ERROR_OPERATION_FAILED; //LCOV_EXCL_LINE
 	} else if (len == 0 &&
 			in_type != BT_ADAPTER_LE_ADVERTISING_DATA_LOCAL_NAME &&
 			in_type != BT_ADAPTER_LE_ADVERTISING_DATA_TX_POWER_LEVEL) {
-		BT_INFO("AD Type 0x%02x data is not set", in_type);
-		return BT_ERROR_OPERATION_FAILED;
+		BT_INFO("AD Type 0x%02x data is not set", in_type); //LCOV_EXCL_LINE
+		return BT_ERROR_OPERATION_FAILED; //LCOV_EXCL_LINE
 	}
 
 	p = (char *)malloc(sizeof(char) * (in_len - len));
@@ -1281,8 +1285,8 @@ int bt_adapter_le_add_advertising_data(bt_advertiser_h advertiser,
 	if ((data == NULL || data_size == 0) &&
 		(adv_type != BT_ADAPTER_LE_ADVERTISING_DATA_LOCAL_NAME &&
 		adv_type != BT_ADAPTER_LE_ADVERTISING_DATA_TX_POWER_LEVEL)) {
-		BT_ERR("empty data for packet type %d", pkt_type);
-		return BT_ERROR_INVALID_PARAMETER;
+		BT_ERR("empty data for packet type %d", pkt_type); //LCOV_EXCL_LINE
+		return BT_ERROR_INVALID_PARAMETER; //LCOV_EXCL_LINE
 	}
 
 	BT_CHECK_INPUT_PARAMETER(advertiser);
@@ -1305,8 +1309,8 @@ int bt_adapter_le_add_advertising_data(bt_advertiser_h advertiser,
 
 	/* 2 bytes are required for Length and AD Type */
 	if (adv_flag_len + *len + adv_ext_len + data_size + 2 > 31) {
-		BT_ERR("Quota exceeded");
-		return BT_ERROR_QUOTA_EXCEEDED;
+		BT_ERR("Quota exceeded"); //LCOV_EXCL_LINE
+		return BT_ERROR_QUOTA_EXCEEDED; //LCOV_EXCL_LINE
 	}
 
 	if (*len == 0)
@@ -1358,14 +1362,14 @@ int bt_adapter_le_remove_advertising_data(bt_advertiser_h advertiser,
 		break;
 
 	case BT_ADAPTER_LE_PACKET_SCAN_RESPONSE:
-		p = &__adv->scan_rsp_data;
-		len = &__adv->scan_rsp_data_len;
-		system_data_len = &__adv->scan_rsp_system_data_len;
-		break;
+		p = &__adv->scan_rsp_data; //LCOV_EXCL_LINE
+		len = &__adv->scan_rsp_data_len; //LCOV_EXCL_LINE
+		system_data_len = &__adv->scan_rsp_system_data_len; //LCOV_EXCL_LINE
+		break; //LCOV_EXCL_LINE
 
 	default:
-		BT_ERR("Unknown LE packet type : %d", pkt_type);
-		return BT_ERROR_INVALID_PARAMETER;
+		BT_ERR("Unknown LE packet type : %d", pkt_type); //LCOV_EXCL_LINE
+		return BT_ERROR_INVALID_PARAMETER; //LCOV_EXCL_LINE
 	}
 
 	ret = __bt_remove_ad_data_by_type(*p, *len, adv_type, &new_p, &new_len);
@@ -1379,7 +1383,7 @@ int bt_adapter_le_remove_advertising_data(bt_advertiser_h advertiser,
 
 	if (adv_type == BT_ADAPTER_LE_ADVERTISING_DATA_LOCAL_NAME ||
 		adv_type == BT_ADAPTER_LE_ADVERTISING_DATA_TX_POWER_LEVEL)
-		*system_data_len -= 1;
+		*system_data_len -= 1; //LCOV_EXCL_LINE
 
 	return ret;
 }
@@ -1393,18 +1397,18 @@ static int __bt_convert_string_to_uuid(const char *string, char **uuid, int *bit
 		char *stop;
 		data = g_malloc0(sizeof(char) * 2);
 		if (data == NULL)
-			return BT_ERROR_OUT_OF_MEMORY;
+			return BT_ERROR_OUT_OF_MEMORY; //LCOV_EXCL_LINE
 
 		val = strtol(string, &stop, 16);
 		val = htons(val);
 		memcpy(data, &val, 2);
 		*uuid = data;
-		*bit = 16;
+		*bit = 16; //LCOV_EXCL_START
 	} else if (strlen(string) == 36)  { // 128 bit uuid
 		if (string[8] != '-' || string[13] != '-' ||
 			string[18] != '-' || string[23] != '-') {
-			BT_ERR("Invalid UUID");
-			return BT_ERROR_INVALID_PARAMETER;
+			BT_ERR("Invalid UUID"); //LCOV_EXCL_LINE
+			return BT_ERROR_INVALID_PARAMETER; //LCOV_EXCL_LINE
 		}
 
 		int ret;
@@ -1440,11 +1444,11 @@ static int __bt_convert_string_to_uuid(const char *string, char **uuid, int *bit
 		*uuid = data;
 		*bit = 128;
 	} else {
-		BT_ERR("Invalid UUID");
-		return BT_ERROR_INVALID_PARAMETER;
+		BT_ERR("Invalid UUID"); //LCOV_EXCL_LINE
+		return BT_ERROR_INVALID_PARAMETER; //LCOV_EXCL_LINE
 	}
 
-	return BT_ERROR_NONE;
+	return BT_ERROR_NONE; //LCOV_EXCL_STOP
 }
 
 static int __bt_convert_byte_ordering(char *data, int data_len, char **converted_data)
@@ -1488,7 +1492,7 @@ static int __bt_find_adv_data_type(bt_advertiser_h advertiser,
 	if (!adv_data)
 		return BT_ERROR_OPERATION_FAILED;
 
-	for (i = 0; i <adv_len ; i++) {
+	for (i = 0; i <adv_len ; i++) { //LCOV_EXCL_START
 		len = adv_data[i];
 		type = adv_data[i + 1];
 
@@ -1497,7 +1501,7 @@ static int __bt_find_adv_data_type(bt_advertiser_h advertiser,
 			*data_len = len;
 			return BT_ERROR_NONE;
 		} else {
-			i = i + adv_data[i];
+			i = i + adv_data[i]; //LCOV_EXCL_STOP
 		}
 	}
 
@@ -1539,13 +1543,13 @@ static int __bt_append_adv_type_data(bt_advertiser_h advertiser,
 	dest_type = data_ptr[1];
 
 	if (data_type != dest_type) {
-		BT_ERR("Invalid data type");
-		return BT_ERROR_INVALID_PARAMETER;
+		BT_ERR("Invalid data type"); //LCOV_EXCL_LINE
+		return BT_ERROR_INVALID_PARAMETER; //LCOV_EXCL_LINE
 	}
 
 	if (adv_flag_len + adv_len + system_data_len + new_data_len > 31) {
-		BT_ERR("Quota exceeded");
-		return BT_ERROR_QUOTA_EXCEEDED;
+		BT_ERR("Quota exceeded"); //LCOV_EXCL_LINE
+		return BT_ERROR_QUOTA_EXCEEDED; //LCOV_EXCL_LINE
 	}
 
 	new_adv = g_malloc0(adv_len + new_data_len);
@@ -1613,9 +1617,9 @@ int bt_adapter_le_add_advertising_service_uuid(bt_advertiser_h advertiser,
 	if (uuid_bit == 16) {
 		byte_len = 2;
 		data_type = BT_ADAPTER_LE_ADVERTISING_DATA_INCOMP_LIST_16_BIT_SERVICE_CLASS_UUIDS;
-	} else if (uuid_bit == 128) {
-		byte_len = 16;
-		data_type = BT_ADAPTER_LE_ADVERTISING_DATA_INCOMP_LIST_128_BIT_SERVICE_CLASS_UUIDS;
+	} else if (uuid_bit == 128) { //LCOV_EXCL_LINE
+		byte_len = 16; //LCOV_EXCL_LINE
+		data_type = BT_ADAPTER_LE_ADVERTISING_DATA_INCOMP_LIST_128_BIT_SERVICE_CLASS_UUIDS; //LCOV_EXCL_LINE
 	}
 
 	__bt_convert_byte_ordering(uuid_ptr, byte_len, &converted_uuid);
@@ -1623,7 +1627,7 @@ int bt_adapter_le_add_advertising_service_uuid(bt_advertiser_h advertiser,
 
 	__bt_find_adv_data_type(advertiser, pkt_type, data_type, &data_ptr, &data_len);
 	if (data_ptr) {
-		ret = __bt_append_adv_type_data(advertiser, pkt_type, converted_uuid, byte_len, data_type, data_ptr, data_len);
+		ret = __bt_append_adv_type_data(advertiser, pkt_type, converted_uuid, byte_len, data_type, data_ptr, data_len); //LCOV_EXCL_LINE
 	} else {
 		ret = bt_adapter_le_add_advertising_data(advertiser, pkt_type, data_type, converted_uuid, byte_len);
 	}
@@ -1656,9 +1660,9 @@ int bt_adapter_le_add_advertising_service_solicitation_uuid(bt_advertiser_h adve
 	if (uuid_bit == 16) {
 		byte_len = 2;
 		data_type = BT_ADAPTER_LE_ADVERTISING_DATA_16_BIT_SERVICE_SOLICITATION_UUIDS;
-	} else if (uuid_bit == 128) {
-		byte_len = 16;
-		data_type = BT_ADAPTER_LE_ADVERTISING_DATA_128_BIT_SERVICE_SOLICITATION_UUIDS;
+	} else if (uuid_bit == 128) { //LCOV_EXCL_LINE
+		byte_len = 16; //LCOV_EXCL_LINE
+		data_type = BT_ADAPTER_LE_ADVERTISING_DATA_128_BIT_SERVICE_SOLICITATION_UUIDS; //LCOV_EXCL_LINE
 	}
 
 	__bt_convert_byte_ordering(uuid_ptr, byte_len, &converted_uuid);
@@ -1666,7 +1670,7 @@ int bt_adapter_le_add_advertising_service_solicitation_uuid(bt_advertiser_h adve
 
 	__bt_find_adv_data_type(advertiser, pkt_type, data_type, &data_ptr, &data_len);
 	if (data_ptr) {
-		ret = __bt_append_adv_type_data(advertiser, pkt_type, converted_uuid, byte_len, data_type, data_ptr, data_len);
+		ret = __bt_append_adv_type_data(advertiser, pkt_type, converted_uuid, byte_len, data_type, data_ptr, data_len); //LCOV_EXCL_LINE
 	} else {
 		ret = bt_adapter_le_add_advertising_data(advertiser, pkt_type, data_type, converted_uuid, byte_len);
 	}
@@ -1697,8 +1701,8 @@ int bt_adapter_le_add_advertising_service_data(bt_advertiser_h advertiser,
 				BT_ADAPTER_LE_ADVERTISING_DATA_SERVICE_DATA,
 				&data_ptr, &data_len);
 	if (data_ptr) {
-		BT_ERR("Aleady existed");
-		return BT_ERROR_ALREADY_DONE;
+		BT_ERR("Aleady existed"); //LCOV_EXCL_LINE
+		return BT_ERROR_ALREADY_DONE; //LCOV_EXCL_LINE
 	}
 
 	ret = __bt_convert_string_to_uuid(uuid, &uuid_ptr, &uuid_bit);
@@ -1707,10 +1711,10 @@ int bt_adapter_le_add_advertising_service_data(bt_advertiser_h advertiser,
 
 	if (uuid_bit == 16) {
 		byte_len = 2;
-	} else if (uuid_bit == 128) {
-		BT_ERR("128 bit UUID is not supported");
-		g_free(uuid_ptr);
-		return BT_ERROR_INVALID_PARAMETER;
+	} else if (uuid_bit == 128) { //LCOV_EXCL_LINE
+		BT_ERR("128 bit UUID is not supported"); //LCOV_EXCL_LINE
+		g_free(uuid_ptr); //LCOV_EXCL_LINE
+		return BT_ERROR_INVALID_PARAMETER; //LCOV_EXCL_LINE
 	}
 
 	__bt_convert_byte_ordering(uuid_ptr, byte_len, &converted_uuid);
@@ -1718,7 +1722,7 @@ int bt_adapter_le_add_advertising_service_data(bt_advertiser_h advertiser,
 
 	adv_data = g_malloc0(sizeof(char) * (service_data_len + 2));
 	if (!adv_data) {
-		g_free(converted_uuid);
+		g_free(converted_uuid); //LCOV_EXCL_LINE
 		return BT_ERROR_OUT_OF_MEMORY;
 	}
 
@@ -1749,8 +1753,8 @@ int bt_adapter_le_set_advertising_appearance(bt_advertiser_h advertiser,
 	__bt_find_adv_data_type(advertiser, pkt_type, BT_ADAPTER_LE_ADVERTISING_DATA_APPEARANCE,
 				&data_ptr, &data_len);
 	if (data_ptr) {
-		BT_ERR("Aleady existed");
-		return BT_ERROR_ALREADY_DONE;
+		BT_ERR("Aleady existed"); //LCOV_EXCL_LINE
+		return BT_ERROR_ALREADY_DONE; //LCOV_EXCL_LINE
 	}
 
 	ret = bt_adapter_le_add_advertising_data(advertiser,
@@ -1777,8 +1781,8 @@ int bt_adapter_le_add_advertising_manufacturer_data(bt_advertiser_h advertiser,
 				BT_ADAPTER_LE_ADVERTISING_DATA_MANUFACTURER_SPECIFIC_DATA,
 				&data_ptr, &data_len);
 	if (data_ptr) {
-		BT_ERR("Aleady existed");
-		return BT_ERROR_ALREADY_DONE;
+		BT_ERR("Aleady existed"); //LCOV_EXCL_LINE
+		return BT_ERROR_ALREADY_DONE; //LCOV_EXCL_LINE
 	}
 
 	adv_data = g_malloc0(sizeof(char) * (manufacturer_data_len + 2));
@@ -1810,7 +1814,7 @@ int bt_adapter_le_set_advertising_device_name(bt_advertiser_h advertiser,
 	BT_CHECK_INPUT_PARAMETER(advertiser);
 
 	if (!include_name) {
-		ret = bt_adapter_le_remove_advertising_data(advertiser, pkt_type,
+		ret = bt_adapter_le_remove_advertising_data(advertiser, pkt_type, //LCOV_EXCL_LINE
 			BT_ADAPTER_LE_ADVERTISING_DATA_LOCAL_NAME);
 		return ret;
 	}
@@ -1819,8 +1823,8 @@ int bt_adapter_le_set_advertising_device_name(bt_advertiser_h advertiser,
 				BT_ADAPTER_LE_ADVERTISING_DATA_LOCAL_NAME,
 				&data_ptr, &data_len);
 	if (data_ptr) {
-		BT_ERR("Aleady existed");
-		return BT_ERROR_ALREADY_DONE;
+		BT_ERR("Aleady existed"); //LCOV_EXCL_LINE
+		return BT_ERROR_ALREADY_DONE; //LCOV_EXCL_LINE
 	}
 
 	ret = bt_adapter_le_add_advertising_data(advertiser,
@@ -1842,7 +1846,7 @@ int bt_adapter_le_set_advertising_tx_power_level(bt_advertiser_h advertiser,
 	BT_CHECK_INPUT_PARAMETER(advertiser);
 
 	if (!include_tx_power) {
-		ret = bt_adapter_le_remove_advertising_data(advertiser, pkt_type,
+		ret = bt_adapter_le_remove_advertising_data(advertiser, pkt_type, //LCOV_EXCL_LINE
 			BT_ADAPTER_LE_ADVERTISING_DATA_TX_POWER_LEVEL);
 		return ret;
 	}
@@ -1851,8 +1855,8 @@ int bt_adapter_le_set_advertising_tx_power_level(bt_advertiser_h advertiser,
 				BT_ADAPTER_LE_ADVERTISING_DATA_TX_POWER_LEVEL,
 				&data_ptr, &data_len);
 	if (data_ptr) {
-		BT_ERR("Aleady existed");
-		return BT_ERROR_ALREADY_DONE;
+		BT_ERR("Aleady existed"); //LCOV_EXCL_LINE
+		return BT_ERROR_ALREADY_DONE; //LCOV_EXCL_LINE
 	}
 
 	ret = bt_adapter_le_add_advertising_data(advertiser,
@@ -1889,8 +1893,8 @@ int bt_adapter_le_clear_advertising_data(bt_advertiser_h advertiser,
 		break;
 
 	default:
-		BT_ERR("Unknown LE packet type : %d", pkt_type);
-		return BT_ERROR_INVALID_PARAMETER;
+		BT_ERR("Unknown LE packet type : %d", pkt_type); //LCOV_EXCL_LINE
+		return BT_ERROR_INVALID_PARAMETER; //LCOV_EXCL_LINE
 	}
 
 	if (*p) {
@@ -1919,28 +1923,28 @@ int bt_adapter_le_start_advertising(bt_advertiser_h advertiser,
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(advertiser);
 
-	if (__adv->adv_data_len > 0 && __adv->adv_data) {
+	if (__adv->adv_data_len > 0 && __adv->adv_data) { //LCOV_EXCL_START
 		memcpy(adv.data, __adv->adv_data, __adv->adv_data_len);
 		error_code = bluetooth_set_advertising_data(__adv->handle, &adv, __adv->adv_data_len);
 		ret = _bt_get_error_code(error_code);
 		if (ret != BT_ERROR_NONE) {
-			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret); //LCOV_EXCL_LINE
-			return ret;
+			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+			return ret; //LCOV_EXCL_STOP
 		}
 	}
 
-	if (__adv->scan_rsp_data_len > 0 && __adv->scan_rsp_data) {
+	if (__adv->scan_rsp_data_len > 0 && __adv->scan_rsp_data) { //LCOV_EXCL_START
 		memcpy(resp.data, __adv->scan_rsp_data, __adv->scan_rsp_data_len);
 		error_code = bluetooth_set_scan_response_data(__adv->handle, &resp, __adv->scan_rsp_data_len);
 		ret = _bt_get_error_code(error_code);
 		if (ret != BT_ERROR_NONE) {
-			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret); //LCOV_EXCL_LINE
-			return ret;
+			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+			return ret; //LCOV_EXCL_STOP
 		}
 	}
 
 	if (adv_params == NULL) {
-		error_code = bluetooth_set_advertising(__adv->handle, TRUE);
+		error_code = bluetooth_set_advertising(__adv->handle, TRUE); //LCOV_EXCL_LINE
 	} else {
 		param.interval_min = adv_params->interval_min;
 		param.interval_max = adv_params->interval_max;
@@ -1993,22 +1997,22 @@ int bt_adapter_le_start_advertising_new(bt_advertiser_h advertiser,
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(advertiser);
 
-	if (__adv->adv_data_len > 0 && __adv->adv_data) {
+	if (__adv->adv_data_len > 0 && __adv->adv_data) { //LCOV_EXCL_START
 		memcpy(adv.data, __adv->adv_data, __adv->adv_data_len);
 		error_code = bluetooth_set_advertising_data(__adv->handle, &adv, __adv->adv_data_len);
 		ret = _bt_get_error_code(error_code);
 		if (ret != BT_ERROR_NONE) {
-			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret); //LCOV_EXCL_LINE
+			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret); //LCOV_EXCL_STOP
 			return ret;
 		}
 	}
 
-	if (__adv->scan_rsp_data_len > 0 && __adv->scan_rsp_data) {
+	if (__adv->scan_rsp_data_len > 0 && __adv->scan_rsp_data) { //LCOV_EXCL_START
 		memcpy(resp.data, __adv->scan_rsp_data, __adv->scan_rsp_data_len);
 		error_code = bluetooth_set_scan_response_data(__adv->handle, &resp, __adv->scan_rsp_data_len);
 		ret = _bt_get_error_code(error_code);
 		if (ret != BT_ERROR_NONE) {
-			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret); //LCOV_EXCL_LINE
+			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret); //LCOV_EXCL_STOP
 			return ret;
 		}
 	}
@@ -2047,7 +2051,7 @@ void _bt_adapter_le_invoke_advertising_state_cb(int handle, int result, bt_adapt
 		if (__adv->handle == handle) {
 			if (__adv->cb == NULL) {
 				BT_ERR("advertiser cb is NULL"); //LCOV_EXCL_LINE
-				return;
+				return; //LCOV_EXCL_LINE
 			}
 
 			__adv->cb(result, (bt_advertiser_h)__adv, adv_state, __adv->user_data);
@@ -2075,7 +2079,7 @@ int bt_adapter_le_set_advertising_mode(bt_advertiser_h advertiser,
 	error_code = _bt_get_error_code(bluetooth_check_privilege_advertising_parameter());
 	if (error_code != BT_ERROR_NONE) {
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code); //LCOV_EXCL_LINE
-		return BT_ERROR_PERMISSION_DENIED;
+		return BT_ERROR_PERMISSION_DENIED; //LCOV_EXCL_LINE
 	}
 
 	// TODO : Before set the mode, check the inprogress status
@@ -2124,11 +2128,11 @@ int bt_adapter_le_set_advertising_connectable(bt_advertiser_h advertiser, bool c
 	error_code = _bt_get_error_code(bluetooth_check_privilege_advertising_parameter());
 	if (error_code != BT_ERROR_NONE) {
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code); //LCOV_EXCL_LINE
-		return BT_ERROR_PERMISSION_DENIED;
+		return BT_ERROR_PERMISSION_DENIED; //LCOV_EXCL_LINE
 	}
 
 	if (connectable)
-		__adv->adv_params.type = BT_ADAPTER_LE_ADVERTISING_CONNECTABLE;
+		__adv->adv_params.type = BT_ADAPTER_LE_ADVERTISING_CONNECTABLE; //LCOV_EXCL_LINE
 	else
 		__adv->adv_params.type = BT_ADAPTER_LE_ADVERTISING_SCANNABLE;
 
@@ -2293,7 +2297,7 @@ int bt_adapter_le_get_scan_result_service_uuids(const bt_adapter_le_device_scan_
 	BT_CHECK_LE_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(info);
-	BT_CHECK_INPUT_PARAMETER(uuids);
+	BT_CHECK_INPUT_PARAMETER(uuids); //LCOV_EXCL_START
 	BT_CHECK_INPUT_PARAMETER(count);
 
 	int adv_length = 0;
@@ -2385,14 +2389,14 @@ int bt_adapter_le_get_scan_result_service_uuids(const bt_adapter_le_device_scan_
 	}
 
 	return BT_ERROR_NONE;
-}
+} //LCOV_EXCL_STOP
 
 int bt_adapter_le_get_scan_result_device_name(const bt_adapter_le_device_scan_result_info_s *info,
 			bt_adapter_le_packet_type_e pkt_type, char **name)
 {
 	BT_CHECK_LE_SUPPORT();
 	BT_CHECK_INIT_STATUS();
-	BT_CHECK_INPUT_PARAMETER(info);
+	BT_CHECK_INPUT_PARAMETER(info); //LCOV_EXCL_START
 	BT_CHECK_INPUT_PARAMETER(name);
 
 	int adv_length = 0;
@@ -2428,7 +2432,7 @@ int bt_adapter_le_get_scan_result_device_name(const bt_adapter_le_device_scan_re
 		adv_data += field_len + 1;
 	}
 
-	return BT_ERROR_NO_DATA;
+	return BT_ERROR_NO_DATA; //LCOV_EXCL_STOP
 }
 
 int bt_adapter_le_get_scan_result_tx_power_level(const bt_adapter_le_device_scan_result_info_s *info,
@@ -2436,7 +2440,7 @@ int bt_adapter_le_get_scan_result_tx_power_level(const bt_adapter_le_device_scan
 {
 	BT_CHECK_LE_SUPPORT();
 	BT_CHECK_INIT_STATUS();
-	BT_CHECK_INPUT_PARAMETER(info);
+	BT_CHECK_INPUT_PARAMETER(info); //LCOV_EXCL_START
 	BT_CHECK_INPUT_PARAMETER(power_level);
 
 	int adv_length = 0;
@@ -2470,7 +2474,7 @@ int bt_adapter_le_get_scan_result_tx_power_level(const bt_adapter_le_device_scan
 		adv_data += field_len + 1;
 	}
 
-	return BT_ERROR_NO_DATA;
+	return BT_ERROR_NO_DATA; //LCOV_EXCL_STOP
 }
 
 int bt_adapter_le_get_scan_result_service_solicitation_uuids(const bt_adapter_le_device_scan_result_info_s *info,
@@ -2478,7 +2482,7 @@ int bt_adapter_le_get_scan_result_service_solicitation_uuids(const bt_adapter_le
 {
 	BT_CHECK_LE_SUPPORT();
 	BT_CHECK_INIT_STATUS();
-	BT_CHECK_INPUT_PARAMETER(info);
+	BT_CHECK_INPUT_PARAMETER(info); //LCOV_EXCL_START
 	BT_CHECK_INPUT_PARAMETER(uuids);
 	BT_CHECK_INPUT_PARAMETER(count);
 
@@ -2565,7 +2569,7 @@ int bt_adapter_le_get_scan_result_service_solicitation_uuids(const bt_adapter_le
 		remain_data += field_len + 1;
 	}
 
-	return BT_ERROR_NONE;
+	return BT_ERROR_NONE; //LCOV_EXCL_STOP
 }
 
 int bt_adapter_le_get_scan_result_service_data_list(const bt_adapter_le_device_scan_result_info_s *info,
@@ -2573,7 +2577,7 @@ int bt_adapter_le_get_scan_result_service_data_list(const bt_adapter_le_device_s
 {
 	BT_CHECK_LE_SUPPORT();
 	BT_CHECK_INIT_STATUS();
-	BT_CHECK_INPUT_PARAMETER(info);
+	BT_CHECK_INPUT_PARAMETER(info); //LCOV_EXCL_START
 	BT_CHECK_INPUT_PARAMETER(count);
 
 	int adv_length = 0;
@@ -2636,7 +2640,7 @@ int bt_adapter_le_get_scan_result_service_data_list(const bt_adapter_le_device_s
 		remain_data += field_len + 1;
 	}
 
-	return BT_ERROR_NONE;
+	return BT_ERROR_NONE; //LCOV_EXCL_STOP
 }
 
 int bt_adapter_le_free_service_data_list(bt_adapter_le_service_data_s *data_list, int count)
@@ -2645,7 +2649,7 @@ int bt_adapter_le_free_service_data_list(bt_adapter_le_service_data_s *data_list
 
 	BT_CHECK_LE_SUPPORT();
 	BT_CHECK_INIT_STATUS();
-	BT_CHECK_INPUT_PARAMETER(data_list);
+	BT_CHECK_INPUT_PARAMETER(data_list); //LCOV_EXCL_START
 
 	for (i = 0; i < count; i++) {
 		g_free(data_list[i].service_uuid);
@@ -2653,7 +2657,7 @@ int bt_adapter_le_free_service_data_list(bt_adapter_le_service_data_s *data_list
 	}
 	g_free(data_list);
 
-	return BT_ERROR_NONE;
+	return BT_ERROR_NONE; //LCOV_EXCL_STOP
 }
 
 int bt_adapter_le_get_scan_result_appearance(const bt_adapter_le_device_scan_result_info_s *info,
@@ -2661,7 +2665,7 @@ int bt_adapter_le_get_scan_result_appearance(const bt_adapter_le_device_scan_res
 {
 	BT_CHECK_LE_SUPPORT();
 	BT_CHECK_INIT_STATUS();
-	BT_CHECK_INPUT_PARAMETER(info);
+	BT_CHECK_INPUT_PARAMETER(info); //LCOV_EXCL_START
 	BT_CHECK_INPUT_PARAMETER(appearance);
 
 	int adv_length = 0;
@@ -2694,7 +2698,7 @@ int bt_adapter_le_get_scan_result_appearance(const bt_adapter_le_device_scan_res
 		adv_data += field_len + 1;
 	}
 
-	return BT_ERROR_NO_DATA;
+	return BT_ERROR_NO_DATA; //LCOV_EXCL_STOP
 }
 
 
@@ -2704,7 +2708,7 @@ int bt_adapter_le_get_scan_result_manufacturer_data(const bt_adapter_le_device_s
 	BT_CHECK_LE_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(info);
-	BT_CHECK_INPUT_PARAMETER(manufacturer_id);
+	BT_CHECK_INPUT_PARAMETER(manufacturer_id); //LCOV_EXCL_START
 	BT_CHECK_INPUT_PARAMETER(manufacturer_data);
 	BT_CHECK_INPUT_PARAMETER(manufacturer_data_len);
 
@@ -2745,7 +2749,7 @@ int bt_adapter_le_get_scan_result_manufacturer_data(const bt_adapter_le_device_s
 		remain_data += field_len + 1;
 	}
 
-	return BT_ERROR_NO_DATA;
+	return BT_ERROR_NO_DATA; //LCOV_EXCL_STOP
 }
 
 //LCOV_EXCL_START

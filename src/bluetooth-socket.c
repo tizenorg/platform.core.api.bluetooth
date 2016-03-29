@@ -34,9 +34,9 @@ int bt_socket_create_rfcomm(const char *uuid, int *socket_fd)
 
 	ret = bluetooth_rfcomm_create_socket(uuid);
 	if (ret < 0) {
-		ret = _bt_get_error_code(ret);
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
-		return ret;
+		ret = _bt_get_error_code(ret); //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret); //LCOV_EXCL_LINE
+		return ret; //LCOV_EXCL_LINE
 	} else {
 		*socket_fd = ret;
 		return BT_ERROR_NONE;
@@ -51,13 +51,13 @@ int bt_socket_destroy_rfcomm(int socket_fd)
 	BT_CHECK_INIT_STATUS();
 	error_code = _bt_get_error_code(bluetooth_rfcomm_remove_socket(socket_fd));
 	if (error_code != BT_ERROR_NONE) {
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code),
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), //LCOV_EXCL_LINE
 				error_code);
 	}
 
 	return error_code;
 }
-
+//LCOV_EXCL_START
 int bt_socket_is_service_used(const char* service_uuid, bool *used)
 {
 	BT_CHECK_BT_SUPPORT();
@@ -67,7 +67,7 @@ int bt_socket_is_service_used(const char* service_uuid, bool *used)
 
 	*used = bluetooth_rfcomm_is_server_uuid_available(service_uuid);
 
-	return BT_ERROR_NONE;
+	return BT_ERROR_NONE; //LCOV_EXCL_STOP
 }
 
 int bt_socket_listen_and_accept_rfcomm(int socket_fd, int max_pending_connections)
@@ -78,7 +78,7 @@ int bt_socket_listen_and_accept_rfcomm(int socket_fd, int max_pending_connection
 	BT_CHECK_INIT_STATUS();
 	error_code = _bt_get_error_code(bluetooth_rfcomm_listen_and_accept(socket_fd, max_pending_connections));
 	if (error_code != BT_ERROR_NONE) {
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code),
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), //LCOV_EXCL_LINE
 				error_code);
 	}
 
@@ -194,7 +194,7 @@ int bt_socket_connect_rfcomm(const char *remote_address, const char *remote_port
 	int error_code = BT_ERROR_NONE;
 
 	BT_CHECK_BT_SUPPORT();
-	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INIT_STATUS(); //LCOV_EXCL_START
 	BT_CHECK_INPUT_PARAMETER(remote_address);
 	BT_CHECK_INPUT_PARAMETER(remote_port_uuid);
 
@@ -206,7 +206,7 @@ int bt_socket_connect_rfcomm(const char *remote_address, const char *remote_port
 				error_code);
 	}
 
-	return error_code;
+	return error_code; //LCOV_EXCL_STOP
 }
 
 int bt_socket_disconnect_rfcomm(int socket_fd)
@@ -214,7 +214,7 @@ int bt_socket_disconnect_rfcomm(int socket_fd)
 	int error_code = BT_ERROR_NONE;
 
 	BT_CHECK_BT_SUPPORT();
-	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INIT_STATUS(); //LCOV_EXCL_START
 
 	error_code = _bt_get_error_code(bluetooth_rfcomm_disconnect(socket_fd));
 	if (error_code != BT_ERROR_NONE) {
@@ -222,7 +222,7 @@ int bt_socket_disconnect_rfcomm(int socket_fd)
 				error_code);
 	}
 
-	return error_code;
+	return error_code; //LCOV_EXCL_STOP
 }
 
 int bt_socket_send_data(int socket_fd, const char *data, int length)
@@ -230,7 +230,7 @@ int bt_socket_send_data(int socket_fd, const char *data, int length)
 	int ret = 0;
 
 	BT_CHECK_BT_SUPPORT();
-	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INIT_STATUS(); //LCOV_EXCL_START
 	BT_CHECK_INPUT_PARAMETER(data);
 
 	ret = bluetooth_rfcomm_write(socket_fd, data, length);
@@ -251,7 +251,7 @@ int bt_socket_send_data(int socket_fd, const char *data, int length)
 		BT_ERR("Write failed, ret = %d", ret);
 	}
 
-	return ret;
+	return ret; //LCOV_EXCL_STOP
 }
 
 int bt_socket_set_data_received_cb(bt_socket_data_received_cb callback, void *user_data)

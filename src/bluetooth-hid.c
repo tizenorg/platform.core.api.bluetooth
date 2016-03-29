@@ -79,8 +79,8 @@ int bt_hid_host_initialize(bt_hid_host_connection_state_changed_cb connection_cb
 	error = bluetooth_hid_init(_bt_hid_event_proxy, user_data);
 	error = _bt_get_error_code(error);
 	if (BT_ERROR_NONE != error) {
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
-		return error;
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); //LCOV_EXCL_LINE
+		return error; //LCOV_EXCL_LINE
 	}
 
 	_bt_set_cb(BT_EVENT_HID_CONNECTION_STATUS, connection_cb, user_data);
@@ -100,8 +100,8 @@ int bt_hid_host_deinitialize()
 	error = bluetooth_hid_deinit();
 	error = _bt_get_error_code(error);
 	if (BT_ERROR_NONE != error) {
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
-		return error;
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); //LCOV_EXCL_LINE
+		return error; //LCOV_EXCL_LINE
 	}
 
 	_bt_unset_cb(BT_EVENT_HID_CONNECTION_STATUS);
@@ -116,7 +116,7 @@ int bt_hid_host_connect(const char *remote_address)
 	bluetooth_device_address_t addr_hex = { {0,} };
 
 	BT_CHECK_HID_HOST_SUPPORT();
-	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INIT_STATUS(); //LCOV_EXCL_START
 	BT_CHECK_HID_HOST_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(remote_address);
 
@@ -127,7 +127,7 @@ int bt_hid_host_connect(const char *remote_address)
 	if (error != BT_ERROR_NONE) {
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
 	}
-	return error;
+	return error; //LCOV_EXCL_STOP
 }
 
 int bt_hid_host_disconnect(const char *remote_address)
@@ -136,7 +136,7 @@ int bt_hid_host_disconnect(const char *remote_address)
 	bluetooth_device_address_t addr_hex = { {0,} };
 
 	BT_CHECK_HID_HOST_SUPPORT();
-	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INIT_STATUS(); //LCOV_EXCL_START
 	BT_CHECK_HID_HOST_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(remote_address);
 
@@ -147,7 +147,7 @@ int bt_hid_host_disconnect(const char *remote_address)
 	if (error != BT_ERROR_NONE) {
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
 	}
-	return error;
+	return error; //LCOV_EXCL_STOP
 }
 //LCOV_EXCL_START
 int bt_hid_device_activate(bt_hid_device_connection_state_changed_cb callback, void * user_data)
