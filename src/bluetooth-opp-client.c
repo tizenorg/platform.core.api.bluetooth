@@ -39,8 +39,7 @@ static bool is_opp_client_initialized = false;
 #endif
 
 #define BT_CHECK_OPP_CLIENT_INIT_STATUS() \
-	if (__bt_check_opp_client_init_status() == BT_ERROR_NOT_INITIALIZED) \
-	{ \
+	if (__bt_check_opp_client_init_status() == BT_ERROR_NOT_INITIALIZED) { \
 		LOGE("[%s] NOT_INITIALIZED(0x%08x)", __FUNCTION__, BT_ERROR_NOT_INITIALIZED); \
 		return BT_ERROR_NOT_INITIALIZED; \
 	}
@@ -54,8 +53,8 @@ int __bt_check_opp_client_init_status(void)
 
 	return BT_ERROR_NONE;
 }
-//LCOV_EXCL_START
-char** __bt_opp_get_file_array(GList *file_list)
+/* LCOV_EXCL_START */
+char **__bt_opp_get_file_array(GList *file_list)
 {
 	char **files = NULL;
 	char *c_file = NULL;
@@ -87,7 +86,7 @@ char** __bt_opp_get_file_array(GList *file_list)
 		BT_DBG("file: %s", files[i]);
 
 	return files;
-} //LCOV_EXCL_STOP
+} /* LCOV_EXCL_STOP */
 
 int bt_opp_client_initialize(void)
 {
@@ -99,9 +98,9 @@ int bt_opp_client_initialize(void)
 	error_code = _bt_get_error_code(bluetooth_opc_init());
 
 	if (error_code != BT_ERROR_NONE) {
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), //LCOV_EXCL_LINE
-				error_code); //LCOV_EXCL_LINE
-		return error_code; //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), /* LCOV_EXCL_LINE */
+				error_code); /* LCOV_EXCL_LINE */
+		return error_code; /* LCOV_EXCL_LINE */
 	}
 
 	is_opp_client_initialized = true;
@@ -120,9 +119,9 @@ int bt_opp_client_deinitialize(void)
 	bt_opp_client_clear_files();
 
 	if (error_code != BT_ERROR_NONE) {
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), //LCOV_EXCL_LINE
-				error_code); //LCOV_EXCL_LINE
-		return error_code; //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), /* LCOV_EXCL_LINE */
+				error_code); /* LCOV_EXCL_LINE */
+		return error_code; /* LCOV_EXCL_LINE */
 	}
 
 	is_opp_client_initialized = false;
@@ -137,7 +136,7 @@ int bt_opp_client_add_file(const char *file)
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_OPP_CLIENT_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(file);
-	BT_CHECK_ADAPTER_STATUS(); //LCOV_EXCL_START
+	BT_CHECK_ADAPTER_STATUS(); /* LCOV_EXCL_START */
 
 	if (access(file, F_OK) == 0) {
 		sending_files = g_list_append(sending_files, strdup(file));
@@ -150,7 +149,7 @@ int bt_opp_client_add_file(const char *file)
 				error_code);
 	}
 
-	return error_code; //LCOV_EXCL_STOP
+	return error_code; /* LCOV_EXCL_STOP */
 }
 
 int bt_opp_client_clear_files(void)
@@ -164,7 +163,7 @@ int bt_opp_client_clear_files(void)
 	BT_CHECK_OPP_CLIENT_INIT_STATUS();
 	BT_CHECK_ADAPTER_STATUS();
 
-	if (sending_files) { //LCOV_EXCL_START
+	if (sending_files) { /* LCOV_EXCL_START */
 		file_num = g_list_length(sending_files);
 
 		for (i = 0; i < file_num; i++) {
@@ -177,7 +176,7 @@ int bt_opp_client_clear_files(void)
 		}
 
 		g_list_free(sending_files);
-		sending_files = NULL; //LCOV_EXCL_STOP
+		sending_files = NULL; /* LCOV_EXCL_STOP */
 	}
 
 	return BT_ERROR_NONE;
@@ -194,7 +193,7 @@ int bt_opp_client_push_files(const char *remote_address,
 	char **files = NULL;
 
 	BT_CHECK_OPP_CLIENT_SUPPORT();
-	BT_CHECK_INIT_STATUS(); //LCOV_EXCL_START
+	BT_CHECK_INIT_STATUS(); /* LCOV_EXCL_START */
 	BT_CHECK_OPP_CLIENT_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(remote_address);
 
@@ -218,7 +217,7 @@ int bt_opp_client_push_files(const char *remote_address,
 	if (files)
 		free(files);
 
-	return error_code; //LCOV_EXCL_STOP
+	return error_code; /* LCOV_EXCL_STOP */
 }
 
 int bt_opp_client_cancel_push(void)
@@ -226,7 +225,7 @@ int bt_opp_client_cancel_push(void)
 	int error_code = BT_ERROR_NONE;
 
 	BT_CHECK_OPP_CLIENT_SUPPORT();
-	BT_CHECK_INIT_STATUS(); //LCOV_EXCL_START
+	BT_CHECK_INIT_STATUS(); /* LCOV_EXCL_START */
 	BT_CHECK_OPP_CLIENT_INIT_STATUS();
 
 	error_code = _bt_get_error_code(bluetooth_opc_cancel_push());
@@ -236,6 +235,6 @@ int bt_opp_client_cancel_push(void)
 				error_code);
 	}
 
-	return error_code; //LCOV_EXCL_STOP
+	return error_code; /* LCOV_EXCL_STOP */
 }
 

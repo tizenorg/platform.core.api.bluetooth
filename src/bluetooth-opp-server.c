@@ -28,7 +28,8 @@ static bool is_opp_server_initialized = false;
 #define BT_CHECK_OPP_SERVER_SUPPORT() \
 	{ \
 		BT_CHECK_BT_SUPPORT(); \
-		LOGE("[%s] NOT_SUPPORTED(0x%08x)", __FUNCTION__, BT_ERROR_NOT_SUPPORTED); \
+		LOGE("[%s] NOT_SUPPORTED(0x%08x)", __FUNCTION__, \
+					BT_ERROR_NOT_SUPPORTED); \
 		return BT_ERROR_NOT_SUPPORTED; \
 	}
 #else
@@ -37,9 +38,9 @@ static bool is_opp_server_initialized = false;
 
 
 #define BT_CHECK_OPP_SERVER_INIT_STATUS() \
-	if (__bt_check_opp_server_init_status() == BT_ERROR_NOT_INITIALIZED) \
-	{ \
-		LOGE("[%s] NOT_INITIALIZED(0x%08x)", __FUNCTION__, BT_ERROR_NOT_INITIALIZED); \
+	if (__bt_check_opp_server_init_status() == BT_ERROR_NOT_INITIALIZED) { \
+		LOGE("[%s] NOT_INITIALIZED(0x%08x)", __FUNCTION__, \
+					BT_ERROR_NOT_INITIALIZED); \
 		return BT_ERROR_NOT_INITIALIZED; \
 	}
 
@@ -52,7 +53,8 @@ int __bt_check_opp_server_init_status(void)
 
 	return BT_ERROR_NONE;
 }
-//LCOV_EXCL_START
+
+/* LCOV_EXCL_START */
 int bt_opp_server_initialize(const char *destination,
 			bt_opp_server_push_requested_cb push_requested_cb,
 			void *user_data)
@@ -76,10 +78,11 @@ int bt_opp_server_initialize(const char *destination,
 	is_opp_server_initialized = true;
 	return BT_ERROR_NONE;
 }
-//LCOV_EXCL_STOP
+
+/* LCOV_EXCL_START */
 int bt_opp_server_initialize_by_connection_request(const char *destination,
-			bt_opp_server_connection_requested_cb connection_requested_cb,
-			void *user_data)
+		bt_opp_server_connection_requested_cb connection_requested_cb,
+		void *user_data)
 {
 	int error_code = BT_ERROR_NONE;
 
@@ -90,9 +93,9 @@ int bt_opp_server_initialize_by_connection_request(const char *destination,
 	error_code = _bt_get_error_code(bluetooth_obex_server_init_without_agent(destination));
 
 	if (error_code != BT_ERROR_NONE) {
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), /* LCOV_EXCL_LINE */
 				error_code);
-		return error_code; //LCOV_EXCL_LINE //LCOV_EXCL_LINE
+		return error_code; /* LCOV_EXCL_LINE */
 	}
 
 	_bt_set_cb(BT_EVENT_OPP_CONNECTION_REQUESTED, connection_requested_cb, user_data);
@@ -110,7 +113,7 @@ int bt_opp_server_deinitialize(void)
 	BT_CHECK_OPP_SERVER_INIT_STATUS();
 
 	if (_bt_check_cb(BT_EVENT_OPP_CONNECTION_REQUESTED) == false) {
-		error_code = _bt_get_error_code(bluetooth_obex_server_deinit()); //LCOV_EXCL_LINE
+		error_code = _bt_get_error_code(bluetooth_obex_server_deinit()); /* LCOV_EXCL_LINE */
 	} else {
 		/* BADA API */
 		error_code = _bt_get_error_code(bluetooth_obex_server_deinit_without_agent());
@@ -120,9 +123,9 @@ int bt_opp_server_deinitialize(void)
 	_bt_unset_cb(BT_EVENT_OPP_PUSH_REQUESTED);
 
 	if (error_code != BT_ERROR_NONE) {
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), /* LCOV_EXCL_LINE */
 				error_code);
-		return error_code; //LCOV_EXCL_LINE
+		return error_code; /* LCOV_EXCL_LINE */
 	}
 
 	is_opp_server_initialized = false;
@@ -139,7 +142,7 @@ int bt_opp_server_accept(bt_opp_server_transfer_progress_cb progress_cb,
 
 	BT_CHECK_OPP_SERVER_SUPPORT();
 	BT_CHECK_INIT_STATUS();
-	BT_CHECK_OPP_SERVER_INIT_STATUS(); //LCOV_EXCL_START
+	BT_CHECK_OPP_SERVER_INIT_STATUS(); /* LCOV_EXCL_START */
 
 	/* Unset the transfer callbacks */
 	_bt_unset_cb(BT_EVENT_OPP_SERVER_TRANSFER_PROGRESS);
@@ -160,7 +163,7 @@ int bt_opp_server_accept(bt_opp_server_transfer_progress_cb progress_cb,
 		_bt_set_cb(BT_EVENT_OPP_SERVER_TRANSFER_FINISHED, finished_cb, user_data);
 	}
 
-	return error_code; //LCOV_EXCL_STOP
+	return error_code; /* LCOV_EXCL_STOP */
 }
 
 int bt_opp_server_reject(void)
@@ -169,7 +172,7 @@ int bt_opp_server_reject(void)
 
 	BT_CHECK_OPP_SERVER_SUPPORT();
 	BT_CHECK_INIT_STATUS();
-	BT_CHECK_OPP_SERVER_INIT_STATUS(); //LCOV_EXCL_START
+	BT_CHECK_OPP_SERVER_INIT_STATUS(); /* LCOV_EXCL_START */
 
 	if (_bt_check_cb(BT_EVENT_OPP_CONNECTION_REQUESTED) == false) {
 		error_code = _bt_get_error_code(bluetooth_obex_server_reject_authorize());
@@ -187,7 +190,7 @@ int bt_opp_server_reject(void)
 	_bt_unset_cb(BT_EVENT_OPP_SERVER_TRANSFER_PROGRESS);
 	_bt_unset_cb(BT_EVENT_OPP_SERVER_TRANSFER_FINISHED);
 
-	return error_code; //LCOV_EXCL_STOP
+	return error_code; /* LCOV_EXCL_STOP */
 }
 
 int bt_opp_server_set_destination(const char *destination)
@@ -201,7 +204,7 @@ int bt_opp_server_set_destination(const char *destination)
 
 	error_code = _bt_get_error_code(bluetooth_obex_server_set_destination_path(destination));
 	if (error_code != BT_ERROR_NONE) {
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), /* LCOV_EXCL_LINE */
 				error_code);
 	}
 
@@ -214,7 +217,7 @@ int bt_opp_server_cancel_transfer(int transfer_id)
 
 	BT_CHECK_OPP_SERVER_SUPPORT();
 	BT_CHECK_INIT_STATUS();
-	BT_CHECK_OPP_SERVER_INIT_STATUS(); //LCOV_EXCL_START
+	BT_CHECK_OPP_SERVER_INIT_STATUS(); /* LCOV_EXCL_START */
 
 	error_code = _bt_get_error_code(bluetooth_obex_server_cancel_transfer(transfer_id));
 	if (error_code != BT_ERROR_NONE) {
@@ -222,6 +225,6 @@ int bt_opp_server_cancel_transfer(int transfer_id)
 				error_code);
 	}
 
-	return error_code; //LCOV_EXCL_STOP
+	return error_code; /* LCOV_EXCL_STOP */
 }
 
