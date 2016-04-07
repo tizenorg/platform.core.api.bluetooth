@@ -613,7 +613,7 @@ static bt_gatt_server_notification_state_change_cb __bt_gatt_attribute_get_notif
 	return NULL;
 }
 
-static bt_gatt_server_notification_sent_cb __bt_gatt_attribute_get_indication_confrim_cb(
+static bt_gatt_server_notification_sent_cb __bt_gatt_attribute_get_notification_completed_cb(
 					bt_gatt_h service, bt_gatt_h attribute, void **user_data)
 {
 	gchar *svc_path = (gchar *)service;
@@ -637,9 +637,9 @@ static bt_gatt_server_notification_sent_cb __bt_gatt_attribute_get_indication_co
 					bt_gatt_characteristic_s *chr = l3->data;
 
 					if (chr && g_strcmp0(chr->path, att_path) == 0) {
-						if (chr->indication_confirm_cb) {
-							*user_data = chr->indication_confirm_user_data;
-							return chr->indication_confirm_cb;
+						if (chr->notified_cb) {
+							*user_data = chr->notified_user_data;
+							return chr->notified_cb;
 						} else
 							return NULL;
 					}
@@ -782,7 +782,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 
 	if (event == BLUETOOTH_EVENT_GATT_SERVER_VALUE_CHANGED || event == BLUETOOTH_EVENT_GATT_SERVER_NOTIFICATION_STATE_CHANGED ||
 		event == BLUETOOTH_EVENT_GATT_SERVER_READ_REQUESTED || event == BLUETOOTH_EVENT_ADVERTISING_STARTED ||
-		event == BLUETOOTH_EVENT_GATT_SERVER_INDICATE_CONFIRMED || event == BLUETOOTH_EVENT_ADVERTISING_STOPPED)
+		event == BLUETOOTH_EVENT_GATT_SERVER_NOTIFICATION_COMPLETED || event == BLUETOOTH_EVENT_ADVERTISING_STOPPED)
 		BT_INFO("NOT use bt_event_slot_container");
 	else if (event_index == -1 || bt_event_slot_container[event_index].callback == NULL)
 		return;
@@ -1703,14 +1703,14 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 				value_change->att_handle, user_data);
 		break;
 	}
-	case BLUETOOTH_EVENT_GATT_SERVER_INDICATE_CONFIRMED: {
+	case BLUETOOTH_EVENT_GATT_SERVER_NOTIFICATION_COMPLETED: {
 		bt_gatt_indicate_confirm_t *confrim_status = param->param_data;
 		bt_gatt_server_notification_sent_cb cb;
 		void *user_data = NULL;
-		cb = __bt_gatt_attribute_get_indication_confrim_cb(confrim_status->service_handle,
+		cb = __bt_gatt_attribute_get_notification_completed_cb(confrim_status->service_handle,
 						confrim_status->att_handle, &user_data);
 
-		BT_INFO("BLUETOOTH_EVENT_GATT_SERVER_INDICATE_CONFIRMED");
+		BT_INFO("BLUETOOTH_EVENT_GATT_SERVER_NOTIFICATION_COMPLETED");
 		if (cb == NULL)
 			return;
 

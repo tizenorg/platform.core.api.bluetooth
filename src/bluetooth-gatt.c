@@ -30,6 +30,7 @@ static GSList *gatt_client_list = NULL;
 
 static GSList *gatt_server_list = NULL;
 static bool is_gatt_server_initialized = false;
+static bool is_gatt_server_started = false;
 
 #ifdef TIZEN_GATT_DISABLE
 #define BT_CHECK_GATT_SUPPORT() \
@@ -1865,6 +1866,11 @@ int bt_gatt_server_initialize(void)
 
 	int ret = BT_ERROR_NONE;
 
+	if (is_gatt_server_started) {
+		BT_ERR("Already Server started");
+		return BT_ERROR_OPERATION_FAILED;
+	}
+
 	if (!is_gatt_server_initialized) {
 		ret = _bt_get_error_code(bluetooth_gatt_init());
 
@@ -1908,6 +1914,7 @@ int bt_gatt_server_deinitialize(void)
 		}
 
 		is_gatt_server_initialized = false;
+		is_gatt_server_started = false;
 		return BT_ERROR_NONE;
 	}
 
@@ -1922,6 +1929,11 @@ int bt_gatt_server_create(bt_gatt_server_h *server)
 
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(server);
+
+	if (is_gatt_server_started) {
+		BT_ERR("Already Server started");
+		return BT_ERROR_OPERATION_FAILED;
+	}
 
 	serv = g_malloc0(sizeof(bt_gatt_server_s));
 	if (serv == NULL)
@@ -2001,6 +2013,11 @@ int bt_gatt_server_register_service(bt_gatt_server_h server, bt_gatt_h service)
 		return BT_ERROR_ALREADY_DONE;
 	}
 
+	if (is_gatt_server_started) {
+		BT_ERR("Already Server started");
+		return BT_ERROR_OPERATION_FAILED;
+	}
+
 	ret = _bt_get_error_code(bluetooth_gatt_add_service(svc->uuid, &svc->path));
 
 	if (ret != BT_ERROR_NONE) {
@@ -2013,6 +2030,7 @@ int bt_gatt_server_register_service(bt_gatt_server_h server, bt_gatt_h service)
 		bt_gatt_characteristic_s *chr = char_l->data;
 
 		ret = _bt_get_error_code(bluetooth_gatt_add_new_characteristic(svc->path, chr->uuid,
+									(bt_gatt_permission_t)chr->permissions,
 									(bt_gatt_characteristic_property_t)chr->properties, &chr->path));
 		if (ret != BT_ERROR_NONE) {
 			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
@@ -2030,7 +2048,8 @@ int bt_gatt_server_register_service(bt_gatt_server_h server, bt_gatt_h service)
 		for (desc_l = chr->descriptors; desc_l; desc_l = g_slist_next(desc_l)) {
 			bt_gatt_descriptor_s *desc = desc_l->data;
 
-			ret = _bt_get_error_code(bluetooth_gatt_add_descriptor(chr->path, desc->uuid, &desc->path));
+			ret = _bt_get_error_code(bluetooth_gatt_add_descriptor(chr->path, desc->uuid,
+									(bt_gatt_permission_t)desc->permissions, &desc->path));
 
 			if (ret != BT_ERROR_NONE) {
 				BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
@@ -2086,6 +2105,8 @@ int bt_gatt_server_unregister_service(bt_gatt_server_h server, bt_gatt_h service
 
 int bt_gatt_server_unregister_all_services(bt_gatt_server_h server)
 {
+	int ret = BT_ERROR_NONE;
+
 	bt_gatt_server_s *serv = (bt_gatt_server_s*)server;
 
 	BT_CHECK_INIT_STATUS();
@@ -2095,7 +2116,29 @@ int bt_gatt_server_unregister_all_services(bt_gatt_server_h server)
 	g_slist_free_full(serv->services, __bt_gatt_free_service);
 	serv->services = NULL;
 
-	return BT_ERROR_NONE;
+	ret = bluetooth_gatt_unregister_application();
+	is_gatt_server_started = false;
+
+	return ret;
+}
+
+int bt_gatt_server_start(void)
+{
+	int ret = BT_ERROR_NONE;
+
+	if (!is_gatt_server_started) {
+		ret = bluetooth_gatt_register_application();
+
+		if (ret != BT_ERROR_NONE) {
+			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+		}
+		is_gatt_server_started = true;
+		return ret;
+	}
+
+	BT_DBG("Gatt-service already Running");
+
+	return ret;
 }
 
 int bt_gatt_server_send_response(int request_id,
@@ -2153,10 +2196,8 @@ int bt_gatt_server_notify(bt_gatt_h characteristic, bool need_confirm,
 		}
 	}
 
-	if (need_confirm) {
-		chr->indication_confirm_cb = callback;
-		chr->indication_confirm_user_data = user_data;
-	}
+	chr->notified_cb = callback;
+	chr->notified_user_data = user_data;
 
 	return ret;
 }
@@ -2418,8 +2459,7 @@ int bt_gatt_client_write_value(bt_gatt_h gatt_handle,
 			g_free(cb_data);
 			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
 		} else {
-			if (chr->write_type != BT_GATT_WRITE_TYPE_WRITE_NO_RESPONSE)
-				_bt_set_cb(BT_EVENT_GATT_CLIENT_WRITE_CHARACTERISTIC, callback, cb_data);
+			_bt_set_cb(BT_EVENT_GATT_CLIENT_WRITE_CHARACTERISTIC, callback, cb_data);
 		}
 	} else if (c->type == BT_GATT_TYPE_DESCRIPTOR) {
 		bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s *)gatt_handle;
