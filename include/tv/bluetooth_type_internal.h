@@ -32,8 +32,7 @@ extern "C"
  * @brief  Enumerations of the Bluetooth adapter le state.
  * @since_tizen 2.3
  */
-typedef enum
-{
+typedef enum {
 	BT_ADAPTER_LE_DISABLED = 0x00, /**< Bluetooth le is disabled */
 	BT_ADAPTER_LE_ENABLED, /**< Bluetooth le is enabled */
 } bt_adapter_le_state_e;
@@ -60,13 +59,13 @@ typedef void (*bt_adapter_le_state_changed_cb)(int result, bt_adapter_le_state_e
  * @since_tizen 2.3
  */
 typedef enum {
-    BT_AG_CALL_EVENT_IDLE = 0x00,  /**< Idle */
-    BT_AG_CALL_EVENT_ANSWERED,  /**< Answered */
-    BT_AG_CALL_EVENT_HELD,  /**< Held */
-    BT_AG_CALL_EVENT_RETRIEVED,  /**< Retrieved */
-    BT_AG_CALL_EVENT_DIALING,  /**< Dialing */
-    BT_AG_CALL_EVENT_ALERTING,  /**< Alerting */
-    BT_AG_CALL_EVENT_INCOMING,  /**< Incoming */
+	BT_AG_CALL_EVENT_IDLE = 0x00,  /**< Idle */
+	BT_AG_CALL_EVENT_ANSWERED,  /**< Answered */
+	BT_AG_CALL_EVENT_HELD,  /**< Held */
+	BT_AG_CALL_EVENT_RETRIEVED,  /**< Retrieved */
+	BT_AG_CALL_EVENT_DIALING,  /**< Dialing */
+	BT_AG_CALL_EVENT_ALERTING,  /**< Alerting */
+	BT_AG_CALL_EVENT_INCOMING,  /**< Incoming */
 } bt_ag_call_event_e;
 
 /**
@@ -75,13 +74,13 @@ typedef enum {
  * @since_tizen 2.3
  */
 typedef enum {
-    BT_AG_CALL_STATE_IDLE = 0x00,  /**< Idle state */
-    BT_AG_CALL_STATE_ACTIVE,  /**< Active state */
-    BT_AG_CALL_STATE_HELD,  /**< Held state */
-    BT_AG_CALL_STATE_DIALING,  /**< Dialing state */
-    BT_AG_CALL_STATE_ALERTING,  /**< Alerting state */
-    BT_AG_CALL_STATE_INCOMING,  /**< Incoming state */
-    BT_AG_CALL_STATE_WAITING,  /**< Waiting for connected indication event after answering an incoming call*/
+	BT_AG_CALL_STATE_IDLE = 0x00,  /**< Idle state */
+	BT_AG_CALL_STATE_ACTIVE,  /**< Active state */
+	BT_AG_CALL_STATE_HELD,  /**< Held state */
+	BT_AG_CALL_STATE_DIALING,  /**< Dialing state */
+	BT_AG_CALL_STATE_ALERTING,  /**< Alerting state */
+	BT_AG_CALL_STATE_INCOMING,  /**< Incoming state */
+	BT_AG_CALL_STATE_WAITING,  /**< Waiting for connected indication event after answering an incoming call*/
 } bt_ag_call_state_e;
 
 /**
@@ -122,8 +121,7 @@ typedef void (*bt_opp_server_push_requested_cb)(const char *file, int size, void
  * @brief  Enumerations of the Bluetooth adapter le scan type.
  * @since_tizen 2.3
  */
-typedef enum
-{
+typedef enum {
 	BT_ADAPTER_LE_PASSIVE_SCAN = 0x00,
 	BT_ADAPTER_LE_ACTIVE_SCAN
 } bt_adapter_le_scan_type_e;
@@ -133,8 +131,7 @@ typedef enum
  * @brief  Enumerations of the Bluetooth le scan mode.
  * @since_tizen 2.3
  */
-typedef enum
-{
+typedef enum {
 	BT_ADAPTER_LE_SCAN_MODE_BALANCED,
 	BT_ADAPTER_LE_SCAN_MODE_LOW_LATENCY,
 	BT_ADAPTER_LE_SCAN_MODE_LOW_ENERGY
@@ -176,14 +173,14 @@ typedef enum {
  * @brief The handle to control Bluetooth LE scan filter
  * @since_tizen 2.4
  */
-typedef void* bt_scan_filter_h;
+typedef void *bt_scan_filter_h;
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
  * @brief The handle of a GATT server
  * @since_tizen 2.4
  */
-typedef void* bt_gatt_server_h;
+typedef void *bt_gatt_server_h;
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
@@ -268,7 +265,7 @@ typedef void (*bt_gatt_server_notification_sent_cb) (int result,
  * @brief  Enumerations for the player control command
  * @since_tizen 2.3
  */
- typedef enum {
+typedef enum {
 	BT_AVRCP_CONTROL_PLAY = 0x01,   /**< Play */
 	BT_AVRCP_CONTROL_PAUSE,   /**< Pause */
 	BT_AVRCP_CONTROL_STOP,   /**< Stop */
@@ -348,12 +345,11 @@ typedef void (*bt_avrcp_play_status_changed_cb) (bt_avrcp_player_state_e play_st
  * @brief Device LE connection update structure.
  * @since_tizen 2.3
  */
-typedef struct
-{
-       unsigned int interval_min;   /**< Minimum value for the connection event interval (msec) */
-       unsigned int interval_max;   /**< Maximum value for the connection event interval (msec) */
-       unsigned int latency;   /**< Slave latency (msec) */
-       unsigned int time_out;   /**< Supervision timeout (msec) */
+typedef struct {
+	unsigned int interval_min;   /**< Minimum value for the connection event interval (msec) */
+	unsigned int interval_max;   /**< Maximum value for the connection event interval (msec) */
+	unsigned int latency;   /**< Slave latency (msec) */
+	unsigned int time_out;   /**< Supervision timeout (msec) */
 } bt_le_conn_update_s;
 
 /**
@@ -364,4 +360,4 @@ typedef struct
 }
 #endif /* __cplusplus */
 
-#endif // __TIZEN_NETWORK_BLUETOOTH_TYPE_INTERNAL_H__
+#endif /* __TIZEN_NETWORK_BLUETOOTH_TYPE_INTERNAL_H__ */

@@ -41,12 +41,13 @@ static void utc_network_bluetooth_opp_server_accept_n(void);
 static void utc_network_bluetooth_opp_server_set_destination_n(void);
 
 void adapter_state_changed_cb_for_opp_server_n(int result,
-							bt_adapter_state_e adapter_state, void *user_data);
+		bt_adapter_state_e adapter_state, void *user_data);
 void transfer_progress_cb_for_opp_server(const char *file, long long size,
-												int percent, void *user_data);
+		int percent, void *user_data);
 void transfer_finished_cb_for_opp_server(int result, const char *file,
-											long long size, void *user_data);
-void push_requested_cb_for_opp_server(const char *file, int size, void *user_data);
+		long long size, void *user_data);
+void push_requested_cb_for_opp_server(const char *file,
+		int size, void *user_data);
 
 gboolean timeout_func(gpointer data);
 
@@ -67,7 +68,9 @@ static void startup(void)
 	mainloop = g_main_loop_new(NULL, FALSE);
 
 	bt_initialize();
-	if (bt_adapter_set_state_changed_cb(adapter_state_changed_cb_for_opp_server_n, "startup") != BT_ERROR_NONE) {
+	if (bt_adapter_set_state_changed_cb(
+		adapter_state_changed_cb_for_opp_server_n,
+		"startup") != BT_ERROR_NONE) {
 		tet_printf("DTS may fail because bt_adapter_set_state_changed_cb() failed");
 	}
 
@@ -75,7 +78,8 @@ static void startup(void)
 	ret = bt_adapter_disable();
 	if (ret == BT_ERROR_NONE) {
 		tet_printf("bt_adapter_disable() succeeded.");
-		timeout_id = g_timeout_add(60000, timeout_func, mainloop);
+		timeout_id = g_timeout_add(60000,
+						timeout_func, mainloop);
 		g_main_loop_run(mainloop);
 		g_source_remove(timeout_id);
 	} else if (ret == BT_ERROR_NOT_ENABLED) {
@@ -107,20 +111,20 @@ gboolean timeout_func(gpointer data)
 	return FALSE;
 }
 
-void push_requested_cb_for_opp_server(const char *file, int size,
-											void *user_data)
+void push_requested_cb_for_opp_server(const char *file,
+	int size, void *user_data)
 {
 
 }
 
-void transfer_progress_cb_for_opp_server(const char *file, long long size,
-											int percent, void *user_data)
+void transfer_progress_cb_for_opp_server(const char *file,
+	long long size, int percent, void *user_data)
 {
 
 }
 
-void transfer_finished_cb_for_opp_server(int result, const char *file,
-											long long size, void *user_data)
+void transfer_finished_cb_for_opp_server(int result,
+	const char *file, long long size, void *user_data)
 {
 
 }
@@ -129,11 +133,13 @@ void transfer_finished_cb_for_opp_server(int result, const char *file,
  * @brief Callback funtions
  */
 void adapter_state_changed_cb_for_opp_server_n(int result,
-							bt_adapter_state_e adapter_state, void *user_data)
+				bt_adapter_state_e adapter_state, void *user_data)
 {
 	tet_printf("Callback: bt_adapter_state_changed_cb was called.");
-	if ((user_data != NULL) && !strcmp((char *)user_data, "startup")) {
-		if (adapter_state == BT_ADAPTER_DISABLED && result == BT_ERROR_NONE) {
+	if ((user_data != NULL) &&
+			!strcmp((char *)user_data, "startup")) {
+		if (adapter_state == BT_ADAPTER_DISABLED &&
+				result == BT_ERROR_NONE) {
 			tet_printf("Callback: BT was disabled. DTS will be started.");
 		} else {
 			tet_printf("Callback: BT was not disabled. DTS will be started but DTS may fail.");
@@ -150,7 +156,8 @@ static void utc_network_bluetooth_opp_server_initialize_n(void)
 	int ret = BT_ERROR_NONE;
 
 	ret = bt_opp_server_initialize(NULL, NULL, NULL);
-	dts_check_eq("bt_opp_server_initialize", ret, BT_ERROR_INVALID_PARAMETER,
+	dts_check_eq("bt_opp_server_initialize",
+		ret, BT_ERROR_INVALID_PARAMETER,
 		"BT_ERROR_INVALID_PARAMETER must be returned when destination parameter is NULL");
 }
 
@@ -158,19 +165,22 @@ static void utc_network_bluetooth_opp_server_initialize_n(void)
 static void utc_network_bluetooth_opp_server_accept_n(void)
 {
 	int ret = BT_ERROR_NONE;
-	ret = bt_opp_server_accept(transfer_progress_cb_for_opp_server,
-						transfer_finished_cb_for_opp_server, NULL, NULL, NULL);
-	dts_check_eq("bt_opp_server_accept", ret, BT_ERROR_INVALID_PARAMETER,
-			"BT_ERROR_NOT_INITIALIZED must be returned.");
+	ret = bt_opp_server_accept(
+			transfer_progress_cb_for_opp_server,
+			transfer_finished_cb_for_opp_server,
+			NULL, NULL, NULL);
+	dts_check_eq("bt_opp_server_accept",
+		ret, BT_ERROR_INVALID_PARAMETER,
+		"BT_ERROR_NOT_INITIALIZED must be returned.");
 
 }
-
 
 static void utc_network_bluetooth_opp_server_set_destination_n(void)
 {
 	int ret = BT_ERROR_NONE;
 
-	ret = bt_opp_server_initialize(dest, push_requested_cb_for_opp_server_p,
+	ret = bt_opp_server_initialize(dest,
+			push_requested_cb_for_opp_server_p,
 			NULL);
 
 	ret = bt_opp_server_set_destination(NULL);

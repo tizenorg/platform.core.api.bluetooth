@@ -47,8 +47,7 @@ extern "C" {
  * @internal
  * @brief Bluetooth callback.
  */
-typedef enum
-{
+typedef enum {
 	BT_EVENT_STATE_CHANGED = 0x00, /**< Adapter state is changed */
 	BT_EVENT_LE_STATE_CHANGED, /**< Adapter le state is changed */
 	BT_EVENT_NAME_CHANGED, /**< Adapter name is changed */
@@ -238,8 +237,7 @@ typedef struct {
 /**
  * @internal
  */
-typedef struct bt_event_sig_event_slot_s
-{
+typedef struct bt_event_sig_event_slot_s {
     const void *callback;
     void *user_data;
 } bt_event_sig_event_slot_s;
@@ -338,18 +336,17 @@ typedef void (*_bt_gatt_client_value_changed_cb)(char *char_path,
 		unsigned char *value, int value_length, void *user_data);
 
 #define BT_CHECK_INPUT_PARAMETER(arg) \
-	if (arg == NULL) \
-	{ \
+	if (arg == NULL) { \
 		LOGE("[%s] INVALID_PARAMETER(0x%08x)", __FUNCTION__, BT_ERROR_INVALID_PARAMETER); \
 		return BT_ERROR_INVALID_PARAMETER; \
 	}
 
 #ifdef TIZEN_BT_DISABLE
 #define BT_CHECK_BT_SUPPORT() \
-        { \
-                LOGE("[%s] NOT_SUPPORTED(0x%08x)", __FUNCTION__, BT_ERROR_NOT_SUPPORTED); \
-                return BT_ERROR_NOT_SUPPORTED; \
-        }
+	{ \
+		LOGE("[%s] NOT_SUPPORTED(0x%08x)", __FUNCTION__, BT_ERROR_NOT_SUPPORTED); \
+		return BT_ERROR_NOT_SUPPORTED; \
+	}
 #else
 #define BT_CHECK_BT_SUPPORT()
 #endif
@@ -372,15 +369,13 @@ typedef enum {
 int _bt_check_init_status(void);
 
 #define BT_CHECK_INIT_STATUS() \
-	if (_bt_check_init_status() == BT_ERROR_NOT_INITIALIZED) \
-	{ \
+	if (_bt_check_init_status() == BT_ERROR_NOT_INITIALIZED) { \
 		LOGE("[%s] NOT_INITIALIZED(0x%08x)", __FUNCTION__, BT_ERROR_NOT_INITIALIZED); \
 		return BT_ERROR_NOT_INITIALIZED; \
 	}
 
 #define BT_CHECK_ADAPTER_STATUS() \
-	if (bluetooth_check_adapter() == BLUETOOTH_ADAPTER_DISABLED) \
-	{ \
+	if (bluetooth_check_adapter() == BLUETOOTH_ADAPTER_DISABLED) { \
 		LOGE("[%s] BT_ERROR_NOT_ENABLED(0x%08x)", __FUNCTION__, BT_ERROR_NOT_ENABLED); \
 		return BT_ERROR_NOT_ENABLED; \
 	}
@@ -453,7 +448,7 @@ void _bt_convert_address_to_hex(bluetooth_device_address_t *addr_hex, const char
  * @internal
  * @brief Convert error code to string.
  */
-char* _bt_convert_error_to_string(int error);
+char *_bt_convert_error_to_string(int error);
 
 /**
  * @internal
@@ -499,9 +494,9 @@ void _bt_adapter_le_invoke_advertising_state_cb(int handle, int result, bt_adapt
 bool _bt_gatt_is_legacy_client_mode(void);
 #endif
 
-const GSList* _bt_gatt_get_client_list(void);
+const GSList *_bt_gatt_get_client_list(void);
 
-const GSList* _bt_gatt_get_server_list(void);
+const GSList *_bt_gatt_get_server_list(void);
 
 int _bt_gatt_client_update_all(bt_gatt_client_h client);
 

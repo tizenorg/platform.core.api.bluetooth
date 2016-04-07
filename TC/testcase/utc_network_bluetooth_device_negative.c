@@ -52,8 +52,8 @@ static void utc_network_bluetooth_device_enable_rssi_monitor_n(void);
 static void utc_network_bluetooth_device_unset_rssi_alert_cb_n(void);
 
 void adapter_state_changed_cb_for_device_negative(int result,
-						bt_adapter_state_e adapter_state,
-						void *user_data);
+		bt_adapter_state_e adapter_state,
+		void *user_data);
 gboolean timeout_func(gpointer data);
 
 struct tet_testlist tet_testlist[] = {
@@ -92,7 +92,9 @@ static void startup(void)
 	mainloop = g_main_loop_new(NULL, FALSE);
 
 	bt_initialize();
-	if (bt_adapter_set_state_changed_cb(adapter_state_changed_cb_for_device_negative, "startup") != BT_ERROR_NONE) {
+	if (bt_adapter_set_state_changed_cb(
+		adapter_state_changed_cb_for_device_negative,
+		"startup") != BT_ERROR_NONE) {
 		tet_printf("DTS may fail because bt_adapter_set_state_changed_cb() failed");
 	}
 
@@ -100,7 +102,8 @@ static void startup(void)
 	ret = bt_adapter_disable();
 	if (ret == BT_ERROR_NONE) {
 		tet_printf("bt_adapter_disable() succeeded.");
-		timeout_id = g_timeout_add(60000, timeout_func, mainloop);
+		timeout_id = g_timeout_add(60000,
+						timeout_func, mainloop);
 		g_main_loop_run(mainloop);
 		g_source_remove(timeout_id);
 	} else if (ret == BT_ERROR_NOT_ENABLED) {
@@ -127,12 +130,14 @@ static void cleanup(void)
  * @brief Callback funtions
  */
 void adapter_state_changed_cb_for_device_negative(int result,
-						bt_adapter_state_e adapter_state,
-						void *user_data)
+	bt_adapter_state_e adapter_state,
+	void *user_data)
 {
 	tet_printf("Callback: bt_adapter_state_changed_cb was called.");
-	if ((user_data != NULL) && !strcmp((char *)user_data, "startup")) {
-		if (adapter_state == BT_ADAPTER_DISABLED && result == BT_ERROR_NONE) {
+	if ((user_data != NULL) &&
+			!strcmp((char *)user_data, "startup")) {
+		if (adapter_state == BT_ADAPTER_DISABLED &&
+				result == BT_ERROR_NONE) {
 			tet_printf("Callback: BT was disabled. DTS will be started.");
 		} else {
 			tet_printf("Callback: BT was not disabled. DTS will be started but DTS may fail.");
@@ -153,8 +158,8 @@ static void utc_network_bluetooth_device_set_bonded_cb_n(void)
 
 	ret = bt_device_set_bond_created_cb(NULL, NULL);
 	dts_check_eq("bt_device_set_bond_created_cb", ret,
-			BT_ERROR_INVALID_PARAMETER,
-			"BT_ERROR_INVALID_PARAMETER must be returned when callback parameter is NULL");
+		BT_ERROR_INVALID_PARAMETER,
+		"BT_ERROR_INVALID_PARAMETER must be returned when callback parameter is NULL");
 }
 
 /**
@@ -166,8 +171,8 @@ static void utc_network_bluetooth_device_set_unbonded_cb_n(void)
 
 	ret = bt_device_set_bond_destroyed_cb(NULL, NULL);
 	dts_check_eq("bt_device_set_bond_destroyed_cb", ret,
-			BT_ERROR_INVALID_PARAMETER,
-			"BT_ERROR_INVALID_PARAMETER must be returned when callback parameter is NULL");
+		BT_ERROR_INVALID_PARAMETER,
+		"BT_ERROR_INVALID_PARAMETER must be returned when callback parameter is NULL");
 }
 
 /**
@@ -180,8 +185,8 @@ utc_network_bluetooth_device_set_authorization_state_changed_cb_n(void)
 
 	ret = bt_device_set_authorization_changed_cb(NULL, NULL);
 	dts_check_eq("bt_device_set_authorization_changed_cb", ret,
-			BT_ERROR_INVALID_PARAMETER,
-			"BT_ERROR_INVALID_PARAMETER must be returned when callback parameter is NULL");
+		BT_ERROR_INVALID_PARAMETER,
+		"BT_ERROR_INVALID_PARAMETER must be returned when callback parameter is NULL");
 }
 
 /**
@@ -195,8 +200,8 @@ static void utc_network_bluetooth_device_unset_bonded_cb_n(void)
 
 	ret = bt_device_unset_bond_created_cb();
 	dts_check_eq("bt_device_unset_bond_created_cb", ret,
-			BT_ERROR_NOT_INITIALIZED,
-			"BT_ERROR_NOT_INITIALIZED must be returned when BT is not initialized.");
+		BT_ERROR_NOT_INITIALIZED,
+		"BT_ERROR_NOT_INITIALIZED must be returned when BT is not initialized.");
 }
 
 	/**
@@ -208,8 +213,8 @@ static void utc_network_bluetooth_device_unset_unbonded_cb_n(void)
 
 	ret = bt_device_unset_bond_destroyed_cb();
 	dts_check_eq("bt_device_unset_bond_destroyed_cb", ret,
-			BT_ERROR_NOT_INITIALIZED,
-			"BT_ERROR_NOT_INITIALIZED must be returned when BT service is not initialized.");
+		BT_ERROR_NOT_INITIALIZED,
+		"BT_ERROR_NOT_INITIALIZED must be returned when BT service is not initialized.");
 }
 
 /**
@@ -234,7 +239,8 @@ static void utc_network_bluetooth_device_bond_n(void)
 	int ret = BT_ERROR_NONE;
 
 	ret = bt_device_create_bond(NULL);
-	dts_check_eq("bt_device_create_bond", ret, BT_ERROR_INVALID_PARAMETER,
+	dts_check_eq("bt_device_create_bond",
+		ret, BT_ERROR_INVALID_PARAMETER,
 		"BT_ERROR_NOT_INITIALIZED must be returned when BT service is not initialized.");
 }
 
@@ -246,7 +252,8 @@ static void utc_network_bluetooth_device_cancel_bonding_n(void)
 	int ret = BT_ERROR_NONE;
 
 	ret = bt_device_cancel_bonding();
-	dts_check_eq("bt_device_cancel_bonding", ret, BT_ERROR_NOT_ENABLED,
+	dts_check_eq("bt_device_cancel_bonding",
+		ret, BT_ERROR_NOT_ENABLED,
 		"BT_ERROR_NOT_ENABLED must be returned when BT is not enabled");
 }
 
@@ -258,7 +265,8 @@ static void utc_network_bluetooth_device_unbond_n(void)
 	int ret = BT_ERROR_NONE;
 
 	ret = bt_device_destroy_bond(NULL);
-	dts_check_eq("bt_device_destroy_bond", ret, BT_ERROR_INVALID_PARAMETER,
+	dts_check_eq("bt_device_destroy_bond",
+		ret, BT_ERROR_INVALID_PARAMETER,
 		"BT_ERROR_INVALID_PARAMETER must be returned when parameter is NULL");
 }
 
@@ -270,7 +278,8 @@ static void utc_network_bluetooth_device_foreach_bonded_device_n(void)
 	int ret = BT_ERROR_NONE;
 
 	ret = bt_adapter_foreach_bonded_device(NULL, NULL);
-	dts_check_eq("bt_adapter_foreach_bonded_device", ret, BT_ERROR_INVALID_PARAMETER,
+	dts_check_eq("bt_adapter_foreach_bonded_device",
+		ret, BT_ERROR_INVALID_PARAMETER,
 		"BT_ERROR_INVALID_PARAMETER must be returned when parameter is NULL");
 }
 
@@ -282,7 +291,8 @@ static void utc_network_bluetooth_device_set_alias_n(void)
 	int ret = BT_ERROR_NONE;
 
 	ret = bt_device_set_alias(NULL, "dts_alias");
-	dts_check_eq("bt_device_set_alias", ret, BT_ERROR_INVALID_PARAMETER,
+	dts_check_eq("bt_device_set_alias",
+		ret, BT_ERROR_INVALID_PARAMETER,
 		"BT_ERROR_INVALID_PARAMETER must be returned when address parameter is NULL");
 }
 
@@ -294,7 +304,7 @@ static void utc_network_bluetooth_device_set_authorization_n(void)
 	int ret = BT_ERROR_NONE;
 
 	ret = bt_device_set_authorization(NULL, BT_DEVICE_AUTHORIZED);
-	dts_check_eq("bt_device_set_authorization", ret,
-		BT_ERROR_INVALID_PARAMETER,
+	dts_check_eq("bt_device_set_authorization",
+		ret, BT_ERROR_INVALID_PARAMETER,
 		"BT_ERROR_INVALID_PARAMETER must be returned when address parameter is NULL");
 }

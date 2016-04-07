@@ -22,17 +22,21 @@ static GMainLoop *mainloop;
 void (*tet_startup) (void) = startup;
 void (*tet_cleanup) (void) = cleanup;
 
-void target_connection_state_changed_cb_for_avrcp_p(bool connected,
-						const char *remote_address,
-						void *user_data);
-void equalizer_state_changed_cb_for_avrcp_p(bt_avrcp_equalizer_state_e equalizer,
-						void *user_data);
-void repeat_mode_changed_cb_for_avrcp_p(bt_avrcp_repeat_mode_e repeat,
-						void *user_data);
-void shuffle_mode_changed_cb_for_avrcp_p(bt_avrcp_shuffle_mode_e shuffle,
-						void *user_data);
-void scan_mode_changed_cb_for_avrcp_p(bt_avrcp_scan_mode_e scan,
-						void *user_data);
+void target_connection_state_changed_cb_for_avrcp_p(
+	bool connected, const char *remote_address,
+	void *user_data);
+void equalizer_state_changed_cb_for_avrcp_p(
+	bt_avrcp_equalizer_state_e equalizer,
+	void *user_data);
+void repeat_mode_changed_cb_for_avrcp_p(
+	bt_avrcp_repeat_mode_e repeat,
+	void *user_data);
+void shuffle_mode_changed_cb_for_avrcp_p(
+	bt_avrcp_shuffle_mode_e shuffle,
+	void *user_data);
+void scan_mode_changed_cb_for_avrcp_p(
+	bt_avrcp_scan_mode_e scan,
+	void *user_data);
 
 static void utc_network_bluetooth_avrcp_targe_initialize_p(void);
 static void utc_network_bluetooth_avrcp_target_deinitialize_p(void);
@@ -87,7 +91,9 @@ static void startup(void)
 	mainloop = g_main_loop_new(NULL, FALSE);
 
 	bt_initialize();
-	if (bt_adapter_set_state_changed_cb(adapter_state_changed_cb_for_avrcp_p, "startup") != BT_ERROR_NONE) {
+	if (bt_adapter_set_state_changed_cb(
+		adapter_state_changed_cb_for_avrcp_p,
+		"startup") != BT_ERROR_NONE) {
 		tet_printf("DTS may fail because bt_adapter_set_state_changed_cb() failed");
 	}
 
@@ -95,7 +101,8 @@ static void startup(void)
 	ret = bt_adapter_enable();
 	if (ret == BT_ERROR_NONE) {
 		tet_printf("bt_adapter_enable() succeeded.");
-		timeout_id = g_timeout_add(60000, timeout_func, mainloop);
+		timeout_id = g_timeout_add(60000,
+						timeout_func, mainloop);
 		g_main_loop_run(mainloop);
 		g_source_remove(timeout_id);
 	} else if (ret != BT_ERROR_ALREADY_DONE) {
@@ -132,40 +139,40 @@ gboolean timeout_func(gpointer data)
  */
 
 void adapter_state_changed_cb_for_avrcp_p(int result,
-					bt_adapter_state_e adapter_state,
-					void *user_data)
+	bt_adapter_state_e adapter_state,
+	void *user_data)
 {
 
 }
 
-void target_connection_state_changed_cb_for_avrcp_p(bool connected,
-					const char *remote_address,
-					void *user_data)
+void target_connection_state_changed_cb_for_avrcp_p(
+	bool connected, const char *remote_address,
+	void *user_data)
 {
 
 }
 
 void equalizer_state_changed_cb_for_avrcp_p(
-					bt_avrcp_equalizer_state_e equalizer,
-					void *user_data)
+	bt_avrcp_equalizer_state_e equalizer,
+	void *user_data)
 {
 
 }
 
-void repeat_mode_changed_cb_for_avrcp_p(bt_avrcp_repeat_mode_e repeat,
-					void *user_data)
+void repeat_mode_changed_cb_for_avrcp_p(
+	bt_avrcp_repeat_mode_e repeat, void *user_data)
 {
 
 }
 
-void shuffle_mode_changed_cb_for_avrcp_p(bt_avrcp_shuffle_mode_e shuffle,
-					void *user_data)
+void shuffle_mode_changed_cb_for_avrcp_p(
+	bt_avrcp_shuffle_mode_e shuffle, void *user_data)
 {
 
 }
 
-void scan_mode_changed_cb_for_avrcp_p(bt_avrcp_scan_mode_e scan,
-					void *user_data)
+void scan_mode_changed_cb_for_avrcp_p(
+	bt_avrcp_scan_mode_e scan, void *user_data)
 {
 
 }
@@ -178,10 +185,11 @@ static void utc_network_bluetooth_avrcp_targe_initialize_p(void)
 	int ret = BT_ERROR_NONE;
 
 	ret = bt_avrcp_target_initialize(
-								target_connection_state_changed_cb_for_avrcp_p,
-								NULL);
-	dts_check_eq("bt_avrcp_target_initialize", ret, BT_ERROR_NONE,
-			"bt_avrcp_target_initialize() failed.");
+			target_connection_state_changed_cb_for_avrcp_p,
+			NULL);
+	dts_check_eq("bt_avrcp_target_initialize",
+		ret, BT_ERROR_NONE,
+		"bt_avrcp_target_initialize() failed.");
 
 }
 
@@ -205,7 +213,8 @@ static void utc_network_bluetooth_avrcp_target_notify_equalizer_state_p(void)
 {
 	int ret = BT_ERROR_NONE;
 
-	ret = bt_avrcp_target_notify_equalizer_state(BT_AVRCP_EQUALIZER_STATE_ON);
+	ret = bt_avrcp_target_notify_equalizer_state(
+			BT_AVRCP_EQUALIZER_STATE_ON);
 	dts_check_eq("bt_avrcp_target_notify_equalizer_state", ret,
 			BT_ERROR_NONE,
 			"bt_avrcp_target_notify_equalizer_state() failed.");
@@ -219,7 +228,8 @@ static void utc_network_bluetooth_avrcp_target_notify_repeat_mode_p(void)
 {
 	int ret = BT_ERROR_NONE;
 
-	ret = bt_avrcp_target_notify_repeat_mode(BT_AVRCP_REPEAT_MODE_ALL_TRACK);
+	ret = bt_avrcp_target_notify_repeat_mode(
+			BT_AVRCP_REPEAT_MODE_ALL_TRACK);
 	dts_check_eq("bt_avrcp_target_notify_repeat_mode", ret, BT_ERROR_NONE,
 			"bt_avrcp_target_notify_repeat_mode() failed.");
 
@@ -232,7 +242,8 @@ static void utc_network_bluetooth_avrcp_target_notify_shuffle_mode_p(void)
 {
 	int ret = BT_ERROR_NONE;
 
-	ret = bt_avrcp_target_notify_shuffle_mode(BT_AVRCP_SHUFFLE_MODE_ALL_TRACK);
+	ret = bt_avrcp_target_notify_shuffle_mode(
+			BT_AVRCP_SHUFFLE_MODE_ALL_TRACK);
 	dts_check_eq("bt_avrcp_target_notify_shuffle_mode", ret, BT_ERROR_NONE,
 			"bt_avrcp_target_notify_shuffle_mode() failed.");
 
@@ -245,7 +256,8 @@ static void utc_network_bluetooth_avrcp_target_notify_scan_mode_p(void)
 {
 	int ret = BT_ERROR_NONE;
 
-	ret = bt_avrcp_target_notify_scan_mode(BT_AVRCP_SCAN_MODE_ALL_TRACK);
+	ret = bt_avrcp_target_notify_scan_mode(
+			BT_AVRCP_SCAN_MODE_ALL_TRACK);
 	dts_check_eq("bt_avrcp_target_notify_scan_mode", ret, BT_ERROR_NONE,
 			"bt_avrcp_target_notify_scan_mode() failed.");
 }
@@ -257,7 +269,8 @@ static void utc_network_bluetooth_avrcp_target_notify_player_state_p(void)
 {
 	int ret = BT_ERROR_NONE;
 
-	ret = bt_avrcp_target_notify_player_state(BT_AVRCP_PLAYER_STATE_PLAYING);
+	ret = bt_avrcp_target_notify_player_state(
+			BT_AVRCP_PLAYER_STATE_PLAYING);
 	dts_check_eq("bt_avrcp_target_notify_player_state", ret, BT_ERROR_NONE,
 			"bt_avrcp_target_notify_player_state() failed.");
 }
@@ -281,7 +294,9 @@ static void utc_network_bluetooth_avrcp_target_notify_track_p(void)
 {
 	int ret = BT_ERROR_NONE;
 
-	ret = bt_avrcp_target_notify_track("title", "artist", "album", "genre", 5, 20, 2);
+	ret = bt_avrcp_target_notify_track("title",
+				"artist", "album",
+				"genre", 5, 20, 2);
 	dts_check_eq("bt_avrcp_target_notify_track", ret, BT_ERROR_NONE,
 			"bt_avrcp_target_notify_track() failed.");
 }
@@ -294,8 +309,8 @@ static void utc_network_bluetooth_avrcp_set_equalizer_state_changed_p(void)
 	int ret = BT_ERROR_NONE;
 
 	ret = bt_avrcp_set_equalizer_state_changed_cb(
-									equalizer_state_changed_cb_for_avrcp_p,
-									NULL);
+			equalizer_state_changed_cb_for_avrcp_p,
+			NULL);
 	dts_check_eq("bt_avrcp_set_equalizer_state_changed_cb", ret, BT_ERROR_NONE,
 			"bt_avrcp_set_equalizer_state_changed_cb() failed.");
 
@@ -322,7 +337,8 @@ static void utc_network_bluetooth_avrcp_set_repeat_mode_changed_p(void)
 {
 	int ret = BT_ERROR_NONE;
 
-	ret = bt_avrcp_set_repeat_mode_changed_cb(repeat_mode_changed_cb_for_avrcp_p, NULL);
+	ret = bt_avrcp_set_repeat_mode_changed_cb(
+			repeat_mode_changed_cb_for_avrcp_p, NULL);
 	dts_check_eq("bt_avrcp_set_repeat_mode_changed_cb", ret, BT_ERROR_NONE,
 			"bt_avrcp_set_repeat_mode_changed_cb() failed.");
 
@@ -350,8 +366,8 @@ static void utc_network_bluetooth_avrcp_set_shuffle_mode_changed_p(void)
 	int ret = BT_ERROR_NONE;
 
 	ret = bt_avrcp_set_shuffle_mode_changed_cb(
-										shuffle_mode_changed_cb_for_avrcp_p,
-										NULL);
+			shuffle_mode_changed_cb_for_avrcp_p,
+			NULL);
 	dts_check_eq("bt_avrcp_set_shuffle_mode_changed_cb", ret, BT_ERROR_NONE,
 			"bt_avrcp_set_shuffle_mode_changed_cb() failed.");
 }
@@ -376,8 +392,9 @@ static void utc_network_bluetooth_avrcp_set_scan_mode_changed_p(void)
 {
 	int ret = BT_ERROR_NONE;
 
-	ret = bt_avrcp_set_scan_mode_changed_cb(scan_mode_changed_cb_for_avrcp_p,
-					NULL);
+	ret = bt_avrcp_set_scan_mode_changed_cb(
+			scan_mode_changed_cb_for_avrcp_p,
+			NULL);
 	dts_check_eq("bt_avrcp_set_scan_mode_changed_cb", ret, BT_ERROR_NONE,
 					"bt_avrcp_set_scan_mode_changed_cb() failed.");
 

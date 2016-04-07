@@ -159,7 +159,7 @@ int get_value_from_file(void)
 
 static void startup(void)
 {
-	if(get_value_from_file() == -1) {
+	if (get_value_from_file() == -1) {
 		tet_printf("Failed to read.");
 	}
 

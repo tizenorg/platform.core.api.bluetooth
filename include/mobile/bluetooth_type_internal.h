@@ -32,8 +32,7 @@ extern "C"
  * @brief  Enumerations of the Bluetooth adapter le state.
  * @since_tizen 2.3
  */
-typedef enum
-{
+typedef enum {
 	BT_ADAPTER_LE_DISABLED = 0x00, /**< Bluetooth le is disabled */
 	BT_ADAPTER_LE_ENABLED, /**< Bluetooth le is enabled */
 } bt_adapter_le_state_e;
@@ -122,8 +121,7 @@ typedef void (*bt_opp_server_push_requested_cb)(const char *file, int size, void
  * @brief  Enumerations of the Bluetooth adapter le scan type.
  * @since_tizen 2.3
  */
-typedef enum
-{
+typedef enum {
 	BT_ADAPTER_LE_PASSIVE_SCAN = 0x00,
 	BT_ADAPTER_LE_ACTIVE_SCAN
 } bt_adapter_le_scan_type_e;
@@ -133,8 +131,7 @@ typedef enum
  * @brief  Enumerations of the Bluetooth le scan mode.
  * @since_tizen 2.3
  */
-typedef enum
-{
+typedef enum {
 	BT_ADAPTER_LE_SCAN_MODE_BALANCED,
 	BT_ADAPTER_LE_SCAN_MODE_LOW_LATENCY,
 	BT_ADAPTER_LE_SCAN_MODE_LOW_ENERGY
@@ -176,14 +173,14 @@ typedef enum {
  * @brief The handle to control Bluetooth LE scan filter
  * @since_tizen 2.4
  */
-typedef void* bt_scan_filter_h;
+typedef void *bt_scan_filter_h;
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
  * @brief The handle of a GATT server
  * @since_tizen 2.4
  */
-typedef void* bt_gatt_server_h;
+typedef void *bt_gatt_server_h;
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
@@ -348,8 +345,7 @@ typedef void (*bt_avrcp_play_status_changed_cb) (bt_avrcp_player_state_e play_st
  * @brief Device LE connection update structure.
  * @since_tizen 2.3
  */
-typedef struct
-{
+typedef struct {
        unsigned int interval_min;   /**< Minimum value for the connection event interval (msec) */
        unsigned int interval_max;   /**< Maximum value for the connection event interval (msec) */
        unsigned int latency;   /**< Slave latency (msec) */
@@ -364,4 +360,4 @@ typedef struct
 }
 #endif /* __cplusplus */
 
-#endif // __TIZEN_NETWORK_BLUETOOTH_TYPE_INTERNAL_H__
+#endif /* __TIZEN_NETWORK_BLUETOOTH_TYPE_INTERNAL_H__ */

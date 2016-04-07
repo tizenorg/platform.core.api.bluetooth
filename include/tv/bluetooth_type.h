@@ -40,8 +40,7 @@ extern "C"
  * @brief Enumerations of Bluetooth error codes.
  * @since_tizen 2.3
  */
-typedef enum
-{
+typedef enum {
 	BT_ERROR_NONE = TIZEN_ERROR_NONE, /**< Successful*/
 	BT_ERROR_CANCELLED = TIZEN_ERROR_CANCELED, /**< Operation cancelled */
 	BT_ERROR_INVALID_PARAMETER = TIZEN_ERROR_INVALID_PARAMETER, /**< Invalid parameter */
@@ -73,8 +72,7 @@ typedef enum
  * @brief  Enumerations of the Bluetooth adapter state.
  * @since_tizen 2.3
  */
-typedef enum
-{
+typedef enum {
 	BT_ADAPTER_DISABLED = 0x00, /**< Bluetooth adapter is disabled */
 	BT_ADAPTER_ENABLED, /**< Bluetooth adapter is enabled */
 } bt_adapter_state_e;
@@ -84,8 +82,7 @@ typedef enum
  * @brief Enumerations of the Bluetooth visibility mode.
  * @since_tizen 2.3
  */
-typedef enum
-{
+typedef enum {
 	BT_ADAPTER_VISIBILITY_MODE_NON_DISCOVERABLE = 0x00,  /**< Other devices cannot find your device via discovery */
 	BT_ADAPTER_VISIBILITY_MODE_GENERAL_DISCOVERABLE,  /**< Discoverable mode */
 	BT_ADAPTER_VISIBILITY_MODE_LIMITED_DISCOVERABLE,  /**< Discoverable mode with time limit. After specific period,
@@ -97,8 +94,7 @@ typedef enum
  * @brief Enumerations of the discovery state of Bluetooth device.
  * @since_tizen 2.3
  */
-typedef enum
-{
+typedef enum {
 	BT_ADAPTER_DEVICE_DISCOVERY_STARTED, /**< Device discovery is started */
 	BT_ADAPTER_DEVICE_DISCOVERY_FINISHED, /**< Device discovery is finished */
 	BT_ADAPTER_DEVICE_DISCOVERY_FOUND, /**< The remote Bluetooth device is found */
@@ -111,8 +107,7 @@ typedef enum
  * @since_tizen 2.3
  *
  */
-typedef enum
-{
+typedef enum {
 	BT_ADAPTER_LE_DEVICE_DISCOVERY_STARTED, /**< LE device discovery is started */
 	BT_ADAPTER_LE_DEVICE_DISCOVERY_FINISHED, /**< LE device discovery is finished */
 	BT_ADAPTER_LE_DEVICE_DISCOVERY_FOUND, /**< The remote Bluetooth LE device is found */
@@ -133,8 +128,7 @@ typedef enum {
  * @brief  Enumerations of the Bluetooth advertising mode.
  * @since_tizen 2.3.1
  */
-typedef enum
-{
+typedef enum {
 	BT_ADAPTER_LE_ADVERTISING_MODE_BALANCED,  /**< Balanced advertising mode */
 	BT_ADAPTER_LE_ADVERTISING_MODE_LOW_LATENCY,  /**< Low latency advertising mode */
 	BT_ADAPTER_LE_ADVERTISING_MODE_LOW_ENERGY  /**< Low energy advertising mode */
@@ -196,8 +190,7 @@ typedef enum {
  * @brief Enumerations of device disconnect reason.
  * @since_tizen 2.3
  */
-typedef enum
-{
+typedef enum {
 	BT_DEVICE_DISCONNECT_REASON_UNKNOWN, /**< Disconnected by unknown reason */
 	BT_DEVICE_DISCONNECT_REASON_TIMEOUT, /**< Disconnected by timeout */
 	BT_DEVICE_DISCONNECT_REASON_LOCAL_HOST, /**< Disconnected by local host */
@@ -209,8 +202,7 @@ typedef enum
  * @brief Enumerations of connection link type.
  * @since_tizen 2.3
  */
-typedef enum
-{
+typedef enum {
 	BT_DEVICE_CONNECTION_LINK_BREDR, /**< BR/EDR link */
 	BT_DEVICE_CONNECTION_LINK_LE, /**< LE link */
 	BT_DEVICE_CONNECTION_LINK_DEFAULT = 0xFF, /**< The connection type defualt */
@@ -221,8 +213,7 @@ typedef enum
  * @brief Enumerations of device authorization state.
  * @since_tizen 2.3
  */
-typedef enum
-{
+typedef enum {
 	BT_DEVICE_AUTHORIZED, /**< The remote Bluetooth device is authorized */
 	BT_DEVICE_UNAUTHORIZED, /**< The remote Bluetooth device is unauthorized */
 } bt_device_authorization_e;
@@ -232,17 +223,16 @@ typedef enum
  * @brief Enumerations of Bluetooth profile.
  * @since_tizen 2.3
  */
-typedef enum
-{
-    BT_PROFILE_RFCOMM = 0x01, /**< RFCOMM Profile */
-    BT_PROFILE_A2DP = 0x02, /**< Advanced Audio Distribution Profile Source role */
-    BT_PROFILE_HSP = 0x04, /**< Headset Profile */
-    BT_PROFILE_HID = 0x08, /**< Human Interface Device Profile */
-    BT_PROFILE_NAP = 0x10, /**< Network Access Point Profile */
-    BT_PROFILE_AG = 0x20, /**< Audio Gateway Profile */
-    BT_PROFILE_GATT = 0x40, /**< Generic Attribute Profile */
-    BT_PROFILE_NAP_SERVER = 0x80, /**< NAP server Profile */
-    BT_PROFILE_A2DP_SINK = 0x100, /**< Advanced Audio Distribution Profile Sink role */
+typedef enum {
+	BT_PROFILE_RFCOMM = 0x01, /**< RFCOMM Profile */
+	BT_PROFILE_A2DP = 0x02, /**< Advanced Audio Distribution Profile Source role */
+	BT_PROFILE_HSP = 0x04, /**< Headset Profile */
+	BT_PROFILE_HID = 0x08, /**< Human Interface Device Profile */
+	BT_PROFILE_NAP = 0x10, /**< Network Access Point Profile */
+	BT_PROFILE_AG = 0x20, /**< Audio Gateway Profile */
+	BT_PROFILE_GATT = 0x40, /**< Generic Attribute Profile */
+	BT_PROFILE_NAP_SERVER = 0x80, /**< NAP server Profile */
+	BT_PROFILE_A2DP_SINK = 0x100, /**< Advanced Audio Distribution Profile Sink role */
 } bt_profile_e;
 
 /**
@@ -250,8 +240,7 @@ typedef enum
  * @brief Enumerations of device address type.
  * @since_tizen 2.3
  */
-typedef enum
-{
+typedef enum {
 	BT_DEVICE_PUBLIC_ADDRESS = 0x00, /**< Public address */
 	BT_DEVICE_RANDOM_ADDRESS, /**< Random address */
 } bt_device_address_type_e;
@@ -295,8 +284,7 @@ typedef enum {
  * @brief  Enumerations of major service class.
  * @since_tizen 2.3
  */
-typedef enum
-{
+typedef enum {
 	BT_MAJOR_SERVICE_CLASS_LIMITED_DISCOVERABLE_MODE  = 0x002000, /**< Limited discoverable mode */
 	BT_MAJOR_SERVICE_CLASS_POSITIONING                = 0x010000, /**< Positioning class */
 	BT_MAJOR_SERVICE_CLASS_NETWORKING                 = 0x020000, /**< Networking class */
@@ -313,8 +301,7 @@ typedef enum
  * @brief  Enumerations of major device class.
  * @since_tizen 2.3
  */
-typedef enum
-{
+typedef enum {
 	BT_MAJOR_DEVICE_CLASS_MISC = 0x00, /**< Miscellaneous major device class*/
 	BT_MAJOR_DEVICE_CLASS_COMPUTER = 0x01, /**< Computer major device class */
 	BT_MAJOR_DEVICE_CLASS_PHONE = 0x02, /**< Phone major device class */
@@ -333,8 +320,7 @@ typedef enum
  * @brief  Enumerations of minor device class.
  * @since_tizen 2.3
  */
-typedef enum
-{
+typedef enum {
 	BT_MINOR_DEVICE_CLASS_COMPUTER_UNCATEGORIZED = 0x00, /**< Uncategorized minor device class of computer */
 	BT_MINOR_DEVICE_CLASS_COMPUTER_DESKTOP_WORKSTATION = 0x04, /**< Desktop workstation minor device class of computer */
 	BT_MINOR_DEVICE_CLASS_COMPUTER_SERVER_CLASS = 0x08, /**< Server minor device class of computer */
@@ -429,8 +415,7 @@ typedef enum
  * @brief  Enumerations of gap appearance type.
  * @since_tizen 2.3
  */
-typedef enum
-{
+typedef enum {
 	BT_APPEARANCE_TYPE_UNKNOWN = 0x00, /**< Unknown appearance type */
 	BT_APPEARANCE_TYPE_GENERIC_PHONE = 0x40, /**< Generic Phone type - Generic category */
 	BT_APPEARANCE_TYPE_GENERIC_COMPUTER = 0x80, /**< Generic Computer type - Generic category */
@@ -442,8 +427,7 @@ typedef enum
  * @brief  Enumerations of connected Bluetooth device event role.
  * @since_tizen 2.3
  */
-typedef enum
-{
+typedef enum {
 	BT_SOCKET_UNKNOWN = 0x00, /**< Unknown role*/
 	BT_SOCKET_SERVER , /**< Server role*/
 	BT_SOCKET_CLIENT, /**< Client role*/
@@ -454,8 +438,7 @@ typedef enum
  * @brief  Enumerations of Bluetooth socket connection state.
  * @since_tizen 2.3
  */
-typedef enum
-{
+typedef enum {
 	BT_SOCKET_CONNECTED, /**< RFCOMM is connected */
 	BT_SOCKET_DISCONNECTED, /**< RFCOMM is disconnected */
 } bt_socket_connection_state_e;
@@ -466,11 +449,11 @@ typedef enum
  * @since_tizen 2.3
  */
 typedef enum {
-    BT_AUDIO_PROFILE_TYPE_ALL = 0,  /**< All supported profiles related with audio */
-    BT_AUDIO_PROFILE_TYPE_HSP_HFP,  /**< HSP(Headset Profile) and HFP(Hands-Free Profile) */
-    BT_AUDIO_PROFILE_TYPE_A2DP,  /**< A2DP(Advanced Audio Distribution Profile) */
-    BT_AUDIO_PROFILE_TYPE_AG,  /**< AG(Audio Gateway) */
-    BT_AUDIO_PROFILE_TYPE_A2DP_SINK,  /**< A2DP(Advanced Audio Distribution Profile) Sink role */
+	BT_AUDIO_PROFILE_TYPE_ALL = 0,  /**< All supported profiles related with audio */
+	BT_AUDIO_PROFILE_TYPE_HSP_HFP,  /**< HSP(Headset Profile) and HFP(Hands-Free Profile) */
+	BT_AUDIO_PROFILE_TYPE_A2DP,  /**< A2DP(Advanced Audio Distribution Profile) */
+	BT_AUDIO_PROFILE_TYPE_AG,  /**< AG(Audio Gateway) */
+	BT_AUDIO_PROFILE_TYPE_A2DP_SINK,  /**< A2DP(Advanced Audio Distribution Profile) Sink role */
 } bt_audio_profile_type_e;
 
 /**
@@ -479,9 +462,9 @@ typedef enum {
  * @since_tizen 2.3
  */
 typedef enum {
-    BT_AG_CALL_HANDLING_EVENT_ANSWER = 0x00,  /**< Request to answer an incoming call */
-    BT_AG_CALL_HANDLING_EVENT_RELEASE,  /**< Request to release a call */
-    BT_AG_CALL_HANDLING_EVENT_REJECT,  /**< Request to reject an incoming call */
+	BT_AG_CALL_HANDLING_EVENT_ANSWER = 0x00,  /**< Request to answer an incoming call */
+	BT_AG_CALL_HANDLING_EVENT_RELEASE,  /**< Request to release a call */
+	BT_AG_CALL_HANDLING_EVENT_REJECT,  /**< Request to reject an incoming call */
 } bt_ag_call_handling_event_e;
 
 /**
@@ -490,11 +473,11 @@ typedef enum {
  * @since_tizen 2.3
  */
 typedef enum {
-    BT_AG_MULTI_CALL_HANDLING_EVENT_RELEASE_HELD_CALLS = 0x00,  /**< Request to release held calls */
-    BT_AG_MULTI_CALL_HANDLING_EVENT_RELEASE_ACTIVE_CALLS,  /**< Request to release active calls */
-    BT_AG_MULTI_CALL_HANDLING_EVENT_ACTIVATE_HELD_CALL,  /**< Request to put active calls into hold state and activate another (held or waiting) call */
-    BT_AG_MULTI_CALL_HANDLING_EVENT_MERGE_CALLS,  /**< Request to add a held call to the conversation */
-    BT_AG_MULTI_CALL_HANDLING_EVENT_EXPLICIT_CALL_TRANSFER,  /**< Request to let a user who has two calls to connect these two calls together and release its connections to both other parties */
+	BT_AG_MULTI_CALL_HANDLING_EVENT_RELEASE_HELD_CALLS = 0x00,  /**< Request to release held calls */
+	BT_AG_MULTI_CALL_HANDLING_EVENT_RELEASE_ACTIVE_CALLS,  /**< Request to release active calls */
+	BT_AG_MULTI_CALL_HANDLING_EVENT_ACTIVATE_HELD_CALL,  /**< Request to put active calls into hold state and activate another (held or waiting) call */
+	BT_AG_MULTI_CALL_HANDLING_EVENT_MERGE_CALLS,  /**< Request to add a held call to the conversation */
+	BT_AG_MULTI_CALL_HANDLING_EVENT_EXPLICIT_CALL_TRANSFER,  /**< Request to let a user who has two calls to connect these two calls together and release its connections to both other parties */
 } bt_ag_multi_call_handling_event_e;
 
 /**
@@ -503,8 +486,8 @@ typedef enum {
  * @since_tizen 2.4
  */
 typedef enum {
-    BT_AVRCP_EQUALIZER_STATE_OFF = 0x01,  /**< Equalizer Off */
-    BT_AVRCP_EQUALIZER_STATE_ON,  /**< Equalizer On */
+	BT_AVRCP_EQUALIZER_STATE_OFF = 0x01,  /**< Equalizer Off */
+	BT_AVRCP_EQUALIZER_STATE_ON,  /**< Equalizer On */
 } bt_avrcp_equalizer_state_e;
 
 /**
@@ -513,10 +496,10 @@ typedef enum {
  * @since_tizen 2.4
  */
 typedef enum {
-    BT_AVRCP_REPEAT_MODE_OFF = 0x01,  /**< Repeat Off */
-    BT_AVRCP_REPEAT_MODE_SINGLE_TRACK,  /**< Single track repeat */
-    BT_AVRCP_REPEAT_MODE_ALL_TRACK,  /**< All track repeat */
-    BT_AVRCP_REPEAT_MODE_GROUP,  /**< Group repeat */
+	BT_AVRCP_REPEAT_MODE_OFF = 0x01,  /**< Repeat Off */
+	BT_AVRCP_REPEAT_MODE_SINGLE_TRACK,  /**< Single track repeat */
+	BT_AVRCP_REPEAT_MODE_ALL_TRACK,  /**< All track repeat */
+	BT_AVRCP_REPEAT_MODE_GROUP,  /**< Group repeat */
 } bt_avrcp_repeat_mode_e;
 
 /**
@@ -525,9 +508,9 @@ typedef enum {
  * @since_tizen 2.4
  */
 typedef enum {
-    BT_AVRCP_SHUFFLE_MODE_OFF = 0x01,  /**< Shuffle Off */
-    BT_AVRCP_SHUFFLE_MODE_ALL_TRACK,  /**< All tracks shuffle */
-    BT_AVRCP_SHUFFLE_MODE_GROUP,  /**< Group shuffle */
+	BT_AVRCP_SHUFFLE_MODE_OFF = 0x01,  /**< Shuffle Off */
+	BT_AVRCP_SHUFFLE_MODE_ALL_TRACK,  /**< All tracks shuffle */
+	BT_AVRCP_SHUFFLE_MODE_GROUP,  /**< Group shuffle */
 } bt_avrcp_shuffle_mode_e;
 
 /**
@@ -536,9 +519,9 @@ typedef enum {
  * @since_tizen 2.4
  */
 typedef enum {
-    BT_AVRCP_SCAN_MODE_OFF = 0x01,  /**< Scan Off */
-    BT_AVRCP_SCAN_MODE_ALL_TRACK,  /**< All tracks scan */
-    BT_AVRCP_SCAN_MODE_GROUP,  /**< Group scan */
+	BT_AVRCP_SCAN_MODE_OFF = 0x01,  /**< Scan Off */
+	BT_AVRCP_SCAN_MODE_ALL_TRACK,  /**< All tracks scan */
+	BT_AVRCP_SCAN_MODE_GROUP,  /**< Group scan */
 } bt_avrcp_scan_mode_e;
 
 /**
@@ -547,11 +530,11 @@ typedef enum {
  * @since_tizen 2.4
  */
 typedef enum {
-    BT_AVRCP_PLAYER_STATE_STOPPED = 0x00,  /**< Stopped */
-    BT_AVRCP_PLAYER_STATE_PLAYING,  /**< Playing */
-    BT_AVRCP_PLAYER_STATE_PAUSED,  /**< Paused */
-    BT_AVRCP_PLAYER_STATE_FORWARD_SEEK,  /**< Seek Forward */
-    BT_AVRCP_PLAYER_STATE_REWIND_SEEK,  /**< Seek Rewind */
+	BT_AVRCP_PLAYER_STATE_STOPPED = 0x00,  /**< Stopped */
+	BT_AVRCP_PLAYER_STATE_PLAYING,  /**< Playing */
+	BT_AVRCP_PLAYER_STATE_PAUSED,  /**< Paused */
+	BT_AVRCP_PLAYER_STATE_FORWARD_SEEK,  /**< Seek Forward */
+	BT_AVRCP_PLAYER_STATE_REWIND_SEEK,  /**< Seek Rewind */
 } bt_avrcp_player_state_e;
 
 /**
@@ -560,8 +543,8 @@ typedef enum {
  * @since_tizen 2.3
  */
 typedef enum {
-    BT_HDP_CHANNEL_TYPE_RELIABLE  = 0x01,  /**< Reliable Data Channel */
-    BT_HDP_CHANNEL_TYPE_STREAMING,  /**< Streaming Data Channel */
+	BT_HDP_CHANNEL_TYPE_RELIABLE  = 0x01,  /**< Reliable Data Channel */
+	BT_HDP_CHANNEL_TYPE_STREAMING,  /**< Streaming Data Channel */
 } bt_hdp_channel_type_e;
 
 /**
@@ -641,7 +624,7 @@ typedef enum {
  * @since_tizen 2.3
  */
 typedef enum {
-    BT_PANU_SERVICE_TYPE_NAP = 0,  /**< Network Access Point */
+	BT_PANU_SERVICE_TYPE_NAP = 0,  /**< Network Access Point */
 } bt_panu_service_type_e;
 
 /**
@@ -649,7 +632,7 @@ typedef enum {
  * @brief The handle to control Bluetooth LE advertising
  * @since_tizen 2.3
  */
-typedef void* bt_advertiser_h;
+typedef void *bt_advertiser_h;
 
 /**
  * @deprecated Deprecated since 2.3.1. Use bt_gatt_h instead.
@@ -657,28 +640,28 @@ typedef void* bt_advertiser_h;
  * @brief  The attribute handle of GATT(Generic Attribute Profile)
  * @since_tizen 2.3
  */
-typedef void* bt_gatt_attribute_h;
+typedef void *bt_gatt_attribute_h;
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
  * @brief The handle of a service, characteristic or descriptor
  * @since_tizen 2.3.1
  */
-typedef void* bt_gatt_h;
+typedef void *bt_gatt_h;
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
  * @brief The handle of a GATT client which is associated with a remote device
  * @since_tizen 2.3.1
  */
-typedef void* bt_gatt_client_h;
+typedef void *bt_gatt_client_h;
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_AG_MODULE
  * @brief  The handle of calls state
  * @since_tizen 2.3
  */
-typedef void* bt_call_list_h;
+typedef void *bt_call_list_h;
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DEVICE_MODULE
@@ -690,8 +673,7 @@ typedef void* bt_call_list_h;
  * @see bt_device_bond_created_cb()
  * @see bt_adapter_device_discovery_state_changed_cb()
  */
-typedef struct
-{
+typedef struct {
 	bt_major_device_class_e major_device_class;	/**< Major device class. */
 	bt_minor_device_class_e minor_device_class;	/**< Minor device class. */
 	int major_service_class_mask;	/**< Major service class mask.
@@ -706,8 +688,7 @@ typedef struct
  * @see #bt_class_s
  * @see bt_adapter_device_discovery_state_changed_cb()
  */
-typedef struct
-{
+typedef struct {
 	char *remote_address;	/**< The address of remote device */
 	char *remote_name;	/**< The name of remote device */
 	bt_class_s bt_class;	/**< The Bluetooth classes */
@@ -729,8 +710,7 @@ typedef struct
  * @see #bt_class_s
  * @see bt_adapter_le_device_discovery_state_changed_cb()
  */
-typedef struct
-{
+typedef struct {
 	char *remote_address;	/**< The address of remote device */
 	int address_type;	/**< The address type of remote device */
 	int rssi;	/**< The strength indicator of received signal  */
@@ -747,8 +727,7 @@ typedef struct
  *
  * @see bt_adapter_le_start_scan()
  */
-typedef struct
-{
+typedef struct {
 	char *remote_address;	/**< The address of remote device */
 	bt_device_address_type_e address_type;	/**< The address type of remote device */
 	int rssi;		/**< The strength indicator of received signal  */
@@ -783,8 +762,7 @@ typedef struct {
  *
  * @see bt_adapter_le_get_scan_result_service_data()
  */
-typedef struct
-{
+typedef struct {
 	char *service_uuid;	/**< 16 bit UUID of the service data */
 	char *service_data;	/**< Service data */
 	int service_data_len;	/**< Service data length */
@@ -798,8 +776,7 @@ typedef struct
  * @see #bt_class_s
  * @see bt_device_bond_created_cb()
  */
-typedef struct
-{
+typedef struct {
 	char *remote_address;	/**< The address of remote device */
 	char *remote_name;	/**< The name of remote device */
 	bt_class_s bt_class;	/**< The Bluetooth classes */
@@ -822,8 +799,7 @@ typedef struct
  *
  * @see bt_device_service_searched_cb()
  */
-typedef struct
-{
+typedef struct {
 	char *remote_address;   /**< The address of remote device */
 	char **service_uuid;  /**< The UUID list of service */
 	int service_count;    /**< The number of services. */
@@ -836,8 +812,7 @@ typedef struct
  *
  * @see bt_device_connection_state_changed_cb()
  */
-typedef struct
-{
+typedef struct {
 	char *remote_address;   /**< The address of remote device */
 	bt_device_connection_link_type_e link;  /**< Link type */
 	bt_device_disconnect_reason_e disconn_reason;  /**< Disconnection reason */
@@ -850,8 +825,7 @@ typedef struct
  *
  * @see bt_socket_connection_state_changed_cb()
  */
-typedef struct
-{
+typedef struct {
 	int socket_fd;	/**< The file descriptor of connected socket */
 	int server_fd;	/**< The file descriptor of the server socket or -1 for client connection */
 	bt_socket_role_e local_role;	/**< The local device role in this connection */
@@ -869,8 +843,7 @@ typedef struct
  *
  * @see bt_socket_data_received_cb()
  */
-typedef struct
-{
+typedef struct {
 	int socket_fd;	/**< The socket fd */
 	int data_size;	/**< The length of the received data */
 	char *data;	/**< The received data */
@@ -1444,8 +1417,10 @@ typedef void (*bt_hid_host_connection_state_changed_cb) (int result, bool connec
  * @see bt_hdp_set_connection_state_changed_cb()
  * @see bt_hdp_unset_connection_state_changed_cb()
  */
-typedef void (*bt_hdp_connected_cb) (int result, const char *remote_address, const char *app_id,
-    bt_hdp_channel_type_e type, unsigned int channel, void *user_data);
+typedef void (*bt_hdp_connected_cb) (int result,
+	const char *remote_address, const char *app_id,
+	bt_hdp_channel_type_e type, unsigned int channel,
+	void *user_data);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_HDP_MODULE
@@ -1686,38 +1661,36 @@ typedef void (*bt_nap_connection_state_changed_cb) (bool connected, const char *
 typedef void (*bt_panu_connection_state_changed_cb) (int result, bool connected, const char *remote_address, bt_panu_service_type_e type, void *user_data);
 
 /* HID device related type */
-typedef struct
-{
-        unsigned char btcode;
-        unsigned char rep_id;
-        unsigned char button;
-        signed char axis_x;
-        signed char axis_y;
-        signed char axis_z;
+typedef struct {
+	unsigned char btcode;
+	unsigned char rep_id;
+	unsigned char button;
+	signed char axis_x;
+	signed char axis_y;
+	signed char axis_z;
 } bt_hid_mouse_data_s;
 
-typedef struct
-{
-        unsigned char btcode;
-        unsigned char rep_id;
-        unsigned char modify;
-        unsigned char key[8];
+typedef struct {
+	unsigned char btcode;
+	unsigned char rep_id;
+	unsigned char modify;
+	unsigned char key[8];
 } bt_hid_key_data_s;
 
 typedef enum {
-        BT_HID_HEADER_HANDSHAKE,
-        BT_HID_HEADER_HID_CONTROL,
-        BT_HID_HEADER_GET_REPORT,
-        BT_HID_HEADER_SET_REPORT,
-        BT_HID_HEADER_GET_PROTOCOL,
-        BT_HID_HEADER_SET_PROTOCOL,
-        BT_HID_HEADER_DATA,
-        BT_HID_HEADER_UNKNOWN
+	BT_HID_HEADER_HANDSHAKE,
+	BT_HID_HEADER_HID_CONTROL,
+	BT_HID_HEADER_GET_REPORT,
+	BT_HID_HEADER_SET_REPORT,
+	BT_HID_HEADER_GET_PROTOCOL,
+	BT_HID_HEADER_SET_PROTOCOL,
+	BT_HID_HEADER_DATA,
+	BT_HID_HEADER_UNKNOWN
 } bluetooth_hid_header_type_t;
 
 typedef enum {
-        BT_HID_PARAM_DATA_RTYPE_INPUT,
-        BT_HID_PARAM_DATA_RTYPE_OUTPUT
+	BT_HID_PARAM_DATA_RTYPE_INPUT,
+	BT_HID_PARAM_DATA_RTYPE_OUTPUT
 } bluetooth_hid_param_type_t;
 
 typedef enum {
@@ -1730,17 +1703,17 @@ typedef enum {
 	BT_HID_HANDSHAKE_ERR_FATAL /**< Fatal error */
 } bluetooth_hid_handshake_type_t;
 
-typedef struct
-{
-        const char *address;
-        bluetooth_hid_header_type_t type;
-        bluetooth_hid_param_type_t param;
-        int data_size;  /**< The length of the received data */
-        const char *data;     /**< The received data */
+typedef struct {
+	const char *address;
+	bluetooth_hid_header_type_t type;
+	bluetooth_hid_param_type_t param;
+	int data_size;  /**< The length of the received data */
+	const char *data;     /**< The received data */
 } bt_hid_device_received_data_s;
 
 typedef void (*bt_hid_device_connection_state_changed_cb) (int result,
-                bool connected, const char *remote_address, void *user_data);
+	bool connected, const char *remote_address,
+	void *user_data);
 
 typedef void (*bt_hid_device_data_received_cb)(const bt_hid_device_received_data_s *data, void *user_data);
 /* HID device related type */
@@ -1749,4 +1722,4 @@ typedef void (*bt_hid_device_data_received_cb)(const bt_hid_device_received_data
 }
 #endif /* __cplusplus */
 
-#endif // __TIZEN_NETWORK_BLUETOOTH_TYPE_H__
+#endif /* __TIZEN_NETWORK_BLUETOOTH_TYPE_H__ */

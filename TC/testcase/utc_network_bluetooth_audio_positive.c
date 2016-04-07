@@ -157,7 +157,7 @@ static void startup(void)
 	bt_error_e ret = BT_ERROR_NONE;
 	int timeout_id = 0;
 
-	if(get_value_from_file() == -1) {
+	if (get_value_from_file() == -1) {
 		tet_printf("Failed to read.");
 	}
 

@@ -2258,8 +2258,9 @@ int bt_opp_server_deinitialize(void);
  *
  * @see  bt_opp_server_reject()
  */
-int bt_opp_server_accept(bt_opp_server_transfer_progress_cb progress_cb, bt_opp_server_transfer_finished_cb finished_cb, const char *name,
- void *user_data, int *transfer_id);
+int bt_opp_server_accept(bt_opp_server_transfer_progress_cb progress_cb,
+	bt_opp_server_transfer_finished_cb finished_cb, const char *name,
+	void *user_data, int *transfer_id);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_OPP_SERVER_MODULE
@@ -3421,7 +3422,7 @@ int bt_gatt_set_characteristic_value_request(bt_gatt_attribute_h characteristic,
 *
 * @see  bt_gatt_destroy_attribute_handle()
 */
-int bt_gatt_clone_attribute_handle(bt_gatt_attribute_h* clone, bt_gatt_attribute_h origin);
+int bt_gatt_clone_attribute_handle(bt_gatt_attribute_h *clone, bt_gatt_attribute_h origin);
 
 /**
 * @deprecated Deprecated since 2.3.1. GATT handle clone and destroy are not allowed.
@@ -4157,4 +4158,4 @@ int bt_gatt_unset_connection_state_changed_cb(void);
 }
 #endif /* __cplusplus */
 
-#endif // __TIZEN_NETWORK_BLUETOOTH_H__
+#endif /* __TIZEN_NETWORK_BLUETOOTH_H__ */

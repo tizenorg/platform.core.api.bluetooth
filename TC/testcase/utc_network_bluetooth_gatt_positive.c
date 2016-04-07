@@ -118,7 +118,7 @@ static void startup(void)
 	bt_error_e ret = BT_ERROR_NONE;
 	int timeout_id = 0;
 
-	if(get_value_from_file() == -1) {
+	if (get_value_from_file() == -1) {
 		tet_printf("Failed to read.");
 	}
 
@@ -148,8 +148,7 @@ static void startup(void)
 			timeout_id = g_timeout_add(60000, timeout_func, mainloop);
 			g_main_loop_run(mainloop);
 			g_source_remove(timeout_id);
-		}
-		else {
+		} else {
 			tet_printf("DTS may fail because bt_adapter_le_enable failed");
 			bt_adapter_le_unset_state_changed_cb();
 		}
@@ -182,39 +181,45 @@ gboolean timeout_func(gpointer data)
 
 
 
-void adapter_state_changed_cb_for_gatt_p(int result, bt_adapter_state_e adapter_state, void* user_data)
+void adapter_state_changed_cb_for_gatt_p(int result,
+	bt_adapter_state_e adapter_state, void *user_data)
 {
 
 }
-void adapter_le_state_changed_cb_for_gatt_p(int result, bt_adapter_le_state_e adapter_le__state, void* user_data)
+void adapter_le_state_changed_cb_for_gatt_p(int result,
+	bt_adapter_le_state_e adapter_le__state, void *user_data)
 {
 
 }
 
-bool primary_service_cb_for_gatt_p(bt_gatt_attribute_h service, void *user_data)
-{
-	return false;
-}
-
-bool characteristics_discovered_cb_for_gatt_p(int result, int index, int total, bt_gatt_attribute_h characteristic,
-				void *user_data)
+bool primary_service_cb_for_gatt_p(bt_gatt_attribute_h service,
+	void *user_data)
 {
 	return false;
 }
 
-bool included_service_cb_for_gatt_p(bt_gatt_attribute_h service, void *user_data)
+bool characteristics_discovered_cb_for_gatt_p(int result,
+	int index, int total, bt_gatt_attribute_h characteristic,
+	void *user_data)
 {
 	return false;
 }
 
-void characteristics_changed_cb_for_gatt_p(bt_gatt_attribute_h characteristic, unsigned char *value, int value_length,
-				void *user_data)
+bool included_service_cb_for_gatt_p(bt_gatt_attribute_h service,
+	void *user_data)
+{
+	return false;
+}
+
+void characteristics_changed_cb_for_gatt_p(bt_gatt_attribute_h characteristic,
+	unsigned char *value, int value_length,
+	void *user_data)
 {
 
 }
 
 void gatt_connection_state_changed_cb(int result, bool connected,
-					const char *remote_address, void *user_data)
+	const char *remote_address, void *user_data)
 {
 	tet_printf("bt_gatt_connection_state_changed_cb : %d", result);
 	if (connected)
@@ -230,8 +235,10 @@ static void utc_network_bluetooth_gatt_foreach_primary_services_p(void)
 {
 	int ret = BT_ERROR_NONE;
 
-	ret = bt_gatt_foreach_primary_services(remote_address, primary_service_cb_for_gatt_p, NULL);
-	dts_check_eq("bt_gatt_foreach_primary_services", ret, BT_ERROR_NONE,
+	ret = bt_gatt_foreach_primary_services(remote_address,
+			primary_service_cb_for_gatt_p, NULL);
+	dts_check_eq("bt_gatt_foreach_primary_services",
+		ret, BT_ERROR_NONE,
 		"bt_gatt_foreach_primary_services() failed.");
 }
 
@@ -245,8 +252,11 @@ static void utc_network_bluetooth_gatt_discover_characteristics_p(void)
 	bt_gatt_attribute_h gatt_serv;
 	gatt_serv = g_malloc0(sizeof(bt_gatt_attribute_h));
 
-	ret = bt_gatt_discover_characteristics(gatt_serv, characteristics_discovered_cb_for_gatt_p, NULL);
-	dts_check_eq("bt_gatt_discover_characteristics", ret, BT_ERROR_NONE, "bt_gatt_discover_characteristics() failed.");
+	ret = bt_gatt_discover_characteristics(gatt_serv,
+			characteristics_discovered_cb_for_gatt_p, NULL);
+	dts_check_eq("bt_gatt_discover_characteristics",
+		ret, BT_ERROR_NONE,
+		"bt_gatt_discover_characteristics() failed.");
 }
 
 
@@ -261,7 +271,8 @@ static void utc_network_bluetooth_gatt_get_service_uuid_p(void)
 	gatt_serv = g_malloc0(sizeof(bt_gatt_attribute_h));
 
 	ret = bt_gatt_get_service_uuid(gatt_serv, &uid);
-	dts_check_eq("bt_gatt_get_service_uuid", ret, BT_ERROR_NONE,
+	dts_check_eq("bt_gatt_get_service_uuid",
+		ret, BT_ERROR_NONE,
 		"bt_gatt_get_service_uuid() failed.");
 }
 
@@ -273,8 +284,10 @@ static void utc_network_bluetooth_gatt_foreach_included_services_p(void)
 	int ret = BT_ERROR_NONE;
 	bt_gatt_attribute_h gatt_serv;
 	gatt_serv = g_malloc0(sizeof(bt_gatt_attribute_h));
-	ret = bt_gatt_foreach_included_services(gatt_serv, included_service_cb_for_gatt_p, NULL);
-	dts_check_eq("bt_gatt_foreach_included_services", ret, BT_ERROR_NONE,
+	ret = bt_gatt_foreach_included_services(gatt_serv,
+			included_service_cb_for_gatt_p, NULL);
+	dts_check_eq("bt_gatt_foreach_included_services",
+		ret, BT_ERROR_NONE,
 		"bt_gatt_foreach_included_services() failed.");
 }
 
@@ -286,8 +299,10 @@ static void utc_network_bluetooth_gatt_set_characteristic_changed_cb_p(void)
 {
 	int ret = BT_ERROR_NONE;
 
-	ret = bt_gatt_set_characteristic_changed_cb(characteristics_changed_cb_for_gatt_p, NULL);
-	dts_check_eq("bt_gatt_set_characteristic_changed_cb", ret, BT_ERROR_NONE,
+	ret = bt_gatt_set_characteristic_changed_cb(
+			characteristics_changed_cb_for_gatt_p, NULL);
+	dts_check_eq("bt_gatt_set_characteristic_changed_cb",
+		ret, BT_ERROR_NONE,
 		"bt_gatt_set_characteristic_changed_cb() failed.");
 }
 
@@ -300,8 +315,9 @@ static void utc_network_bluetooth_gatt_unset_characteristic_changed_cb_p(void)
 	int ret = BT_ERROR_NONE;
 
 	ret = bt_gatt_unset_characteristic_changed_cb();
-	dts_check_eq("bt_gatt_unset_characteristic_changed_cb", ret, BT_ERROR_NONE,
-			"bt_gatt_unset_characteristic_changed_cb() failed.");
+	dts_check_eq("bt_gatt_unset_characteristic_changed_cb",
+		ret, BT_ERROR_NONE,
+		"bt_gatt_unset_characteristic_changed_cb() failed.");
 
 }
 

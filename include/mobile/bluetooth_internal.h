@@ -2991,7 +2991,7 @@ int bt_device_le_conn_update(const char *device_address,
  * @see bt_initialize()
  * @see bt_hid_device_deactivate()
  */
-int bt_hid_device_activate(bt_hid_device_connection_state_changed_cb callback, void * user_data);
+int bt_hid_device_activate(bt_hid_device_connection_state_changed_cb callback, void *user_data);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_HID_MODULE
@@ -3171,4 +3171,4 @@ int bt_hid_device_reply_to_report(const char *remote_address,
 }
 #endif /* __cplusplus */
 
-#endif // __TIZEN_NETWORK_BLUETOOTH_INTERNAL_H__
+#endif /* __TIZEN_NETWORK_BLUETOOTH_INTERNAL_H__ */

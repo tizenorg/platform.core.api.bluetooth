@@ -42,12 +42,12 @@ static void utc_network_bluetooth_device_discovery_cancel_p(void);
 
 gboolean timeout_func(gpointer data);
 void adapter_state_changed_cb_for_discovery_p(int result,
-						bt_adapter_state_e adapter_state,
-						void *user_data);
+		bt_adapter_state_e adapter_state,
+		void *user_data);
 void device_discovery_state_changed_cb_for_discovery_p(int result,
-						bt_adapter_device_discovery_state_e discovery_state,
-						bt_adapter_device_discovery_info_s *discovery_info,
-						void *user_data);
+		bt_adapter_device_discovery_state_e discovery_state,
+		bt_adapter_device_discovery_info_s *discovery_info,
+		void *user_data);
 
 struct tet_testlist tet_testlist[] = {
 	{utc_network_bluetooth_device_discovery_get_status_p, POSITIVE_TC_IDX},
@@ -68,14 +68,17 @@ static void startup(void)
 
 	bt_initialize();
 
-	if (bt_adapter_set_state_changed_cb(adapter_state_changed_cb_for_discovery_p, "startup") != BT_ERROR_NONE) {
+	if (bt_adapter_set_state_changed_cb(
+		adapter_state_changed_cb_for_discovery_p,
+		"startup") != BT_ERROR_NONE) {
 		tet_printf("DTS may fail because bt_adapter_set_state_changed_cb() failed.");
 	}
 
 	ret = bt_adapter_enable();
 	if (ret == BT_ERROR_NONE) {
 		tet_printf("bt_adapter_enable() succeeded.");
-		timeout_id = g_timeout_add(60000, timeout_func, mainloop);
+		timeout_id = g_timeout_add(60000,
+			timeout_func, mainloop);
 		g_main_loop_run(mainloop);
 		g_source_remove(timeout_id);
 	} else if (ret == BT_ERROR_ALREADY_DONE) {
@@ -110,8 +113,8 @@ gboolean timeout_func(gpointer data)
  * @brief Callback funtions
  */
 void adapter_state_changed_cb_for_discovery_p(int result,
-						bt_adapter_state_e adapter_state,
-						void *user_data)
+		bt_adapter_state_e adapter_state,
+		void *user_data)
 {
 	if (user_data != NULL && !strcmp((char *)user_data, "startup")) {
 		if (adapter_state == BT_ADAPTER_ENABLED &&
@@ -129,17 +132,20 @@ void adapter_state_changed_cb_for_discovery_p(int result,
 }
 
 void device_discovery_state_changed_cb_for_discovery_p(int result,
-					bt_adapter_device_discovery_state_e discovery_state,
-					bt_adapter_device_discovery_info_s *discovery_info,
-					void *user_data)
+		bt_adapter_device_discovery_state_e discovery_state,
+		bt_adapter_device_discovery_info_s *discovery_info,
+		void *user_data)
 {
 	tet_printf("Callback: device_discovery_state_changed_cb_for_discovery_p is called");
 
 	if (discovery_state == BT_ADAPTER_DEVICE_DISCOVERY_FOUND) {
 		tet_printf("Callback: Devices were found");
-		tet_printf("Callback: Device name is %s", discovery_info->remote_name);
-		tet_printf("Callback: Service class: %x", discovery_info->bt_class.major_service_class_mask);
-		if (user_data != NULL && !strcmp((char *)user_data, "start")) {
+		tet_printf("Callback: Device name is %s",
+			discovery_info->remote_name);
+		tet_printf("Callback: Service class: %x",
+			discovery_info->bt_class.major_service_class_mask);
+		if (user_data != NULL &&
+			!strcmp((char *)user_data, "start")) {
 			callback_result = true;
 			if (mainloop) {
 				g_main_loop_quit(mainloop);
@@ -148,7 +154,8 @@ void device_discovery_state_changed_cb_for_discovery_p(int result,
 	} else if (discovery_state == BT_ADAPTER_DEVICE_DISCOVERY_FINISHED) {
 		tet_printf("Callback: Device discovery finished");
 		if (user_data != NULL) {
-			if (!strcmp((char *)user_data, "start") && callback_result == false) {
+			if (!strcmp((char *)user_data, "start") &&
+				callback_result == false) {
 				tet_printf("You need a discoverable device");
 				tet_printf("utc_network_bluetooth_device_discovery_start_p and \
 						utc_network_bluetooth_device_discovery_cancel_p will fail");
@@ -173,8 +180,9 @@ static void utc_network_bluetooth_device_discovery_get_status_p(void)
 	bool status = false;
 
 	ret = bt_adapter_is_discovering(&status);
-	dts_check_eq("bt_adapter_is_discovering", ret, BT_ERROR_NONE,
-			"bt_adapter_is_discovering() failed.");
+	dts_check_eq("bt_adapter_is_discovering",
+		ret, BT_ERROR_NONE,
+		"bt_adapter_is_discovering() failed.");
 }
 
 /**
@@ -184,10 +192,12 @@ static void utc_network_bluetooth_device_discovery_set_state_changed_cb_p(void)
 {
 	int ret = BT_ERROR_NONE;
 
-	ret = bt_adapter_set_device_discovery_state_changed_cb(device_discovery_state_changed_cb_for_discovery_p, "start");
-	dts_check_eq("bt_adapter_set_device_discovery_state_changed_cb", ret,
-			BT_ERROR_NONE,
-			"bt_adapter_set_device_discovery_state_changed_cb() failed.");
+	ret = bt_adapter_set_device_discovery_state_changed_cb(
+		device_discovery_state_changed_cb_for_discovery_p,
+		"start");
+	dts_check_eq("bt_adapter_set_device_discovery_state_changed_cb",
+		ret, BT_ERROR_NONE,
+		"bt_adapter_set_device_discovery_state_changed_cb() failed.");
 }
 
 /**
@@ -203,7 +213,8 @@ static void utc_network_bluetooth_device_discovery_start_p(void)
 	ret = bt_adapter_start_device_discovery();
 	if (ret == BT_ERROR_NONE) {
 		tet_printf("bt_adapter_device_discovery_state_changed_cb_for_discovery_p() will be called.");
-		timeout_id = g_timeout_add(60000, timeout_func, mainloop);
+		timeout_id = g_timeout_add(60000,
+			timeout_func, mainloop);
 		g_main_loop_run(mainloop);
 		g_source_remove(timeout_id);
 		dts_check_eq("bt_adapter_start_device_discovery",
@@ -223,8 +234,8 @@ static void utc_network_bluetooth_device_discovery_unset_state_changed_cb_p(void
 	int ret = BT_ERROR_NONE;
 
 	ret = bt_adapter_unset_device_discovery_state_changed_cb();
-	dts_check_eq("bt_adapter_unset_device_discovery_state_changed_cb", ret,
-			BT_ERROR_NONE,
+	dts_check_eq("bt_adapter_unset_device_discovery_state_changed_cb",
+			ret, BT_ERROR_NONE,
 			"bt_device_discovery_uset_state_changed_cb() failed");
 }
 
@@ -239,7 +250,8 @@ static void utc_network_bluetooth_device_discovery_cancel_p(void)
 	callback_result = false;
 
 	if (bt_adapter_set_device_discovery_state_changed_cb
-		(device_discovery_state_changed_cb_for_discovery_p, "cancel") != BT_ERROR_NONE) {
+		(device_discovery_state_changed_cb_for_discovery_p,
+		"cancel") != BT_ERROR_NONE) {
 		dts_fail("bt_adapter_stop_device_discovery",
 			"bt_adapter_set_device_discovery_state_changed_cb() failed");
 	}
@@ -247,12 +259,14 @@ static void utc_network_bluetooth_device_discovery_cancel_p(void)
 	ret = bt_adapter_stop_device_discovery();
 	if (ret == BT_ERROR_NONE) {
 		tet_printf("bt_adapter_device_discovery_state_changed_cb_for_discovery_p() will be called");   
-		timeout_id = g_timeout_add(60000, timeout_func, mainloop);
+		timeout_id = g_timeout_add(60000,
+			timeout_func, mainloop);
 		g_main_loop_run(mainloop);
 		g_source_remove(timeout_id);
 		bt_adapter_unset_device_discovery_state_changed_cb();
-		dts_check_eq("bt_adapter_stop_device_discovery", callback_result, true,
-					"Callback was called but failed");
+		dts_check_eq("bt_adapter_stop_device_discovery",
+				callback_result, true,
+				"Callback was called but failed");
 	} else {
 		dts_fail("bt_adapter_stop_device_discovery",
 				"bt_adapter_stop_device_discovery() failed");

@@ -144,7 +144,7 @@ static void startup(void)
 	bt_error_e ret = BT_ERROR_NONE;
 	int timeout_id = 0;
 
-	if(get_value_from_file() == -1) {
+	if (get_value_from_file() == -1) {
 		tet_printf("Failed to read.");
 	}
 
@@ -267,8 +267,8 @@ void device_discovery_state_changed_cb_for_device_p(int result,
 	}
 }
 
-void device_bonded_cb(int result, bt_device_info_s * device_info,
-				void *user_data)
+void device_bonded_cb(int result, bt_device_info_s *device_info,
+	void *user_data)
 {
 	int i = 0;
 
@@ -556,7 +556,7 @@ bool bonded_device_cb_for_device_p(bt_device_info_s *dev_info, void *user_data)
 		device_info->service_count = dev_info->service_count;
 		tet_printf("service count : %d", device_info->service_count);
 		if (device_info->service_count > 0) {
-			device_info->service_uuid = (char **)malloc(sizeof(char *) * device_info->service_count);
+			device_info->service_uuid = (char **)malloc(sizeof(char *) *device_info->service_count);
 			if (device_info->service_uuid == NULL) {
 				tet_printf("Failed to allocate memory");
 			} else {

@@ -42,7 +42,7 @@ static void utc_network_bluetooth_hdp_set_connection_state_changed_cb_n(void);
 static void utc_network_bluetooth_hdp_set_data_received_cb_n(void);
 
 void adapter_state_changed_cb_for_hdp_n(int result,
-					bt_adapter_state_e adapter_state, void *user_data);
+	bt_adapter_state_e adapter_state, void *user_data);
 gboolean timeout_func(gpointer data);
 
 struct tet_testlist tet_testlist[] = {
@@ -65,7 +65,8 @@ static void startup(void)
 	mainloop = g_main_loop_new(NULL, FALSE);
 
 	bt_initialize();
-	if (bt_adapter_set_state_changed_cb(adapter_state_changed_cb_for_hdp_n, "startup") != BT_ERROR_NONE) {
+	if (bt_adapter_set_state_changed_cb(
+		adapter_state_changed_cb_for_hdp_n, "startup") != BT_ERROR_NONE) {
 		tet_printf("DTS may fail because bt_adapter_set_state_changed_cb() failed");
 	}
 
@@ -107,7 +108,7 @@ gboolean timeout_func(gpointer data)
  * @brief Callback funtions
  */
 void adapter_state_changed_cb_for_hdp_n(int result,
-							bt_adapter_state_e adapter_state, void *user_data)
+	bt_adapter_state_e adapter_state, void *user_data)
 {
 
 }
@@ -120,8 +121,10 @@ static void utc_network_bluetooth_hdp_set_data_received_cb_n(void)
 {
 	int ret = BT_ERROR_NONE;
 
-	ret = bt_hdp_set_data_received_cb(NULL, NULL);
-	dts_check_eq("bt_hdp_set_data_received_cb", ret, BT_ERROR_INVALID_PARAMETER,
+	ret = bt_hdp_set_data_received_cb(
+			NULL, NULL);
+	dts_check_eq("bt_hdp_set_data_received_cb",
+		ret, BT_ERROR_INVALID_PARAMETER,
 		"BT_ERROR_INVALID_PARAMETER is returned when cb parameters are NULL");
 }
 
@@ -133,8 +136,8 @@ static void utc_network_bluetooth_hdp_set_connection_state_changed_cb_n(void)
 	int ret = BT_ERROR_NONE;
 
 	ret = bt_hdp_set_connection_state_changed_cb(NULL, NULL, NULL);
-	dts_check_eq("bt_hdp_set_connection_state_changed_cb", ret,
-				BT_ERROR_INVALID_PARAMETER,
+	dts_check_eq("bt_hdp_set_connection_state_changed_cb",
+		ret, BT_ERROR_INVALID_PARAMETER,
 		"BT_ERROR_INVALID_PARAMETER is returned when cb parameters are NULL");
 }
 
@@ -147,7 +150,8 @@ static void utc_network_bluetooth_hdp_disconnect_n(void)
 	int ret = BT_ERROR_NONE;
 
 	ret = bt_hdp_disconnect(NULL, 1);
-	dts_check_eq("bt_hdp_disconnect", ret, BT_ERROR_INVALID_PARAMETER,
+	dts_check_eq("bt_hdp_disconnect",
+		ret, BT_ERROR_INVALID_PARAMETER,
 		"BT_ERROR_INVALID_PARAMETER must be returned when remote address parameter is NULL");
 }
 
@@ -159,7 +163,8 @@ static void utc_network_bluetooth_hdp_connect_to_source_n(void)
 	int ret = BT_ERROR_NONE;
 
 	ret = bt_hdp_connect_to_source(NULL, NULL);
-	dts_check_eq("bt_hdp_connect_to_source", ret, BT_ERROR_INVALID_PARAMETER,
+	dts_check_eq("bt_hdp_connect_to_source",
+		ret, BT_ERROR_INVALID_PARAMETER,
 		"BT_ERROR_INVALID_PARAMETER must be returned when remote address and app_id parameter are NULL");
 }
 
@@ -171,8 +176,9 @@ static void utc_network_bluetooth_hdp_register_sink_app_n(void)
 	int ret = BT_ERROR_NONE;
 
 	ret = bt_hdp_register_sink_app(1, NULL);
-	dts_check_eq("bt_hdp_register_sink_app", ret, BT_ERROR_INVALID_PARAMETER,
-			"BT_ERROR_INVALID_PARAMETER must be returned when app_id parameter is NULL");
+	dts_check_eq("bt_hdp_register_sink_app",
+		ret, BT_ERROR_INVALID_PARAMETER,
+		"BT_ERROR_INVALID_PARAMETER must be returned when app_id parameter is NULL");
 }
 
 /**
@@ -183,8 +189,9 @@ static void utc_network_bluetooth_hdp_unregister_sink_app_n(void)
 	int ret = BT_ERROR_NONE;
 
 	ret = bt_hdp_unregister_sink_app(NULL);
-	dts_check_eq("bt_shdp_unregister_sink", ret, BT_ERROR_INVALID_PARAMETER,
-			"BT_ERROR_INVALID_PARAMETER must be returned when app_id parameter is NULL");
+	dts_check_eq("bt_shdp_unregister_sink",
+		ret, BT_ERROR_INVALID_PARAMETER,
+		"BT_ERROR_INVALID_PARAMETER must be returned when app_id parameter is NULL");
 }
 
 /**
@@ -196,6 +203,7 @@ static void utc_network_bluetooth_hdp_send_data_n(void)
 	char *data = "dts_test";
 
 	ret = bt_hdp_send_data(1, data, sizeof(data));
-	dts_check_eq("bt_hdp_send_data", ret, BT_ERROR_NOT_ENABLED,
-			"BT_ERROR_NOT_ENABLED must be returned when BT is not enabled");
+	dts_check_eq("bt_hdp_send_data",
+		ret, BT_ERROR_NOT_ENABLED,
+		"BT_ERROR_NOT_ENABLED must be returned when BT is not enabled");
 }
