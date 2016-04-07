@@ -2744,6 +2744,7 @@ int bt_gatt_server_set_value_changed_cb(bt_gatt_h gatt_handle,
  *
  * @see bt_gatt_server_create()
  * @see bt_gatt_service_create()
+ * @see bt_gatt_server_start()
  * @see bt_gatt_server_unregister_service()
  */
 int bt_gatt_server_register_service(bt_gatt_server_h server, bt_gatt_h service);
@@ -2779,6 +2780,25 @@ int bt_gatt_server_unregister_service(bt_gatt_server_h server, bt_gatt_h service
  * @see bt_gatt_server_register_service()
  */
 int bt_gatt_server_unregister_all_services(bt_gatt_server_h server);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Registers the applciation along with the GATT services of the aplciation it is hosting
+ * @since_tizen 2.4
+ *
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_ALREADY_DONE Operation is already done
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ *
+ * @see bt_gatt_server_initialize()
+ * @see bt_gatt_server_create()
+ * @see bt_gatt_service_create()
+ * @see bt_gatt_server_unregister_service()
+ */
+int bt_gatt_server_start(void);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE

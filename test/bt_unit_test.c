@@ -577,6 +577,8 @@ tc_table_t tc_gatt[] = {
 		, BT_UNIT_TEST_FUNCTION_GATT_SERVER_REGISTER_CUSTOM_SVC},
 	{"Change Custom Value"
 		, BT_UNIT_TEST_FUNCTION_GATT_SERVER_CHANGE_CUSTOM_VAL},
+	{"Start Server"
+		, BT_UNIT_TEST_FUNCTION_GATT_START_SERVER},
 	{"ANCS (Pair)"
 		, BT_UNIT_TEST_FUNCTION_ANCS_PAIR},
 	{"ANCS (Watch notification)"
@@ -5795,7 +5797,7 @@ int test_input_callback(void *data)
 			char *char_uuid = "2a06"; /* Alert Level */
 			char char_value[1] = {2}; /* high alert */
 			int value_length = 1;
-			int permissions = BT_GATT_PERMISSION_READ;
+			int permissions = BT_GATT_PERMISSION_READ | BT_GATT_PERMISSION_WRITE;
 			int properties = BT_GATT_PROPERTY_READ | BT_GATT_PROPERTY_WRITE;
 
 			ret = bt_gatt_server_initialize();
@@ -5841,7 +5843,7 @@ int test_input_callback(void *data)
 			char char_value[4] = {10, 20, 30, 40};
 			char desc_value[4] = {12, 34, 56, 78};
 			int value_length = 4;
-			int permissions = BT_GATT_PERMISSION_READ;
+			int permissions = BT_GATT_PERMISSION_READ | BT_GATT_PERMISSION_WRITE;
 			int properties = BT_GATT_PROPERTY_BROADCAST | BT_GATT_PROPERTY_READ |
 							BT_GATT_PROPERTY_WRITE | BT_GATT_PROPERTY_NOTIFY;
 
@@ -5891,6 +5893,11 @@ int test_input_callback(void *data)
 			}
 			ret = bt_gatt_set_value(custom_h.chr, char_value, 4);
 			TC_PRT("returns  %s\n", __bt_get_error_message(ret));
+			break;
+		}
+		case BT_UNIT_TEST_FUNCTION_GATT_START_SERVER: {
+			ret = bt_gatt_server_start();
+			TC_PRT("bt_gatt_server_register_service : %s\n", __bt_get_error_message(ret));
 			break;
 		}
 		case BT_UNIT_TEST_FUNCTION_GATT_SERVER_FOREACH_SERVICES: {
