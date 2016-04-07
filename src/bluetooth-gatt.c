@@ -35,20 +35,23 @@ static bool is_gatt_server_initialized = false;
 #define BT_CHECK_GATT_SUPPORT() \
 		{ \
 			BT_CHECK_BT_SUPPORT(); \
-			LOGE("[%s] NOT_SUPPORTED(0x%08x)", __FUNCTION__, BT_ERROR_NOT_SUPPORTED); \
+			LOGE("[%s] NOT_SUPPORTED(0x%08x)", __FUNCTION__, \
+						BT_ERROR_NOT_SUPPORTED); \
 			return BT_ERROR_NOT_SUPPORTED; \
 		}
 #else
 #define BT_CHECK_GATT_SUPPORT()
 #endif
 
-#define BT_CHECK_GATT_SERVER_INIT_STATUS() \
-	if (__bt_check_gatt_server_init_status() == BT_ERROR_NOT_INITIALIZED) \
-	{ \
-		LOGE("[%s] NOT_INITIALIZED(0x%08x)", __FUNCTION__, BT_ERROR_NOT_INITIALIZED); \
+#define BT_CHECK_GATT_SERVER_INIT_STATUS() { \
+	if (__bt_check_gatt_server_init_status() == BT_ERROR_NOT_INITIALIZED) { \
+		LOGE("[%s] NOT_INITIALIZED(0x%08x)", __FUNCTION__, \
+					BT_ERROR_NOT_INITIALIZED); \
 		return BT_ERROR_NOT_INITIALIZED; \
-	}
-//LCOV_EXCL_START
+	} \
+}
+
+/* LCOV_EXCL_START */
 int __bt_check_gatt_server_init_status(void)
 {
 	if (is_gatt_server_initialized != true) {
@@ -68,11 +71,13 @@ static char *__convert_uuid_to_uuid128(const char *uuid)
 
 	switch (len) {
 	case 4:		/* UUID 16bits */
-		uuid128 = g_strdup_printf("0000%s-0000-1000-8000-00805F9B34FB", uuid);
+		uuid128 = g_strdup_printf("0000%s-0000-1000-8000-00805F9B34FB",
+					uuid);
 		break;
 
 	case 8:		/* UUID 32bits */
-		uuid128 = g_strdup_printf("%s-0000-1000-8000-00805F9B34FB", uuid);
+		uuid128 = g_strdup_printf("%s-0000-1000-8000-00805F9B34FB",
+					uuid);
 		break;
 
 	case 36:	/* UUID 128bits */
@@ -119,12 +124,12 @@ static int __get_gatt_handle_by_uuid(GSList *list, const char *uuid,
 	return BT_ERROR_NONE;
 }
 
-const GSList* _bt_gatt_get_client_list(void)
+const GSList *_bt_gatt_get_client_list(void)
 {
 	return gatt_client_list;
 }
 
-const GSList* _bt_gatt_get_server_list(void)
+const GSList *_bt_gatt_get_server_list(void)
 {
 	return gatt_server_list;
 }
@@ -140,7 +145,8 @@ bool _bt_gatt_is_legacy_client_mode(void)
 	BT_INFO("Legacy GATT Client APIs");
 	return true;
 }
-//LCOV_EXCL_STOP
+
+/* LCOV_EXCL_STOP */
 int bt_gatt_foreach_primary_services(const char *remote_address,
 				bt_gatt_primary_service_cb callback,
 				void *user_data)
@@ -154,7 +160,7 @@ int bt_gatt_foreach_primary_services(const char *remote_address,
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(remote_address);
-	BT_CHECK_INPUT_PARAMETER(callback); //LCOV_EXCL_START
+	BT_CHECK_INPUT_PARAMETER(callback); /* LCOV_EXCL_START */
 
 	prim_svc = g_new0(bt_gatt_handle_info_t, 1);
 
@@ -176,7 +182,8 @@ int bt_gatt_foreach_primary_services(const char *remote_address,
 		BT_INFO("handle: %s", prim_svc->handle[i]);
 
 		if (foreach_call == true &&
-		    !callback((bt_gatt_attribute_h)prim_svc->handle[i], user_data)) {
+		    !callback((bt_gatt_attribute_h)prim_svc->handle[i],
+							user_data)) {
 			foreach_call = false;
 		}
 
@@ -188,7 +195,7 @@ int bt_gatt_foreach_primary_services(const char *remote_address,
 	g_free(prim_svc->handle);
 	g_free(prim_svc);
 
-	return ret; //LCOV_EXCL_STOP
+	return ret; /* LCOV_EXCL_STOP */
 }
 
 int bt_gatt_discover_characteristics(bt_gatt_attribute_h service,
@@ -200,17 +207,18 @@ int bt_gatt_discover_characteristics(bt_gatt_attribute_h service,
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(service);
-	BT_CHECK_INPUT_PARAMETER(callback); //LCOV_EXCL_START
+	BT_CHECK_INPUT_PARAMETER(callback); /* LCOV_EXCL_START */
 
 	ret = _bt_get_error_code(bluetooth_gatt_discover_service_characteristics((const char *)service));
 
 	if (ret != BT_ERROR_NONE) {
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
 	} else {
-		_bt_set_cb(BT_EVENT_GATT_CLIENT_CHARACTERISTIC_DISCOVERED_LEGACY, callback, user_data);
+		_bt_set_cb(BT_EVENT_GATT_CLIENT_CHARACTERISTIC_DISCOVERED_LEGACY,
+							callback, user_data);
 	}
 
-	return ret; //LCOV_EXCL_STOP
+	return ret; /* LCOV_EXCL_STOP */
 }
 
 int bt_gatt_get_service_uuid(bt_gatt_attribute_h service, char **uuid)
@@ -223,22 +231,25 @@ int bt_gatt_get_service_uuid(bt_gatt_attribute_h service, char **uuid)
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(service);
 
-	memset(&property, 0x00, sizeof(bt_gatt_service_property_t)); //LCOV_EXCL_START
+	memset(&property, 0x00, sizeof(bt_gatt_service_property_t)); /* LCOV_EXCL_START */
 
-	ret = _bt_get_error_code(bluetooth_gatt_get_service_property((const char *)service, &property));
+	ret = _bt_get_error_code(bluetooth_gatt_get_service_property((const char *)service,
+								&property));
 
 	if (ret != BT_ERROR_NONE) {
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
 	} else {
 		*uuid = g_strdup(property.uuid);
 
-		if (property.include_handles.count != 0 && property.include_handles.handle) {
+		if (property.include_handles.count != 0 &&
+			property.include_handles.handle) {
 			for (i = 0; i < property.include_handles.count; i++) {
 				g_free(property.include_handles.handle[i]);
 			}
 			g_free(property.include_handles.handle);
 		}
-		if (property.char_handle.count != 0 && property.char_handle.handle) {
+		if (property.char_handle.count != 0 &&
+			property.char_handle.handle) {
 			for (i = 0; i < property.char_handle.count; i++) {
 				g_free(property.char_handle.handle[i]);
 			}
@@ -246,7 +257,7 @@ int bt_gatt_get_service_uuid(bt_gatt_attribute_h service, char **uuid)
 		}
 	}
 
-	return ret; //LCOV_EXCL_STOP
+	return ret; /* LCOV_EXCL_STOP */
 }
 
 int bt_gatt_foreach_included_services(bt_gatt_attribute_h service,
@@ -261,16 +272,18 @@ int bt_gatt_foreach_included_services(bt_gatt_attribute_h service,
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(service);
-	BT_CHECK_INPUT_PARAMETER(callback); //LCOV_EXCL_START
+	BT_CHECK_INPUT_PARAMETER(callback); /* LCOV_EXCL_START */
 
 	memset(&property, 0x00, sizeof(bt_gatt_service_property_t));
 
-	ret = _bt_get_error_code(bluetooth_gatt_get_service_property((const char *)service, &property));
+	ret = _bt_get_error_code(bluetooth_gatt_get_service_property((const char *)service,
+								&property));
 
 	if (ret != BT_ERROR_NONE) {
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
 	} else {
-		if (property.char_handle.count != 0 && property.char_handle.handle) {
+		if (property.char_handle.count != 0 &&
+			property.char_handle.handle) {
 			for (i = 0; i < property.char_handle.count; i++) {
 				g_free(property.char_handle.handle[i]);
 			}
@@ -295,7 +308,7 @@ int bt_gatt_foreach_included_services(bt_gatt_attribute_h service,
 		}
 		g_free(property.include_handles.handle);
 	}
-	return ret; //LCOV_EXCL_STOP
+	return ret; /* LCOV_EXCL_STOP */
 }
 
 int bt_gatt_set_characteristic_changed_cb(bt_gatt_characteristic_changed_cb callback,
@@ -305,7 +318,8 @@ int bt_gatt_set_characteristic_changed_cb(bt_gatt_characteristic_changed_cb call
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(callback);
 
-	_bt_set_cb(BT_EVENT_GATT_CLIENT_VALUE_CHANGED_LEGACY, callback, user_data);
+	_bt_set_cb(BT_EVENT_GATT_CLIENT_VALUE_CHANGED_LEGACY,
+					callback, user_data);
 
 	return BT_ERROR_NONE;
 }
@@ -328,12 +342,13 @@ int bt_gatt_watch_characteristic_changes(bt_gatt_attribute_h service)
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(service);
 
-	ret = _bt_get_error_code(bluetooth_gatt_watch_characteristics((const char *)service)); //LCOV_EXCL_LINE
+	ret = _bt_get_error_code(bluetooth_gatt_watch_characteristics((const char *)service)); /* LCOV_EXCL_LINE */
 
-	if (ret != BT_ERROR_NONE) //LCOV_EXCL_LINE
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret); //LCOV_EXCL_LINE
+	if (ret != BT_ERROR_NONE) /* LCOV_EXCL_LINE */
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret),
+					ret); /* LCOV_EXCL_LINE */
 
-	return ret; //LCOV_EXCL_LINE
+	return ret; /* LCOV_EXCL_LINE */
 }
 
 int bt_gatt_unwatch_characteristic_changes(bt_gatt_attribute_h service)
@@ -344,12 +359,13 @@ int bt_gatt_unwatch_characteristic_changes(bt_gatt_attribute_h service)
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(service);
 
-	ret = _bt_get_error_code(bluetooth_gatt_unwatch_characteristics((const char *)service)); //LCOV_EXCL_LINE
+	ret = _bt_get_error_code(bluetooth_gatt_unwatch_characteristics((const char *)service)); /* LCOV_EXCL_LINE */
 
-	if (ret != BT_ERROR_NONE) //LCOV_EXCL_LINE
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret); //LCOV_EXCL_LINE
+	if (ret != BT_ERROR_NONE) /* LCOV_EXCL_LINE */
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret),
+					ret); /* LCOV_EXCL_LINE */
 
-	return ret; //LCOV_EXCL_LINE
+	return ret; /* LCOV_EXCL_LINE */
 }
 
 int bt_gatt_get_characteristic_declaration(bt_gatt_attribute_h characteristic,
@@ -365,7 +381,8 @@ int bt_gatt_get_characteristic_declaration(bt_gatt_attribute_h characteristic,
 
 	memset(&property, 0x00, sizeof(bt_gatt_char_property_t));
 
-	ret = _bt_get_error_code(bluetooth_gatt_get_characteristics_property((const char *)characteristic, &property)); //LCOV_EXCL_START
+	ret = _bt_get_error_code(bluetooth_gatt_get_characteristics_property((const char *)characteristic,
+					&property)); /* LCOV_EXCL_START */
 
 	if (ret != BT_ERROR_NONE) {
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
@@ -385,7 +402,7 @@ int bt_gatt_get_characteristic_declaration(bt_gatt_attribute_h characteristic,
 
 	}
 
-	return ret; //LCOV_EXCL_STOP
+	return ret; /* LCOV_EXCL_STOP */
 }
 
 int bt_gatt_set_characteristic_value(bt_gatt_attribute_h characteristic,
@@ -397,19 +414,19 @@ int bt_gatt_set_characteristic_value(bt_gatt_attribute_h characteristic,
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(characteristic);
-	BT_CHECK_INPUT_PARAMETER(value); //LCOV_EXCL_START
+	BT_CHECK_INPUT_PARAMETER(value); /* LCOV_EXCL_START */
 
 	if (value_length <= 0)
 		return BT_ERROR_INVALID_PARAMETER;
 
 	ret = _bt_get_error_code(bluetooth_gatt_set_characteristics_value((const char *)characteristic,
-							(const guint8 *)value, value_length));
+					(const guint8*)value, value_length));
 
 	if (ret != BT_ERROR_NONE) {
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
 	}
 
-	return ret; //LCOV_EXCL_STOP
+	return ret; /* LCOV_EXCL_STOP */
 }
 
 int bt_gatt_set_characteristic_value_request(bt_gatt_attribute_h characteristic,
@@ -421,22 +438,23 @@ int bt_gatt_set_characteristic_value_request(bt_gatt_attribute_h characteristic,
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(characteristic);
-	BT_CHECK_INPUT_PARAMETER(value); //LCOV_EXCL_START
+	BT_CHECK_INPUT_PARAMETER(value); /* LCOV_EXCL_START */
 
 	if (value_length <= 0)
 		return BT_ERROR_INVALID_PARAMETER;
 
 	ret = _bt_get_error_code(bluetooth_gatt_set_characteristics_value_request(
 					(const char *)characteristic,
-					(const guint8 *)value, value_length));
+					(const guint8*)value, value_length));
 
 	if (ret != BT_ERROR_NONE) {
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
 	} else {
-		_bt_set_cb(BT_EVENT_GATT_CLIENT_WRITE_CHARACTERISTIC_LEGACY, callback, characteristic);
+		_bt_set_cb(BT_EVENT_GATT_CLIENT_WRITE_CHARACTERISTIC_LEGACY,
+						callback, characteristic);
 	}
 
-	return ret; //LCOV_EXCL_STOP
+	return ret; /* LCOV_EXCL_STOP */
 }
 
 int bt_gatt_clone_attribute_handle(bt_gatt_attribute_h *clone,
@@ -448,9 +466,9 @@ int bt_gatt_clone_attribute_handle(bt_gatt_attribute_h *clone,
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(origin);
 
-	*clone = g_strdup((char *)origin); //LCOV_EXCL_LINE
+	*clone = g_strdup((char *)origin); /* LCOV_EXCL_LINE */
 
-	return error; //LCOV_EXCL_LINE
+	return error; /* LCOV_EXCL_LINE */
 }
 
 int bt_gatt_destroy_attribute_handle(bt_gatt_attribute_h handle)
@@ -461,9 +479,9 @@ int bt_gatt_destroy_attribute_handle(bt_gatt_attribute_h handle)
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(handle);
 
-	g_free(handle); //LCOV_EXCL_LINE
+	g_free(handle); /* LCOV_EXCL_LINE */
 
-	return error; //LCOV_EXCL_LINE
+	return error; /* LCOV_EXCL_LINE */
 }
 
 int bt_gatt_read_characteristic_value(bt_gatt_attribute_h characteristic,
@@ -474,17 +492,18 @@ int bt_gatt_read_characteristic_value(bt_gatt_attribute_h characteristic,
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(characteristic);
-	BT_CHECK_INPUT_PARAMETER(callback); //LCOV_EXCL_START
+	BT_CHECK_INPUT_PARAMETER(callback); /* LCOV_EXCL_START */
 
 	ret = _bt_get_error_code(bluetooth_gatt_read_characteristic_value((const char *)characteristic));
 
 	if (ret != BT_ERROR_NONE) {
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
 	} else {
-		_bt_set_cb(BT_EVENT_GATT_CLIENT_READ_CHARACTERISTIC_LEGACY, callback, NULL);
+		_bt_set_cb(BT_EVENT_GATT_CLIENT_READ_CHARACTERISTIC_LEGACY,
+							callback, NULL);
 	}
 
-	return ret; //LCOV_EXCL_STOP
+	return ret; /* LCOV_EXCL_STOP */
 }
 
 int bt_gatt_discover_characteristic_descriptor(bt_gatt_attribute_h characteristic_handle,
@@ -496,7 +515,7 @@ int bt_gatt_discover_characteristic_descriptor(bt_gatt_attribute_h characteristi
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(characteristic_handle);
-	BT_CHECK_INPUT_PARAMETER(callback); //LCOV_EXCL_START
+	BT_CHECK_INPUT_PARAMETER(callback); /* LCOV_EXCL_START */
 
 	ret = _bt_get_error_code(bluetooth_gatt_discover_characteristic_descriptor
 			((const char *)characteristic_handle));
@@ -504,10 +523,11 @@ int bt_gatt_discover_characteristic_descriptor(bt_gatt_attribute_h characteristi
 	if (ret != BT_ERROR_NONE) {
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
 	} else {
-		_bt_set_cb(BT_EVENT_GATT_CLIENT_CHARACTERISTIC_DESCRIPTOR_DISCOVERED_LEGACY, callback, user_data);
+		_bt_set_cb(BT_EVENT_GATT_CLIENT_CHARACTERISTIC_DESCRIPTOR_DISCOVERED_LEGACY,
+							callback, user_data);
 	}
 
-	return ret; //LCOV_EXCL_STOP
+	return ret; /* LCOV_EXCL_STOP */
 }
 #endif
 
@@ -521,7 +541,8 @@ int bt_gatt_connect(const char *address, bool auto_connect)
 	BT_CHECK_INPUT_PARAMETER(address);
 	_bt_convert_address_to_hex(&bd_addr, address);
 
-	ret = _bt_get_error_code(bluetooth_connect_le(&bd_addr, auto_connect ? TRUE : FALSE));
+	ret = _bt_get_error_code(bluetooth_connect_le(&bd_addr,
+					auto_connect ? TRUE : FALSE));
 
 	if (ret != BT_ERROR_NONE) {
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
@@ -547,7 +568,8 @@ int bt_gatt_disconnect(const char *address)
 	return ret;
 }
 
-int bt_gatt_set_connection_state_changed_cb(bt_gatt_connection_state_changed_cb callback, void *user_data)
+int bt_gatt_set_connection_state_changed_cb(bt_gatt_connection_state_changed_cb callback,
+							void *user_data)
 {
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
@@ -564,7 +586,7 @@ int bt_gatt_unset_connection_state_changed_cb(void)
 	_bt_unset_cb(BT_EVENT_GATT_CONNECTION_STATUS);
 	return BT_ERROR_NONE;
 }
-//LCOV_EXCL_START
+/* LCOV_EXCL_START */
 int bt_gatt_get_uuid_specification_name(const char *uuid, char **name)
 {
 	BT_CHECK_GATT_SUPPORT();
@@ -650,7 +672,8 @@ int bt_gatt_get_uuid_specification_name(const char *uuid, char **name)
 		offset = 4;
 
 	for (i = 0; bt_uuid_name[i].uuid; i++) {
-		if (!g_ascii_strncasecmp(uuid + offset, bt_uuid_name[i].uuid, 4)) {
+		if (!g_ascii_strncasecmp(uuid + offset,
+			bt_uuid_name[i].uuid, 4)) {
 			*name = g_strdup(bt_uuid_name[i].specification_name);
 			return BT_ERROR_NONE;
 		}
@@ -662,7 +685,7 @@ int bt_gatt_get_uuid_specification_name(const char *uuid, char **name)
 
 static void __bt_gatt_free_descriptor(bt_gatt_h gatt_handle)
 {
-	bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s*)gatt_handle;
+	bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s *)gatt_handle;
 
 	g_free(desc->path);
 	g_free(desc->uuid);
@@ -672,7 +695,7 @@ static void __bt_gatt_free_descriptor(bt_gatt_h gatt_handle)
 
 static void __bt_gatt_free_characteristic(bt_gatt_h gatt_handle)
 {
-	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s*)gatt_handle;
+	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)gatt_handle;
 
 	g_slist_free_full(chr->descriptors, __bt_gatt_free_descriptor);
 
@@ -685,7 +708,7 @@ static void __bt_gatt_free_characteristic(bt_gatt_h gatt_handle)
 static void __bt_gatt_free_service(bt_gatt_h gatt_handle)
 {
 	int ret = BT_ERROR_NONE;
-	bt_gatt_service_s *svc = (bt_gatt_service_s*)gatt_handle;
+	bt_gatt_service_s *svc = (bt_gatt_service_s *)gatt_handle;
 
 	g_slist_free_full(svc->included_services, __bt_gatt_free_service);
 	g_slist_free_full(svc->characteristics, __bt_gatt_free_characteristic);
@@ -704,47 +727,52 @@ static void __bt_gatt_free_service(bt_gatt_h gatt_handle)
 
 static void __bt_gatt_destroy_descriptor(bt_gatt_h gatt_handle)
 {
-	bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s*)gatt_handle;
-	bt_gatt_characteristic_s *parent_chr = (bt_gatt_characteristic_s*)desc->parent;
+	bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s *)gatt_handle;
+	bt_gatt_characteristic_s *parent_chr = (bt_gatt_characteristic_s *)desc->parent;
 
 	if (parent_chr)
-		parent_chr->descriptors = g_slist_remove(parent_chr->descriptors, desc);
+		parent_chr->descriptors = g_slist_remove(parent_chr->descriptors,
+									desc);
 
 	__bt_gatt_free_descriptor(gatt_handle);
 }
 
 static void __bt_gatt_destroy_characteristic(bt_gatt_h gatt_handle)
 {
-	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s*)gatt_handle;
-	bt_gatt_service_s *parent_svc = (bt_gatt_service_s*)chr->parent;
+	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)gatt_handle;
+	bt_gatt_service_s *parent_svc = (bt_gatt_service_s *)chr->parent;
 
 	if (parent_svc)
-		parent_svc->characteristics = g_slist_remove(parent_svc->characteristics, chr);
+		parent_svc->characteristics = g_slist_remove(parent_svc->characteristics,
+									chr);
 
 	__bt_gatt_free_characteristic(gatt_handle);
 }
 
 static void __bt_gatt_destroy_service(bt_gatt_h gatt_handle)
 {
-	bt_gatt_service_s *svc = (bt_gatt_service_s*)gatt_handle;
+	bt_gatt_service_s *svc = (bt_gatt_service_s *)gatt_handle;
 	bt_gatt_server_s *server = NULL;
 	bt_gatt_client_s *client = NULL;
 	bt_gatt_service_s *parent_svc = NULL;
 
 	if (svc->is_included_service == FALSE) {
 		if (svc->role == BT_GATT_ROLE_SERVER) {
-			server = (bt_gatt_server_s*)svc->parent;
+			server = (bt_gatt_server_s *)svc->parent;
 			if (server)
-				server->services = g_slist_remove(server->services, svc);
+				server->services = g_slist_remove(server->services,
+									svc);
 		} else {
-			client = (bt_gatt_client_s*)svc->parent;
+			client = (bt_gatt_client_s *)svc->parent;
 			if (client)
-				client->services = g_slist_remove(client->services, svc);
+				client->services = g_slist_remove(client->services,
+									svc);
 		}
 	} else {
-		parent_svc = (bt_gatt_service_s*)svc->parent;
+		parent_svc = (bt_gatt_service_s *)svc->parent;
 		if (parent_svc)
-			parent_svc->included_services = g_slist_remove(parent_svc->included_services, svc);
+			parent_svc->included_services = g_slist_remove(parent_svc->included_services,
+									svc);
 	}
 
 	__bt_gatt_free_service(gatt_handle);
@@ -756,12 +784,13 @@ static int __convert_int_to_signed_bits(int i, int size)
 		i = (1 << (size - 1)) + (i & ((1 << (size - 1)) - 1));
 
 	return i;
- }
+}
 
 static int __convert_unsigned_to_signed(int value, int size)
 {
 	if ((value & (1 << (size-1))) != 0) {
-		value = -1 * ((1 << (size-1)) - (value & ((1 << (size-1)) - 1)));
+		value = -1 * ((1 << (size-1))
+				- (value & ((1 << (size-1)) - 1)));
 	}
 	return value;
 }
@@ -773,22 +802,25 @@ static int __convert_unsigned_byte_to_int(char b)
 
 static int __convert_unsigned_bytes_to_int16(char b0, char b1)
 {
-	return (__convert_unsigned_byte_to_int(b0) + (__convert_unsigned_byte_to_int(b1) << 8));
+	return (__convert_unsigned_byte_to_int(b0)
+		+ (__convert_unsigned_byte_to_int(b1) << 8));
 }
 
 static int __convert_unsigned_bytes_to_int32(char b0, char b1, char b2, char b3)
 {
-	return (__convert_unsigned_byte_to_int(b0) + (__convert_unsigned_byte_to_int(b1) << 8))
-		 + (__convert_unsigned_byte_to_int(b2) << 16) + (__convert_unsigned_byte_to_int(b3) << 24);
+	return (__convert_unsigned_byte_to_int(b0)
+		+ (__convert_unsigned_byte_to_int(b1) << 8))
+		+ (__convert_unsigned_byte_to_int(b2) << 16)
+		+ (__convert_unsigned_byte_to_int(b3) << 24);
 }
 
 static double power(int x, int n)
 {
-    /* pow() cannot not referenced. */
-    if(n == 0)
-        return 1;
-    else
-        return x*power(x,n-1);
+	/* pow() cannot not referenced. */
+	if (n == 0)
+		return 1;
+	else
+		return x*power(x, n-1);
 }
 
 static float __convert_bytes_to_short_float(char b0, char b1)
@@ -809,8 +841,8 @@ float __convert_bytes_to_float(char b0, char b1, char b2, char b3)
 	int mantissa;
 	float exponent;
 	mantissa = __convert_unsigned_to_signed(__convert_unsigned_byte_to_int(b0)
-	                + (__convert_unsigned_byte_to_int(b1) << 8)
-	                + (__convert_unsigned_byte_to_int(b2) << 16), 24);
+			+ (__convert_unsigned_byte_to_int(b1) << 8)
+			+ (__convert_unsigned_byte_to_int(b2) << 16), 24);
 	exponent = power(10, b3);
 
 	return (float)(mantissa * exponent);
@@ -826,7 +858,7 @@ static int __get_data_type_float_size(bt_data_type_float_e type)
 		default:
 			return 0;
 	}
- }
+}
 
 static int __get_data_type_int_size(bt_data_type_int_e format)
 {
@@ -843,11 +875,11 @@ static int __get_data_type_int_size(bt_data_type_int_e format)
 		default:
 			return 0;
 	}
- }
+}
 
 int bt_gatt_destroy(bt_gatt_h gatt_handle)
 {
-	bt_gatt_common_s *handle = (bt_gatt_common_s*)gatt_handle;
+	bt_gatt_common_s *handle = (bt_gatt_common_s *)gatt_handle;
 
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
@@ -866,18 +898,19 @@ int bt_gatt_destroy(bt_gatt_h gatt_handle)
 
 	return BT_ERROR_NONE;
 }
-//LCOV_EXCL_STOP
+/* LCOV_EXCL_STOP */
+
 int bt_gatt_get_value(bt_gatt_h gatt_handle, char **value, int *value_length)
 {
-	bt_gatt_common_s *handle = (bt_gatt_common_s*)gatt_handle;
-	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s*)gatt_handle;
-	bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s*)gatt_handle;
+	bt_gatt_common_s *handle = (bt_gatt_common_s *)gatt_handle;
+	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)gatt_handle;
+	bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s *)gatt_handle;
 
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
 	BT_CHECK_INPUT_PARAMETER(gatt_handle);
-	BT_CHECK_INPUT_PARAMETER(value); //LCOV_EXCL_START
+	BT_CHECK_INPUT_PARAMETER(value); /* LCOV_EXCL_START */
 	BT_CHECK_INPUT_PARAMETER(value_length);
 
 	if (handle->type == BT_GATT_TYPE_CHARACTERISTIC) {
@@ -893,22 +926,23 @@ int bt_gatt_get_value(bt_gatt_h gatt_handle, char **value, int *value_length)
 		return BT_ERROR_INVALID_PARAMETER;
 	}
 
-	return BT_ERROR_NONE; //LCOV_EXCL_STOP
+	return BT_ERROR_NONE; /* LCOV_EXCL_STOP */
 }
 
-int bt_gatt_get_int_value(bt_gatt_h gatt_handle, bt_data_type_int_e type, int offset, int *value)
+int bt_gatt_get_int_value(bt_gatt_h gatt_handle, bt_data_type_int_e type,
+			int offset, int *value)
 {
 	char *val;
 	int val_len;
-	bt_gatt_common_s *handle = (bt_gatt_common_s*)gatt_handle;
-	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s*)gatt_handle;
-	bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s*)gatt_handle;
+	bt_gatt_common_s *handle = (bt_gatt_common_s *)gatt_handle;
+	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)gatt_handle;
+	bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s *)gatt_handle;
 
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
 	BT_CHECK_INPUT_PARAMETER(gatt_handle);
-	BT_CHECK_INPUT_PARAMETER(value); //LCOV_EXCL_START
+	BT_CHECK_INPUT_PARAMETER(value); /* LCOV_EXCL_START */
 
 	if (handle->type == BT_GATT_TYPE_CHARACTERISTIC) {
 		val = chr->value;
@@ -931,12 +965,13 @@ int bt_gatt_get_int_value(bt_gatt_h gatt_handle, bt_data_type_int_e type, int of
 			*value = __convert_unsigned_byte_to_int(val[offset]);
 			break;
 		case BT_DATA_TYPE_UINT16:
-			*value = __convert_unsigned_bytes_to_int16(val[offset], val[offset+1]);
+			*value = __convert_unsigned_bytes_to_int16(val[offset],
+								val[offset+1]);
 			break;
 
 		case BT_DATA_TYPE_UINT32:
-			*value = __convert_unsigned_bytes_to_int32(val[offset],	val[offset+1],
-									  val[offset+2], val[offset+3]);
+			*value = __convert_unsigned_bytes_to_int32(val[offset],
+				val[offset+1], val[offset+2], val[offset+3]);
 			break;
 		case BT_DATA_TYPE_SINT8:
 			*value = __convert_unsigned_to_signed(__convert_unsigned_byte_to_int(val[offset]), 8);
@@ -944,32 +979,33 @@ int bt_gatt_get_int_value(bt_gatt_h gatt_handle, bt_data_type_int_e type, int of
 
 		case BT_DATA_TYPE_SINT16:
 			*value = __convert_unsigned_to_signed(__convert_unsigned_bytes_to_int16(val[offset],
-													   val[offset+1]), 16);
+							   val[offset+1]), 16);
 			break;
 
 		case BT_DATA_TYPE_SINT32:
 			*value = __convert_unsigned_to_signed(__convert_unsigned_bytes_to_int32(val[offset],
-					val[offset+1], val[offset+2], val[offset+3]), 32);
+				val[offset+1], val[offset+2], val[offset+3]), 32);
 			break;
 		default:
 			return BT_ERROR_INVALID_PARAMETER;
 	}
 
-	return BT_ERROR_NONE; //LCOV_EXCL_STOP
+	return BT_ERROR_NONE; /* LCOV_EXCL_STOP */
 }
 
-int bt_gatt_get_float_value(bt_gatt_h gatt_handle, bt_data_type_float_e type, int offset, float *value)
+int bt_gatt_get_float_value(bt_gatt_h gatt_handle, bt_data_type_float_e type,
+						int offset, float *value)
 {
 	char *val;
 	int val_len;
-	bt_gatt_common_s *handle = (bt_gatt_common_s*)gatt_handle;
-	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s*)gatt_handle;
-	bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s*)gatt_handle;
+	bt_gatt_common_s *handle = (bt_gatt_common_s *)gatt_handle;
+	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)gatt_handle;
+	bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s *)gatt_handle;
 
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(gatt_handle);
-	BT_CHECK_INPUT_PARAMETER(value); //LCOV_EXCL_START
+	BT_CHECK_INPUT_PARAMETER(value); /* LCOV_EXCL_START */
 
 	if (handle->type == BT_GATT_TYPE_CHARACTERISTIC) {
 		val = chr->value;
@@ -989,34 +1025,36 @@ int bt_gatt_get_float_value(bt_gatt_h gatt_handle, bt_data_type_float_e type, in
 
 	switch (type) {
 		case BT_DATA_TYPE_SFLOAT:
-			*value = __convert_bytes_to_short_float(val[offset], val[offset+1]);
+			*value = __convert_bytes_to_short_float(val[offset],
+				val[offset+1]);
 			break;
 
 		case BT_DATA_TYPE_FLOAT:
-			*value = __convert_bytes_to_float(val[offset], val[offset+1],
-				val[offset+2], val[offset+3]);
+			*value = __convert_bytes_to_float(val[offset],
+				val[offset+1], val[offset+2], val[offset+3]);
 			break;
 		default:
 			return BT_ERROR_INVALID_PARAMETER;
 	}
 
-	return BT_ERROR_NONE; //LCOV_EXCL_STOP
+	return BT_ERROR_NONE; /* LCOV_EXCL_STOP */
 }
 
-int bt_gatt_set_value(bt_gatt_h gatt_handle, const char *value, int value_length)
+int bt_gatt_set_value(bt_gatt_h gatt_handle, const char *value,
+						int value_length)
 {
 	int ret;
 	char **val = NULL;
 	int *val_len = NULL;
-	bt_gatt_common_s *handle = (bt_gatt_common_s*)gatt_handle;
-	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s*)gatt_handle;
-	bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s*)gatt_handle;
+	bt_gatt_common_s *handle = (bt_gatt_common_s *)gatt_handle;
+	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)gatt_handle;
+	bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s *)gatt_handle;
 
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
 	BT_CHECK_INPUT_PARAMETER(gatt_handle);
-	BT_CHECK_INPUT_PARAMETER(value); //LCOV_EXCL_START
+	BT_CHECK_INPUT_PARAMETER(value); /* LCOV_EXCL_START */
 
 	if (handle->type == BT_GATT_TYPE_CHARACTERISTIC) {
 		val = &chr->value;
@@ -1030,7 +1068,8 @@ int bt_gatt_set_value(bt_gatt_h gatt_handle, const char *value, int value_length
 	}
 
 	if (handle->role == BT_GATT_ROLE_SERVER && handle->path) {
-		ret = _bt_get_error_code(bluetooth_gatt_update_characteristic(handle->path, value, value_length));
+		ret = _bt_get_error_code(bluetooth_gatt_update_characteristic(handle->path,
+							value, value_length));
 		if (ret != BT_ERROR_NONE) {
 			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
 			return ret;
@@ -1043,10 +1082,11 @@ int bt_gatt_set_value(bt_gatt_h gatt_handle, const char *value, int value_length
 		*val = g_memdup(value, value_length);
 	*val_len = value_length;
 
-	return BT_ERROR_NONE; //LCOV_EXCL_STOP
+	return BT_ERROR_NONE; /* LCOV_EXCL_STOP */
 }
 
-int bt_gatt_set_int_value(bt_gatt_h gatt_handle, bt_data_type_int_e type, int value, int offset)
+int bt_gatt_set_int_value(bt_gatt_h gatt_handle, bt_data_type_int_e type,
+						int value, int offset)
 {
 	int ret;
 	char **val = NULL;
@@ -1054,16 +1094,16 @@ int bt_gatt_set_int_value(bt_gatt_h gatt_handle, bt_data_type_int_e type, int va
 	char *tmp;
 	int fmt_size;
 	int idx = offset;
-	bt_gatt_common_s *handle = (bt_gatt_common_s*)gatt_handle;
-	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s*)gatt_handle;
-	bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s*)gatt_handle;
+	bt_gatt_common_s *handle = (bt_gatt_common_s *)gatt_handle;
+	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)gatt_handle;
+	bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s *)gatt_handle;
 
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
 	BT_CHECK_INPUT_PARAMETER(gatt_handle);
 
-	if (handle->type == BT_GATT_TYPE_CHARACTERISTIC) { //LCOV_EXCL_START
+	if (handle->type == BT_GATT_TYPE_CHARACTERISTIC) { /* LCOV_EXCL_START */
 		val = &chr->value;
 		val_len = &chr->value_length;
 	} else if (handle->type == BT_GATT_TYPE_DESCRIPTOR) {
@@ -1083,7 +1123,7 @@ int bt_gatt_set_int_value(bt_gatt_h gatt_handle, bt_data_type_int_e type, int va
 	if (*val == NULL) {
 		*val = g_malloc0(fmt_size);
 		*val_len = fmt_size;
-	} else if (*val_len == offset) {// Added
+	} else if (*val_len == offset) { /* Added */
 		tmp = g_malloc0(*val_len + fmt_size);
 		/* Fix : NULL_RETURNS */
 		if (!tmp) {
@@ -1094,7 +1134,7 @@ int bt_gatt_set_int_value(bt_gatt_h gatt_handle, bt_data_type_int_e type, int va
 		g_free(*val);
 		*val = tmp;
 		*val_len += fmt_size;
-	} else if (*val_len < offset + fmt_size) {// Overlapped
+	} else if (*val_len < offset + fmt_size) {/* Overlapped */
 		tmp = g_malloc0(offset + fmt_size);
 		/* Fix : NULL_RETURNS */
 		if (!tmp) {
@@ -1140,14 +1180,15 @@ int bt_gatt_set_int_value(bt_gatt_h gatt_handle, bt_data_type_int_e type, int va
 	}
 
 	if (handle->role == BT_GATT_ROLE_SERVER && handle->path) {
-		ret = _bt_get_error_code(bluetooth_gatt_update_characteristic(handle->path, *val, *val_len));
+		ret = _bt_get_error_code(bluetooth_gatt_update_characteristic(handle->path,
+							*val, *val_len));
 		if (ret != BT_ERROR_NONE) {
 			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
 			return ret;
 		}
 	}
 
-	return BT_ERROR_NONE; //LCOV_EXCL_STOP
+	return BT_ERROR_NONE; /* LCOV_EXCL_STOP */
 }
 
 int bt_gatt_set_float_value(bt_gatt_h gatt_handle, bt_data_type_float_e type,
@@ -1161,16 +1202,16 @@ int bt_gatt_set_float_value(bt_gatt_h gatt_handle, bt_data_type_float_e type,
 	char *tmp;
 	int fmt_size;
 	int idx = offset;
-	bt_gatt_common_s *handle = (bt_gatt_common_s*)gatt_handle;
-	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s*)gatt_handle;
-	bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s*)gatt_handle;
+	bt_gatt_common_s *handle = (bt_gatt_common_s *)gatt_handle;
+	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)gatt_handle;
+	bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s *)gatt_handle;
 
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
 	BT_CHECK_INPUT_PARAMETER(gatt_handle);
 
-	if (handle->type == BT_GATT_TYPE_CHARACTERISTIC) { //LCOV_EXCL_START
+	if (handle->type == BT_GATT_TYPE_CHARACTERISTIC) { /* LCOV_EXCL_START */
 		val = &chr->value;
 		val_len = &chr->value_length;
 	} else if (handle->type == BT_GATT_TYPE_DESCRIPTOR) {
@@ -1198,7 +1239,7 @@ int bt_gatt_set_float_value(bt_gatt_h gatt_handle, bt_data_type_float_e type,
 		if (*val == NULL)
 			return BT_ERROR_OUT_OF_MEMORY;
 		*val_len = fmt_size;
-	} else if (*val_len == offset) {// Added
+	} else if (*val_len == offset) {/* Added */
 		tmp = g_malloc0(*val_len + fmt_size);
 		/* Fix : NULL_RETURNS */
 		if (tmp == NULL) {
@@ -1209,7 +1250,7 @@ int bt_gatt_set_float_value(bt_gatt_h gatt_handle, bt_data_type_float_e type,
 		g_free(*val);
 		*val = tmp;
 		*val_len += fmt_size;
-	} else if (*val_len < offset + fmt_size) {// Overlapped
+	} else if (*val_len < offset + fmt_size) {/* Overlapped */
 		tmp = g_malloc0(offset + fmt_size);
 		/* Fix : NULL_RETURNS */
 		if (tmp == NULL) {
@@ -1245,21 +1286,22 @@ int bt_gatt_set_float_value(bt_gatt_h gatt_handle, bt_data_type_float_e type,
 	}
 
 	if (handle->role == BT_GATT_ROLE_SERVER && handle->path) {
-		ret = _bt_get_error_code(bluetooth_gatt_update_characteristic(handle->path, *val, *val_len));
+		ret = _bt_get_error_code(bluetooth_gatt_update_characteristic(handle->path,
+							*val, *val_len));
 		if (ret != BT_ERROR_NONE) {
 			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
 			return ret;
 		}
 	}
 
-	return BT_ERROR_NONE; //LCOV_EXCL_STOP
+	return BT_ERROR_NONE; /* LCOV_EXCL_STOP */
 }
-//LCOV_EXCL_START
+/* LCOV_EXCL_START */
 int bt_gatt_get_permissions(bt_gatt_h gatt_handle, int *permissions)
 {
-	bt_gatt_common_s *handle = (bt_gatt_common_s*)gatt_handle;
-	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s*)gatt_handle;
-	bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s*)gatt_handle;
+	bt_gatt_common_s *handle = (bt_gatt_common_s *)gatt_handle;
+	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)gatt_handle;
+	bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s *)gatt_handle;
 
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
@@ -1281,9 +1323,9 @@ int bt_gatt_get_permissions(bt_gatt_h gatt_handle, int *permissions)
 
 int bt_gatt_set_permissions(bt_gatt_h gatt_handle, int permissions)
 {
-	bt_gatt_common_s *handle = (bt_gatt_common_s*)gatt_handle;
-	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s*)gatt_handle;
-	bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s*)gatt_handle;
+	bt_gatt_common_s *handle = (bt_gatt_common_s *)gatt_handle;
+	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)gatt_handle;
+	bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s *)gatt_handle;
 
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
@@ -1301,37 +1343,37 @@ int bt_gatt_set_permissions(bt_gatt_h gatt_handle, int permissions)
 
 	return BT_ERROR_NONE;
 }
-//LCOV_EXCL_STOP
+/* LCOV_EXCL_STOP */
 int bt_gatt_get_uuid(bt_gatt_h gatt_handle, char **uuid)
 {
-	bt_gatt_common_s *handle = (bt_gatt_common_s*)gatt_handle;
+	bt_gatt_common_s *handle = (bt_gatt_common_s *)gatt_handle;
 
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
 	BT_CHECK_INPUT_PARAMETER(gatt_handle);
-	BT_CHECK_INPUT_PARAMETER(uuid); //LCOV_EXCL_LINE
+	BT_CHECK_INPUT_PARAMETER(uuid); /* LCOV_EXCL_LINE */
 
-	*uuid = g_strdup(handle->uuid); //LCOV_EXCL_LINE
+	*uuid = g_strdup(handle->uuid); /* LCOV_EXCL_LINE */
 
-	return BT_ERROR_NONE; //LCOV_EXCL_LINE
+	return BT_ERROR_NONE; /* LCOV_EXCL_LINE */
 }
 
 int bt_gatt_get_type(bt_gatt_h gatt_handle, bt_gatt_type_e *gatt_type)
 {
-	bt_gatt_common_s *handle = (bt_gatt_common_s*)gatt_handle;
+	bt_gatt_common_s *handle = (bt_gatt_common_s *)gatt_handle;
 
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
 	BT_CHECK_INPUT_PARAMETER(gatt_handle);
-	BT_CHECK_INPUT_PARAMETER(gatt_type); //LCOV_EXCL_LINE
+	BT_CHECK_INPUT_PARAMETER(gatt_type); /* LCOV_EXCL_LINE */
 
-	*gatt_type = handle->type; //LCOV_EXCL_LINE
+	*gatt_type = handle->type; /* LCOV_EXCL_LINE */
 
-	return BT_ERROR_NONE; //LCOV_EXCL_LINE
+	return BT_ERROR_NONE; /* LCOV_EXCL_LINE */
 }
-//LCOV_EXCL_START
+/* LCOV_EXCL_START */
 int bt_gatt_service_create(const char *uuid, bt_gatt_service_type_e type,
 			   bt_gatt_h *service)
 {
@@ -1343,7 +1385,7 @@ int bt_gatt_service_create(const char *uuid, bt_gatt_service_type_e type,
 	BT_CHECK_INPUT_PARAMETER(uuid);
 	BT_CHECK_INPUT_PARAMETER(service);
 
-	svc = (bt_gatt_service_s*)g_malloc0(sizeof(bt_gatt_service_s));
+	svc = (bt_gatt_service_s *)g_malloc0(sizeof(bt_gatt_service_s));
 	if (svc == NULL)
 		return BT_ERROR_OUT_OF_MEMORY;
 	svc->type = BT_GATT_TYPE_SERVICE;
@@ -1367,8 +1409,8 @@ int bt_gatt_service_create(const char *uuid, bt_gatt_service_type_e type,
 int bt_gatt_service_add_characteristic(bt_gatt_h service,
 					bt_gatt_h characteristic)
 {
-	bt_gatt_service_s *svc = (bt_gatt_service_s*)service;
-	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s*)characteristic;
+	bt_gatt_service_s *svc = (bt_gatt_service_s *)service;
+	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)characteristic;
 
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
@@ -1389,8 +1431,8 @@ int bt_gatt_service_add_characteristic(bt_gatt_h service,
 int bt_gatt_service_add_included_service(bt_gatt_h service,
 					bt_gatt_h included_service)
 {
-	bt_gatt_service_s *svc = (bt_gatt_service_s*)service;
-	bt_gatt_service_s *included_svc = (bt_gatt_service_s*)included_service;
+	bt_gatt_service_s *svc = (bt_gatt_service_s *)service;
+	bt_gatt_service_s *included_svc = (bt_gatt_service_s *)included_service;
 
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
@@ -1402,7 +1444,8 @@ int bt_gatt_service_add_included_service(bt_gatt_h service,
 		return BT_ERROR_INVALID_PARAMETER;
 	}
 
-	svc->included_services = g_slist_append(svc->included_services, included_svc);
+	svc->included_services = g_slist_append(svc->included_services,
+							included_svc);
 	included_svc->parent = (void *)service;
 
 	return BT_ERROR_NONE;
@@ -1432,7 +1475,7 @@ int bt_gatt_service_get_server(bt_gatt_h service, bt_gatt_server_h *server)
 
 	return BT_ERROR_NONE;
 }
-//LCOV_EXCL_STOP
+/* LCOV_EXCL_STOP */
 int bt_gatt_service_get_client(bt_gatt_h service, bt_gatt_client_h *client)
 {
 	bt_gatt_service_s *svc = (bt_gatt_service_s *)service;
@@ -1441,7 +1484,7 @@ int bt_gatt_service_get_client(bt_gatt_h service, bt_gatt_client_h *client)
 	BT_CHECK_INIT_STATUS();
 
 	BT_CHECK_INPUT_PARAMETER(service);
-	BT_CHECK_INPUT_PARAMETER(client); //LCOV_EXCL_START
+	BT_CHECK_INPUT_PARAMETER(client); /* LCOV_EXCL_START */
 
 	if (svc->is_included_service) {
 		BT_ERR("This is included service of %p", svc->parent);
@@ -1455,13 +1498,13 @@ int bt_gatt_service_get_client(bt_gatt_h service, bt_gatt_client_h *client)
 
 	*client = (bt_gatt_client_h)svc->parent;
 
-	return BT_ERROR_NONE; //LCOV_EXCL_STOP
+	return BT_ERROR_NONE; /* LCOV_EXCL_STOP */
 }
 
 int bt_gatt_service_get_characteristic(bt_gatt_h service, const char *uuid,
 					bt_gatt_h *characteristic)
 {
-	bt_gatt_service_s *svc = (bt_gatt_service_s*)service;
+	bt_gatt_service_s *svc = (bt_gatt_service_s *)service;
 	bt_gatt_h gatt_handle = NULL;
 	int ret;
 
@@ -1469,23 +1512,25 @@ int bt_gatt_service_get_characteristic(bt_gatt_h service, const char *uuid,
 	BT_CHECK_INIT_STATUS();
 
 	BT_CHECK_INPUT_PARAMETER(service);
-	BT_CHECK_INPUT_PARAMETER(uuid); //LCOV_EXCL_START
+	BT_CHECK_INPUT_PARAMETER(uuid); /* LCOV_EXCL_START */
 	BT_CHECK_INPUT_PARAMETER(characteristic);
 
-	ret = __get_gatt_handle_by_uuid(svc->characteristics, uuid, &gatt_handle);
+	ret = __get_gatt_handle_by_uuid(svc->characteristics,
+						uuid, &gatt_handle);
 	if (ret == BT_ERROR_NONE && gatt_handle != NULL) {
 		*characteristic = gatt_handle;
 		return BT_ERROR_NONE;
 	}
 
-	BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret); //LCOV_EXCL_STOP
+	BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret),
+					ret); /* LCOV_EXCL_STOP */
 	return ret;
 }
 
 int bt_gatt_service_foreach_characteristics(bt_gatt_h service,
-					bt_gatt_foreach_cb callback, void *user_data)
+				bt_gatt_foreach_cb callback, void *user_data)
 {
-	bt_gatt_service_s *svc = (bt_gatt_service_s*)service;
+	bt_gatt_service_s *svc = (bt_gatt_service_s *)service;
 	bt_gatt_characteristic_s *chr = NULL;
 	GSList *l = NULL;
 	int total = 0;
@@ -1495,7 +1540,7 @@ int bt_gatt_service_foreach_characteristics(bt_gatt_h service,
 	BT_CHECK_INIT_STATUS();
 
 	BT_CHECK_INPUT_PARAMETER(service);
-	BT_CHECK_INPUT_PARAMETER(callback); //LCOV_EXCL_START
+	BT_CHECK_INPUT_PARAMETER(callback); /* LCOV_EXCL_START */
 
 	total = g_slist_length(svc->characteristics);
 
@@ -1505,13 +1550,13 @@ int bt_gatt_service_foreach_characteristics(bt_gatt_h service,
 			break;
 	}
 
-	return BT_ERROR_NONE; //LCOV_EXCL_STOP
+	return BT_ERROR_NONE; /* LCOV_EXCL_STOP */
 }
 
 int bt_gatt_service_get_included_service(bt_gatt_h service, const char *uuid,
 						bt_gatt_h *included_service)
 {
-	bt_gatt_service_s *svc = (bt_gatt_service_s*)service;
+	bt_gatt_service_s *svc = (bt_gatt_service_s *)service;
 	bt_gatt_h gatt_handle = NULL;
 	int ret;
 
@@ -1519,23 +1564,25 @@ int bt_gatt_service_get_included_service(bt_gatt_h service, const char *uuid,
 	BT_CHECK_INIT_STATUS();
 
 	BT_CHECK_INPUT_PARAMETER(service);
-	BT_CHECK_INPUT_PARAMETER(uuid); //LCOV_EXCL_START
+	BT_CHECK_INPUT_PARAMETER(uuid); /* LCOV_EXCL_START */
 	BT_CHECK_INPUT_PARAMETER(included_service);
 
-	ret = __get_gatt_handle_by_uuid(svc->included_services, uuid, &gatt_handle);
+	ret = __get_gatt_handle_by_uuid(svc->included_services,
+					uuid, &gatt_handle);
 	if (ret == BT_ERROR_NONE && gatt_handle != NULL) {
 		*included_service = gatt_handle;
 		return BT_ERROR_NONE;
 	}
 
-	BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret); //LCOV_EXCL_STOP
+	BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret),
+					ret); /* LCOV_EXCL_STOP */
 	return ret;
 }
 
 int bt_gatt_service_foreach_included_services(bt_gatt_h service,
-					bt_gatt_foreach_cb callback, void *user_data)
+				bt_gatt_foreach_cb callback, void *user_data)
 {
-	bt_gatt_service_s *svc = (bt_gatt_service_s*)service;
+	bt_gatt_service_s *svc = (bt_gatt_service_s *)service;
 	bt_gatt_service_s *included_svc = NULL;
 	GSList *l = NULL;
 	int total = 0;
@@ -1545,22 +1592,23 @@ int bt_gatt_service_foreach_included_services(bt_gatt_h service,
 	BT_CHECK_INIT_STATUS();
 
 	BT_CHECK_INPUT_PARAMETER(service);
-	BT_CHECK_INPUT_PARAMETER(callback); //LCOV_EXCL_LINE
+	BT_CHECK_INPUT_PARAMETER(callback); /* LCOV_EXCL_LINE */
 
-	total = g_slist_length(svc->included_services); //LCOV_EXCL_LINE
+	total = g_slist_length(svc->included_services); /* LCOV_EXCL_LINE */
 
 	for (l = svc->included_services; l; l = g_slist_next(l)) {
-		included_svc = l->data; //LCOV_EXCL_LINE
-		if (!callback(total, index++, (bt_gatt_h)included_svc, user_data)) //LCOV_EXCL_LINE
+		included_svc = l->data; /* LCOV_EXCL_LINE */
+		if (!callback(total, index++, (bt_gatt_h)included_svc,
+					user_data)) /* LCOV_EXCL_LINE */
 			break;
 	}
 
 	return BT_ERROR_NONE;
 }
-//LCOV_EXCL_START
+/* LCOV_EXCL_START */
 int bt_gatt_characteristic_create(const char *uuid, int permissions,
-				int properties, const char *value, int value_length,
-				bt_gatt_h *characteristic)
+				int properties, const char *value,
+				int value_length, bt_gatt_h *characteristic)
 {
 	int ret = BT_ERROR_NONE;
 	bt_gatt_characteristic_s *chr = NULL;
@@ -1641,7 +1689,7 @@ int bt_gatt_characteristic_add_descriptor(bt_gatt_h characteristic,
 
 	return BT_ERROR_NONE;
 }
-//LCOV_EXCL_STOP
+/* LCOV_EXCL_STOP */
 int bt_gatt_characteristic_get_service(bt_gatt_h characteristic, bt_gatt_h *service)
 {
 	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)characteristic;
@@ -1650,11 +1698,11 @@ int bt_gatt_characteristic_get_service(bt_gatt_h characteristic, bt_gatt_h *serv
 	BT_CHECK_INIT_STATUS();
 
 	BT_CHECK_INPUT_PARAMETER(characteristic);
-	BT_CHECK_INPUT_PARAMETER(service); //LCOV_EXCL_LINE
+	BT_CHECK_INPUT_PARAMETER(service); /* LCOV_EXCL_LINE */
 
-	*service = (bt_gatt_h)chr->parent; //LCOV_EXCL_LINE
+	*service = (bt_gatt_h)chr->parent; /* LCOV_EXCL_LINE */
 
-	return BT_ERROR_NONE; //LCOV_EXCL_LINE
+	return BT_ERROR_NONE; /* LCOV_EXCL_LINE */
 }
 
 int bt_gatt_characteristic_get_properties(bt_gatt_h characteristic, int *properties)
@@ -1665,7 +1713,7 @@ int bt_gatt_characteristic_get_properties(bt_gatt_h characteristic, int *propert
 	BT_CHECK_INIT_STATUS();
 
 	BT_CHECK_INPUT_PARAMETER(characteristic);
-	BT_CHECK_INPUT_PARAMETER(properties); //LCOV_EXCL_START
+	BT_CHECK_INPUT_PARAMETER(properties); /* LCOV_EXCL_START */
 
 	if (chr->type != BT_GATT_TYPE_CHARACTERISTIC) {
 		BT_ERR("Wrong type of GATT handle : %d", chr->type);
@@ -1674,10 +1722,11 @@ int bt_gatt_characteristic_get_properties(bt_gatt_h characteristic, int *propert
 
 	*properties = chr->properties;
 
-	return BT_ERROR_NONE; //LCOV_EXCL_STOP
+	return BT_ERROR_NONE; /* LCOV_EXCL_STOP */
 }
 
-int bt_gatt_characteristic_set_properties(bt_gatt_h characteristic, int properties)
+int bt_gatt_characteristic_set_properties(bt_gatt_h characteristic,
+						int properties)
 {
 	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)characteristic;
 
@@ -1687,13 +1736,14 @@ int bt_gatt_characteristic_set_properties(bt_gatt_h characteristic, int properti
 	BT_CHECK_INPUT_PARAMETER(characteristic);
 
 	if (chr->type != BT_GATT_TYPE_CHARACTERISTIC) {
-		BT_ERR("Wrong type of GATT handle : %d", chr->type); //LCOV_EXCL_LINE
-		return BT_ERROR_INVALID_PARAMETER; //LCOV_EXCL_LINE
+		BT_ERR("Wrong type of GATT handle : %d",
+				chr->type); /* LCOV_EXCL_LINE */
+		return BT_ERROR_INVALID_PARAMETER; /* LCOV_EXCL_LINE */
 	}
 
-	chr->properties = properties; //LCOV_EXCL_LINE
+	chr->properties = properties; /* LCOV_EXCL_LINE */
 
-	return BT_ERROR_NONE; //LCOV_EXCL_LINE
+	return BT_ERROR_NONE; /* LCOV_EXCL_LINE */
 }
 
 int bt_gatt_characteristic_get_write_type(bt_gatt_h characteristic,
@@ -1705,16 +1755,17 @@ int bt_gatt_characteristic_get_write_type(bt_gatt_h characteristic,
 	BT_CHECK_INIT_STATUS();
 
 	BT_CHECK_INPUT_PARAMETER(characteristic);
-	BT_CHECK_INPUT_PARAMETER(write_type); //LCOV_EXCL_LINE
+	BT_CHECK_INPUT_PARAMETER(write_type); /* LCOV_EXCL_LINE */
 
-	if (chr->type != BT_GATT_TYPE_CHARACTERISTIC) { //LCOV_EXCL_LINE
-		BT_ERR("Wrong type of GATT handle : %d", chr->type); //LCOV_EXCL_LINE
-		return BT_ERROR_INVALID_PARAMETER; //LCOV_EXCL_LINE
+	if (chr->type != BT_GATT_TYPE_CHARACTERISTIC) { /* LCOV_EXCL_LINE */
+		BT_ERR("Wrong type of GATT handle : %d",
+					chr->type); /* LCOV_EXCL_LINE */
+		return BT_ERROR_INVALID_PARAMETER; /* LCOV_EXCL_LINE */
 	}
 
-	*write_type = chr->write_type; //LCOV_EXCL_LINE
+	*write_type = chr->write_type; /* LCOV_EXCL_LINE */
 
-	return BT_ERROR_NONE; //LCOV_EXCL_LINE
+	return BT_ERROR_NONE; /* LCOV_EXCL_LINE */
 }
 
 int bt_gatt_characteristic_set_write_type(bt_gatt_h characteristic,
@@ -1728,8 +1779,8 @@ int bt_gatt_characteristic_set_write_type(bt_gatt_h characteristic,
 	BT_CHECK_INPUT_PARAMETER(characteristic);
 
 	if (chr->type != BT_GATT_TYPE_CHARACTERISTIC) {
-		BT_ERR("Wrong type of GATT handle : %d", chr->type); //LCOV_EXCL_LINE
-		return BT_ERROR_INVALID_PARAMETER; //LCOV_EXCL_LINE
+		BT_ERR("Wrong type of GATT handle : %d", chr->type); /* LCOV_EXCL_LINE */
+		return BT_ERROR_INVALID_PARAMETER; /* LCOV_EXCL_LINE */
 	}
 
 	chr->write_type = write_type;
@@ -1737,8 +1788,8 @@ int bt_gatt_characteristic_set_write_type(bt_gatt_h characteristic,
 	return BT_ERROR_NONE;
 }
 
-int bt_gatt_characteristic_get_descriptor(bt_gatt_h characteristic, const char *uuid,
-						bt_gatt_h *descriptor)
+int bt_gatt_characteristic_get_descriptor(bt_gatt_h characteristic,
+				const char *uuid, bt_gatt_h *descriptor)
 {
 	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)characteristic;
 	bt_gatt_h gatt_handle = NULL;
@@ -1748,7 +1799,7 @@ int bt_gatt_characteristic_get_descriptor(bt_gatt_h characteristic, const char *
 	BT_CHECK_INIT_STATUS();
 
 	BT_CHECK_INPUT_PARAMETER(characteristic);
-	BT_CHECK_INPUT_PARAMETER(uuid); //LCOV_EXCL_START
+	BT_CHECK_INPUT_PARAMETER(uuid); /* LCOV_EXCL_START */
 	BT_CHECK_INPUT_PARAMETER(descriptor);
 
 	ret = __get_gatt_handle_by_uuid(chr->descriptors, uuid, &gatt_handle);
@@ -1758,11 +1809,11 @@ int bt_gatt_characteristic_get_descriptor(bt_gatt_h characteristic, const char *
 	}
 
 	BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
-	return ret; //LCOV_EXCL_STOP
+	return ret; /* LCOV_EXCL_STOP */
 }
 
 int bt_gatt_characteristic_foreach_descriptors(bt_gatt_h characteristic,
-					bt_gatt_foreach_cb callback, void *user_data)
+				bt_gatt_foreach_cb callback, void *user_data)
 {
 	GSList *l;
 	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)characteristic;
@@ -1773,7 +1824,7 @@ int bt_gatt_characteristic_foreach_descriptors(bt_gatt_h characteristic,
 	BT_CHECK_INIT_STATUS();
 
 	BT_CHECK_INPUT_PARAMETER(characteristic);
-	BT_CHECK_INPUT_PARAMETER(callback); //LCOV_EXCL_START
+	BT_CHECK_INPUT_PARAMETER(callback); /* LCOV_EXCL_START */
 
 	if (chr->type != BT_GATT_TYPE_CHARACTERISTIC) {
 		BT_ERR("Wrong type of GATT handle : %d", chr->type);
@@ -1785,12 +1836,12 @@ int bt_gatt_characteristic_foreach_descriptors(bt_gatt_h characteristic,
 	i = 1;
 	for (l = chr->descriptors; l; l = g_slist_next(l)) {
 		if (!callback(total, i++, (bt_gatt_h)l->data, user_data))
-			break; //LCOV_EXCL_STOP
+			break; /* LCOV_EXCL_STOP */
 	}
 
 	return BT_ERROR_NONE;
 }
-//LCOV_EXCL_START
+/* LCOV_EXCL_START */
 int bt_gatt_descriptor_create(const char *uuid, int permissions,
 				const char *value, int value_length,
 				bt_gatt_h *descriptor)
@@ -1843,8 +1894,9 @@ fail:
 
 	return ret;
 }
-//LCOV_EXCL_STOP
-int bt_gatt_descriptor_get_characteristic(bt_gatt_h descriptor, bt_gatt_h *characteristic)
+/* LCOV_EXCL_STOP */
+int bt_gatt_descriptor_get_characteristic(bt_gatt_h descriptor,
+					bt_gatt_h *characteristic)
 {
 	bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s *)descriptor;
 
@@ -1858,7 +1910,7 @@ int bt_gatt_descriptor_get_characteristic(bt_gatt_h descriptor, bt_gatt_h *chara
 
 	return BT_ERROR_NONE;
 }
-//LCOV_EXCL_START
+/* LCOV_EXCL_START */
 int bt_gatt_server_initialize(void)
 {
 	BT_CHECK_INIT_STATUS();
@@ -1893,7 +1945,8 @@ int bt_gatt_server_deinitialize(void)
 		GSList *l;
 		for (l = gatt_server_list; l; l = g_slist_next(l)) {
 			bt_gatt_server_s *serv = l->data;
-			g_slist_free_full(serv->services, __bt_gatt_free_service);
+			g_slist_free_full(serv->services,
+					__bt_gatt_free_service);
 			g_free(serv);
 		}
 		g_slist_free(gatt_server_list);
@@ -1936,7 +1989,7 @@ int bt_gatt_server_create(bt_gatt_server_h *server)
 
 int bt_gatt_server_destroy(bt_gatt_server_h server)
 {
-	bt_gatt_server_s *serv = (bt_gatt_server_s*)server;
+	bt_gatt_server_s *serv = (bt_gatt_server_s *)server;
 
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(server);
@@ -1952,7 +2005,7 @@ int bt_gatt_server_set_read_value_requested_cb(bt_gatt_h gatt_handle,
 				bt_gatt_server_read_value_requested_cb callback,
 				void *user_data)
 {
-	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s*)gatt_handle;
+	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)gatt_handle;
 
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_GATT_SERVER_INIT_STATUS();
@@ -1968,10 +2021,10 @@ int bt_gatt_server_set_read_value_requested_cb(bt_gatt_h gatt_handle,
 }
 
 int bt_gatt_server_set_notification_state_change_cb(bt_gatt_h gatt_handle,
-				bt_gatt_server_notification_state_change_cb callback,
-				void *user_data)
+			bt_gatt_server_notification_state_change_cb callback,
+			void *user_data)
 {
-	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s*)gatt_handle;
+	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)gatt_handle;
 
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_GATT_SERVER_INIT_STATUS();
@@ -1987,8 +2040,8 @@ int bt_gatt_server_set_notification_state_change_cb(bt_gatt_h gatt_handle,
 int bt_gatt_server_register_service(bt_gatt_server_h server, bt_gatt_h service)
 {
 	int ret = BT_ERROR_NONE;
-	bt_gatt_server_s *serv = (bt_gatt_server_s*)server;
-	bt_gatt_service_s *svc = (bt_gatt_service_s*)service;
+	bt_gatt_server_s *serv = (bt_gatt_server_s *)server;
+	bt_gatt_service_s *svc = (bt_gatt_service_s *)service;
 	GSList *char_l;
 
 	BT_CHECK_INIT_STATUS();
@@ -2001,7 +2054,8 @@ int bt_gatt_server_register_service(bt_gatt_server_h server, bt_gatt_h service)
 		return BT_ERROR_ALREADY_DONE;
 	}
 
-	ret = _bt_get_error_code(bluetooth_gatt_add_service(svc->uuid, &svc->path));
+	ret = _bt_get_error_code(bluetooth_gatt_add_service(svc->uuid,
+							&svc->path));
 
 	if (ret != BT_ERROR_NONE) {
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
@@ -2012,35 +2066,43 @@ int bt_gatt_server_register_service(bt_gatt_server_h server, bt_gatt_h service)
 		GSList *desc_l;
 		bt_gatt_characteristic_s *chr = char_l->data;
 
-		ret = _bt_get_error_code(bluetooth_gatt_add_new_characteristic(svc->path, chr->uuid,
-									(bt_gatt_characteristic_property_t)chr->properties, &chr->path));
+		ret = _bt_get_error_code(bluetooth_gatt_add_new_characteristic(svc->path,
+					chr->uuid,
+					(bt_gatt_characteristic_property_t)chr->properties,
+					&chr->path));
 		if (ret != BT_ERROR_NONE) {
-			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+			BT_ERR("%s(0x%08x)",
+				_bt_convert_error_to_string(ret), ret);
 			goto fail;
 		}
 
 		ret = _bt_get_error_code(bluetooth_gatt_set_characteristic_value(chr->path,
-									chr->value, chr->value_length));
+					chr->value, chr->value_length));
 
 		if (ret != BT_ERROR_NONE) {
-			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+			BT_ERR("%s(0x%08x)",
+				_bt_convert_error_to_string(ret), ret);
 			goto fail;
 		}
 
 		for (desc_l = chr->descriptors; desc_l; desc_l = g_slist_next(desc_l)) {
 			bt_gatt_descriptor_s *desc = desc_l->data;
 
-			ret = _bt_get_error_code(bluetooth_gatt_add_descriptor(chr->path, desc->uuid, &desc->path));
+			ret = _bt_get_error_code(bluetooth_gatt_add_descriptor(chr->path,
+						desc->uuid, &desc->path));
 
 			if (ret != BT_ERROR_NONE) {
-				BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+				BT_ERR("%s(0x%08x)",
+					_bt_convert_error_to_string(ret), ret);
 				goto fail;
 			}
 
-			ret = _bt_get_error_code(bluetooth_gatt_set_descriptor_value(desc->path, desc->value, desc->value_length));
+			ret = _bt_get_error_code(bluetooth_gatt_set_descriptor_value(desc->path,
+					desc->value, desc->value_length));
 
 			if (ret != BT_ERROR_NONE) {
-				BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+				BT_ERR("%s(0x%08x)",
+					_bt_convert_error_to_string(ret), ret);
 				goto fail;
 			}
 		}
@@ -2064,10 +2126,11 @@ fail:
 	return ret;
 }
 
-int bt_gatt_server_unregister_service(bt_gatt_server_h server, bt_gatt_h service)
+int bt_gatt_server_unregister_service(bt_gatt_server_h server,
+					bt_gatt_h service)
 {
-	bt_gatt_server_s *serv = (bt_gatt_server_s*)server;
-	bt_gatt_service_s *svc = (bt_gatt_service_s*)service;
+	bt_gatt_server_s *serv = (bt_gatt_server_s *)server;
+	bt_gatt_service_s *svc = (bt_gatt_service_s *)service;
 
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_GATT_SERVER_INIT_STATUS();
@@ -2086,7 +2149,7 @@ int bt_gatt_server_unregister_service(bt_gatt_server_h server, bt_gatt_h service
 
 int bt_gatt_server_unregister_all_services(bt_gatt_server_h server)
 {
-	bt_gatt_server_s *serv = (bt_gatt_server_s*)server;
+	bt_gatt_server_s *serv = (bt_gatt_server_s *)server;
 
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_GATT_SERVER_INIT_STATUS();
@@ -2112,8 +2175,9 @@ int bt_gatt_server_send_response(int request_id,
 	 * once the new parameters available to CAPI API, the below
 	 * code be made generic for both read and write */
 	ret = _bt_get_error_code(bluetooth_gatt_send_response(request_id,
-				BLUETOOTH_GATT_ATT_REQUEST_TYPE_READ, BT_ERROR_NONE,
-										offset, value, value_length));
+					BLUETOOTH_GATT_ATT_REQUEST_TYPE_READ,
+					BT_ERROR_NONE,
+					offset, value, value_length));
 
 	if (ret != BT_ERROR_NONE) {
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
@@ -2126,8 +2190,8 @@ int bt_gatt_server_notify(bt_gatt_h characteristic, bool need_confirm,
 				bt_gatt_server_notification_sent_cb callback,
 				const char *device_address, void *user_data)
 {
-	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s*)characteristic;
-	bt_gatt_common_s *handle = (bt_gatt_common_s*)characteristic;
+	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)characteristic;
+	bt_gatt_common_s *handle = (bt_gatt_common_s *)characteristic;
 	bluetooth_device_address_t addr_hex = { {0,} };
 	int ret = BT_ERROR_NONE;
 
@@ -2140,14 +2204,20 @@ int bt_gatt_server_notify(bt_gatt_h characteristic, bool need_confirm,
 
 	if (chr->value_length > 0 && chr->value) {
 		if (handle->role == BT_GATT_ROLE_SERVER && handle->path) {
-			ret = bluetooth_gatt_server_set_notification(handle->path, &addr_hex);
+			ret = bluetooth_gatt_server_set_notification(handle->path,
+								&addr_hex);
 			if (ret != BT_ERROR_NONE) {
-				BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+				BT_ERR("%s(0x%08x)",
+					_bt_convert_error_to_string(ret), ret);
 				return ret;
 			}
-			ret = _bt_get_error_code(bluetooth_gatt_update_characteristic(handle->path, chr->value, chr->value_length));
+			ret = _bt_get_error_code(bluetooth_gatt_update_characteristic(
+							handle->path,
+							chr->value,
+							chr->value_length));
 			if (ret != BT_ERROR_NONE) {
-				BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+				BT_ERR("%s(0x%08x)",
+					_bt_convert_error_to_string(ret), ret);
 				return ret;
 			}
 		}
@@ -2193,7 +2263,8 @@ int bt_gatt_server_get_service(bt_gatt_server_h server, const char *uuid,
 	BT_CHECK_INPUT_PARAMETER(uuid);
 	BT_CHECK_INPUT_PARAMETER(service);
 
-	ret = __get_gatt_handle_by_uuid(server_s->services, uuid, &gatt_handle);
+	ret = __get_gatt_handle_by_uuid(server_s->services,
+					uuid, &gatt_handle);
 	if (ret == BT_ERROR_NONE && gatt_handle != NULL) {
 		*service = gatt_handle;
 		return BT_ERROR_NONE;
@@ -2226,7 +2297,7 @@ int bt_gatt_server_foreach_services(bt_gatt_server_h server,
 
 	return BT_ERROR_NONE;
 }
-//LCOV_EXCL_STOP
+/* LCOV_EXCL_STOP */
 int bt_gatt_client_create(const char *remote_address, bt_gatt_client_h *client)
 {
 	int ret = BT_ERROR_NONE;
@@ -2235,7 +2306,7 @@ int bt_gatt_client_create(const char *remote_address, bt_gatt_client_h *client)
 
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
-	BT_CHECK_INPUT_PARAMETER(remote_address); //LCOV_EXCL_START
+	BT_CHECK_INPUT_PARAMETER(remote_address); /* LCOV_EXCL_START */
 
 	for (l = gatt_client_list; l; l = g_slist_next(gatt_client_list)) {
 		bt_gatt_client_s *c = (bt_gatt_client_s *)l->data;
@@ -2271,7 +2342,7 @@ int bt_gatt_client_create(const char *remote_address, bt_gatt_client_h *client)
 	if (_bt_gatt_client_update_all(*client) == BT_ERROR_NONE)
 			client_s->services_discovered = true;
 
-	return ret; //LCOV_EXCL_STOP
+	return ret; /* LCOV_EXCL_STOP */
 }
 
 int bt_gatt_client_destroy(bt_gatt_client_h client)
@@ -2280,14 +2351,14 @@ int bt_gatt_client_destroy(bt_gatt_client_h client)
 
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
-	BT_CHECK_INPUT_PARAMETER(client); //LCOV_EXCL_START
+	BT_CHECK_INPUT_PARAMETER(client); /* LCOV_EXCL_START */
 
 	g_free(client_s->remote_address);
 	g_slist_free_full(client_s->services, __bt_gatt_free_service);
 	gatt_client_list = g_slist_remove(gatt_client_list, client_s);
 	g_free(client_s);
 
-	return BT_ERROR_NONE; //LCOV_EXCL_STOP
+	return BT_ERROR_NONE; /* LCOV_EXCL_STOP */
 }
 
 int bt_gatt_client_get_remote_address(bt_gatt_client_h client,
@@ -2297,7 +2368,7 @@ int bt_gatt_client_get_remote_address(bt_gatt_client_h client,
 
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
-	BT_CHECK_INPUT_PARAMETER(client); //LCOV_EXCL_START
+	BT_CHECK_INPUT_PARAMETER(client); /* LCOV_EXCL_START */
 	BT_CHECK_INPUT_PARAMETER(remote_address);
 
 	*remote_address = g_strdup(client_s->remote_address);
@@ -2315,7 +2386,7 @@ static bool __bt_gatt_client_is_in_progress(void)
 		return true;
 	}
 
-	return false; //LCOV_EXCL_STOP
+	return false; /* LCOV_EXCL_STOP */
 }
 
 int bt_gatt_client_read_value(bt_gatt_h gatt_handle,
@@ -2328,7 +2399,7 @@ int bt_gatt_client_read_value(bt_gatt_h gatt_handle,
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(gatt_handle);
-	BT_CHECK_INPUT_PARAMETER(callback); //LCOV_EXCL_START
+	BT_CHECK_INPUT_PARAMETER(callback); /* LCOV_EXCL_START */
 
 	if (__bt_gatt_client_is_in_progress()) {
 		BT_ERR("Operation is in progress");
@@ -2347,29 +2418,35 @@ int bt_gatt_client_read_value(bt_gatt_h gatt_handle,
 	if (c->type == BT_GATT_TYPE_CHARACTERISTIC) {
 		bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)gatt_handle;
 
-		ret = _bt_get_error_code(bluetooth_gatt_read_characteristic_value(chr->path));
+		ret = _bt_get_error_code(
+			bluetooth_gatt_read_characteristic_value(chr->path));
 		if (ret != BT_ERROR_NONE) {
 			g_free(cb_data);
-			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+			BT_ERR("%s(0x%08x)",
+				_bt_convert_error_to_string(ret), ret);
 		} else {
-			_bt_set_cb(BT_EVENT_GATT_CLIENT_READ_CHARACTERISTIC, callback, cb_data);
+			_bt_set_cb(BT_EVENT_GATT_CLIENT_READ_CHARACTERISTIC,
+							callback, cb_data);
 		}
 	} else if (c->type == BT_GATT_TYPE_DESCRIPTOR) {
 		bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s *)gatt_handle;
 
-		ret = _bt_get_error_code(bluetooth_gatt_read_descriptor_value(desc->path));
+		ret = _bt_get_error_code(
+			bluetooth_gatt_read_descriptor_value(desc->path));
 		if (ret != BT_ERROR_NONE) {
 			g_free(cb_data);
-			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+			BT_ERR("%s(0x%08x)",
+				_bt_convert_error_to_string(ret), ret);
 		} else {
-			_bt_set_cb(BT_EVENT_GATT_CLIENT_READ_DESCRIPTOR, callback, cb_data);
+			_bt_set_cb(BT_EVENT_GATT_CLIENT_READ_DESCRIPTOR,
+							callback, cb_data);
 		}
 	} else {
 		BT_ERR("Invalid handle type for read ");
 		g_free(cb_data);
 	}
 
-	return ret; //LCOV_EXCL_STOP
+	return ret; /* LCOV_EXCL_STOP */
 }
 
 int bt_gatt_client_write_value(bt_gatt_h gatt_handle,
@@ -2382,7 +2459,7 @@ int bt_gatt_client_write_value(bt_gatt_h gatt_handle,
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(gatt_handle);
-	BT_CHECK_INPUT_PARAMETER(callback); //LCOV_EXCL_START
+	BT_CHECK_INPUT_PARAMETER(callback); /* LCOV_EXCL_START */
 
 	if (__bt_gatt_client_is_in_progress()) {
 		BT_ERR("Operation is in progress");
@@ -2404,11 +2481,13 @@ int bt_gatt_client_write_value(bt_gatt_h gatt_handle,
 		BT_DBG("path : %s", chr->path);
 		if (chr->write_type == BT_GATT_WRITE_TYPE_WRITE)
 			ret = _bt_get_error_code(bluetooth_gatt_set_characteristics_value_by_type(
-					chr->path, (guint8 *)chr->value, chr->value_length,
+					chr->path, (guint8 *)chr->value,
+					chr->value_length,
 					BT_GATT_PROPERTY_WRITE));
 		else if (chr->write_type == BT_GATT_WRITE_TYPE_WRITE_NO_RESPONSE)
 			ret = _bt_get_error_code(bluetooth_gatt_set_characteristics_value_by_type(
-					chr->path, (guint8 *)chr->value, chr->value_length,
+					chr->path, (guint8 *)chr->value,
+					chr->value_length,
 					BT_GATT_PROPERTY_WRITE_WITHOUT_RESPONSE));
 		else {
 			BT_ERR("Unknow write type : %d", chr->write_type);
@@ -2419,18 +2498,23 @@ int bt_gatt_client_write_value(bt_gatt_h gatt_handle,
 			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
 		} else {
 			if (chr->write_type != BT_GATT_WRITE_TYPE_WRITE_NO_RESPONSE)
-				_bt_set_cb(BT_EVENT_GATT_CLIENT_WRITE_CHARACTERISTIC, callback, cb_data);
+				_bt_set_cb(BT_EVENT_GATT_CLIENT_WRITE_CHARACTERISTIC,
+							callback, cb_data);
 		}
 	} else if (c->type == BT_GATT_TYPE_DESCRIPTOR) {
 		bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s *)gatt_handle;
 
-		ret = _bt_get_error_code(bluetooth_gatt_write_descriptor_value(desc->path,
-						(guint8 *)desc->value, desc->value_length));
+		ret = _bt_get_error_code(bluetooth_gatt_write_descriptor_value(
+						desc->path,
+						(guint8 *)desc->value,
+						desc->value_length));
 		if (ret != BT_ERROR_NONE) {
 			g_free(cb_data);
-			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+			BT_ERR("%s(0x%08x)",
+				_bt_convert_error_to_string(ret), ret);
 		} else {
-			_bt_set_cb(BT_EVENT_GATT_CLIENT_WRITE_DESCRIPTOR, callback, cb_data);
+			_bt_set_cb(BT_EVENT_GATT_CLIENT_WRITE_DESCRIPTOR,
+							 callback, cb_data);
 		}
 	} else {
 		BT_ERR("Invalid handle type for write ");
@@ -2522,7 +2606,7 @@ static void __value_changed_cb(char *char_path,
 			}
 		}
 	}
-} //LCOV_EXCL_STOP
+} /* LCOV_EXCL_STOP */
 
 int bt_gatt_client_set_characteristic_value_changed_cb(bt_gatt_h characteristic,
 		bt_gatt_client_characteristic_value_changed_cb callback,
@@ -2544,7 +2628,8 @@ int bt_gatt_client_set_characteristic_value_changed_cb(bt_gatt_h characteristic,
 		ret = _bt_get_error_code(bluetooth_gatt_watch_characteristics(
 					chr->path));
 		if (ret != BT_ERROR_NONE)
-			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+			BT_ERR("%s(0x%08x)",
+				_bt_convert_error_to_string(ret), ret);
 		else
 			_bt_set_cb(BT_EVENT_GATT_CLIENT_VALUE_CHANGED,
 					__value_changed_cb, NULL);
@@ -2563,14 +2648,15 @@ int bt_gatt_client_unset_characteristic_value_changed_cb(bt_gatt_h characteristi
 
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
-	BT_CHECK_INPUT_PARAMETER(characteristic); //LCOV_EXCL_START
+	BT_CHECK_INPUT_PARAMETER(characteristic); /* LCOV_EXCL_START */
 
 	if (chr->properties &
 		(BT_GATT_PROPERTY_NOTIFY | BT_GATT_PROPERTY_INDICATE)) {
-		ret = _bt_get_error_code(bluetooth_gatt_unwatch_characteristics(
-					chr->path));
+		ret = _bt_get_error_code(
+			bluetooth_gatt_unwatch_characteristics(chr->path));
 		if (ret != BT_ERROR_NONE)
-			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+			BT_ERR("%s(0x%08x)",
+				_bt_convert_error_to_string(ret), ret);
 		else {
 			chr->value_changed_cb = NULL;
 			chr->value_changed_user_data = NULL;
@@ -2580,7 +2666,7 @@ int bt_gatt_client_unset_characteristic_value_changed_cb(bt_gatt_h characteristi
 		ret = BT_ERROR_NOT_SUPPORTED;
 	}
 
-	return ret; //LCOV_EXCL_STOP
+	return ret; /* LCOV_EXCL_STOP */
 }
 
 int bt_gatt_client_get_service(bt_gatt_client_h client, const char *uuid,
@@ -2607,7 +2693,8 @@ int bt_gatt_client_get_service(bt_gatt_client_h client, const char *uuid,
 }
 
 int bt_gatt_client_foreach_services(bt_gatt_client_h client,
-				    bt_gatt_foreach_cb callback, void *user_data)
+					bt_gatt_foreach_cb callback,
+					void *user_data)
 {
 	bt_gatt_client_s *client_s = (bt_gatt_client_s *)client;
 	GSList *l = NULL;
@@ -2617,12 +2704,13 @@ int bt_gatt_client_foreach_services(bt_gatt_client_h client,
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(client);
-	BT_CHECK_INPUT_PARAMETER(callback); //LCOV_EXCL_LINE
+	BT_CHECK_INPUT_PARAMETER(callback); /* LCOV_EXCL_LINE */
 
-	total = g_slist_length(client_s->services); //LCOV_EXCL_LINE
+	total = g_slist_length(client_s->services); /* LCOV_EXCL_LINE */
 
-	for (l = client_s->services; l; l = g_slist_next(l)) { //LCOV_EXCL_LINE
-		if (!callback(total, index++, (bt_gatt_h)l->data, user_data)) //LCOV_EXCL_LINE
+	for (l = client_s->services; l; l = g_slist_next(l)) { /* LCOV_EXCL_LINE */
+		if (!callback(total, index++,
+			(bt_gatt_h)l->data, user_data)) /* LCOV_EXCL_LINE */
 			break;
 	}
 
