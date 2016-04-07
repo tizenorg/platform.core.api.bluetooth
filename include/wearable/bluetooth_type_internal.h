@@ -70,8 +70,7 @@ extern "C"
  * @brief  Enumerations of the Bluetooth adapter le state.
  * @since_tizen 2.3.1
  */
-typedef enum
-{
+typedef enum {
 	BT_ADAPTER_LE_DISABLED = 0x00, /**< Bluetooth le is disabled */
 	BT_ADAPTER_LE_ENABLED, /**< Bluetooth le is enabled */
 } bt_adapter_le_state_e;
@@ -161,8 +160,7 @@ typedef void (*bt_opp_server_push_requested_cb)(const char *file, int size, void
  * @brief  Enumerations of the Bluetooth adapter le scan type.
  * @since_tizen 2.3
  */
-typedef enum
-{
+typedef enum {
 	BT_ADAPTER_LE_PASSIVE_SCAN = 0x00,
 	BT_ADAPTER_LE_ACTIVE_SCAN
 } bt_adapter_le_scan_type_e;
@@ -172,8 +170,7 @@ typedef enum
  * @brief  Enumerations of the Bluetooth le scan mode.
  * @since_tizen 2.3
  */
-typedef enum
-{
+typedef enum {
 	BT_ADAPTER_LE_SCAN_MODE_BALANCED,
 	BT_ADAPTER_LE_SCAN_MODE_LOW_LATENCY,
 	BT_ADAPTER_LE_SCAN_MODE_LOW_ENERGY
@@ -239,8 +236,7 @@ typedef enum {
  * @brief  Enumerations of Addressbook memory for PBAP.
  * @since_tizen 2.3
  */
-typedef enum
-{
+typedef enum {
 	BT_PBAP_PHONE = 0x00, /**< Request for Addressbook from Phone*/
 	BT_PBAP_SIM , /**< Request for Addressbook from SIM*/
 } bt_pbap_addressbook_source_e;
@@ -250,8 +246,7 @@ typedef enum
  * @brief  Enumerations of Folder type.
  * @since_tizen 2.3
  */
-typedef enum
-{
+typedef enum {
 	BT_PBAP_PHONEBOOK = 0x00, /**< Request for Addressbook*/
 	BT_PBAP_INCOMING , /**< Request for Incoming Calls*/
 	BT_PBAP_OUTGOING , /**< Request for Outgoing Calls*/
@@ -264,8 +259,7 @@ typedef enum
  * @brief  Enumerations of Phonebook Search field.
  * @since_tizen 2.3
  */
-typedef enum
-{
+typedef enum {
 	BT_PBAP_SEARCH_NAME = 0x00, /**< Request for Search by name (default)*/
 	BT_PBAP_SEARCH_NUMBER, /**< Request for Search by phone number*/
 	BT_PBAP_SEARCH_SOUND, /**< Request for Search by sound*/
@@ -276,8 +270,7 @@ typedef enum
  * @brief  Enumerations of vCard Formats.
  * @since_tizen 2.3
  */
-typedef enum
-{
+typedef enum {
 	BT_PBAP_APP_PARAM_VCARD21 = 0x00, /**< vCard Format 2.1 (default)*/
 	BT_PBAP_APP_PARAM_VCARD30, /**< vCard Format 3.0*/
 } bt_pbap_filter_vcard_format_e;
@@ -287,8 +280,7 @@ typedef enum
  * @brief  Enumerations of Sorting Orders.
  * @since_tizen 2.3
  */
-typedef enum
-{
+typedef enum {
 	BT_PBAP_APP_PARAM_ORDER_INDEXED = 0x00, /**< Filter Order Indexed (default)*/
 	BT_PBAP_APP_PARAM_ORDER_ALPHANUMERIC, /**< Filter Order Alphanumeric*/
 	BT_PBAP_APP_PARAM_ORDER_PHONETIC, /**< Filter Order Phonetic*/
@@ -588,14 +580,14 @@ typedef enum {
  * @brief The handle to control Bluetooth LE scan filter
  * @since_tizen 2.4
  */
-typedef void* bt_scan_filter_h;
+typedef void *bt_scan_filter_h;
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
  * @brief The handle of a GATT server
  * @since_tizen 2.4
  */
-typedef void* bt_gatt_server_h;
+typedef void *bt_gatt_server_h;
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
@@ -680,8 +672,7 @@ typedef void (*bt_gatt_server_notification_sent_cb) (int result,
  * @brief Device LE connection update structure.
  * @since_tizen 2.3.1
  */
-typedef struct
-{
+typedef struct {
        unsigned int interval_min;   /**< Minimum value for the connection event interval (msec) */
        unsigned int interval_max;   /**< Maximum value for the connection event interval (msec) */
        unsigned int latency;   /**< Slave latency (msec) */
@@ -696,4 +687,4 @@ typedef struct
 }
 #endif /* __cplusplus */
 
-#endif // __TIZEN_NETWORK_BLUETOOTH_TYPE_INTERNAL_H__
+#endif /* __TIZEN_NETWORK_BLUETOOTH_TYPE_INTERNAL_H__ */

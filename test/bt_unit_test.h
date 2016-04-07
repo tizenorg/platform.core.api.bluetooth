@@ -29,8 +29,7 @@ extern "C" {
 #define PRT(format, args...) printf("%s:%d() "format, __FUNCTION__, __LINE__, ##args)
 #define TC_PRT(format, args...) PRT(format"\n", ##args)
 
-typedef enum
-{
+typedef enum {
 	BT_UNIT_TEST_TABLE_MAIN = 1,
 	BT_UNIT_TEST_TABLE_SET_ADDRESS,
 	BT_UNIT_TEST_TABLE_ADAPTER,
@@ -55,8 +54,7 @@ typedef enum
 	BT_UNIT_TEST_TABLE_FINISH = 0xFF,
 } bt_unit_test_table_e;
 
-typedef enum
-{
+typedef enum {
 	BT_UNIT_TEST_FUNCTION_BACK = 0,
 	BT_UNIT_TEST_FUNCTION_SET_ADDRESS = 0,
 	BT_UNIT_TEST_FUNCTION_INITIALIZE = 1,

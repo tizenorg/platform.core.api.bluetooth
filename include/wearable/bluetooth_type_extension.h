@@ -52,4 +52,4 @@ typedef void (*bt_ag_sco_state_changed_cb) (int result, bool opened, void *user_
 }
 #endif /* __cplusplus */
 
-#endif // __TIZEN_NETWORK_BLUETOOTH_TYPE_EXTENSION_H__
+#endif /* __TIZEN_NETWORK_BLUETOOTH_TYPE_EXTENSION_H__ */

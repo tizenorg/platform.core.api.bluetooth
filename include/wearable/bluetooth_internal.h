@@ -2183,7 +2183,7 @@ int bt_pbap_connect(const char *address, bt_pbap_enabled_cb callback, void *user
  * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
  *
  * @pre The state of local Bluetooth must be #BT_ADAPTER_ENABLED.
- * 	PBAP client must be initialized with bt_pbap_init()
+ *	PBAP client must be initialized with bt_pbap_init()
  *	PBAP connection must be created with bt_pbap_connect().
  *
  * @see bt_pbap_connect()
@@ -3637,7 +3637,7 @@ int bt_device_le_conn_update(const char *device_address,
  * @see bt_initialize()
  * @see bt_hid_device_deactivate()
  */
-int bt_hid_device_activate(bt_hid_device_connection_state_changed_cb callback, void * user_data);
+int bt_hid_device_activate(bt_hid_device_connection_state_changed_cb callback, void *user_data);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_HID_MODULE
@@ -3817,4 +3817,4 @@ int bt_hid_device_reply_to_report(const char *remote_address,
 }
 #endif /* __cplusplus */
 
-#endif // __TIZEN_NETWORK_BLUETOOTH_INTERNAL_H__
+#endif /* __TIZEN_NETWORK_BLUETOOTH_INTERNAL_H__ */

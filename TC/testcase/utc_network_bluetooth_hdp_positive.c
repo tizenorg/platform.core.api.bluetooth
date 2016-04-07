@@ -47,17 +47,15 @@ static void utc_network_bluetooth_hdp_set_data_received_cb_p(void);
 static void utc_network_bluetooth_hdp_unset_data_received_cb_p(void);
 
 void data_received_cb_for_hdp_p(unsigned int channel, const char *data,
-					unsigned int size, void *user_data);
+		unsigned int size, void *user_data);
 void connected_cb_for_hdp_p(int result, const char *remote_address,
-					const char *app_id,
-					bt_hdp_channel_type_e type, unsigned int channel, void *user_data);
+		const char *app_id,
+		bt_hdp_channel_type_e type, unsigned int channel, void *user_data);
 void disconnected_cb_for_hdp_p(int result, const char *remote_address,
-					unsigned int channel, void *user_data);
-
-
+		unsigned int channel, void *user_data);
 
 void adapter_state_changed_cb_for_hdp_p(int result,
-							bt_adapter_state_e adapter_state, void *user_data);
+		bt_adapter_state_e adapter_state, void *user_data);
 gboolean timeout_func(gpointer data);
 
 struct tet_testlist tet_testlist[] = {
@@ -73,7 +71,6 @@ struct tet_testlist tet_testlist[] = {
 	{NULL, 0},
 };
 
-
 static void startup(void)
 {
 	int ret = BT_ERROR_NONE;
@@ -83,7 +80,9 @@ static void startup(void)
 	mainloop = g_main_loop_new(NULL, FALSE);
 
 	bt_initialize();
-	if (bt_adapter_set_state_changed_cb(adapter_state_changed_cb_for_hdp_p, "startup") != BT_ERROR_NONE) {
+	if (bt_adapter_set_state_changed_cb(
+			adapter_state_changed_cb_for_hdp_p,
+			"startup") != BT_ERROR_NONE) {
 		tet_printf("DTS may fail because bt_adapter_set_state_changed_cb() failed");
 	}
 
@@ -91,7 +90,8 @@ static void startup(void)
 	ret = bt_adapter_enable();
 	if (ret == BT_ERROR_NONE) {
 		tet_printf("bt_adapter_enable() succeeded.");
-		timeout_id = g_timeout_add(60000, timeout_func, mainloop);
+		timeout_id = g_timeout_add(60000,
+			timeout_func, mainloop);
 		g_main_loop_run(mainloop);
 		g_source_remove(timeout_id);
 	} else if (ret != BT_ERROR_ALREADY_DONE) {
@@ -124,26 +124,29 @@ gboolean timeout_func(gpointer data)
 }
 
 void adapter_state_changed_cb_for_hdp_p(int result,
-					bt_adapter_state_e adapter_state, void *user_data)
+	bt_adapter_state_e adapter_state, void *user_data)
 {
 
 }
 
-void data_received_cb_for_hdp_p(unsigned int channel, const char *data,
-					unsigned int size, void *user_data)
+void data_received_cb_for_hdp_p(unsigned int channel,
+	const char *data, unsigned int size,
+	void *user_data)
 {
 
 }
 
-void connected_cb_for_hdp_p(int result, const char *remote_address,
-					const char *app_id,
-					bt_hdp_channel_type_e type, unsigned int channel, void *user_data)
+void connected_cb_for_hdp_p(int result,
+	const char *remote_address, const char *app_id,
+	bt_hdp_channel_type_e type, unsigned int channel,
+	void *user_data)
 {
 
 }
 
-void disconnected_cb_for_hdp_p(int result, const char *remote_address,
-					unsigned int channel, void *user_data)
+void disconnected_cb_for_hdp_p(int result,
+	const char *remote_address, unsigned int channel,
+	void *user_data)
 {
 
 }
@@ -152,9 +155,11 @@ static void utc_network_bluetooth_hdp_set_data_received_cb_p(void)
 {
 	int ret = BT_ERROR_NONE;
 
-	ret = bt_hdp_set_data_received_cb(data_received_cb_for_hdp_p, NULL);
-	dts_check_eq("bt_hdp_set_data_received_cb", ret, BT_ERROR_NONE,
-					"bt_hdp_set_data_received_cb() failed.");
+	ret = bt_hdp_set_data_received_cb(
+			data_received_cb_for_hdp_p, NULL);
+	dts_check_eq("bt_hdp_set_data_received_cb",
+		ret, BT_ERROR_NONE,
+		"bt_hdp_set_data_received_cb() failed.");
 }
 
 
@@ -163,18 +168,21 @@ static void utc_network_bluetooth_hdp_unset_data_received_cb_p(void)
 	int ret = BT_ERROR_NONE;
 
 	ret = bt_hdp_unset_data_received_cb();
-	dts_check_eq("bt_hdp_unset_data_received_cb", ret, BT_ERROR_NONE,
-					"bt_hdp_unset_data_received_cb() failed.");
+	dts_check_eq("bt_hdp_unset_data_received_cb",
+		ret, BT_ERROR_NONE,
+		"bt_hdp_unset_data_received_cb() failed.");
 }
 
 static void utc_network_bluetooth_hdp_set_connection_state_changed_cb_p(void)
 {
 	int ret = BT_ERROR_NONE;
 
-	ret = bt_hdp_set_connection_state_changed_cb(connected_cb_for_hdp_p,
-				disconnected_cb_for_hdp_p, NULL);
-	dts_check_eq("bt_hdp_set_connection_state_changed_cb", ret, BT_ERROR_NONE,
-				"bt_hdp_set_connection_state_changed_cb() failed.");
+	ret = bt_hdp_set_connection_state_changed_cb(
+			connected_cb_for_hdp_p,
+			disconnected_cb_for_hdp_p, NULL);
+	dts_check_eq("bt_hdp_set_connection_state_changed_cb",
+		ret, BT_ERROR_NONE,
+		"bt_hdp_set_connection_state_changed_cb() failed.");
 }
 
 static void utc_network_bluetooth_hdp_unset_connection_state_changed_cb_p(void)
@@ -182,7 +190,8 @@ static void utc_network_bluetooth_hdp_unset_connection_state_changed_cb_p(void)
 	int ret = BT_ERROR_NONE;
 
 	ret = bt_hdp_unset_connection_state_changed_cb();
-	dts_check_eq("bt_hdp_unset_connection_state_changed_cb", ret, BT_ERROR_NONE,
+	dts_check_eq("bt_hdp_unset_connection_state_changed_cb",
+		ret, BT_ERROR_NONE,
 		"bt_hdp_unset_connection_state_changed_cb() failed.");
 }
 
@@ -202,8 +211,9 @@ static void utc_network_bluetooth_hdp_disconnect_p(void)
 	char *remote_adr = "00:22:58:07:77:BB";
 
 	ret = bt_hdp_disconnect(remote_adr, 0);
-	dts_check_eq("bt_hdp_disconnect", ret, BT_ERROR_NONE,
-					"bt_hdp_disconnect() failed.");
+	dts_check_eq("bt_hdp_disconnect",
+		ret, BT_ERROR_NONE,
+		"bt_hdp_disconnect() failed.");
 }
 
 static void utc_network_bluetooth_hdp_connect_to_source_p(void)
@@ -211,8 +221,9 @@ static void utc_network_bluetooth_hdp_connect_to_source_p(void)
 	int ret = BT_ERROR_NONE;
 
 	ret = bt_hdp_connect_to_source(remote_adr, appid);
-	dts_check_eq("bt_hdp_connect_to_source", ret, BT_ERROR_NONE,
-				"bt_hdp_connect_to_source() failed.");
+	dts_check_eq("bt_hdp_connect_to_source",
+		ret, BT_ERROR_NONE,
+		"bt_hdp_connect_to_source() failed.");
 
 }
 
@@ -221,8 +232,9 @@ static void utc_network_bluetooth_hdp_unregister_sink_app_p(void)
 	int ret = BT_ERROR_NONE;
 
 	ret = bt_hdp_unregister_sink_app(appid);
-	dts_check_eq("bt_hdp_unregister_sink_app", ret, BT_ERROR_NONE,
-					"bt_hdp_unregister_sink_app() failed.");
+	dts_check_eq("bt_hdp_unregister_sink_app",
+		ret, BT_ERROR_NONE,
+		"bt_hdp_unregister_sink_app() failed.");
 
 }
 
@@ -231,12 +243,9 @@ static void utc_network_bluetooth_hdp_register_sink_app_p(void)
 	int ret = BT_ERROR_NONE;
 
 	ret = bt_hdp_register_sink_app(1, &appid);
-	dts_check_eq("bt_hdp_register_sink_app", ret, BT_ERROR_NONE,
-					"bt_hdp_register_sink_app() failed.");
+	dts_check_eq("bt_hdp_register_sink_app",
+		ret, BT_ERROR_NONE,
+		"bt_hdp_register_sink_app() failed.");
 
 }
-
-
-
-
 

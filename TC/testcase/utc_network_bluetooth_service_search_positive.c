@@ -106,7 +106,7 @@ static void startup(void)
 	bt_error_e ret = BT_ERROR_NONE;
 	int timeout_id = 0;
 
-	if(get_value_from_file() == -1) {
+	if (get_value_from_file() == -1) {
 		tet_printf("Failed to read.");
 	}
 
@@ -378,7 +378,7 @@ static void utc_network_bluetooth_service_search_cancel_p(void)
 				"bt_device_start_service_search() succeeded.");
 	}
 
-    ret = bt_device_cancel_service_search();
+	ret = bt_device_cancel_service_search();
 	if (ret == BT_ERROR_NONE) {
 		tet_printf("bt_device_cancel_service_search() succeeded.");
 		tet_printf("service_searched_cb_for_service_search_p() will be called.");

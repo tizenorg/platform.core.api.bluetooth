@@ -45,8 +45,8 @@ static void utc_network_bluetooth_ag_call_list_add_n(void);
 static void utc_network_bluetooth_ag_set_dtmf_transmitted_cb_n(void);
 
 void adapter_state_changed_cb_for_audio_negative(int result,
-						bt_adapter_state_e adapter_state,
-						void *user_data);
+		bt_adapter_state_e adapter_state,
+		void *user_data);
 gboolean timeout_func(gpointer data);
 
 struct tet_testlist tet_testlist[] = {
@@ -87,7 +87,9 @@ static void startup(void)
 	if (bt_audio_initialize() != BT_ERROR_NONE)
 		tet_printf("bt_audio_initialize failed");
 
-	if (bt_adapter_set_state_changed_cb(adapter_state_changed_cb_for_audio_negative, "startup") != BT_ERROR_NONE) {
+	if (bt_adapter_set_state_changed_cb(
+		adapter_state_changed_cb_for_audio_negative,
+		"startup") != BT_ERROR_NONE) {
 		tet_printf("DTS may fail because bt_adapter_set_state_changed_cb() failed");
 	}
 
@@ -129,12 +131,14 @@ gboolean timeout_func(gpointer data)
  * @brief Callback funtions
  */
 void adapter_state_changed_cb_for_audio_negative(int result,
-						bt_adapter_state_e adapter_state,
-						void *user_data)
+		bt_adapter_state_e adapter_state,
+		void *user_data)
 {
 	tet_printf("Callback: bt_adapter_state_changed_cb was called.");
-	if (user_data != NULL && !strcmp((char *)user_data, "startup")) {
-		if (adapter_state == BT_ADAPTER_DISABLED && result == BT_ERROR_NONE) {
+	if (user_data != NULL &&
+			!strcmp((char *)user_data, "startup")) {
+		if (adapter_state == BT_ADAPTER_DISABLED &&
+				result == BT_ERROR_NONE) {
 			tet_printf("Callback: BT was disabled. DTS will be started.");
 		} else {
 			tet_printf("Callback: BT was not disabled. DTS will be started but DTS may fail.");
@@ -153,9 +157,10 @@ static void utc_network_bluetooth_audio_connect_n(void)
 {
 	int ret = BT_ERROR_NONE;
 
-	ret = bt_audio_connect(NULL, BT_AUDIO_PROFILE_TYPE_HSP_HFP);
+	ret = bt_audio_connect(NULL,
+			BT_AUDIO_PROFILE_TYPE_HSP_HFP);
 	dts_check_eq("bt_audio_connect", ret,
-			BT_ERROR_INVALID_PARAMETER, "bt_audio_connect() failed.");
+		BT_ERROR_INVALID_PARAMETER, "bt_audio_connect() failed.");
 }
 
 /**
@@ -376,8 +381,10 @@ static void utc_network_bluetooth_ag_call_list_add_n(void)
 	unsigned int call_id = 0;
 	const char *phone_number = "9663868998";
 
-	ret = bt_call_list_add(NULL, call_id, BT_AG_CALL_STATE_INCOMING, phone_number);
-	dts_check_eq("bt_call_list_add", ret, BT_ERROR_INVALID_PARAMETER,
+	ret = bt_call_list_add(NULL, call_id,
+			BT_AG_CALL_STATE_INCOMING, phone_number);
+	dts_check_eq("bt_call_list_add", ret,
+			BT_ERROR_INVALID_PARAMETER,
 			"bt_call_list_add() failed.");
 
 }

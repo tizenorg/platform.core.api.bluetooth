@@ -57,17 +57,19 @@ static void utc_network_bluetooth_socket_unset_connection_state_changed_cb_p(voi
 
 gboolean timeout_func(gpointer data);
 void adapter_state_changed_cb_for_socket_p(int result,
-						bt_adapter_state_e adapter_state, void *user_data);
+		bt_adapter_state_e adapter_state, void *user_data);
 void device_discovery_state_changed_cb_for_socket_p(int result,
-						bt_adapter_device_discovery_state_e discovery_state,
-		bt_adapter_device_discovery_info_s *discovery_info, void *user_data);
+		bt_adapter_device_discovery_state_e discovery_state,
+		bt_adapter_device_discovery_info_s *discovery_info,
+		void *user_data);
 void device_bonded_cb_for_socket_p(int result, bt_device_info_s *device_info,
-						void *user_data);
+		void *user_data);
 void socket_data_received_cb_for_socket_p(bt_socket_received_data_s *data,
-						void *user_data);
+		void *user_data);
 void socket_connection_state_changed_cb_for_socket_p(int result,
-						bt_socket_connection_state_e connection_state,
-						bt_socket_connection_s *connection, void *user_data);
+		bt_socket_connection_state_e connection_state,
+		bt_socket_connection_s *connection,
+		void *user_data);
 void device_unbonded_cb(int result, char *remote_address, void *user_data);
 
 struct tet_testlist tet_testlist[] = {
@@ -126,7 +128,7 @@ static void startup(void)
 	bt_error_e ret = BT_ERROR_NONE;
 	int timeout_id = 0;
 
-	if(get_value_from_file() == -1) {
+	if (get_value_from_file() == -1) {
 		tet_printf("Failed to read.");
 	}
 
@@ -139,15 +141,21 @@ static void startup(void)
 
 	bt_initialize();
 
-	if (bt_adapter_set_state_changed_cb(adapter_state_changed_cb_for_socket_p, "startup") != BT_ERROR_NONE) {
+	if (bt_adapter_set_state_changed_cb(
+		adapter_state_changed_cb_for_socket_p,
+		"startup") != BT_ERROR_NONE) {
 		tet_printf("bt_adapter_set_state_changed_cb() failed.");
 	}
 
-	if (bt_adapter_set_device_discovery_state_changed_cb(device_discovery_state_changed_cb_for_socket_p, "startup") != BT_ERROR_NONE) {
+	if (bt_adapter_set_device_discovery_state_changed_cb(
+		device_discovery_state_changed_cb_for_socket_p,
+		"startup") != BT_ERROR_NONE) {
 		tet_printf("bt_adapter_set_device_discovery_state_changed_cb() failed.");
 	}
 
-	if (bt_device_set_bond_created_cb(device_bonded_cb_for_socket_p, "startup") != BT_ERROR_NONE) {
+	if (bt_device_set_bond_created_cb(
+		device_bonded_cb_for_socket_p,
+		"startup") != BT_ERROR_NONE) {
 		tet_printf("bt_device_set_bond_created_cb() failed.");
 	}
 
@@ -181,7 +189,8 @@ static void startup(void)
 		tet_printf("DTS may fail because bt_adapter_enable() failed.");
 	}
 
-	if (discovery_result == true && bt_device_create_bond(target_address) == BT_ERROR_NONE) {
+	if (discovery_result == true &&
+		bt_device_create_bond(target_address) == BT_ERROR_NONE) {
 		tet_printf("bt_device_create_bond() succeeded.");
 		timeout_id = g_timeout_add(60000, timeout_func, mainloop);
 		g_main_loop_run(mainloop);
@@ -210,7 +219,8 @@ static void cleanup(void)
 	int timeout_id = 0;
 
 	/* Destroy a bond */
-	bt_device_set_bond_destroyed_cb(device_unbonded_cb, NULL);
+	bt_device_set_bond_destroyed_cb(
+		device_unbonded_cb, NULL);
 	if (bt_device_destroy_bond(target_address) == BT_ERROR_NONE) {
 		timeout_id = g_timeout_add(60000, timeout_func, mainloop);
 		g_main_loop_run(mainloop);
@@ -231,7 +241,8 @@ gboolean timeout_func(gpointer data)
 /**
  * @brief Callback funtions
  */
-void device_unbonded_cb(int result, char *remote_address, void *user_data)
+void device_unbonded_cb(int result,
+	char *remote_address, void *user_data)
 {
 	tet_printf("Callback: bt_device_bond_destroyed_cb() was called.");
 
@@ -242,10 +253,12 @@ void device_unbonded_cb(int result, char *remote_address, void *user_data)
 }
 
 void adapter_state_changed_cb_for_socket_p(int result,
-					bt_adapter_state_e adapter_state, void *user_data)
+	bt_adapter_state_e adapter_state, void *user_data)
 {
-	if (user_data != NULL && !strcmp((char *)user_data, "startup")) {
-		if (adapter_state == BT_ADAPTER_ENABLED && result == BT_ERROR_NONE) {
+	if (user_data != NULL &&
+			!strcmp((char *)user_data, "startup")) {
+		if (adapter_state == BT_ADAPTER_ENABLED &&
+				result == BT_ERROR_NONE) {
 			tet_printf("Callback: BT was enabled.");
 			bt_adapter_start_device_discovery();
 		} else {
@@ -258,23 +271,29 @@ void adapter_state_changed_cb_for_socket_p(int result,
 }
 
 void device_discovery_state_changed_cb_for_socket_p(int result,
-			bt_adapter_device_discovery_state_e discovery_state,
-			bt_adapter_device_discovery_info_s *discovery_info, void *user_data)
+	bt_adapter_device_discovery_state_e discovery_state,
+	bt_adapter_device_discovery_info_s *discovery_info,
+	void *user_data)
 {
 	tet_printf("Callback: bt_adapter_device_discovery_state_changed_cb() was called");
-	if (user_data != NULL && !strcmp((char *)user_data, "startup")) {
+	if (user_data != NULL &&
+		!strcmp((char *)user_data, "startup")) {
 		if (discovery_state == BT_ADAPTER_DEVICE_DISCOVERY_FINISHED) {
 			tet_printf("Callback: Device discovery finished. DTS will be started.");
 			if (mainloop) {
 				g_main_loop_quit(mainloop);
 			}
 		} else if (discovery_state == BT_ADAPTER_DEVICE_DISCOVERY_FOUND) {
-			tet_printf("Callback: Devices were founded (%s)", discovery_info->remote_name);
-			if (discovery_info->remote_name != NULL && !strcmp(discovery_info->remote_name, target_name)) {
+			tet_printf("Callback: Devices were founded (%s)",
+				discovery_info->remote_name);
+			if (discovery_info->remote_name != NULL &&
+				!strcmp(discovery_info->remote_name, target_name)) {
 				discovery_result = true;
 				tet_printf("Callback: dts_test device was found.");
-				strncpy(target_address, discovery_info->remote_address, 18);
-				tet_printf("Callback: device address: %s", discovery_info->remote_address);
+				strncpy(target_address,
+					discovery_info->remote_address, 18);
+				tet_printf("Callback: device address: %s",
+					discovery_info->remote_address);
 				if (bt_adapter_stop_device_discovery() == BT_ERROR_NONE) {
 					tet_printf("Callback: Device discovery will be stopped");
 				}
@@ -283,9 +302,11 @@ void device_discovery_state_changed_cb_for_socket_p(int result,
 	}
 }
 
-void device_bonded_cb_for_socket_p(int result, bt_device_info_s *device_info, void *user_data)
+void device_bonded_cb_for_socket_p(int result,
+	bt_device_info_s *device_info, void *user_data)
 {
-	if ((user_data != NULL) && !strcmp((char *)user_data, "startup")) {
+	if ((user_data != NULL) &&
+		!strcmp((char *)user_data, "startup")) {
 		if ((device_info->remote_address != NULL) &&
 				!strcmp(device_info->remote_address, target_address)) {
 			if (result == BT_ERROR_NONE) {
@@ -302,14 +323,16 @@ void device_bonded_cb_for_socket_p(int result, bt_device_info_s *device_info, vo
 	}
 }
 
-void socket_data_received_cb_for_socket_p(bt_socket_received_data_s *data,
-					void *user_data)
+void socket_data_received_cb_for_socket_p(
+	bt_socket_received_data_s *data,
+	void *user_data)
 {
 }
 
 void socket_connection_state_changed_cb_for_socket_p(int result,
-				bt_socket_connection_state_e connection_state,
-				bt_socket_connection_s *connection, void *user_data)
+	bt_socket_connection_state_e connection_state,
+	bt_socket_connection_s *connection,
+	void *user_data)
 {
 	tet_printf("Callback: bt_socket_connection_state_changed_cb() was called");
 	if (connection_state == BT_SOCKET_CONNECTED)
@@ -318,7 +341,8 @@ void socket_connection_state_changed_cb_for_socket_p(int result,
 		tet_printf("Callback: Disconnected");
 
 	if (connection_state == BT_SOCKET_CONNECTED) {
-		tet_printf("Callback: [BT_SOCKET_CONNECTED] result = %d", result);
+		tet_printf("Callback: [BT_SOCKET_CONNECTED] result = %d",
+			result);
 		if (result == BT_ERROR_NONE && is_connecting == true) {
 			callback_result = true;
 			socket_fd = connection->socket_fd;
@@ -329,7 +353,8 @@ void socket_connection_state_changed_cb_for_socket_p(int result,
 			}
 		}
 	} else if (connection_state == BT_SOCKET_DISCONNECTED) {
-		tet_printf("Callback: [BT_SOCKET_DISCONNECTED] result = %d", result);
+		tet_printf("Callback: [BT_SOCKET_DISCONNECTED] result = %d",
+			result);
 		if (result == BT_ERROR_NONE && is_connecting == false) {
 			callback_result = true;
 			socket_fd = connection->socket_fd;
@@ -349,9 +374,12 @@ static void utc_network_bluetooth_socket_set_data_received_cb_p(void)
 {
 	int ret = BT_ERROR_NONE;
 
-	ret = bt_socket_set_data_received_cb(socket_data_received_cb_for_socket_p, NULL);
-	dts_check_eq("bt_socket_set_data_received_cb", ret, BT_ERROR_NONE,
-				"bt_socket_set_data_received_cb() failed.");
+	ret = bt_socket_set_data_received_cb(
+			socket_data_received_cb_for_socket_p,
+			NULL);
+	dts_check_eq("bt_socket_set_data_received_cb",
+			ret, BT_ERROR_NONE,
+			"bt_socket_set_data_received_cb() failed.");
 }
 
 /**
@@ -361,10 +389,12 @@ static void utc_network_bluetooth_socket_set_connection_state_changed_cb_p(void)
 {
 	int ret = BT_ERROR_NONE;
 
-	ret = bt_socket_set_connection_state_changed_cb(socket_connection_state_changed_cb_for_socket_p, NULL);
-	dts_check_eq("bt_socket_set_connection_state_changed_cb", ret,
-			BT_ERROR_NONE,
-			"bt_socket_set_connection_state_changed_cb() failed.");
+	ret = bt_socket_set_connection_state_changed_cb(
+			socket_connection_state_changed_cb_for_socket_p,
+			NULL);
+	dts_check_eq("bt_socket_set_connection_state_changed_cb",
+		ret, BT_ERROR_NONE,
+		"bt_socket_set_connection_state_changed_cb() failed.");
 }
 
 /**
@@ -374,9 +404,11 @@ static void utc_network_bluetooth_socket_create_rfcomm_p(void)
 {
 	int ret = BT_ERROR_NONE;
 
-	ret = bt_socket_create_rfcomm(rfcomm_test_uuid_spp, &socket_fd);
-	dts_check_eq("bt_socket_create_rfcomm", ret, BT_ERROR_NONE,
-			"bt_socket_create_rfcomm() failed.");
+	ret = bt_socket_create_rfcomm(
+			rfcomm_test_uuid_spp, &socket_fd);
+	dts_check_eq("bt_socket_create_rfcomm",
+		ret, BT_ERROR_NONE,
+		"bt_socket_create_rfcomm() failed.");
 }
 
 /**
@@ -387,8 +419,9 @@ static void utc_network_bluetooth_socket_listen_and_accept_rfcomm_p(void)
 	int ret = BT_ERROR_NONE;
 
 	ret = bt_socket_listen_and_accept_rfcomm(socket_fd, 1);
-	dts_check_eq("bt_socket_listen_and_accept_rfcomm", ret, BT_ERROR_NONE,
-			"bt_socket_listen_and_accept_rfcomm() failed.");
+	dts_check_eq("bt_socket_listen_and_accept_rfcomm",
+		ret, BT_ERROR_NONE,
+		"bt_socket_listen_and_accept_rfcomm() failed.");
 }
 
 /**
@@ -399,8 +432,9 @@ static void utc_network_bluetooth_socket_destroy_rfcomm_p(void)
 	int ret = BT_ERROR_NONE;
 
 	ret = bt_socket_destroy_rfcomm(socket_fd);
-	dts_check_eq("bt_socket_destroy_rfcomm", ret, BT_ERROR_NONE,
-			"bt_socket_destroy_rfcomm() failed.");
+	dts_check_eq("bt_socket_destroy_rfcomm",
+		ret, BT_ERROR_NONE,
+		"bt_socket_destroy_rfcomm() failed.");
 }
 
 /**
@@ -413,17 +447,20 @@ static void utc_network_bluetooth_socket_connect_rfcomm_p(void)
 
 	is_connecting = true;
 	callback_result = false;
-	ret = bt_socket_connect_rfcomm(target_address, rfcomm_test_uuid_spp);
+	ret = bt_socket_connect_rfcomm(target_address,
+				rfcomm_test_uuid_spp);
 	if (ret == BT_ERROR_NONE) {
-		dts_check_eq("bt_socket_connect_rfcomm", ret, BT_ERROR_NONE,
-						"bt_socket_connect_rfcomm() failed.");
+		dts_check_eq("bt_socket_connect_rfcomm",
+			ret, BT_ERROR_NONE,
+			"bt_socket_connect_rfcomm() failed.");
 		tet_printf("bt_socket_connect_rfcomm() succeeded.");
-		timeout_id = g_timeout_add(60000, timeout_func, mainloop);
+		timeout_id = g_timeout_add(60000,
+						timeout_func, mainloop);
 		g_main_loop_run(mainloop);
 		g_source_remove(timeout_id);
 	} else {
 		dts_fail("bt_socket_connect_rfcomm",
-				"bt_socket_connect_rfcomm() failed");
+			"bt_socket_connect_rfcomm() failed");
 	}
 }
 
@@ -435,8 +472,9 @@ static void utc_network_bluetooth_socket_disconnect_rfcomm_p(void)
 	int ret = BT_ERROR_NONE;
 
 	ret = bt_socket_disconnect_rfcomm(socket_fd);
-	dts_check_eq("bt_socket_disconnect_rfcomm", ret, BT_ERROR_NONE,
-				"bt_socket_disconnect_rfcomm() failed.");
+	dts_check_eq("bt_socket_disconnect_rfcomm",
+		ret, BT_ERROR_NONE,
+		"bt_socket_disconnect_rfcomm() failed.");
 }
 
 /**
@@ -447,9 +485,11 @@ static void utc_network_bluetooth_socket_send_data_p(void)
 	int ret = BT_ERROR_NONE;
 	char *dts_test = "dts_test";
 	int socket_fd = 1;
-	ret = bt_socket_send_data(socket_fd, "dts_test", sizeof(dts_test));
-	dts_check_eq("bt_socket_send_data", ret, BT_ERROR_NONE,
-				"bt_socket_send_data() failed.");
+	ret = bt_socket_send_data(socket_fd,
+			"dts_test", sizeof(dts_test));
+	dts_check_eq("bt_socket_send_data",
+		ret, BT_ERROR_NONE,
+		"bt_socket_send_data() failed.");
 }
 
 /**
@@ -460,8 +500,9 @@ static void utc_network_bluetooth_socket_unset_data_received_cb_p(void)
 	int ret = BT_ERROR_NONE;
 
 	ret = bt_socket_unset_data_received_cb();
-	dts_check_eq("bt_socket_unset_data_received_cb", ret, BT_ERROR_NONE,
-				"bt_socket_unset_data_received_cb() failed.");
+	dts_check_eq("bt_socket_unset_data_received_cb",
+		ret, BT_ERROR_NONE,
+		"bt_socket_unset_data_received_cb() failed.");
 }
 
 /**
@@ -472,7 +513,7 @@ static void utc_network_bluetooth_socket_unset_connection_state_changed_cb_p(voi
 	int ret = BT_ERROR_NONE;
 
 	ret = bt_socket_unset_connection_state_changed_cb();
-	dts_check_eq("bt_socket_unset_connection_state_changed_cb", ret,
-				BT_ERROR_NONE,
-				"bt_socket_unset_connection_state_changed_cb() failed.");
+	dts_check_eq("bt_socket_unset_connection_state_changed_cb",
+		ret, BT_ERROR_NONE,
+		"bt_socket_unset_connection_state_changed_cb() failed.");
 }

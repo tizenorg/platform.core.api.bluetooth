@@ -238,8 +238,9 @@ static void utc_network_bluetooth_adapter_get_visibility_n(void)
 	int dur = 10;
 	int ret = bt_adapter_get_visibility(NULL, &dur);
 
-	dts_check_eq("bt_adapter_get_visibility", ret, BT_ERROR_INVALID_PARAMETER,
-			"BT_ERROR_INVALID_PARAMETER must be returned when parameter is NULL.");
+	dts_check_eq("bt_adapter_get_visibility",
+		ret, BT_ERROR_INVALID_PARAMETER,
+		"BT_ERROR_INVALID_PARAMETER must be returned when parameter is NULL.");
 }
 
 /**

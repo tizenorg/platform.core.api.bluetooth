@@ -47,13 +47,13 @@ static void utc_network_bluetooth_opp_client_push_files_p(void);
 static void utc_network_bluetooth_opp_client_cancel_push_p(void);
 
 void push_responded_cb_for_opp_client_p(int result,
-						const char *remote_address, void *user_data);
+	const char *remote_address, void *user_data);
 void push_progress_cb_for_opp_client_p(const char *file,
-						long long size, int percent, void *user_data);
+	long long size, int percent, void *user_data);
 void push_finished_cb_for_opp_client_p(int result,
-						const char *remote_address, void *user_data);
+	const char *remote_address, void *user_data);
 void adapter_state_changed_cb_for_opp_client_p(int result,
-						bt_adapter_state_e adapter_state, void *user_data);
+	bt_adapter_state_e adapter_state, void *user_data);
 gboolean timeout_func(gpointer data);
 
 struct tet_testlist tet_testlist[] = {
@@ -108,7 +108,7 @@ static void startup(void)
 	int ret = BT_ERROR_NONE;
 	int timeout_id = 0;
 
-	if(get_value_from_file() == -1) {
+	if (get_value_from_file() == -1) {
 		tet_printf("Failed to read.");
 	}
 
@@ -116,7 +116,9 @@ static void startup(void)
 	mainloop = g_main_loop_new(NULL, FALSE);
 
 	bt_initialize();
-	if (bt_adapter_set_state_changed_cb(adapter_state_changed_cb_for_opp_client_p, "startup") != BT_ERROR_NONE) {
+	if (bt_adapter_set_state_changed_cb(
+		adapter_state_changed_cb_for_opp_client_p,
+		"startup") != BT_ERROR_NONE) {
 		tet_printf("DTS may fail because bt_adapter_set_state_changed_cb() failed");
 	}
 
@@ -124,7 +126,8 @@ static void startup(void)
 			ret = bt_adapter_enable();
 			if (ret == BT_ERROR_NONE) {
 				tet_printf("bt_adapter_enable() succeeded.");
-				timeout_id = g_timeout_add(60000, timeout_func, mainloop);
+				timeout_id = g_timeout_add(60000,
+								timeout_func, mainloop);
 				g_main_loop_run(mainloop);
 				g_source_remove(timeout_id);
 			} else if (ret != BT_ERROR_ALREADY_DONE) {
@@ -157,10 +160,12 @@ gboolean timeout_func(gpointer data)
 }
 
 void adapter_state_changed_cb_for_opp_client_p(int result,
-							bt_adapter_state_e adapter_state, void *user_data)
+	bt_adapter_state_e adapter_state, void *user_data)
 {
-	if ((user_data != NULL) && !strcmp((char *)user_data, "startup")) {
-		if (adapter_state == BT_ADAPTER_ENABLED && result == BT_ERROR_NONE) {
+	if ((user_data != NULL) &&
+			!strcmp((char *)user_data, "startup")) {
+		if (adapter_state == BT_ADAPTER_ENABLED &&
+			result == BT_ERROR_NONE) {
 			tet_printf("Callback: BT was enabled.");
 			bt_adapter_start_device_discovery();
 		} else {
@@ -173,25 +178,22 @@ void adapter_state_changed_cb_for_opp_client_p(int result,
 }
 
 void push_responded_cb_for_opp_client_p(int result,
-								const char *remote_address, void *user_data)
+	const char *remote_address, void *user_data)
 {
 
 }
 
-
-void push_progress_cb_for_opp_client_p(const char *file, long long size,
-												int percent, void *user_data)
+void push_progress_cb_for_opp_client_p(const char *file,
+	long long size, int percent, void *user_data)
 {
 
 }
-
 
 void push_finished_cb_for_opp_client_p(int result,
-		const char *remote_address, void *user_data)
+	const char *remote_address, void *user_data)
 {
 
 }
-
 
 static void utc_network_bluetooth_opp_client_initialize_p(void)
 {
@@ -219,7 +221,7 @@ static void utc_network_bluetooth_opp_client_add_file_p(void)
 	const char *file = "/tmp/a.txt";
 
 	if (access("/tmp/a.txt", F_OK) < 0) {
-		fd = open("/tmp/a.txt", O_RDWR|O_CREAT,0666);
+		fd = open("/tmp/a.txt", O_RDWR|O_CREAT, 0666);
 		write(fd, "hey", 3);
 	}
 
@@ -244,11 +246,13 @@ static void utc_network_bluetooth_opp_client_push_files_p(void)
 {
 	int ret = BT_ERROR_NONE;
 
-	ret = bt_opp_client_push_files(remote_address, push_responded_cb_for_opp_client_p,
-	push_progress_cb_for_opp_client_p, push_finished_cb_for_opp_client_p, NULL);
+	ret = bt_opp_client_push_files(remote_address,
+			push_responded_cb_for_opp_client_p,
+			push_progress_cb_for_opp_client_p,
+			push_finished_cb_for_opp_client_p, NULL);
 
 	dts_check_eq("bt_opp_client_push_files", ret,
-				BT_ERROR_NONE, "bt_opp_client_push_files() failed");
+		BT_ERROR_NONE, "bt_opp_client_push_files() failed");
 }
 
 static void utc_network_bluetooth_opp_client_cancel_push_p(void)
@@ -257,5 +261,5 @@ static void utc_network_bluetooth_opp_client_cancel_push_p(void)
 
 		ret = bt_opp_client_cancel_push();
 		dts_check_eq("bt_opp_client_cancel_push", ret,
-						BT_ERROR_NONE, "bt_opp_client_cancel_push() failed.");
+			BT_ERROR_NONE, "bt_opp_client_cancel_push() failed.");
 }

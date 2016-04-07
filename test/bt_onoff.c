@@ -31,7 +31,8 @@
 GMainLoop *main_loop = NULL;
 static guint onoff_timer = 0;
 
-static void __bt_adapter_state_changed_cb(int result, bt_adapter_state_e adapter_state, void *user_data)
+static void __bt_adapter_state_changed_cb(int result,
+	bt_adapter_state_e adapter_state, void *user_data)
 {
 	TC_PRT("state(%d), error(%d)", adapter_state, result);
 
@@ -65,18 +66,17 @@ static gboolean __bt_onoff_timeout_cb(gpointer data)
 	return FALSE;
 }
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
 	int ret;
 	bt_adapter_state_e state;
 
-	if(bt_initialize() != BT_ERROR_NONE)
-	{
+	if (bt_initialize() != BT_ERROR_NONE) {
 		TC_PRT("bt_initialize() failed.");
 		return -1;
 	}
-	if (bt_adapter_set_state_changed_cb(__bt_adapter_state_changed_cb, NULL) != BT_ERROR_NONE)
-	{
+	if (bt_adapter_set_state_changed_cb(
+		__bt_adapter_state_changed_cb, NULL) != BT_ERROR_NONE) {
 		TC_PRT("bt_adapter_set_state_changed_cb() failed.");
 		goto DONE;
 	}
@@ -87,14 +87,18 @@ int main(int argc, char* argv[])
 	ret = bt_adapter_get_state(&state);
 	TC_PRT("state(%d), error(%d)", state, ret);
 
-	onoff_timer = g_timeout_add(20000, (GSourceFunc)__bt_onoff_timeout_cb, NULL);
+	onoff_timer = g_timeout_add(20000,
+		(GSourceFunc)__bt_onoff_timeout_cb,
+		NULL);
 
 	if (argc <= 1) {
 		if (state == BT_ADAPTER_DISABLED)
 			ret = bt_adapter_enable();
 		else
 			ret = bt_adapter_disable();
-		TC_PRT("bt_adapter_%s() error(%d)", state==BT_ADAPTER_DISABLED?"enable":"disable", ret);
+		TC_PRT("bt_adapter_%s() error(%d)",
+			state == BT_ADAPTER_DISABLED ? "enable" : "disable",
+			ret);
 	} else {
 		if (argv[1][0] == '0') {
 			if (state == BT_ADAPTER_DISABLED) {
@@ -102,7 +106,8 @@ int main(int argc, char* argv[])
 				goto DONE;
 			} else {
 				ret = bt_adapter_disable();
-				TC_PRT("bt_adapter_disable() error(%d)", ret);
+				TC_PRT("bt_adapter_disable() error(%d)",
+					ret);
 				if (ret != BT_ERROR_NONE)
 					goto DONE;
 			}

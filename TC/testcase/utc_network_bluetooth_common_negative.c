@@ -38,7 +38,9 @@ static void startup(void)
 	mainloop = g_main_loop_new(NULL, FALSE);
 
 	bt_initialize();
-	if (bt_adapter_set_state_changed_cb(adapter_state_changed_cb_for_common_n, "startup") != BT_ERROR_NONE) {
+	if (bt_adapter_set_state_changed_cb(
+		adapter_state_changed_cb_for_common_n,
+		"startup") != BT_ERROR_NONE) {
 		tet_printf("DTS may fail because bt_adapter_set_state_changed_cb() failed");
 	}
 
@@ -46,7 +48,8 @@ static void startup(void)
 	ret = bt_adapter_disable();
 	if (ret == BT_ERROR_NONE) {
 		tet_printf("bt_adapter_disable() succeeded.");
-		timeout_id = g_timeout_add(60000, timeout_func, mainloop);
+		timeout_id = g_timeout_add(60000,
+						timeout_func, mainloop);
 		g_main_loop_run(mainloop);
 		g_source_remove(timeout_id);
 	} else if (ret == BT_ERROR_NOT_ENABLED) {
@@ -77,8 +80,7 @@ gboolean timeout_func(gpointer data)
 }
 
 void adapter_state_changed_cb_for_common_n(int result,
-						bt_adapter_state_e adapter_state,
-						void *user_data)
+	bt_adapter_state_e adapter_state, void *user_data)
 {
 
 }
