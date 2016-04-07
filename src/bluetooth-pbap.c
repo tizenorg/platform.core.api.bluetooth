@@ -269,7 +269,7 @@ int bt_pbap_phonebook_search(const char *address,
 	app_param.maxlist = maxlistcount;
 	app_param.search_attribute = search_attribute;
 	strncpy(app_param.search_value, search_value,
-			BLUETOOTH_PBAP_MAX_SEARCH_VALUE_LENGTH -1 );
+			BLUETOOTH_PBAP_MAX_SEARCH_VALUE_LENGTH - 1);
 
 	_bt_set_cb(BT_EVENT_PBAP_PHONEBOOK_SEARCH, callback, user_data);
 	error_code = _bt_get_error_code(bluetooth_pbap_phonebook_search(&addr_hex, &folder, &app_param));

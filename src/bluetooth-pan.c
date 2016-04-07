@@ -34,7 +34,7 @@
 #else
 #define BT_CHECK_PAN_SUPPORT()
 #endif
-//LCOV_EXCL_START
+/* LCOV_EXCL_START */
 int bt_nap_activate(void)
 {
 	int error = BT_ERROR_NONE;
@@ -177,4 +177,4 @@ int bt_panu_disconnect(const char *remote_address)
 	}
 	return error;
 }
-//LCOV_EXCL_STOP
+/* LCOV_EXCL_STOP */

@@ -37,8 +37,7 @@ static bool is_avrcp_control_initialized = false;
 #endif
 
 #define BT_CHECK_AVRCP_TARGET_INIT_STATUS() \
-	if (__bt_check_avrcp_target_init_status() == BT_ERROR_NOT_INITIALIZED) \
-	{ \
+	if (__bt_check_avrcp_target_init_status() == BT_ERROR_NOT_INITIALIZED) { \
 		LOGE("[%s] NOT_INITIALIZED(0x%08x)", __FUNCTION__, BT_ERROR_NOT_INITIALIZED); \
 		return BT_ERROR_NOT_INITIALIZED; \
 	}
@@ -46,16 +45,15 @@ static bool is_avrcp_control_initialized = false;
 int __bt_check_avrcp_target_init_status(void)
 {
 	if (is_avrcp_target_initialized != true) {
-		BT_ERR("NOT_INITIALIZED(0x%08x)", BT_ERROR_NOT_INITIALIZED); //LCOV_EXCL_LINE
-		return BT_ERROR_NOT_INITIALIZED; //LCOV_EXCL_LINE
+		BT_ERR("NOT_INITIALIZED(0x%08x)", BT_ERROR_NOT_INITIALIZED); /* LCOV_EXCL_LINE */
+		return BT_ERROR_NOT_INITIALIZED; /* LCOV_EXCL_LINE */
 	}
 
 	return BT_ERROR_NONE;
 }
 
 #define BT_CHECK_AVRCP_CONTROL_INIT_STATUS() \
-	if (__bt_check_avrcp_control_init_status() == BT_ERROR_NOT_INITIALIZED) \
-	{ \
+	if (__bt_check_avrcp_control_init_status() == BT_ERROR_NOT_INITIALIZED) { \
 		LOGE("[%s] NOT_INITIALIZED(0x%08x)", __FUNCTION__, BT_ERROR_NOT_INITIALIZED); \
 		return BT_ERROR_NOT_INITIALIZED; \
 	}
@@ -63,8 +61,8 @@ int __bt_check_avrcp_target_init_status(void)
 int __bt_check_avrcp_control_init_status(void)
 {
 	if (is_avrcp_control_initialized != true) {
-		BT_ERR("NOT_INITIALIZED(0x%08x)", BT_ERROR_NOT_INITIALIZED); //LCOV_EXCL_LINE
-		return BT_ERROR_NOT_INITIALIZED; //LCOV_EXCL_LINE
+		BT_ERR("NOT_INITIALIZED(0x%08x)", BT_ERROR_NOT_INITIALIZED); /* LCOV_EXCL_LINE */
+		return BT_ERROR_NOT_INITIALIZED; /* LCOV_EXCL_LINE */
 	}
 
 	return BT_ERROR_NONE;
@@ -75,7 +73,7 @@ int __bt_check_avrcp_control_init_status(void)
 * subsequent check ins.*/
 int _bt_convert_avrcp_error_code(int error)
 {
-	switch(error) {
+	switch (error) {
 	case BT_MEDIA_ERROR_NONE:
 		return BT_ERROR_NONE;
 	case BT_MEDIA_ERROR_INTERNAL:
@@ -101,8 +99,8 @@ int bt_avrcp_target_initialize(bt_avrcp_target_connection_state_changed_cb callb
 	error = _bt_convert_avrcp_error_code(error);
 	error = _bt_get_error_code(error);
 	if (BT_ERROR_NONE != error) {
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); //LCOV_EXCL_LINE
-		return error; //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); /* LCOV_EXCL_LINE */
+		return error; /* LCOV_EXCL_LINE */
 	}
 
 	is_avrcp_target_initialized = true;
@@ -124,8 +122,8 @@ int bt_avrcp_target_deinitialize(void)
 
 	error = _bt_get_error_code(error);
 	if (BT_ERROR_NONE != error) {
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); //LCOV_EXCL_LINE
-		return error; //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); /* LCOV_EXCL_LINE */
+		return error; /* LCOV_EXCL_LINE */
 	}
 
 	is_avrcp_target_initialized = false;
@@ -143,7 +141,7 @@ int bt_avrcp_target_notify_equalizer_state(bt_avrcp_equalizer_state_e state)
 	error = _bt_convert_avrcp_error_code(error);
 	error = _bt_get_error_code(error);
 	if (BT_ERROR_NONE != error) {
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); /* LCOV_EXCL_LINE */
 	}
 	return error;
 }
@@ -158,7 +156,7 @@ int bt_avrcp_target_notify_repeat_mode(bt_avrcp_repeat_mode_e mode)
 	error = _bt_convert_avrcp_error_code(error);
 	error = _bt_get_error_code(error);
 	if (BT_ERROR_NONE != error) {
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); /* LCOV_EXCL_LINE */
 	}
 	return error;
 }
@@ -174,7 +172,7 @@ int bt_avrcp_target_notify_shuffle_mode(bt_avrcp_shuffle_mode_e mode)
 	error = _bt_convert_avrcp_error_code(error);
 	error = _bt_get_error_code(error);
 	if (BT_ERROR_NONE != error) {
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); /* LCOV_EXCL_LINE */
 	}
 	return error;
 }
@@ -189,7 +187,7 @@ int bt_avrcp_target_notify_scan_mode(bt_avrcp_scan_mode_e mode)
 	error = _bt_convert_avrcp_error_code(error);
 	error = _bt_get_error_code(error);
 	if (BT_ERROR_NONE != error) {
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); /* LCOV_EXCL_LINE */
 	}
 	return error;
 }
@@ -205,7 +203,7 @@ int bt_avrcp_target_notify_player_state(bt_avrcp_player_state_e state)
 	error = _bt_convert_avrcp_error_code(error);
 	error = _bt_get_error_code(error);
 	if (BT_ERROR_NONE != error) {
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); /* LCOV_EXCL_LINE */
 	}
 	return error;
 }
@@ -221,7 +219,7 @@ int bt_avrcp_target_notify_position(unsigned int position)
 	error = _bt_convert_avrcp_error_code(error);
 	error = _bt_get_error_code(error);
 	if (BT_ERROR_NONE != error) {
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); /* LCOV_EXCL_LINE */
 	}
 	return error;
 }
@@ -246,12 +244,12 @@ int bt_avrcp_target_notify_track(const char *title, const char *artist, const ch
 	error = _bt_convert_avrcp_error_code(error);
 	error = _bt_get_error_code(error);
 	if (BT_ERROR_NONE != error) {
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); /* LCOV_EXCL_LINE */
 	}
 	return error;
 }
 
-//LCOV_EXCL_START
+/* LCOV_EXCL_START */
 int bt_avrcp_control_initialize(bt_avrcp_control_connection_state_changed_cb callback,
 								void *user_data)
 {
@@ -265,8 +263,8 @@ int bt_avrcp_control_initialize(bt_avrcp_control_connection_state_changed_cb cal
 	error = _bt_convert_avrcp_error_code(error);
 	error = _bt_get_error_code(error);
 	if (BT_ERROR_NONE != error) {
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); //LCOV_EXCL_LINE
-		return error; //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); /* LCOV_EXCL_LINE */
+		return error; /* LCOV_EXCL_LINE */
 	}
 
 	is_avrcp_control_initialized = true;
@@ -288,8 +286,8 @@ int bt_avrcp_control_deinitialize(void)
 
 	error = _bt_get_error_code(error);
 	if (BT_ERROR_NONE != error) {
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); //LCOV_EXCL_LINE
-		return error; //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); /* LCOV_EXCL_LINE */
+		return error; /* LCOV_EXCL_LINE */
 	}
 
 	is_avrcp_control_initialized = false;
@@ -310,7 +308,7 @@ int bt_avrcp_control_connect(const char *remote_address)
 	error = bluetooth_media_control_connect(&addr_hex);
 	error = _bt_get_error_code(error);
 	if (error != BT_ERROR_NONE)
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); /* LCOV_EXCL_LINE */
 
 	return error;
 }
@@ -329,7 +327,7 @@ int bt_avrcp_control_disconnect(const char *remote_address)
 	error = bluetooth_media_control_disconnect(&addr_hex);
 	error = _bt_get_error_code(error);
 	if (error != BT_ERROR_NONE)
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); /* LCOV_EXCL_LINE */
 
 	return error;
 }
@@ -345,7 +343,7 @@ int bt_avrcp_control_send_player_command(bt_avrcp_player_command_e cmd)
 	error = _bt_convert_avrcp_error_code(error);
 	error = _bt_get_error_code(error);
 	if (BT_ERROR_NONE != error)
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); /* LCOV_EXCL_LINE */
 
 	return error;
 }
@@ -361,7 +359,7 @@ int bt_avrcp_control_set_equalizer_state(bt_avrcp_equalizer_state_e state)
 	error = _bt_convert_avrcp_error_code(error);
 	error = _bt_get_error_code(error);
 	if (BT_ERROR_NONE != error)
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); /* LCOV_EXCL_LINE */
 
 	return error;
 }
@@ -378,7 +376,7 @@ int bt_avrcp_control_get_equalizer_state(bt_avrcp_equalizer_state_e *state)
 	error = _bt_convert_avrcp_error_code(error);
 	error = _bt_get_error_code(error);
 	if (BT_ERROR_NONE != error)
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); /* LCOV_EXCL_LINE */
 
 	return error;
 }
@@ -394,7 +392,7 @@ int bt_avrcp_control_set_repeat_mode(bt_avrcp_repeat_mode_e mode)
 	error = _bt_convert_avrcp_error_code(error);
 	error = _bt_get_error_code(error);
 	if (BT_ERROR_NONE != error)
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); /* LCOV_EXCL_LINE */
 
 	return error;
 }
@@ -411,7 +409,7 @@ int bt_avrcp_control_get_repeat_mode(bt_avrcp_repeat_mode_e *mode)
 	error = _bt_convert_avrcp_error_code(error);
 	error = _bt_get_error_code(error);
 	if (BT_ERROR_NONE != error)
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); //LCOV_EXCL_LINE
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); /* LCOV_EXCL_LINE */
 
 	return error;
 }
@@ -559,7 +557,7 @@ int bt_avrcp_control_free_track_info(bt_avrcp_metadata_attributes_info_s *track)
 	g_free((gpointer)track);
 	return BT_ERROR_NONE;
 }
-//LCOV_EXCL_STOP
+/* LCOV_EXCL_STOP */
 
 int bt_avrcp_set_equalizer_state_changed_cb(bt_avrcp_equalizer_state_changed_cb callback, void *user_data)
 {
@@ -629,7 +627,7 @@ int bt_avrcp_unset_scan_mode_changed_cb(void)
 	return BT_ERROR_NONE;
 }
 
-//LCOV_EXCL_START
+/* LCOV_EXCL_START */
 int bt_avrcp_set_song_position_changed_cb(bt_avrcp_song_position_changed_cb callback, void *user_data)
 {
 	BT_CHECK_AVRCP_SUPPORT();
@@ -680,4 +678,4 @@ int bt_avrcp_unset_track_info_changed_cb(void)
 	_bt_unset_cb(BT_EVENT_AVRCP_TRACK_INFO_CHANGED);
 	return BT_ERROR_NONE;
 }
-//LCOV_EXCL_STOP
+/* LCOV_EXCL_STOP */
