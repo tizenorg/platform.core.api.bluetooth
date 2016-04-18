@@ -244,16 +244,16 @@ int bt_gatt_get_service_uuid(bt_gatt_attribute_h service, char **uuid)
 
 		if (property.include_handles.count != 0 &&
 			property.include_handles.handle) {
-			for (i = 0; i < property.include_handles.count; i++) {
+			for (i = 0; i < property.include_handles.count; i++)
 				g_free(property.include_handles.handle[i]);
-			}
+
 			g_free(property.include_handles.handle);
 		}
 		if (property.char_handle.count != 0 &&
 			property.char_handle.handle) {
-			for (i = 0; i < property.char_handle.count; i++) {
+			for (i = 0; i < property.char_handle.count; i++)
 				g_free(property.char_handle.handle[i]);
-			}
+
 			g_free(property.char_handle.handle);
 		}
 	}
@@ -285,9 +285,9 @@ int bt_gatt_foreach_included_services(bt_gatt_attribute_h service,
 	} else {
 		if (property.char_handle.count != 0 &&
 			property.char_handle.handle) {
-			for (i = 0; i < property.char_handle.count; i++) {
+			for (i = 0; i < property.char_handle.count; i++)
 				g_free(property.char_handle.handle[i]);
-			}
+
 			g_free(property.char_handle.handle);
 		}
 		if (property.include_handles.count == 0 ||
@@ -423,9 +423,8 @@ int bt_gatt_set_characteristic_value(bt_gatt_attribute_h characteristic,
 	ret = _bt_get_error_code(bluetooth_gatt_set_characteristics_value((const char *)characteristic,
 					(const guint8*)value, value_length));
 
-	if (ret != BT_ERROR_NONE) {
+	if (ret != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
-	}
 
 	return ret; /* LCOV_EXCL_STOP */
 }
@@ -545,9 +544,9 @@ int bt_gatt_connect(const char *address, bool auto_connect)
 	ret = _bt_get_error_code(bluetooth_connect_le(&bd_addr,
 					auto_connect ? TRUE : FALSE));
 
-	if (ret != BT_ERROR_NONE) {
+	if (ret != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
-	}
+
 	return ret;
 }
 
@@ -563,9 +562,9 @@ int bt_gatt_disconnect(const char *address)
 
 	ret = _bt_get_error_code(bluetooth_disconnect_le(&bd_addr));
 
-	if (ret != BT_ERROR_NONE) {
+	if (ret != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
-	}
+
 	return ret;
 }
 
@@ -852,29 +851,29 @@ float __convert_bytes_to_float(char b0, char b1, char b2, char b3)
 static int __get_data_type_float_size(bt_data_type_float_e type)
 {
 	switch (type) {
-		case BT_DATA_TYPE_SFLOAT:
-			return 2;
-		case BT_DATA_TYPE_FLOAT:
-			return 4;
-		default:
-			return 0;
+	case BT_DATA_TYPE_SFLOAT:
+		return 2;
+	case BT_DATA_TYPE_FLOAT:
+		return 4;
+	default:
+		return 0;
 	}
 }
 
 static int __get_data_type_int_size(bt_data_type_int_e format)
 {
 	switch (format) {
-		case BT_DATA_TYPE_SINT8:
-		case BT_DATA_TYPE_UINT8:
-			return 1;
-		case BT_DATA_TYPE_SINT16:
-		case BT_DATA_TYPE_UINT16:
-			return 2;
-		case BT_DATA_TYPE_SINT32:
-		case BT_DATA_TYPE_UINT32:
-			return 4;
-		default:
-			return 0;
+	case BT_DATA_TYPE_SINT8:
+	case BT_DATA_TYPE_UINT8:
+		return 1;
+	case BT_DATA_TYPE_SINT16:
+	case BT_DATA_TYPE_UINT16:
+		return 2;
+	case BT_DATA_TYPE_SINT32:
+	case BT_DATA_TYPE_UINT32:
+		return 4;
+	default:
+		return 0;
 	}
 }
 
@@ -962,33 +961,33 @@ int bt_gatt_get_int_value(bt_gatt_h gatt_handle, bt_data_type_int_e type,
 	}
 
 	switch (type) {
-		case BT_DATA_TYPE_UINT8:
-			*value = __convert_unsigned_byte_to_int(val[offset]);
-			break;
-		case BT_DATA_TYPE_UINT16:
-			*value = __convert_unsigned_bytes_to_int16(val[offset],
-								val[offset+1]);
-			break;
+	case BT_DATA_TYPE_UINT8:
+		*value = __convert_unsigned_byte_to_int(val[offset]);
+		break;
+	case BT_DATA_TYPE_UINT16:
+		*value = __convert_unsigned_bytes_to_int16(val[offset],
+							val[offset+1]);
+		break;
 
-		case BT_DATA_TYPE_UINT32:
-			*value = __convert_unsigned_bytes_to_int32(val[offset],
-				val[offset+1], val[offset+2], val[offset+3]);
-			break;
-		case BT_DATA_TYPE_SINT8:
-			*value = __convert_unsigned_to_signed(__convert_unsigned_byte_to_int(val[offset]), 8);
-			break;
+	case BT_DATA_TYPE_UINT32:
+		*value = __convert_unsigned_bytes_to_int32(val[offset],
+			val[offset+1], val[offset+2], val[offset+3]);
+		break;
+	case BT_DATA_TYPE_SINT8:
+		*value = __convert_unsigned_to_signed(__convert_unsigned_byte_to_int(val[offset]), 8);
+		break;
 
-		case BT_DATA_TYPE_SINT16:
-			*value = __convert_unsigned_to_signed(__convert_unsigned_bytes_to_int16(val[offset],
-							   val[offset+1]), 16);
-			break;
+	case BT_DATA_TYPE_SINT16:
+		*value = __convert_unsigned_to_signed(__convert_unsigned_bytes_to_int16(val[offset],
+						   val[offset+1]), 16);
+		break;
 
-		case BT_DATA_TYPE_SINT32:
-			*value = __convert_unsigned_to_signed(__convert_unsigned_bytes_to_int32(val[offset],
-				val[offset+1], val[offset+2], val[offset+3]), 32);
-			break;
-		default:
-			return BT_ERROR_INVALID_PARAMETER;
+	case BT_DATA_TYPE_SINT32:
+		*value = __convert_unsigned_to_signed(__convert_unsigned_bytes_to_int32(val[offset],
+			val[offset+1], val[offset+2], val[offset+3]), 32);
+		break;
+	default:
+		return BT_ERROR_INVALID_PARAMETER;
 	}
 
 	return BT_ERROR_NONE; /* LCOV_EXCL_STOP */
@@ -1025,17 +1024,17 @@ int bt_gatt_get_float_value(bt_gatt_h gatt_handle, bt_data_type_float_e type,
 	}
 
 	switch (type) {
-		case BT_DATA_TYPE_SFLOAT:
-			*value = __convert_bytes_to_short_float(val[offset],
-				val[offset+1]);
-			break;
+	case BT_DATA_TYPE_SFLOAT:
+		*value = __convert_bytes_to_short_float(val[offset],
+			val[offset+1]);
+		break;
 
-		case BT_DATA_TYPE_FLOAT:
-			*value = __convert_bytes_to_float(val[offset],
-				val[offset+1], val[offset+2], val[offset+3]);
-			break;
-		default:
-			return BT_ERROR_INVALID_PARAMETER;
+	case BT_DATA_TYPE_FLOAT:
+		*value = __convert_bytes_to_float(val[offset],
+			val[offset+1], val[offset+2], val[offset+3]);
+		break;
+	default:
+		return BT_ERROR_INVALID_PARAMETER;
 	}
 
 	return BT_ERROR_NONE; /* LCOV_EXCL_STOP */
@@ -1149,35 +1148,35 @@ int bt_gatt_set_int_value(bt_gatt_h gatt_handle, bt_data_type_int_e type,
 	}
 
 	switch (type) {
-		case BT_DATA_TYPE_SINT8:
-			value = __convert_int_to_signed_bits(value, 8);
-		case BT_DATA_TYPE_UINT8:
-			if (*val)
-				(*val)[idx] = (char)(value & 0xFF);
-			break;
+	case BT_DATA_TYPE_SINT8:
+		value = __convert_int_to_signed_bits(value, 8);
+	case BT_DATA_TYPE_UINT8:
+		if (*val)
+			(*val)[idx] = (char)(value & 0xFF);
+		break;
 
-		case BT_DATA_TYPE_SINT16:
-			value = __convert_int_to_signed_bits(value, 16);
-		case BT_DATA_TYPE_UINT16:
-			if (*val) {
-				 (*val)[idx++] = (char)(value & 0xFF);
-				 (*val)[idx] = (char)((value >> 8) & 0xFF);
-			}
-			break;
+	case BT_DATA_TYPE_SINT16:
+		value = __convert_int_to_signed_bits(value, 16);
+	case BT_DATA_TYPE_UINT16:
+		if (*val) {
+			 (*val)[idx++] = (char)(value & 0xFF);
+			 (*val)[idx] = (char)((value >> 8) & 0xFF);
+		}
+		break;
 
-		case BT_DATA_TYPE_SINT32:
-			value = __convert_int_to_signed_bits(value, 32);
-		case BT_DATA_TYPE_UINT32:
-			if (*val) {
-				(*val)[idx++] = (char)(value & 0xFF);
-				(*val)[idx++] = (char)((value >> 8) & 0xFF);
-				(*val)[idx++] = (char)((value >> 16) & 0xFF);
-				(*val)[idx] = (char)((value >> 24) & 0xFF);
-			}
-			break;
+	case BT_DATA_TYPE_SINT32:
+		value = __convert_int_to_signed_bits(value, 32);
+	case BT_DATA_TYPE_UINT32:
+		if (*val) {
+			(*val)[idx++] = (char)(value & 0xFF);
+			(*val)[idx++] = (char)((value >> 8) & 0xFF);
+			(*val)[idx++] = (char)((value >> 16) & 0xFF);
+			(*val)[idx] = (char)((value >> 24) & 0xFF);
+		}
+		break;
 
-		default:
-			return BT_ERROR_INVALID_PARAMETER;
+	default:
+		return BT_ERROR_INVALID_PARAMETER;
 	}
 
 	if (handle->role == BT_GATT_ROLE_SERVER && handle->path) {
@@ -1265,25 +1264,25 @@ int bt_gatt_set_float_value(bt_gatt_h gatt_handle, bt_data_type_float_e type,
 	}
 
 	switch (type) {
-		case BT_DATA_TYPE_FLOAT:
-			mant = __convert_int_to_signed_bits(mantissa, 24);
-			exp = __convert_int_to_signed_bits(exponent, 8);
-			(*val)[idx++] = (char)(mant & 0xFF);
-			(*val)[idx++] = (char)((mant >> 8) & 0xFF);
-			(*val)[idx++] = (char)((mant >> 16) & 0xFF);
-			(*val)[idx] = (char)(exp & 0xFF);
-			break;
+	case BT_DATA_TYPE_FLOAT:
+		mant = __convert_int_to_signed_bits(mantissa, 24);
+		exp = __convert_int_to_signed_bits(exponent, 8);
+		(*val)[idx++] = (char)(mant & 0xFF);
+		(*val)[idx++] = (char)((mant >> 8) & 0xFF);
+		(*val)[idx++] = (char)((mant >> 16) & 0xFF);
+		(*val)[idx] = (char)(exp & 0xFF);
+		break;
 
-		case BT_DATA_TYPE_SFLOAT:
-			mant = __convert_int_to_signed_bits(mantissa, 12);
-			exp = __convert_int_to_signed_bits(exponent, 4);
-			(*val)[idx++] = (char)(mant & 0xFF);
-			(*val)[idx] = (char)((mant >> 8) & 0x0F);
-			(*val)[idx] += (char)((exp & 0x0F) << 4);
-			break;
+	case BT_DATA_TYPE_SFLOAT:
+		mant = __convert_int_to_signed_bits(mantissa, 12);
+		exp = __convert_int_to_signed_bits(exponent, 4);
+		(*val)[idx++] = (char)(mant & 0xFF);
+		(*val)[idx] = (char)((mant >> 8) & 0x0F);
+		(*val)[idx] += (char)((exp & 0x0F) << 4);
+		break;
 
-		default:
-			return BT_ERROR_INVALID_PARAMETER;
+	default:
+		return BT_ERROR_INVALID_PARAMETER;
 	}
 
 	if (handle->role == BT_GATT_ROLE_SERVER && handle->path) {
@@ -2197,9 +2196,9 @@ int bt_gatt_server_start(void)
 	if (!is_gatt_server_started) {
 		ret = bluetooth_gatt_register_application();
 
-		if (ret != BT_ERROR_NONE) {
+		if (ret != BT_ERROR_NONE)
 			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
-		}
+
 		is_gatt_server_started = true;
 		return ret;
 	}
@@ -2227,9 +2226,8 @@ int bt_gatt_server_send_response(int request_id,
 					BT_ERROR_NONE,
 					offset, value, value_length));
 
-	if (ret != BT_ERROR_NONE) {
+	if (ret != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
-	}
 
 	return ret;
 }
@@ -2577,9 +2575,8 @@ static const bt_gatt_client_h __find_gatt_client(const char *remote_address)
 	for (l = gatt_client_list; l; l = g_slist_next(l)) {
 		bt_gatt_client_s *client_s = l->data;
 
-		if (!g_strcmp0(client_s->remote_address, remote_address)) {
+		if (!g_strcmp0(client_s->remote_address, remote_address))
 			return (const bt_gatt_client_h)l->data;
-		}
 	}
 
 	return NULL;

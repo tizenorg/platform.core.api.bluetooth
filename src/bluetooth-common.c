@@ -225,15 +225,13 @@ int _bt_get_bt_device_info_s(bt_device_info_s **dest_dev, bluetooth_device_info_
 	BT_CHECK_INPUT_PARAMETER(source_dev);
 
 	*dest_dev = (bt_device_info_s *)malloc(sizeof(bt_device_info_s));
-	if (*dest_dev == NULL) {
+	if (*dest_dev == NULL)
 		return BT_ERROR_OUT_OF_MEMORY;
-	}
 
-	if (strlen(source_dev->device_name.name) > 0) {
+	if (strlen(source_dev->device_name.name) > 0)
 		(*dest_dev)->remote_name = strdup(source_dev->device_name.name);
-	} else {
+	else
 		(*dest_dev)->remote_name = NULL;
-	}
 
 	_bt_convert_address_to_string(&((*dest_dev)->remote_address), &(source_dev->device_address));
 
@@ -247,9 +245,8 @@ int _bt_get_bt_device_info_s(bt_device_info_s **dest_dev, bluetooth_device_info_
 				(*dest_dev)->service_uuid[i] =
 					g_strndup(source_dev->uuids[i],
 						BLUETOOTH_UUID_STRING_MAX - 1);
-				if ((*dest_dev)->service_uuid[i] != NULL) {
+				if ((*dest_dev)->service_uuid[i] != NULL)
 					__bt_convert_lower_to_upper((*dest_dev)->service_uuid[i]);
-				}
 			}
 		}
 	} else {
@@ -310,11 +307,10 @@ int _bt_convert_address_to_string(char **addr_str, bluetooth_device_address_t *a
 	snprintf(address, 18, "%2.2X:%2.2X:%2.2X:%2.2X:%2.2X:%2.2X", addr_hex->addr[0], addr_hex->addr[1], addr_hex->addr[2], addr_hex->addr[3], addr_hex->addr[4], addr_hex->addr[5]);
 	*addr_str = strdup(address);
 
-	if (*addr_str != NULL) {
+	if (*addr_str != NULL)
 		return BT_ERROR_NONE;
-	} else {
+	else
 		return BT_ERROR_OUT_OF_MEMORY; /* LCOV_EXCL_LINE */
-	}
 }
 
 void _bt_convert_address_to_hex(bluetooth_device_address_t *addr_hex, const char *addr_str)
@@ -326,13 +322,11 @@ void _bt_convert_address_to_hex(bluetooth_device_address_t *addr_hex, const char
 		return; /* LCOV_EXCL_LINE */
 
 	i = sscanf(addr_str, "%X:%X:%X:%X:%X:%X", &addr[0], &addr[1], &addr[2], &addr[3], &addr[4], &addr[5]);
-	if (i != BLUETOOTH_ADDRESS_LENGTH) {
+	if (i != BLUETOOTH_ADDRESS_LENGTH)
 		BT_ERR("Invalid format string - [%s]", addr_str); /* LCOV_EXCL_LINE */
-	}
 
-	for (i = 0; i < BLUETOOTH_ADDRESS_LENGTH; i++) {
+	for (i = 0; i < BLUETOOTH_ADDRESS_LENGTH; i++)
 		addr_hex->addr[i] = (unsigned char)addr[i];
-	}
 }
 
 char *_bt_convert_error_to_string(int error)
@@ -1123,9 +1117,9 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 		BT_INFO("BLUETOOTH_EVENT_NETWORK_SERVER_CONNECTED");
 		dev_info = (bluetooth_network_device_info_t *)(param->param_data);
 
-		if (param->result != BLUETOOTH_ERROR_NONE) {
+		if (param->result != BLUETOOTH_ERROR_NONE)
 			BT_ERR("Fail to connect the network server");
-		}
+
 		_bt_convert_address_to_string(&device_addr, &dev_info->device_address);
 		((bt_nap_connection_state_changed_cb)bt_event_slot_container[event_index].callback)
 		(TRUE, device_addr, dev_info->interface_name, bt_event_slot_container[event_index].user_data);
@@ -1138,9 +1132,9 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 		BT_INFO("BLUETOOTH_EVENT_NETWORK_SERVER_DISCONNECTED");
 		dev_info = (bluetooth_network_device_info_t *)(param->param_data);
 
-		if (param->result != BLUETOOTH_ERROR_NONE) {
+		if (param->result != BLUETOOTH_ERROR_NONE)
 			BT_ERR("Fail to disconnect the network server");
-		}
+
 		_bt_convert_address_to_string(&device_addr, &dev_info->device_address);
 		((bt_nap_connection_state_changed_cb)bt_event_slot_container[event_index].callback)
 		(FALSE, device_addr, dev_info->interface_name, bt_event_slot_container[event_index].user_data);
@@ -1200,9 +1194,8 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 	case BLUETOOTH_EVENT_HDP_DATA_RECEIVED:
 		BT_INFO("HDP data recieved callback will be ");
 		hdp_data_ind = (bt_hdp_data_ind_t *)(param->param_data);
-		if (param->result != BLUETOOTH_ERROR_NONE) {
+		if (param->result != BLUETOOTH_ERROR_NONE)
 			BT_ERR("Fail to receive HDP data");
-		}
 
 		((bt_hdp_data_received_cb)bt_event_slot_container[event_index].callback)
 		(hdp_data_ind->channel_id, hdp_data_ind->buffer, hdp_data_ind->size,
@@ -2150,15 +2143,13 @@ static int __bt_get_bt_adapter_device_discovery_info_s(bt_adapter_device_discove
 	BT_CHECK_INPUT_PARAMETER(source_info);
 
 	*discovery_info = (bt_adapter_device_discovery_info_s *)malloc(sizeof(bt_adapter_device_discovery_info_s));
-	if (*discovery_info == NULL) {
+	if (*discovery_info == NULL)
 		return BT_ERROR_OUT_OF_MEMORY;
-	}
 
-	if (strlen(source_info->device_name.name) > 0) {
+	if (strlen(source_info->device_name.name) > 0)
 		(*discovery_info)->remote_name = strdup(source_info->device_name.name);
-	} else {
+	else
 		(*discovery_info)->remote_name = NULL;
-	}
 
 	_bt_convert_address_to_string(&((*discovery_info)->remote_address), &(source_info->device_address));
 
@@ -2171,16 +2162,15 @@ static int __bt_get_bt_adapter_device_discovery_info_s(bt_adapter_device_discove
 		if ((*discovery_info)->service_uuid != NULL) {
 			for (i = 0; i < source_info->service_index; i++) {
 				(*discovery_info)->service_uuid[i] = strdup(source_info->uuids[i]);
-				if ((*discovery_info)->service_uuid[i] != NULL) {
+				if ((*discovery_info)->service_uuid[i] != NULL)
 					__bt_convert_lower_to_upper((*discovery_info)->service_uuid[i]);
-				}
 
 				BT_INFO("UUID: %s", (*discovery_info)->service_uuid[i]);
 			}
 		}
-	} else {
+	} else
 		(*discovery_info)->service_uuid = NULL;
-	}
+
 	(*discovery_info)->service_count = source_info->service_index;
 
 	(*discovery_info)->rssi = (int)source_info->rssi;
@@ -2234,9 +2224,8 @@ static int __bt_get_bt_adapter_le_device_scan_info_s(
 	BT_CHECK_INPUT_PARAMETER(source_info);
 
 	*scan_info = (bt_adapter_le_device_scan_result_info_s *)malloc(sizeof(bt_adapter_le_device_scan_result_info_s));
-	if (*scan_info == NULL) {
+	if (*scan_info == NULL)
 		return BT_ERROR_OUT_OF_MEMORY;
-	}
 
 	_bt_convert_address_to_string(&((*scan_info)->remote_address), &(source_info->device_address));
 
@@ -2290,9 +2279,8 @@ static int __bt_get_bt_adapter_le_device_discovery_info_s(
 	BT_CHECK_INPUT_PARAMETER(source_info);
 
 	*le_discovery_info = (bt_adapter_le_device_discovery_info_s *)malloc(sizeof(bt_adapter_le_device_discovery_info_s));
-	if (*le_discovery_info == NULL) {
+	if (*le_discovery_info == NULL)
 		return BT_ERROR_OUT_OF_MEMORY;
-	}
 
 	_bt_convert_address_to_string(&((*le_discovery_info)->remote_address), &(source_info->device_address));
 
@@ -2596,9 +2584,8 @@ static void __bt_convert_lower_to_upper(char *origin)
 	int i = 0;
 
 	for (i = 0; i < length; i++) {
-		if (islower(origin[i])) {
+		if (islower(origin[i]))
 			origin[i] = toupper(origin[i]);
-		}
 	}
 }
 

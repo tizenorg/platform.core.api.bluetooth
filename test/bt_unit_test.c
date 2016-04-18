@@ -1217,9 +1217,8 @@ static void __bt_adapter_manufacturer_data_changed_cb(char *data,
 	int i;
 
 	TC_PRT("manufacturer data is changed");
-	for (i = 0; i < len; i++) {
+	for (i = 0; i < len; i++)
 		TC_PRT("[%d] %02x", i, data[i]);
-	}
 }
 
 static void __bt_adapter_authentication_req_cb(
@@ -1255,9 +1254,8 @@ static bool __bt_adapter_bonded_device_cb(bt_device_info_s *device_info,
 	if (device_info->service_uuid == NULL) {
 		TC_PRT("No uuids");
 	} else {
-		for (i = 0; i < device_info->service_count; i++) {
+		for (i = 0; i < device_info->service_count; i++)
 			TC_PRT("uuid: %s", device_info->service_uuid[i]);
-		}
 	}
 
 	if (device_info->manufacturer_data_len > 0) {
@@ -1295,9 +1293,8 @@ static void __bt_adapter_device_discovery_state_changed_cb(
 	if (discovery_info->service_uuid == NULL) {
 		TC_PRT("No uuids");
 	} else {
-		for (i = 0; i < discovery_info->service_count; i++) {
+		for (i = 0; i < discovery_info->service_count; i++)
 			TC_PRT("uuid: %s", discovery_info->service_uuid[i]);
-		}
 	}
 
 	if (discovery_info->manufacturer_data_len > 0) {
@@ -1469,7 +1466,6 @@ static void __bt_adapter_le_device_discovery_state_changed_cb(int result,
 		int i, ret;
 		int field_len = 0;
 		unsigned char *field_data;
-		
 		printf("Adv data [");
 		for (i = 0; i < discovery_info->adv_data_len; i++)
 			printf("%02x ", discovery_info->adv_data[i]);
@@ -1495,7 +1491,7 @@ static void __bt_adapter_le_device_discovery_state_changed_cb(int result,
 		if (ret == BT_ERROR_NONE) {
 			TC_PRT("%s", field_data);
 			g_free(field_data);
-		}		
+		}
 #endif
 	}
 }
@@ -1562,75 +1558,77 @@ static void __bt_hid_device_data_received_cb(const bt_hid_device_received_data_s
 	TC_PRT("Address: %s", data->address);
 	TC_PRT("Type: %d", data->type);
 	TC_PRT("Param: %d", data->param);
+
 	switch (data->type) {
-		case BT_HID_HEADER_HANDSHAKE:
-			TC_PRT("HANDSHAKE data");
-			break;
-		case BT_HID_HEADER_HID_CONTROL:
-			TC_PRT("HID Control data");
-			ret = bt_hid_device_disconnect(remote_addr);
-			TC_PRT("ret %d", ret);
-			break;
-		case BT_HID_HEADER_GET_REPORT:
-			TC_PRT("GET_REPORT data");
-			TC_PRT("ReportId %d", data->data[1]);
-			bt_hid_key_data_s send_data;
-			/* Will send character 'a' */
-			char	pressedkey[8]	 = { 4, 0, 0, 0,  0, 0, 0, 0 };
-			memcpy(send_data.key, pressedkey, 8);
-			send_data.modify = 0;
-			if (data->data[1] == 0x02) {
-			ret = bt_hid_device_reply_to_report(remote_addr,
-					BT_HID_HEADER_GET_REPORT,
-					BT_HID_PARAM_DATA_RTYPE_INPUT,
-					(const char *)&send_data,
-					sizeof(send_data));
-			} else if (data->data[1] == 0x01) {
-				TC_PRT("Send Mouse Event");
-			} else {
-				TC_PRT("Invalid ReportId");
-				val = BT_HID_HANDSHAKE_ERR_INVALID_REPORT_ID;
-				ret = bt_hid_device_reply_to_report(remote_addr,
-						BT_HID_HEADER_HANDSHAKE,
-						BT_HID_PARAM_DATA_RTYPE_INPUT,
-						&val, sizeof(val));
-			}
-			TC_PRT("ret %d", ret);
-			break;
-		case BT_HID_HEADER_SET_REPORT:
-			TC_PRT("SET_REPORT data");
-			break;
-		case BT_HID_HEADER_DATA:
-			TC_PRT("TRANs DATA");
-			break;
-		case BT_HID_HEADER_GET_PROTOCOL:
-			TC_PRT("GET PROTOCOL");
-			ret = bt_hid_device_reply_to_report(remote_addr,
-					BT_HID_HEADER_GET_PROTOCOL,
-					BT_HID_PARAM_DATA_RTYPE_INPUT,
-					&val, sizeof(val));
-			TC_PRT("ret %d", ret);
-			break;
-		case BT_HID_HEADER_SET_PROTOCOL:
-			TC_PRT("SET PROTOCOL");
-			val = BT_HID_HANDSHAKE_SUCCESSFUL;
+	case BT_HID_HEADER_HANDSHAKE:
+		TC_PRT("HANDSHAKE data");
+		break;
+	case BT_HID_HEADER_HID_CONTROL:
+		TC_PRT("HID Control data");
+		ret = bt_hid_device_disconnect(remote_addr);
+		TC_PRT("ret %d", ret);
+		break;
+	case BT_HID_HEADER_GET_REPORT:
+		TC_PRT("GET_REPORT data");
+		TC_PRT("ReportId %d", data->data[1]);
+		bt_hid_key_data_s send_data;
+		/* Will send character 'a' */
+		char	pressedkey[8]	 = { 4, 0, 0, 0,  0, 0, 0, 0 };
+		memcpy(send_data.key, pressedkey, 8);
+		send_data.modify = 0;
+		if (data->data[1] == 0x02) {
+		ret = bt_hid_device_reply_to_report(remote_addr,
+				BT_HID_HEADER_GET_REPORT,
+				BT_HID_PARAM_DATA_RTYPE_INPUT,
+				(const char *)&send_data,
+				sizeof(send_data));
+		} else if (data->data[1] == 0x01) {
+			TC_PRT("Send Mouse Event");
+		} else {
+			TC_PRT("Invalid ReportId");
+			val = BT_HID_HANDSHAKE_ERR_INVALID_REPORT_ID;
 			ret = bt_hid_device_reply_to_report(remote_addr,
 					BT_HID_HEADER_HANDSHAKE,
 					BT_HID_PARAM_DATA_RTYPE_INPUT,
 					&val, sizeof(val));
-			TC_PRT("ret %d", ret);
-			break;
-		default:
-			TC_PRT("Unkonw");
-			break;
+		}
+		TC_PRT("ret %d", ret);
+		break;
+	case BT_HID_HEADER_SET_REPORT:
+		TC_PRT("SET_REPORT data");
+		break;
+	case BT_HID_HEADER_DATA:
+		TC_PRT("TRANs DATA");
+		break;
+	case BT_HID_HEADER_GET_PROTOCOL:
+		TC_PRT("GET PROTOCOL");
+		ret = bt_hid_device_reply_to_report(remote_addr,
+				BT_HID_HEADER_GET_PROTOCOL,
+				BT_HID_PARAM_DATA_RTYPE_INPUT,
+				&val, sizeof(val));
+		TC_PRT("ret %d", ret);
+		break;
+	case BT_HID_HEADER_SET_PROTOCOL:
+		TC_PRT("SET PROTOCOL");
+		val = BT_HID_HANDSHAKE_SUCCESSFUL;
+		ret = bt_hid_device_reply_to_report(remote_addr,
+				BT_HID_HEADER_HANDSHAKE,
+				BT_HID_PARAM_DATA_RTYPE_INPUT,
+				&val, sizeof(val));
+		TC_PRT("ret %d", ret);
+		break;
+	default:
+		TC_PRT("Unkonw");
+		break;
 	}
+
 	switch (data->param) {
-		case BT_HID_PARAM_DATA_RTYPE_INPUT:
-			TC_PRT("Input Report");
-			break;
-		case BT_HID_PARAM_DATA_RTYPE_OUTPUT:
-			TC_PRT("Output Report");
-			break;
+	case BT_HID_PARAM_DATA_RTYPE_INPUT:
+		TC_PRT("Input Report");
+		break;
+	case BT_HID_PARAM_DATA_RTYPE_OUTPUT:
+		TC_PRT("Output Report");
+		break;
 	}
 }
 
@@ -2219,9 +2217,8 @@ void __bt_gatt_client_value_changed_cb(bt_gatt_h chr,
 
 	TC_PRT("Value changed for [%s]", uuid);
 	TC_PRT("len [%d]", len);
-	for (i = 0; i < len; i++) {
+	for (i = 0; i < len; i++)
 		TC_PRT("value %u", value[i]);
-	}
 
 	g_free(uuid);
 
@@ -2238,9 +2235,8 @@ void __bt_HP_client_cp_req_status_changed_cb(bt_gatt_h chr,
 
 	TC_PRT("Value changed for [%s]", uuid);
 	TC_PRT("len [%d]", len);
-		for (i = 0; i < len; i++) {
+		for (i = 0; i < len; i++)
 				TC_PRT("value %u", value[i]);
-		}
 
 	g_free(uuid);
 
@@ -2265,9 +2261,9 @@ void __bt_gatt_server_value_changed_cb(char *remote_address,
 	TC_PRT("remote_address : %s", remote_address);
 	TC_PRT("offset : %d", offset);
 	TC_PRT("len [%d] : ", len);
-	for (i = 0; i < len; i++) {
+	for (i = 0; i < len; i++)
 		printf("%d ", value[i]);
-	}
+
 	printf("\n");
 }
 
@@ -2363,9 +2359,8 @@ void __bt_gatt_characteristic_changed_cb(bt_gatt_attribute_h characteristic,
 	TC_PRT("service %s", (char *)characteristic);
 	TC_PRT("value_length %d", value_length);
 
-	for (i = 0; i < value_length; i++) {
+	for (i = 0; i < value_length; i++)
 		TC_PRT("value %c", value[i]);
-	}
 
 	return;
 }
@@ -2385,9 +2380,8 @@ void __bt_gatt_char_read_cb(unsigned char *value,
 
 	TC_PRT("value_length %d", value_length);
 
-	for (i = 0; i < value_length; i++) {
+	for (i = 0; i < value_length; i++)
 		TC_PRT("value %u", value[i]);
-	}
 
 	return;
 }
@@ -4123,7 +4117,7 @@ int test_input_callback(void *data)
 					BT_ADAPTER_LE_PACKET_ADVERTISING, true);
 				if (ret != BT_ERROR_NONE)
 					TC_PRT("add appearance data [0x%04x]", ret);
-				manufacture = manufacture_2;		
+				manufacture = manufacture_2;
 				break;
 
 			case 3: /* All */
@@ -4609,9 +4603,9 @@ int test_input_callback(void *data)
 
 			ret = bt_device_is_profile_connected(remote_addr,
 				profile, &connected_status);
-			if (ret < BT_ERROR_NONE) {
+			if (ret < BT_ERROR_NONE)
 				TC_PRT("returns %s\n", __bt_get_error_message(ret));
-			}
+
 			TC_PRT("Profile [%s]",
 				connected_status ? "Connected" : "Disconnected");
 			break;
@@ -4665,16 +4659,14 @@ int test_input_callback(void *data)
 			ret = bt_device_get_connection_state(remote_addr,
 					BT_DEVICE_CONNECTION_LINK_BREDR,
 					&bredr_connected);
-			if (ret < BT_ERROR_NONE) {
+			if (ret < BT_ERROR_NONE)
 				TC_PRT("returns %s\n", __bt_get_error_message(ret));
-			}
 
 			ret = bt_device_get_connection_state(remote_addr,
 					BT_DEVICE_CONNECTION_LINK_LE,
 					&le_connected);
-			if (ret < BT_ERROR_NONE) {
+			if (ret < BT_ERROR_NONE)
 				TC_PRT("returns %s\n", __bt_get_error_message(ret));
-			}
 
 			TC_PRT("BR/EDR [%s], LE [%s]",
 				bredr_connected ? "Connected" : "Disconnected",
@@ -4973,9 +4965,8 @@ int test_input_callback(void *data)
 			bool opened = false;
 			ret = bt_ag_is_sco_opened(&opened);
 			TC_PRT("opend[%s]", opened ? "YES" : "NO");
-			if (ret < BT_ERROR_NONE) {
+			if (ret < BT_ERROR_NONE)
 				TC_PRT("returns %s\n", __bt_get_error_message(ret));
-			}
 			break;
 		}
 		case BT_UNIT_TEST_FUNCTION_AG_SET_SCO_STATE_CHANGED_CB:
@@ -5115,9 +5106,8 @@ int test_input_callback(void *data)
 			bool enabled = false;
 			ret = bt_ag_is_nrec_enabled(&enabled);
 			TC_PRT("opend[%s]", enabled ? "YES" : "NO");
-			if (ret < BT_ERROR_NONE) {
+			if (ret < BT_ERROR_NONE)
 				TC_PRT("returns %s\n", __bt_get_error_message(ret));
-			}
 			break;
 		}
 		case BT_UNIT_TEST_FUNCTION_ACTIVATE_FLAG_TO_SET_PARAMETERS:
@@ -5252,9 +5242,8 @@ int test_input_callback(void *data)
 				__bt_gatt_client_foreach_svc_cb,
 				(void *)test_id);
 #endif
-			if (ret != BT_ERROR_NONE) {
+			if (ret != BT_ERROR_NONE)
 				TC_PRT("returns %s\n", __bt_get_error_message(ret));
-			}
 			break;
 		}
 		case BT_UNIT_TEST_FUNCTION_GATT_CLIENT_READ_VALUE: {
@@ -5305,9 +5294,8 @@ int test_input_callback(void *data)
 						__bt_gatt_client_read_complete_cb, NULL);
 			}
 
-			if (ret != BT_ERROR_NONE) {
+			if (ret != BT_ERROR_NONE)
 				TC_PRT("bt_gatt_client_read_value is failed : %d", ret);
-			}
 
 			__bt_free_test_param(&g_test_param);
 			break;
@@ -5377,9 +5365,8 @@ int test_input_callback(void *data)
 						__bt_gatt_client_write_complete_cb, NULL);
 			}
 
-			if (ret != BT_ERROR_NONE) {
+			if (ret != BT_ERROR_NONE)
 				TC_PRT("bt_gatt_client_write_value is failed : %d", ret);
-			}
 
 			__bt_free_test_param(&g_test_param);
 			break;
@@ -5945,9 +5932,8 @@ int test_input_callback(void *data)
 
 			ret = bt_gatt_client_set_characteristic_value_changed_cb(noti_source,
 					__bt_gatt_client_value_changed_cb, NULL);
-			if (ret != BT_ERROR_NONE) {
+			if (ret != BT_ERROR_NONE)
 				TC_PRT("bt_gatt_client_set_characteristic_value_changed_cb is failed : %d", ret);
-			}
 			break;
 		}
 		case BT_UNIT_TEST_FUNCTION_ANCS_POSITIVE_ACTION: {
@@ -6025,9 +6011,8 @@ int test_input_callback(void *data)
 
 			ret = bt_gatt_client_set_characteristic_value_changed_cb(data_source,
 					__bt_gatt_client_value_changed_cb, NULL);
-			if (ret != BT_ERROR_NONE) {
+			if (ret != BT_ERROR_NONE)
 				TC_PRT("bt_gatt_client_set_characteristic_value_changed_cb is failed : %d", ret);
-			}
 
 			noti_id = g_test_param.params[0];
 			id = atoi(noti_id);
@@ -6164,9 +6149,8 @@ int test_input_callback(void *data)
 				bt_gatt_get_uuid_specification_name(uuid, &name);
 				TC_PRT("uuid: %s [%s]", uuid, name);
 
-				for (i = 0; i < value_length; i++) {
+				for (i = 0; i < value_length; i++)
 					TC_PRT("value %c", value[i]);
-				}
 
 				g_free(uuid);
 				g_free(name);
@@ -6286,9 +6270,8 @@ int test_input_callback(void *data)
 			ret = bt_gatt_client_foreach_services(hps_client,
 					__bt_hps_client_svc_cb, (void *)test_id);
 #endif
-			if (ret != BT_ERROR_NONE) {
+			if (ret != BT_ERROR_NONE)
 				TC_PRT("returns %s\n", __bt_get_error_message(ret));
-			}
 			break;
 		}
 		case BT_UNIT_TEST_FUNCTION_HPS_CLIENT_SET_URI: {
@@ -6328,9 +6311,8 @@ int test_input_callback(void *data)
 			ret = bt_gatt_client_write_value(chr,
 					__bt_gatt_client_write_complete_cb, NULL);
 
-			if (ret != BT_ERROR_NONE) {
+			if (ret != BT_ERROR_NONE)
 				TC_PRT("bt_gatt_client_write_value is failed : %d", ret);
-			}
 
 			__bt_free_test_param(&g_test_param);
 			break;
@@ -6373,9 +6355,8 @@ int test_input_callback(void *data)
 			ret = bt_gatt_client_write_value(chr,
 					__bt_gatt_client_write_complete_cb, NULL);
 
-			if (ret != BT_ERROR_NONE) {
+			if (ret != BT_ERROR_NONE)
 				TC_PRT("bt_gatt_client_write_value is failed : %d", ret);
-			}
 
 			__bt_free_test_param(&g_test_param);
 			break;
@@ -6419,16 +6400,14 @@ int test_input_callback(void *data)
 			ret = bt_gatt_client_set_characteristic_value_changed_cb(chr,
 					__bt_HP_client_cp_req_status_changed_cb, NULL);
 
-			if (ret != BT_ERROR_NONE) {
+			if (ret != BT_ERROR_NONE)
 				TC_PRT("bt_gatt_client_write_value is failed : %d", ret);
-			}
 
 			ret = bt_gatt_client_write_value(chr,
 					__bt_gatt_client_write_complete_cb, NULL);
 
-			if (ret != BT_ERROR_NONE) {
+			if (ret != BT_ERROR_NONE)
 				TC_PRT("bt_gatt_client_write_value is failed : %d", ret);
-			}
 
 			__bt_free_test_param(&g_test_param);
 			break;
@@ -6469,9 +6448,9 @@ int test_input_callback(void *data)
 			ret = bt_gatt_client_write_value(chr,
 					__bt_gatt_client_write_complete_cb, NULL);
 
-			if (ret != BT_ERROR_NONE) {
+			if (ret != BT_ERROR_NONE)
 				TC_PRT("bt_gatt_client_write_value is failed : %d", ret);
-			}
+
 			__bt_free_test_param(&g_test_param);
 			break;
 		}
@@ -6497,9 +6476,8 @@ int test_input_callback(void *data)
 			ret = bt_gatt_client_read_value(chr,
 					__bt_gatt_client_read_complete_cb, NULL);
 
-			if (ret != BT_ERROR_NONE) {
+			if (ret != BT_ERROR_NONE)
 				TC_PRT("bt_gatt_client_read_value is failed : %d", ret);
-			}
 			break;
 		}
 
@@ -6524,9 +6502,8 @@ int test_input_callback(void *data)
 			ret = bt_gatt_client_read_value(chr,
 					__bt_gatt_client_read_complete_cb, NULL);
 
-			if (ret != BT_ERROR_NONE) {
+			if (ret != BT_ERROR_NONE)
 				TC_PRT("bt_gatt_client_read_value is failed : %d", ret);
-			}
 			break;
 		}
 		case BT_UNIT_TEST_FUNCTION_HPS_CLIENT_GET_ENTITY: {
@@ -6550,9 +6527,9 @@ int test_input_callback(void *data)
 			ret = bt_gatt_client_read_value(chr,
 					__bt_gatt_client_read_complete_cb, NULL);
 
-			if (ret != BT_ERROR_NONE) {
+			if (ret != BT_ERROR_NONE)
 				TC_PRT("bt_gatt_client_read_value is failed : %d", ret);
-			}
+
 			break;
 		}
 		case BT_UNIT_TEST_FUNCTION_HPS_CLIENT_GET_SECURITY: {
@@ -6576,9 +6553,9 @@ int test_input_callback(void *data)
 			ret = bt_gatt_client_read_value(chr,
 					__bt_gatt_client_read_complete_cb, NULL);
 
-			if (ret != BT_ERROR_NONE) {
+			if (ret != BT_ERROR_NONE)
 				TC_PRT("bt_gatt_client_read_value is failed : %d", ret);
-			}
+
 			break;
 		}
 		case BT_UNIT_TEST_FUNCTION_HPS_CLIENT_SET_STATUS_NOTIFICATION: {
@@ -7212,91 +7189,81 @@ int test_input_callback(void *data)
 		switch (test_id) {
 		case BT_UNIT_TEST_FUNCTION_HF_INITIALIZE:
 			ret = bt_hf_initialize();
-			if (ret < BT_ERROR_NONE) {
+			if (ret < BT_ERROR_NONE)
 				TC_PRT("failed with [0x%04x]", ret);
-			} else if (ret == BT_ERROR_NONE) {
+			else if (ret == BT_ERROR_NONE)
 				TC_PRT("Success");
-			}
 			break;
 		case BT_UNIT_TEST_FUNCTION_HF_DEINITIALIZE:
 			ret = bt_hf_deinitialize();
-			if (ret < BT_ERROR_NONE) {
+			if (ret < BT_ERROR_NONE)
 				TC_PRT("failed with [0x%04x]", ret);
-			} else if (ret == BT_ERROR_NONE) {
+			else if (ret == BT_ERROR_NONE)
 				TC_PRT("Success");
-			}
 			break;
 		case BT_UNIT_TEST_FUNCTION_HF_NOTIFY_CALL_ANSWER:
 			ret = bt_hf_notify_call_event(
 					BT_HF_CALL_EVENT_ANSWER,
 					"9663868998");
-			if (ret < BT_ERROR_NONE) {
+			if (ret < BT_ERROR_NONE)
 				TC_PRT("failed with [0x%04x]", ret);
-			} else if (ret == BT_ERROR_NONE) {
+			else if (ret == BT_ERROR_NONE)
 				TC_PRT("Success");
-			}
 			break;
 		case BT_UNIT_TEST_FUNCTION_HF_NOTIFY_SPEAKER_GAIN:
 			ret = bt_hf_notify_speaker_gain(10);
-			if (ret < BT_ERROR_NONE) {
+			if (ret < BT_ERROR_NONE)
 				TC_PRT("failed with [0x%04x]", ret);
-			} else if (ret == BT_ERROR_NONE) {
+			else if (ret == BT_ERROR_NONE)
 				TC_PRT("Success");
-			}
 			break;
 		case BT_UNIT_TEST_FUNCTION_HF_SET_SPEAKER_GAIN_CB:
 			ret = bt_hf_set_speaker_gain_changed_cb(
 					__bt_hf_speaker_gain_changed_cb,
 					NULL);
-			if (ret < BT_ERROR_NONE) {
+			if (ret < BT_ERROR_NONE)
 				TC_PRT("failed with [0x%04x]", ret);
-			} else if (ret == BT_ERROR_NONE) {
+			else if (ret == BT_ERROR_NONE)
 				TC_PRT("Success");
-			}
 			break;
 		case BT_UNIT_TEST_FUNCTION_HF_UNSET_SPEAKER_GAIN_CB:
 			ret = bt_hf_unset_speaker_gain_changed_cb();
-			if (ret < BT_ERROR_NONE) {
+			if (ret < BT_ERROR_NONE)
 				TC_PRT("failed with [0x%04x]", ret);
-			} else if (ret == BT_ERROR_NONE) {
+			else if (ret == BT_ERROR_NONE)
 				TC_PRT("Success");
-			}
 			break;
 		case BT_UNIT_TEST_FUNCTION_HF_NOTIFY_VOICE_REC_TRUE:
 			ret = bt_hf_notify_voice_recognition_state(true);
-			if (ret < BT_ERROR_NONE) {
+			if (ret < BT_ERROR_NONE)
 				TC_PRT("failed with [0x%04x]", ret);
-			} else if (ret == BT_ERROR_NONE) {
+			else if (ret == BT_ERROR_NONE)
 				TC_PRT("Success");
-			}
 			break;
 		case BT_UNIT_TEST_FUNCTION_HF_NOTIFY_CALL_TERM:
 			ret = bt_hf_notify_call_event(
 					BT_HF_CALL_EVENT_IDLE,
 					"9663868998");
-			if (ret < BT_ERROR_NONE) {
+			if (ret < BT_ERROR_NONE)
 				TC_PRT("failed with [0x%04x]", ret);
-			} else if (ret == BT_ERROR_NONE) {
+			else if (ret == BT_ERROR_NONE)
 				TC_PRT("Success");
-			}
 			break;
 		case BT_UNIT_TEST_FUNCTION_HF_NOTIFY_CALL_INIT:
 			ret = bt_hf_notify_call_event(
 					BT_HF_CALL_EVENT_DIAL,
 					"9663868998");
-			if (ret < BT_ERROR_NONE) {
+			if (ret < BT_ERROR_NONE)
 				TC_PRT("failed with [0x%04x]", ret);
-			} else if (ret == BT_ERROR_NONE) {
+			else if (ret == BT_ERROR_NONE)
 				TC_PRT("Success");
-			}
 			break;
 		case BT_UNIT_TEST_FUNCTION_HF_NOTIFY_VOICE_REC_FALSE:
 			ret = bt_hf_notify_voice_recognition_state(false);
-			if (ret < BT_ERROR_NONE) {
+			if (ret < BT_ERROR_NONE)
 				TC_PRT("failed with [0x%04x]", ret);
-			} else if (ret == BT_ERROR_NONE) {
+			else if (ret == BT_ERROR_NONE)
 				TC_PRT("Success");
-			}
 			break;
 		case BT_UNIT_TEST_FUNCTION_HF_IS_SCO_OPENED: {
 			bool is_opened = false;
@@ -7316,9 +7283,9 @@ int test_input_callback(void *data)
 			GSList *list;
 			ret = bt_hf_get_call_status_info_list(&list);
 
-			if (ret < BT_ERROR_NONE) {
+			if (ret < BT_ERROR_NONE)
 				TC_PRT("failed with [0x%04x]", ret);
-			} else {
+			else {
 				for (; list; list = g_slist_next(list)) {
 					bt_hf_call_status_info_s *call_info = list->data;
 					TC_PRT("Call info [No:%s, Dir:%d, Stat:%d, Mpt:%d, Idx:%d]",
@@ -7333,55 +7300,49 @@ int test_input_callback(void *data)
 		case BT_UNIT_TEST_FUNCTION_HF_SET_SCO_CHANGED_CB:
 			ret = bt_hf_set_sco_state_changed_cb(
 					__bt_hf_sco_state_changed_cb, NULL);
-			if (ret < BT_ERROR_NONE) {
+			if (ret < BT_ERROR_NONE)
 				TC_PRT("failed with [0x%04x]", ret);
-			} else if (ret == BT_ERROR_NONE) {
+			else if (ret == BT_ERROR_NONE)
 				TC_PRT("Success");
-			}
 			break;
 		case BT_UNIT_TEST_FUNCTION_HF_UNSET_SCO_CHANGED_CB:
 			ret = bt_hf_unset_sco_state_changed_cb();
-			if (ret < BT_ERROR_NONE) {
+			if (ret < BT_ERROR_NONE)
 				TC_PRT("failed with [0x%04x]", ret);
-			} else if (ret == BT_ERROR_NONE) {
+			else if (ret == BT_ERROR_NONE)
 				TC_PRT("Success");
-			}
 			break;
 		case BT_UNIT_TEST_FUNCTION_HF_SET_CALL_EVENT_CB:
 			ret = bt_hf_set_call_handling_event_cb(
 					__bt_hf_set_call_handling_event_cb,
 					NULL);
-			if (ret < BT_ERROR_NONE) {
+			if (ret < BT_ERROR_NONE)
 				TC_PRT("failed with [0x%04x]", ret);
-			} else if (ret == BT_ERROR_NONE) {
+			else if (ret == BT_ERROR_NONE)
 				TC_PRT("Success");
-			}
 			break;
 		case BT_UNIT_TEST_FUNCTION_HF_UNSET_CALL_EVENT_CB:
 			ret = bt_hf_unset_call_handling_event_cb();
-			if (ret < BT_ERROR_NONE) {
+			if (ret < BT_ERROR_NONE)
 				TC_PRT("failed with [0x%04x]", ret);
-			} else if (ret == BT_ERROR_NONE) {
+			else if (ret == BT_ERROR_NONE)
 				TC_PRT("Success");
-			}
 			break;
 		case BT_UNIT_TEST_FUNCTION_HF_SET_CALL_STATUS_UPDATED_EVENT_CB:
 			ret = bt_hf_set_call_status_updated_event_cb(
 					__bt_hf_call_status_updated_event_cb,
 					NULL);
-			if (ret < BT_ERROR_NONE) {
+			if (ret < BT_ERROR_NONE)
 				TC_PRT("failed with [0x%04x]", ret);
-			} else if (ret == BT_ERROR_NONE) {
+			else if (ret == BT_ERROR_NONE)
 				TC_PRT("Success");
-			}
 			break;
 		case BT_UNIT_TEST_FUNCTION_HF_UNSET_CALL_STATUS_UPDATED_EVENT_CB:
 			ret = bt_hf_unset_call_status_updated_event_cb();
-			if (ret < BT_ERROR_NONE) {
+			if (ret < BT_ERROR_NONE)
 				TC_PRT("failed with [0x%04x]", ret);
-			} else if (ret == BT_ERROR_NONE) {
+			else if (ret == BT_ERROR_NONE)
 				TC_PRT("Success");
-			}
 			break;
 		case BT_UNIT_TEST_FUNCTION_ACTIVATE_FLAG_TO_SET_PARAMETERS:
 			need_to_set_params = true;

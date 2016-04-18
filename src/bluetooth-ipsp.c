@@ -118,9 +118,9 @@ int _bt_le_ipsp_connect(const char *address)
 
 	ret = _bt_get_error_code(bluetooth_le_ipsp_connect((ipsp_device_address_t *)&bd_addr));
 
-	if (ret != BT_ERROR_NONE) {
+	if (ret != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
-	}
+
 	return ret;
 }
 
@@ -137,9 +137,9 @@ int _bt_le_ipsp_disconnect(const char *address)
 
 	ret = _bt_get_error_code(bluetooth_le_ipsp_disconnect((ipsp_device_address_t *)&bd_addr));
 
-	if (ret != BT_ERROR_NONE) {
+	if (ret != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
-	}
+
 	return ret;
 }
 

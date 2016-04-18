@@ -51,9 +51,8 @@ int bt_hdp_register_sink_app(unsigned short data_type, char **app_id)
 	}
 
 	*app_id = strdup(app_handle);
-	if (*app_id == NULL) {
+	if (*app_id == NULL)
 		return BT_ERROR_OUT_OF_MEMORY;
-	}
 
 	return BT_ERROR_NONE;
 }
@@ -67,9 +66,9 @@ int bt_hdp_unregister_sink_app(const char *app_id)
 	BT_CHECK_INPUT_PARAMETER(app_id);
 	error = bluetooth_hdp_deactivate(app_id);
 	error = _bt_get_error_code(error);
-	if (BT_ERROR_NONE != error) {
+	if (BT_ERROR_NONE != error)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); /* LCOV_EXCL_LINE */
-	}
+
 	return error;
 }
 
@@ -84,9 +83,9 @@ int bt_hdp_send_data(unsigned int channel, const char *data, unsigned int size)
 	}
 	error = bluetooth_hdp_send_data(channel, data, size);
 	error = _bt_get_error_code(error);
-	if (BT_ERROR_NONE != error) {
+	if (BT_ERROR_NONE != error)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
-	}
+
 	return error; /* LCOV_EXCL_STOP */
 }
 
@@ -102,9 +101,9 @@ int bt_hdp_connect_to_source(const char *remote_address, const char *app_id)
 	_bt_convert_address_to_hex(&addr_hex, remote_address);
 	error = bluetooth_hdp_connect(app_id, HDP_QOS_ANY, &addr_hex);
 	error = _bt_get_error_code(error);
-	if (error != BT_ERROR_NONE) {
+	if (error != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
-	}
+
 	return error; /* LCOV_EXCL_STOP */
 }
 
@@ -120,9 +119,9 @@ int bt_hdp_disconnect(const char *remote_address, unsigned int channel)
 
 	error = bluetooth_hdp_disconnect(channel, &addr_hex);
 	error = _bt_get_error_code(error);
-	if (error != BT_ERROR_NONE) {
+	if (error != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
-	}
+
 	return error; /* LCOV_EXCL_STOP */
 }
 

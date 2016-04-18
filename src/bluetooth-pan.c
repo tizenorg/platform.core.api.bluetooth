@@ -43,9 +43,9 @@ int bt_nap_activate(void)
 	BT_CHECK_INIT_STATUS();
 	error = bluetooth_network_activate_server();
 	error = _bt_get_error_code(error);
-	if (error != BT_ERROR_NONE) {
+	if (error != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
-	}
+
 	return error;
 }
 
@@ -57,9 +57,9 @@ int bt_nap_deactivate(void)
 	BT_CHECK_INIT_STATUS();
 	error = bluetooth_network_deactivate_server();
 	error = _bt_get_error_code(error);
-	if (error != BT_ERROR_NONE) {
+	if (error != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
-	}
+
 	return error;
 }
 
@@ -73,11 +73,10 @@ int bt_nap_disconnect_all(void)
 	BT_CHECK_INIT_STATUS();
 	error = bluetooth_network_deactivate_server();
 	error = _bt_get_error_code(error);
-	if (error != BT_ERROR_NONE) {
+	if (error != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
-	} else {
+	else
 		return bt_nap_activate();
-	}
 
 	return error;
 }

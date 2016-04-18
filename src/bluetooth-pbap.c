@@ -42,9 +42,8 @@ int bt_pbap_init(void)
 	BT_CHECK_INIT_STATUS();
 	int error_code = BT_ERROR_NONE;
 	error_code = _bt_get_error_code(bluetooth_pbap_init());
-	if (error_code != BT_ERROR_NONE) {
+	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
-	}
 
 	return error_code;
 }
@@ -55,9 +54,8 @@ int bt_pbap_deinit(void)
 	BT_CHECK_INIT_STATUS();
 	int error_code = BT_ERROR_NONE;
 	error_code = _bt_get_error_code(bluetooth_pbap_deinit());
-	if (error_code != BT_ERROR_NONE) {
+	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
-	}
 
 	return error_code;
 }

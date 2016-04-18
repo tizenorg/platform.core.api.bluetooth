@@ -140,9 +140,9 @@ int bt_avrcp_target_notify_equalizer_state(bt_avrcp_equalizer_state_e state)
 	error = bluetooth_media_player_change_property(EQUALIZER, state);
 	error = _bt_convert_avrcp_error_code(error);
 	error = _bt_get_error_code(error);
-	if (BT_ERROR_NONE != error) {
+	if (BT_ERROR_NONE != error)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); /* LCOV_EXCL_LINE */
-	}
+
 	return error;
 }
 int bt_avrcp_target_notify_repeat_mode(bt_avrcp_repeat_mode_e mode)
@@ -155,9 +155,9 @@ int bt_avrcp_target_notify_repeat_mode(bt_avrcp_repeat_mode_e mode)
 	error = bluetooth_media_player_change_property(REPEAT, mode);
 	error = _bt_convert_avrcp_error_code(error);
 	error = _bt_get_error_code(error);
-	if (BT_ERROR_NONE != error) {
+	if (BT_ERROR_NONE != error)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); /* LCOV_EXCL_LINE */
-	}
+
 	return error;
 }
 
@@ -171,9 +171,9 @@ int bt_avrcp_target_notify_shuffle_mode(bt_avrcp_shuffle_mode_e mode)
 	error = bluetooth_media_player_change_property(SHUFFLE, mode);
 	error = _bt_convert_avrcp_error_code(error);
 	error = _bt_get_error_code(error);
-	if (BT_ERROR_NONE != error) {
+	if (BT_ERROR_NONE != error)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); /* LCOV_EXCL_LINE */
-	}
+
 	return error;
 }
 int bt_avrcp_target_notify_scan_mode(bt_avrcp_scan_mode_e mode)
@@ -186,9 +186,9 @@ int bt_avrcp_target_notify_scan_mode(bt_avrcp_scan_mode_e mode)
 	error = bluetooth_media_player_change_property(SCAN, mode);
 	error = _bt_convert_avrcp_error_code(error);
 	error = _bt_get_error_code(error);
-	if (BT_ERROR_NONE != error) {
+	if (BT_ERROR_NONE != error)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); /* LCOV_EXCL_LINE */
-	}
+
 	return error;
 }
 
@@ -202,9 +202,9 @@ int bt_avrcp_target_notify_player_state(bt_avrcp_player_state_e state)
 	error = bluetooth_media_player_change_property(STATUS, state);
 	error = _bt_convert_avrcp_error_code(error);
 	error = _bt_get_error_code(error);
-	if (BT_ERROR_NONE != error) {
+	if (BT_ERROR_NONE != error)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); /* LCOV_EXCL_LINE */
-	}
+
 	return error;
 }
 
@@ -218,9 +218,9 @@ int bt_avrcp_target_notify_position(unsigned int position)
 	error = bluetooth_media_player_change_property(POSITION, position);
 	error = _bt_convert_avrcp_error_code(error);
 	error = _bt_get_error_code(error);
-	if (BT_ERROR_NONE != error) {
+	if (BT_ERROR_NONE != error)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); /* LCOV_EXCL_LINE */
-	}
+
 	return error;
 }
 
@@ -243,9 +243,9 @@ int bt_avrcp_target_notify_track(const char *title, const char *artist, const ch
 	error = bluetooth_media_player_change_track(&metadata);
 	error = _bt_convert_avrcp_error_code(error);
 	error = _bt_get_error_code(error);
-	if (BT_ERROR_NONE != error) {
+	if (BT_ERROR_NONE != error)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error); /* LCOV_EXCL_LINE */
-	}
+
 	return error;
 }
 

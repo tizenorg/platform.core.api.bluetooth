@@ -1332,9 +1332,8 @@ static int __bt_remove_ad_data_by_type(char *in_data, unsigned int in_len,
 	}
 
 	p = (char *)malloc(sizeof(char) *(in_len - len));
-	if (p == NULL) {
+	if (p == NULL)
 		return BT_ERROR_OUT_OF_MEMORY;
-	}
 
 	memcpy(p, in_data, sizeof(char) *i);
 	memcpy(p + i, in_data + i + len, sizeof(char) *(in_len - len - i));
@@ -1399,9 +1398,8 @@ int bt_adapter_le_add_advertising_data(bt_advertiser_h advertiser,
 		*p = NULL;
 
 	new_p = realloc(*p, sizeof(char) *(*len + data_size + 2));
-	if (new_p == NULL) {
+	if (new_p == NULL)
 		return BT_ERROR_OUT_OF_MEMORY;
-	}
 
 	new_p[*len] = data_size + 1;
 	new_p[*len + 1] = adv_type;
@@ -1457,9 +1455,8 @@ int bt_adapter_le_remove_advertising_data(bt_advertiser_h advertiser,
 	}
 
 	ret = __bt_remove_ad_data_by_type(*p, *len, adv_type, &new_p, &new_len);
-	if (ret != BT_ERROR_NONE) {
+	if (ret != BT_ERROR_NONE)
 		return ret;
-	}
 
 	free(*p);
 	*p = new_p;

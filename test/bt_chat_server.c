@@ -44,9 +44,8 @@ static char *quit_command = "Quit";
 gboolean timeout_func(gpointer data)
 {
 	LOGE("[%s] Timeout.", __FUNCTION__);
-	if (g_mainloop) {
+	if (g_mainloop)
 		g_main_loop_quit((GMainLoop *)data);
-	}
 
 	return FALSE;
 }
@@ -66,9 +65,8 @@ void bt_state_changed_impl(int result,
 		}
 	}
 
-	if (g_mainloop) {
+	if (g_mainloop)
 		g_main_loop_quit(g_mainloop);
-	}
 }
 
 void bt_socket_connection_state_changed_impl(int result,
@@ -117,9 +115,8 @@ void bt_socket_data_received_impl(bt_socket_received_data_s *data,
 	if (data->data_size > 0) {
 		if (!strncmp(data->data, quit_command, data->data_size)) {
 			LOGI("[%s] Callback: Quit command.", __FUNCTION__);
-			if (g_mainloop) {
+			if (g_mainloop)
 				g_main_loop_quit(g_mainloop);
-			}
 		}
 
 		if (bt_socket_send_data(connected_socket,

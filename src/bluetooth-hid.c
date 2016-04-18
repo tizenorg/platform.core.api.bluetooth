@@ -123,9 +123,9 @@ int bt_hid_host_connect(const char *remote_address)
 
 	error = bluetooth_hid_connect((hid_device_address_t *)&addr_hex);
 	error = _bt_get_error_code(error);
-	if (error != BT_ERROR_NONE) {
+	if (error != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
-	}
+
 	return error; /* LCOV_EXCL_STOP */
 }
 
@@ -143,9 +143,9 @@ int bt_hid_host_disconnect(const char *remote_address)
 
 	error = bluetooth_hid_disconnect((hid_device_address_t *)&addr_hex);
 	error = _bt_get_error_code(error);
-	if (error != BT_ERROR_NONE) {
+	if (error != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
-	}
+
 	return error; /* LCOV_EXCL_STOP */
 }
 /* LCOV_EXCL_START */

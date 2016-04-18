@@ -271,9 +271,9 @@ int bt_audio_connect(const char *remote_address, bt_audio_profile_type_e type)
 		break;
 	}
 	error = _bt_get_error_code(error);
-	if (error != BT_ERROR_NONE) {
+	if (error != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
-	}
+
 	return error;
 }
 /* LCOV_EXCL_STOP */
@@ -329,9 +329,9 @@ int bt_audio_disconnect(const char *remote_address, bt_audio_profile_type_e type
 		break;
 	}
 	error = _bt_get_error_code(error);
-	if (error != BT_ERROR_NONE) {
+	if (error != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
-	}
+
 	return error;
 }
 /* LCOV_EXCL_STOP */
@@ -366,9 +366,9 @@ int bt_ag_notify_speaker_gain(int gain)
 	BT_CHECK_AG_INIT_STATUS();
 	error = bluetooth_telephony_set_speaker_gain((unsigned short)gain);
 	error = _bt_convert_telephony_error_code(error);
-	if (BT_ERROR_NONE != error) {
+	if (BT_ERROR_NONE != error)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
-	}
+
 	return error;
 }
 
@@ -382,9 +382,9 @@ int bt_ag_get_speaker_gain(int *gain)
 	BT_CHECK_INPUT_PARAMETER(gain);
 	error = bluetooth_telephony_get_headset_volume((unsigned int *)gain);
 	error = _bt_convert_telephony_error_code(error);
-	if (BT_ERROR_NONE != error) {
+	if (BT_ERROR_NONE != error)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
-	}
+
 	return error;
 }
 
@@ -400,9 +400,9 @@ int bt_ag_is_nrec_enabled(bool *enabled)
 
 	error = bluetooth_telephony_is_nrec_enabled(&is_enabled);
 	error = _bt_convert_telephony_error_code(error);
-	if (BT_ERROR_NONE != error) {
+	if (BT_ERROR_NONE != error)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
-	}
+
 	if (is_enabled)
 		*enabled = true;
 	else
@@ -423,9 +423,9 @@ int bt_ag_is_wbs_mode(bool *wbs_mode)
 
 	error = bluetooth_telephony_is_wbs_mode(&is_wbs_mode);
 	error = _bt_convert_telephony_error_code(error);
-	if (BT_ERROR_NONE != error) {
+	if (BT_ERROR_NONE != error)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
-	}
+
 	if (is_wbs_mode)
 		*wbs_mode = true;
 	else
@@ -487,9 +487,9 @@ int bt_ag_open_sco(void)
 	BT_CHECK_AG_INIT_STATUS(); /* LCOV_EXCL_START */
 	error = bluetooth_telephony_audio_open();
 	error = _bt_convert_telephony_error_code(error);
-	if (error != BT_ERROR_NONE) {
+	if (error != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
-	}
+
 	return error; /* LCOV_EXCL_STOP */
 }
 
@@ -502,9 +502,9 @@ int bt_ag_close_sco(void)
 	BT_CHECK_AG_INIT_STATUS(); /* LCOV_EXCL_START */
 	error = bluetooth_telephony_audio_close();
 	error = _bt_convert_telephony_error_code(error);
-	if (error != BT_ERROR_NONE) {
+	if (error != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
-	}
+
 	return error; /* LCOV_EXCL_STOP */
 }
 
@@ -582,9 +582,9 @@ int bt_ag_notify_call_event(bt_ag_call_event_e event, unsigned int call_id, cons
 		error = BLUETOOTH_TELEPHONY_ERROR_INVALID_PARAM;
 	}
 	error = _bt_convert_telephony_error_code(error);
-	if (error != BT_ERROR_NONE) {
+	if (error != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
-	}
+
 	return error;
 }
 
@@ -602,9 +602,9 @@ int bt_ag_notify_call_list(bt_call_list_h list)
 	call_count = g_list_length(handle->list);
 	error = bluetooth_telephony_set_call_status((void *)handle->list, call_count);
 	error = _bt_convert_telephony_error_code(error);
-	if (error != BT_ERROR_NONE) {
+	if (error != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
-	}
+
 	return error;
 }
 /* LCOV_EXCL_STOP */
@@ -621,9 +621,9 @@ int bt_ag_notify_voice_recognition_state(bool state)
 	else
 		error = bluetooth_telephony_stop_voice_recognition();
 	error = _bt_convert_telephony_error_code(error);
-	if (error != BT_ERROR_NONE) {
+	if (error != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
-	}
+
 	return error; /* LCOV_EXCL_STOP */
 }
 
@@ -898,9 +898,9 @@ int bt_hf_notify_call_event(bt_hf_call_event_e event, char *phone_number)
 	}
 
 	error = _bt_get_error_code(error);
-	if (error != BT_ERROR_NONE) {
+	if (error != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error), error);
-	}
+
 	return error;
 }
 

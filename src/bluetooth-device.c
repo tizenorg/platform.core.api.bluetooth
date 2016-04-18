@@ -34,9 +34,8 @@ int bt_device_create_bond(const char *device_address)
 
 	_bt_convert_address_to_hex(&addr_hex, device_address); /* LCOV_EXCL_START */
 	error_code = _bt_get_error_code(bluetooth_bond_device(&addr_hex));
-	if (error_code != BT_ERROR_NONE) {
+	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
-	}
 
 	return error_code;
 }
@@ -53,9 +52,8 @@ int bt_device_create_bond_by_type(const char *device_address,
 
 	_bt_convert_address_to_hex(&addr_hex, device_address);
 	error_code = _bt_get_error_code(bluetooth_bond_device_by_type(&addr_hex, conn_type));
-	if (error_code != BT_ERROR_NONE) {
+	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
-	}
 
 	return error_code;
 } /* LCOV_EXCL_STOP */
@@ -147,9 +145,9 @@ int bt_device_start_service_search(const char *device_address)
 	if (ret == BT_ERROR_OPERATION_FAILED)
 		ret = BT_ERROR_SERVICE_SEARCH_FAILED;
 
-	if (ret != BT_ERROR_NONE) {
+	if (ret != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
-	}
+
 	return ret;
 }
 
@@ -160,9 +158,8 @@ int bt_device_cancel_service_search(void)
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	ret = _bt_get_error_code(bluetooth_cancel_service_search());
-	if (ret != BT_ERROR_NONE) {
+	if (ret != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
-	}
 
 	return ret; /* LCOV_EXCL_STOP */
 }
@@ -396,9 +393,8 @@ int bt_device_le_conn_update(const char *device_address,
 
 	ret = _bt_get_error_code(bluetooth_le_conn_update(&addr_hex, &param));
 
-	if (BT_ERROR_NONE != ret) {
+	if (BT_ERROR_NONE != ret)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
-	}
 
 	return ret;
 }
@@ -592,9 +588,9 @@ int bt_passkey_reply(char *passkey, bool authentication_reply)
 	BT_CHECK_INPUT_PARAMETER(passkey);
 	int error_code = BT_ERROR_NONE;
 	error_code = _bt_get_error_code(bluetooth_passkey_reply(passkey, authentication_reply));
-	if (error_code != BT_ERROR_NONE) {
+	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
-	}
+
 	return error_code;
 }
 
@@ -604,9 +600,9 @@ int bt_passkey_confirmation_reply(bool confirmation_reply)
 
 	int error_code = BT_ERROR_NONE;
 	error_code = _bt_get_error_code(bluetooth_passkey_confirmation_reply(confirmation_reply));
-	if (error_code != BT_ERROR_NONE) {
+	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
-	}
+
 	return error_code;
 }
 int bt_device_le_set_data_length(const char *remote_address,

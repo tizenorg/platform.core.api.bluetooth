@@ -62,9 +62,8 @@ void bt_state_changed_impl(int result,
 		}
 	}
 
-	if (g_mainloop) {
+	if (g_mainloop)
 		g_main_loop_quit(g_mainloop);
-	}
 }
 
 void bt_socket_connection_state_changed_impl(int result,
@@ -100,16 +99,14 @@ void bt_socket_connection_state_changed_impl(int result,
 			} else {
 				LOGE("[%s] Callback: bt_socket_send_data() failed.",
 					__FUNCTION__);
-				if (g_mainloop) {
+				if (g_mainloop)
 					g_main_loop_quit(g_mainloop);
-				}
 			}
 		} else {
 			LOGI("[%s] Callback: Failed to connect",
 				__FUNCTION__);
-			if (g_mainloop) {
+			if (g_mainloop)
 				g_main_loop_quit(g_mainloop);
-			}
 		}
 	} else {
 		LOGI("[%s] Callback: Disconnected.",
@@ -126,9 +123,8 @@ void bt_socket_data_received_impl(bt_socket_received_data_s *data,
 					quit_command, data->data_size)) {
 				LOGI("[%s] Callback: Quit command.",
 					__FUNCTION__);
-				if (g_mainloop) {
+				if (g_mainloop)
 					g_main_loop_quit(g_mainloop);
-				}
 			}
 		} else {
 			LOGE("[%s] Callback: No data.",
@@ -220,9 +216,8 @@ void bt_adapter_device_discovery_state_changed_impl(int result,
 	} else if (discovery_state == BT_ADAPTER_DEVICE_DISCOVERY_FINISHED) {
 		LOGI("[%s] Callback: device discovery finished.",
 			__FUNCTION__);
-		if (g_mainloop) {
+		if (g_mainloop)
 			g_main_loop_quit(g_mainloop);
-		}
 	}
 }
 
@@ -257,9 +252,8 @@ void bt_device_bond_created_impl(int result,
 			__FUNCTION__);
 	}
 
-	if (g_mainloop) {
+	if (g_mainloop)
 		g_main_loop_quit(g_mainloop);
-	}
 }
 
 void bt_device_service_searched_impl(int result,
@@ -286,9 +280,8 @@ void bt_device_service_searched_impl(int result,
 			__FUNCTION__);
 	}
 
-	if (g_mainloop) {
+	if (g_mainloop)
 		g_main_loop_quit(g_mainloop);
-	}
 }
 
 int main()
