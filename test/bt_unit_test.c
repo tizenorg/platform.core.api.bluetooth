@@ -2932,7 +2932,7 @@ int test_set_params(int test_id, char *param)
 
 			if (param_index > 0) {
 				g_test_param.params[param_index - 1] = g_malloc0(strlen(param) + 1);
-				strcpy(g_test_param.params[param_index - 1], param);
+				strncpy(g_test_param.params[param_index - 1], param, strlen(param));
 			}
 
 			if (param_index == g_test_param.param_count) {
@@ -2962,7 +2962,7 @@ int test_set_params(int test_id, char *param)
 
 			if (param_index > 0) {
 				g_test_param.params[param_index - 1] = g_malloc0(strlen(param) + 1);
-				strcpy(g_test_param.params[param_index - 1], param);
+				strncpy(g_test_param.params[param_index - 1], param, strlen(param));
 			}
 
 			if (param_index == g_test_param.param_count) {
@@ -3002,7 +3002,7 @@ int test_set_params(int test_id, char *param)
 
 			if (param_index > 0) {
 				g_test_param.params[param_index - 1] = g_malloc0(strlen(param) + 1);
-				strcpy(g_test_param.params[param_index - 1], param);
+				strncpy(g_test_param.params[param_index - 1], param, strlen(param));
 			}
 
 			if (param_index == g_test_param.param_count) {
@@ -3051,7 +3051,7 @@ int test_set_params(int test_id, char *param)
 
 			if (param_index > 0) {
 				g_test_param.params[param_index - 1] = g_malloc0(strlen(param) + 1);
-				strcpy(g_test_param.params[param_index - 1], param);
+				strncpy(g_test_param.params[param_index - 1], param, strlen(param));
 			}
 
 			if (param_index == g_test_param.param_count) {
@@ -3080,7 +3080,7 @@ int test_set_params(int test_id, char *param)
 
 			if (param_index > 0) {
 				g_test_param.params[param_index - 1] = g_malloc0(strlen(param) + 1);
-				strcpy(g_test_param.params[param_index - 1], param);
+				strncpy(g_test_param.params[param_index - 1], param, strlen(param));
 			}
 
 			if (param_index == g_test_param.param_count) {
@@ -3110,7 +3110,7 @@ int test_set_params(int test_id, char *param)
 
 			if (param_index > 0) {
 				g_test_param.params[param_index - 1] = g_malloc0(strlen(param) + 1);
-				strcpy(g_test_param.params[param_index - 1], param);
+				strncpy(g_test_param.params[param_index - 1], param, strlen(param));
 			}
 
 			if (param_index == g_test_param.param_count) {
@@ -3139,7 +3139,7 @@ int test_set_params(int test_id, char *param)
 
 			if (param_index > 0) {
 				g_test_param.params[param_index - 1] = g_malloc0(strlen(param) + 1);
-				strcpy(g_test_param.params[param_index - 1], param);
+				strncpy(g_test_param.params[param_index - 1], param, strlen(param));
 			}
 
 			if (param_index == g_test_param.param_count) {
@@ -3168,7 +3168,7 @@ int test_set_params(int test_id, char *param)
 
 			if (param_index > 0) {
 				g_test_param.params[param_index - 1] = g_malloc0(strlen(param) + 1);
-				strcpy(g_test_param.params[param_index - 1], param);
+				strncpy(g_test_param.params[param_index - 1], param, strlen(param));
 			}
 
 			if (param_index == g_test_param.param_count) {
@@ -3218,7 +3218,7 @@ int test_set_params(int test_id, char *param)
 
 			if (param_index > 0) {
 				g_test_param.params[param_index - 1] = g_malloc0(strlen(param) + 1);
-				strcpy(g_test_param.params[param_index - 1], param);
+				strncpy(g_test_param.params[param_index - 1], param, strlen(param));
 			}
 
 			if (param_index == g_test_param.param_count) {
@@ -3249,7 +3249,7 @@ int test_set_params(int test_id, char *param)
 				g_test_param.params[param_index - 1] = g_malloc0(len + 1);
 				/* Remove new line character */
 				param[len - 1] = '\0';
-				strcpy(g_test_param.params[param_index - 1], param);
+				strncpy(g_test_param.params[param_index - 1], param, strlen(param));
 			}
 
 			if (param_index == g_test_param.param_count) {
@@ -3290,7 +3290,7 @@ int test_set_params(int test_id, char *param)
 				g_test_param.params[param_index - 1] = g_malloc0(len + 1);
 				/* Remove new line character */
 				param[len - 1] = '\0';
-				strcpy(g_test_param.params[param_index - 1], param);
+				strncpy(g_test_param.params[param_index - 1], param, strlen(param));
 			}
 
 			if (param_index == g_test_param.param_count) {
@@ -3338,7 +3338,7 @@ int test_set_params(int test_id, char *param)
 				g_test_param.params[param_index - 1] = g_malloc0(len + 1);
 				/* Remove new line character */
 				param[len - 1] = '\0';
-				strcpy(g_test_param.params[param_index - 1], param);
+				strncpy(g_test_param.params[param_index - 1], param, strlen(param));
 			}
 
 			if (param_index == g_test_param.param_count) {
@@ -3376,7 +3376,7 @@ int test_set_params(int test_id, char *param)
 				g_test_param.params[param_index - 1] = g_malloc0(len + 1);
 				/* Remove new line character */
 				param[len - 1] = '\0';
-				strcpy(g_test_param.params[param_index - 1], param);
+				strncpy(g_test_param.params[param_index - 1], param, strlen(param));
 			}
 
 			if (param_index == g_test_param.param_count) {
@@ -3417,7 +3417,7 @@ int test_set_params(int test_id, char *param)
 				g_test_param.params[param_index - 1] = g_malloc0(len + 1);
 				/* Remove new line character */
 				param[len - 1] = '\0';
-				strcpy(g_test_param.params[param_index - 1], param);
+				strncpy(g_test_param.params[param_index - 1], param, strlen(param));
 			}
 
 			if (param_index == g_test_param.param_count) {
@@ -3456,7 +3456,7 @@ int test_set_params(int test_id, char *param)
 
 			if (param_index > 0) {
 				g_test_param.params[param_index - 1] = g_malloc0(strlen(param) + 1);
-				strcpy(g_test_param.params[param_index - 1], param);
+				strncpy(g_test_param.params[param_index - 1], param, strlen(param));
 			}
 
 			if (param_index == g_test_param.param_count) {
@@ -3489,7 +3489,7 @@ int test_set_params(int test_id, char *param)
 				g_test_param.params[param_index - 1] = g_malloc0(len + 1);
 				/* Remove new line character */
 				param[len - 1] = '\0';
-				strcpy(g_test_param.params[param_index - 1], param);
+				strncpy(g_test_param.params[param_index - 1], param, strlen(param));
 			}
 
 			if (param_index == g_test_param.param_count) {
@@ -3521,7 +3521,7 @@ int test_set_params(int test_id, char *param)
 			}
 			if (param_index > 0) {
 				g_test_param.params[param_index - 1] = g_malloc0(strlen(param) + 1);
-				strcpy(g_test_param.params[param_index - 1], param);
+				strncpy(g_test_param.params[param_index - 1], param, strlen(param));
 			}
 
 			if (param_index == g_test_param.param_count) {
