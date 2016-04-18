@@ -36,7 +36,7 @@ extern "C"
  */
 #define BT_PBAP_FIELD_ALL		(0xFFFFFFFFFFFFFFFFULL)
 #define BT_PBAP_FIELD_VERSION	(1ULL << 0)
-#define BT_PBAP_FIELD_FN 		(1ULL << 1)
+#define BT_PBAP_FIELD_FN		(1ULL << 1)
 #define BT_PBAP_FIELD_N			(1ULL << 2)
 #define BT_PBAP_FIELD_PHOTO		(1ULL << 3)
 #define BT_PBAP_FIELD_BDAY		(1ULL << 4)
@@ -97,13 +97,13 @@ typedef void (*bt_adapter_le_state_changed_cb)(int result, bt_adapter_le_state_e
  * @since_tizen 2.3.1
  */
 typedef enum {
-    BT_AG_CALL_EVENT_IDLE = 0x00,  /**< Idle */
-    BT_AG_CALL_EVENT_ANSWERED,  /**< Answered */
-    BT_AG_CALL_EVENT_HELD,  /**< Held */
-    BT_AG_CALL_EVENT_RETRIEVED,  /**< Retrieved */
-    BT_AG_CALL_EVENT_DIALING,  /**< Dialing */
-    BT_AG_CALL_EVENT_ALERTING,  /**< Alerting */
-    BT_AG_CALL_EVENT_INCOMING,  /**< Incoming */
+	BT_AG_CALL_EVENT_IDLE = 0x00,  /**< Idle */
+	BT_AG_CALL_EVENT_ANSWERED,  /**< Answered */
+	BT_AG_CALL_EVENT_HELD,  /**< Held */
+	BT_AG_CALL_EVENT_RETRIEVED,  /**< Retrieved */
+	BT_AG_CALL_EVENT_DIALING,  /**< Dialing */
+	BT_AG_CALL_EVENT_ALERTING,  /**< Alerting */
+	BT_AG_CALL_EVENT_INCOMING,  /**< Incoming */
 } bt_ag_call_event_e;
 
 /**
@@ -112,13 +112,13 @@ typedef enum {
  * @since_tizen 2.3.1
  */
 typedef enum {
-    BT_AG_CALL_STATE_IDLE = 0x00,  /**< Idle state */
-    BT_AG_CALL_STATE_ACTIVE,  /**< Active state */
-    BT_AG_CALL_STATE_HELD,  /**< Held state */
-    BT_AG_CALL_STATE_DIALING,  /**< Dialing state */
-    BT_AG_CALL_STATE_ALERTING,  /**< Alerting state */
-    BT_AG_CALL_STATE_INCOMING,  /**< Incoming state */
-    BT_AG_CALL_STATE_WAITING,  /**< Waiting for connected indication event after answering an incoming call*/
+	BT_AG_CALL_STATE_IDLE = 0x00,  /**< Idle state */
+	BT_AG_CALL_STATE_ACTIVE,  /**< Active state */
+	BT_AG_CALL_STATE_HELD,  /**< Held state */
+	BT_AG_CALL_STATE_DIALING,  /**< Dialing state */
+	BT_AG_CALL_STATE_ALERTING,  /**< Alerting state */
+	BT_AG_CALL_STATE_INCOMING,  /**< Incoming state */
+	BT_AG_CALL_STATE_WAITING,  /**< Waiting for connected indication event after answering an incoming call*/
 } bt_ag_call_state_e;
 
 /**
@@ -182,19 +182,19 @@ typedef enum {
  * @since_tizen 2.3
  */
 typedef enum {
-    BT_HF_CALL_HANDLING_EVENT_ANSWER = 0x00,  /**< Request to answer an incoming call */
-    BT_HF_CALL_HANDLING_EVENT_RELEASE,  /**< Request to release a call */
-    BT_HF_CALL_HANDLING_EVENT_REJECT,  /**< Request to reject an incoming call */
-    BT_HF_CALL_HANDLING_EVENT_RING,  /**< Request of ringing call */
-    BT_HF_CALL_HANDLING_EVENT_CALL_STARTED,  /**< Request of Call started */
-    BT_HF_CALL_HANDLING_EVENT_CALL_ENDED,  /**< Request of Call Ended */
-    BT_HF_CALL_HANDLING_EVENT_VOICE_RECOGNITION_ENABLED,  /**< Request of voice recognition enabled */
-    BT_HF_CALL_HANDLING_EVENT_VOICE_RECOGNITION_DISABLED,  /**< Request of voice recognition disabled */
-    BT_HF_CALL_HANDLING_EVENT_VENDOR_DEP_CMD,  /**< Request of Vendor command */
-    BT_HF_CALL_HANDLING_EVENT_WAITING,  /**< Request to waiting a call */
-    BT_HF_CALL_HANDLING_EVENT_HELD,  /**< Request to hold a call */
-    BT_HF_CALL_HANDLING_EVENT_UNHELD,  /**< Request to unhold calls */
-    BT_HF_CALL_HANDLING_EVENT_SWAPPED,  /**< Request to swap calls */
+	BT_HF_CALL_HANDLING_EVENT_ANSWER = 0x00,  /**< Request to answer an incoming call */
+	BT_HF_CALL_HANDLING_EVENT_RELEASE,  /**< Request to release a call */
+	BT_HF_CALL_HANDLING_EVENT_REJECT,  /**< Request to reject an incoming call */
+	BT_HF_CALL_HANDLING_EVENT_RING,  /**< Request of ringing call */
+	BT_HF_CALL_HANDLING_EVENT_CALL_STARTED,  /**< Request of Call started */
+	BT_HF_CALL_HANDLING_EVENT_CALL_ENDED,  /**< Request of Call Ended */
+	BT_HF_CALL_HANDLING_EVENT_VOICE_RECOGNITION_ENABLED,  /**< Request of voice recognition enabled */
+	BT_HF_CALL_HANDLING_EVENT_VOICE_RECOGNITION_DISABLED,  /**< Request of voice recognition disabled */
+	BT_HF_CALL_HANDLING_EVENT_VENDOR_DEP_CMD,  /**< Request of Vendor command */
+	BT_HF_CALL_HANDLING_EVENT_WAITING,  /**< Request to waiting a call */
+	BT_HF_CALL_HANDLING_EVENT_HELD,  /**< Request to hold a call */
+	BT_HF_CALL_HANDLING_EVENT_UNHELD,  /**< Request to unhold calls */
+	BT_HF_CALL_HANDLING_EVENT_SWAPPED,  /**< Request to swap calls */
 } bt_hf_call_handling_event_e;
 
 
@@ -204,11 +204,11 @@ typedef enum {
  * @since_tizen 2.3
  */
 typedef enum {
-    BT_HF_MULTI_CALL_HANDLING_EVENT_RELEASE_HELD_CALLS = 0x00,  /**< Request to release held calls */
-    BT_HF_MULTI_CALL_HANDLING_EVENT_RELEASE_ACTIVE_CALLS,  /**< Request to release active calls */
-    BT_HF_MULTI_CALL_HANDLING_EVENT_ACTIVATE_HELD_CALL,  /**< Request to put active calls into hold state and activate another (held or waiting) call */
-    BT_HF_MULTI_CALL_HANDLING_EVENT_MERGE_CALLS,  /**< Request to add a held call to the conversation */
-    BT_HF_MULTI_CALL_HANDLING_EVENT_EXPLICIT_CALL_TRANSFER,  /**< Request to let a user who has two calls to connect these two calls together and release its connections to both other parties */
+	BT_HF_MULTI_CALL_HANDLING_EVENT_RELEASE_HELD_CALLS = 0x00,  /**< Request to release held calls */
+	BT_HF_MULTI_CALL_HANDLING_EVENT_RELEASE_ACTIVE_CALLS,  /**< Request to release active calls */
+	BT_HF_MULTI_CALL_HANDLING_EVENT_ACTIVATE_HELD_CALL,  /**< Request to put active calls into hold state and activate another (held or waiting) call */
+	BT_HF_MULTI_CALL_HANDLING_EVENT_MERGE_CALLS,  /**< Request to add a held call to the conversation */
+	BT_HF_MULTI_CALL_HANDLING_EVENT_EXPLICIT_CALL_TRANSFER,  /**< Request to let a user who has two calls to connect these two calls together and release its connections to both other parties */
 } bt_hf_multi_call_handling_event_e;
 
 /**
@@ -217,18 +217,18 @@ typedef enum {
  * @since_tizen 2.3
  */
 typedef enum {
-    BT_HF_CALL_EVENT_IDLE = 0x00,  /**< Idle */
-    BT_HF_CALL_EVENT_ANSWER,  /**< Answered */
-    BT_HF_CALL_EVENT_HOLD,  /**< Held */
-    BT_HF_CALL_EVENT_RETRIEVE,  /**< Retrieved */
-    BT_HF_CALL_EVENT_DIAL,  /**< Dialing */
-    BT_HF_CALL_EVENT_ALERT,  /**< Alerting */
-    BT_HF_CALL_EVENT_INCOMING,  /**< Incoming */
-    BT_HF_CALL_EVENT_REDIAL,  /**< Redialling */
-    BT_HF_CALL_EVENT_RELEASE_ALL_NONACTIVE_CALLS,  /**< Release all nonactive calls */
-    BT_HF_CALL_EVENT_ACCEPT_AND_RELEASE,  /**< Accept and Release */
-    BT_HF_CALL_EVENT_ACCEPT_AND_HOLD,  /**< Accept and Hold */
-    BT_HF_CALL_EVENT_ADD_TO_CONVERSATION,  /**< Add to the conversation */
+	BT_HF_CALL_EVENT_IDLE = 0x00,  /**< Idle */
+	BT_HF_CALL_EVENT_ANSWER,  /**< Answered */
+	BT_HF_CALL_EVENT_HOLD,  /**< Held */
+	BT_HF_CALL_EVENT_RETRIEVE,  /**< Retrieved */
+	BT_HF_CALL_EVENT_DIAL,  /**< Dialing */
+	BT_HF_CALL_EVENT_ALERT,  /**< Alerting */
+	BT_HF_CALL_EVENT_INCOMING,  /**< Incoming */
+	BT_HF_CALL_EVENT_REDIAL,  /**< Redialling */
+	BT_HF_CALL_EVENT_RELEASE_ALL_NONACTIVE_CALLS,  /**< Release all nonactive calls */
+	BT_HF_CALL_EVENT_ACCEPT_AND_RELEASE,  /**< Accept and Release */
+	BT_HF_CALL_EVENT_ACCEPT_AND_HOLD,  /**< Accept and Hold */
+	BT_HF_CALL_EVENT_ADD_TO_CONVERSATION,  /**< Add to the conversation */
 } bt_hf_call_event_e;
 
 /**
@@ -291,7 +291,7 @@ typedef enum {
  * @brief  Enumerations for the player control command
  * @since_tizen 2.3
  */
- typedef enum {
+typedef enum {
 	BT_AVRCP_CONTROL_PLAY = 0x01,   /**< Play */
 	BT_AVRCP_CONTROL_PAUSE,   /**< Pause */
 	BT_AVRCP_CONTROL_STOP,   /**< Stop */
@@ -673,10 +673,10 @@ typedef void (*bt_gatt_server_notification_sent_cb) (int result,
  * @since_tizen 2.3.1
  */
 typedef struct {
-       unsigned int interval_min;   /**< Minimum value for the connection event interval (msec) */
-       unsigned int interval_max;   /**< Maximum value for the connection event interval (msec) */
-       unsigned int latency;   /**< Slave latency (msec) */
-       unsigned int time_out;   /**< Supervision timeout (msec) */
+	unsigned int interval_min;   /**< Minimum value for the connection event interval (msec) */
+	unsigned int interval_max;   /**< Maximum value for the connection event interval (msec) */
+	unsigned int latency;   /**< Slave latency (msec) */
+	unsigned int time_out;   /**< Supervision timeout (msec) */
 } bt_le_conn_update_s;
 
 /**

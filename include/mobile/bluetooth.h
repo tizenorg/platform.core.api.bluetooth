@@ -2414,7 +2414,7 @@ int bt_opp_client_clear_files(void);
  * @see bt_opp_client_cancel_push
  */
 int bt_opp_client_push_files(const char *remote_address, bt_opp_client_push_responded_cb responded_cb,
- bt_opp_client_push_progress_cb progress_cb, bt_opp_client_push_finished_cb finished_cb, void *user_data);
+	bt_opp_client_push_progress_cb progress_cb, bt_opp_client_push_finished_cb finished_cb, void *user_data);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_OPP_CLIENT_MODULE

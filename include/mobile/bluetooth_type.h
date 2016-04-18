@@ -224,15 +224,15 @@ typedef enum {
  * @since_tizen 2.3
  */
 typedef enum {
-    BT_PROFILE_RFCOMM = 0x01, /**< RFCOMM Profile */
-    BT_PROFILE_A2DP = 0x02, /**< Advanced Audio Distribution Profile Source role */
-    BT_PROFILE_HSP = 0x04, /**< Headset Profile */
-    BT_PROFILE_HID = 0x08, /**< Human Interface Device Profile */
-    BT_PROFILE_NAP = 0x10, /**< Network Access Point Profile */
-    BT_PROFILE_AG = 0x20, /**< Audio Gateway Profile */
-    BT_PROFILE_GATT = 0x40, /**< Generic Attribute Profile */
-    BT_PROFILE_NAP_SERVER = 0x80, /**< NAP server Profile */
-    BT_PROFILE_A2DP_SINK = 0x100, /**< Advanced Audio Distribution Profile Sink role */
+	BT_PROFILE_RFCOMM = 0x01, /**< RFCOMM Profile */
+	BT_PROFILE_A2DP = 0x02, /**< Advanced Audio Distribution Profile Source role */
+	BT_PROFILE_HSP = 0x04, /**< Headset Profile */
+	BT_PROFILE_HID = 0x08, /**< Human Interface Device Profile */
+	BT_PROFILE_NAP = 0x10, /**< Network Access Point Profile */
+	BT_PROFILE_AG = 0x20, /**< Audio Gateway Profile */
+	BT_PROFILE_GATT = 0x40, /**< Generic Attribute Profile */
+	BT_PROFILE_NAP_SERVER = 0x80, /**< NAP server Profile */
+	BT_PROFILE_A2DP_SINK = 0x100, /**< Advanced Audio Distribution Profile Sink role */
 } bt_profile_e;
 
 /**
@@ -449,11 +449,11 @@ typedef enum {
  * @since_tizen 2.3
  */
 typedef enum {
-    BT_AUDIO_PROFILE_TYPE_ALL = 0,  /**< All supported profiles related with audio */
-    BT_AUDIO_PROFILE_TYPE_HSP_HFP,  /**< HSP(Headset Profile) and HFP(Hands-Free Profile) */
-    BT_AUDIO_PROFILE_TYPE_A2DP,  /**< A2DP(Advanced Audio Distribution Profile) */
-    BT_AUDIO_PROFILE_TYPE_AG,  /**< AG(Audio Gateway) */
-    BT_AUDIO_PROFILE_TYPE_A2DP_SINK,  /**< A2DP(Advanced Audio Distribution Profile) Sink role */
+	BT_AUDIO_PROFILE_TYPE_ALL = 0,  /**< All supported profiles related with audio */
+	BT_AUDIO_PROFILE_TYPE_HSP_HFP,  /**< HSP(Headset Profile) and HFP(Hands-Free Profile) */
+	BT_AUDIO_PROFILE_TYPE_A2DP,  /**< A2DP(Advanced Audio Distribution Profile) */
+	BT_AUDIO_PROFILE_TYPE_AG,  /**< AG(Audio Gateway) */
+	BT_AUDIO_PROFILE_TYPE_A2DP_SINK,  /**< A2DP(Advanced Audio Distribution Profile) Sink role */
 } bt_audio_profile_type_e;
 
 /**
@@ -462,9 +462,9 @@ typedef enum {
  * @since_tizen 2.3
  */
 typedef enum {
-    BT_AG_CALL_HANDLING_EVENT_ANSWER = 0x00,  /**< Request to answer an incoming call */
-    BT_AG_CALL_HANDLING_EVENT_RELEASE,  /**< Request to release a call */
-    BT_AG_CALL_HANDLING_EVENT_REJECT,  /**< Request to reject an incoming call */
+	BT_AG_CALL_HANDLING_EVENT_ANSWER = 0x00,  /**< Request to answer an incoming call */
+	BT_AG_CALL_HANDLING_EVENT_RELEASE,  /**< Request to release a call */
+	BT_AG_CALL_HANDLING_EVENT_REJECT,  /**< Request to reject an incoming call */
 } bt_ag_call_handling_event_e;
 
 /**
@@ -473,11 +473,11 @@ typedef enum {
  * @since_tizen 2.3
  */
 typedef enum {
-    BT_AG_MULTI_CALL_HANDLING_EVENT_RELEASE_HELD_CALLS = 0x00,  /**< Request to release held calls */
-    BT_AG_MULTI_CALL_HANDLING_EVENT_RELEASE_ACTIVE_CALLS,  /**< Request to release active calls */
-    BT_AG_MULTI_CALL_HANDLING_EVENT_ACTIVATE_HELD_CALL,  /**< Request to put active calls into hold state and activate another (held or waiting) call */
-    BT_AG_MULTI_CALL_HANDLING_EVENT_MERGE_CALLS,  /**< Request to add a held call to the conversation */
-    BT_AG_MULTI_CALL_HANDLING_EVENT_EXPLICIT_CALL_TRANSFER,  /**< Request to let a user who has two calls to connect these two calls together and release its connections to both other parties */
+	BT_AG_MULTI_CALL_HANDLING_EVENT_RELEASE_HELD_CALLS = 0x00,  /**< Request to release held calls */
+	BT_AG_MULTI_CALL_HANDLING_EVENT_RELEASE_ACTIVE_CALLS,  /**< Request to release active calls */
+	BT_AG_MULTI_CALL_HANDLING_EVENT_ACTIVATE_HELD_CALL,  /**< Request to put active calls into hold state and activate another (held or waiting) call */
+	BT_AG_MULTI_CALL_HANDLING_EVENT_MERGE_CALLS,  /**< Request to add a held call to the conversation */
+	BT_AG_MULTI_CALL_HANDLING_EVENT_EXPLICIT_CALL_TRANSFER,  /**< Request to let a user who has two calls to connect these two calls together and release its connections to both other parties */
 } bt_ag_multi_call_handling_event_e;
 
 /**
@@ -486,8 +486,8 @@ typedef enum {
  * @since_tizen 2.4
  */
 typedef enum {
-    BT_AVRCP_EQUALIZER_STATE_OFF = 0x01,  /**< Equalizer Off */
-    BT_AVRCP_EQUALIZER_STATE_ON,  /**< Equalizer On */
+	BT_AVRCP_EQUALIZER_STATE_OFF = 0x01,  /**< Equalizer Off */
+	BT_AVRCP_EQUALIZER_STATE_ON,  /**< Equalizer On */
 } bt_avrcp_equalizer_state_e;
 
 /**
@@ -496,10 +496,10 @@ typedef enum {
  * @since_tizen 2.4
  */
 typedef enum {
-    BT_AVRCP_REPEAT_MODE_OFF = 0x01,  /**< Repeat Off */
-    BT_AVRCP_REPEAT_MODE_SINGLE_TRACK,  /**< Single track repeat */
-    BT_AVRCP_REPEAT_MODE_ALL_TRACK,  /**< All track repeat */
-    BT_AVRCP_REPEAT_MODE_GROUP,  /**< Group repeat */
+	BT_AVRCP_REPEAT_MODE_OFF = 0x01,  /**< Repeat Off */
+	BT_AVRCP_REPEAT_MODE_SINGLE_TRACK,  /**< Single track repeat */
+	BT_AVRCP_REPEAT_MODE_ALL_TRACK,  /**< All track repeat */
+	BT_AVRCP_REPEAT_MODE_GROUP,  /**< Group repeat */
 } bt_avrcp_repeat_mode_e;
 
 /**
@@ -508,9 +508,9 @@ typedef enum {
  * @since_tizen 2.4
  */
 typedef enum {
-    BT_AVRCP_SHUFFLE_MODE_OFF = 0x01,  /**< Shuffle Off */
-    BT_AVRCP_SHUFFLE_MODE_ALL_TRACK,  /**< All tracks shuffle */
-    BT_AVRCP_SHUFFLE_MODE_GROUP,  /**< Group shuffle */
+	BT_AVRCP_SHUFFLE_MODE_OFF = 0x01,  /**< Shuffle Off */
+	BT_AVRCP_SHUFFLE_MODE_ALL_TRACK,  /**< All tracks shuffle */
+	BT_AVRCP_SHUFFLE_MODE_GROUP,  /**< Group shuffle */
 } bt_avrcp_shuffle_mode_e;
 
 /**
@@ -519,9 +519,9 @@ typedef enum {
  * @since_tizen 2.4
  */
 typedef enum {
-    BT_AVRCP_SCAN_MODE_OFF = 0x01,  /**< Scan Off */
-    BT_AVRCP_SCAN_MODE_ALL_TRACK,  /**< All tracks scan */
-    BT_AVRCP_SCAN_MODE_GROUP,  /**< Group scan */
+	BT_AVRCP_SCAN_MODE_OFF = 0x01,  /**< Scan Off */
+	BT_AVRCP_SCAN_MODE_ALL_TRACK,  /**< All tracks scan */
+	BT_AVRCP_SCAN_MODE_GROUP,  /**< Group scan */
 } bt_avrcp_scan_mode_e;
 
 /**
@@ -530,11 +530,11 @@ typedef enum {
  * @since_tizen 2.4
  */
 typedef enum {
-    BT_AVRCP_PLAYER_STATE_STOPPED = 0x00,  /**< Stopped */
-    BT_AVRCP_PLAYER_STATE_PLAYING,  /**< Playing */
-    BT_AVRCP_PLAYER_STATE_PAUSED,  /**< Paused */
-    BT_AVRCP_PLAYER_STATE_FORWARD_SEEK,  /**< Seek Forward */
-    BT_AVRCP_PLAYER_STATE_REWIND_SEEK,  /**< Seek Rewind */
+	BT_AVRCP_PLAYER_STATE_STOPPED = 0x00,  /**< Stopped */
+	BT_AVRCP_PLAYER_STATE_PLAYING,  /**< Playing */
+	BT_AVRCP_PLAYER_STATE_PAUSED,  /**< Paused */
+	BT_AVRCP_PLAYER_STATE_FORWARD_SEEK,  /**< Seek Forward */
+	BT_AVRCP_PLAYER_STATE_REWIND_SEEK,  /**< Seek Rewind */
 } bt_avrcp_player_state_e;
 
 /**
@@ -543,8 +543,8 @@ typedef enum {
  * @since_tizen 2.3
  */
 typedef enum {
-    BT_HDP_CHANNEL_TYPE_RELIABLE  = 0x01,  /**< Reliable Data Channel */
-    BT_HDP_CHANNEL_TYPE_STREAMING,  /**< Streaming Data Channel */
+	BT_HDP_CHANNEL_TYPE_RELIABLE  = 0x01,  /**< Reliable Data Channel */
+	BT_HDP_CHANNEL_TYPE_STREAMING,  /**< Streaming Data Channel */
 } bt_hdp_channel_type_e;
 
 /**
@@ -624,7 +624,7 @@ typedef enum {
  * @since_tizen 2.3
  */
 typedef enum {
-    BT_PANU_SERVICE_TYPE_NAP = 0,  /**< Network Access Point */
+	BT_PANU_SERVICE_TYPE_NAP = 0,  /**< Network Access Point */
 } bt_panu_service_type_e;
 
 /**
@@ -1418,7 +1418,7 @@ typedef void (*bt_hid_host_connection_state_changed_cb) (int result, bool connec
  * @see bt_hdp_unset_connection_state_changed_cb()
  */
 typedef void (*bt_hdp_connected_cb) (int result, const char *remote_address, const char *app_id,
-    bt_hdp_channel_type_e type, unsigned int channel, void *user_data);
+	bt_hdp_channel_type_e type, unsigned int channel, void *user_data);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_HDP_MODULE

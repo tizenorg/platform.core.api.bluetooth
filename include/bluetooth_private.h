@@ -193,7 +193,7 @@ typedef enum {
 /**
  * @internal
  */
- typedef struct {
+typedef struct {
 	bt_adapter_le_advertising_mode_e mode;
 	bt_adapter_le_advertising_filter_policy_e filter_policy;
 	bt_adapter_le_advertising_type_e type;
@@ -238,8 +238,8 @@ typedef struct {
  * @internal
  */
 typedef struct bt_event_sig_event_slot_s {
-    const void *callback;
-    void *user_data;
+	const void *callback;
+	void *user_data;
 } bt_event_sig_event_slot_s;
 
 typedef struct {
