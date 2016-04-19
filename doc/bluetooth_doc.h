@@ -692,4 +692,31 @@
  *
  */
 
+/**
+ * @defgroup CAPI_NETWORK_BLUETOOTH_PBAP_CLIENT_MODULE Bluetooth PBAP Client
+ * @brief Bluetooth PBAP (Phone Book Access Profile) API provides functions for managing connections to a phone book server and retrieving phone book data.
+ * @ingroup CAPI_NETWORK_BLUETOOTH_MODULE
+ *
+ * @section CAPI_NETWORK_BLUETOOTH_PBAP_CLIENT_MODULE_HEADER Required Header
+ *  \#include <bluetooth.h>
+ *
+ * @section CAPI_NETWORK_BLUETOOTH_PBAP_CLIENT_MODULE_OVERVIEW Overview
+ * The PBAP involves two roles, @a Server and @a Client.
+ * The @a Server is a device that has phone book data. The @a Client is a device that requests the phone book data from the @a Server.
+ * This API only supports @a Client role.
+ *
+ * @section CAPI_NETWORK_BLUETOOTH_PBAP_CLIENT_MODULE_FEATURE Related Features
+ * This API is related to the following features:\n
+ *  - http://tizen.org/feature/network.bluetooth.phonebook.client\n
+ *
+ * It is recommended to use features in your application for reliability.\n
+ *
+ * You can check if a device supports features related to this API by using @ref CAPI_SYSTEM_SYSTEM_INFO_MODULE, thereby controlling your application's actions.\n
+ *
+ * To ensure your application is only running on the device with specific features, please define the features in your manifest file using the manifest editor in the SDK.\n
+ *
+ * More details on using features in your application can be found from <a href="https://developer.tizen.org/development/tools/native-tools/manifest-text-editor#feature"><b>Feature Element</b>.</a>
+ *
+ */
+
 #endif /* __TIZEN_NETWORK_BLUETOOTH_DOC_H__ */
