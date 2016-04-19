@@ -1842,7 +1842,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 		if (connected->connected == 0)
 			_bt_unset_cb(BT_EVENT_PBAP_CONNECTION_STATUS);
 		_bt_convert_address_to_string(&device_addr, &connected->btaddr);
-		cb(device_addr, connected->connected, user_data);
+		cb(device_addr, (bool)connected->connected, user_data);
 
 		if (device_addr != NULL)
 			free(device_addr);
@@ -1850,7 +1850,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 		break;
 	}
 	case BLUETOOTH_PBAP_PHONEBOOK_SIZE: {
-		bt_pbap_phonebook_size_cb cb = bt_event_slot_container[event_index].callback;
+		bt_pbap_phone_book_size_cb cb = bt_event_slot_container[event_index].callback;
 		void *user_data = bt_event_slot_container[event_index].user_data;
 		bt_pbap_phonebook_size_t *pb_size = (bt_pbap_phonebook_size_t *)param->param_data;
 
@@ -1866,7 +1866,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 		break;
 	}
 	case BLUETOOTH_PBAP_PHONEBOOK_PULL: {
-		bt_pbap_phonebook_pull_cb cb = bt_event_slot_container[event_index].callback;
+		bt_pbap_phone_book_get_cb cb = bt_event_slot_container[event_index].callback;
 		void *user_data = bt_event_slot_container[event_index].user_data;
 		bt_pbap_phonebook_pull_t *pb_pull = (bt_pbap_phonebook_pull_t *)(param->param_data);
 
@@ -1874,7 +1874,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 
 		_bt_unset_cb(BT_EVENT_PBAP_PHONEBOOK_PULL);
 		_bt_convert_address_to_string(&device_addr, &pb_pull->btaddr);
-		cb(device_addr, pb_pull->vcf_file, pb_pull->success, user_data);
+		cb(device_addr, pb_pull->vcf_file, (bool)pb_pull->success, user_data);
 
 		if (device_addr != NULL)
 			free(device_addr);
@@ -1898,7 +1898,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 		break;
 	}
 	case BLUETOOTH_PBAP_VCARD_PULL: {
-		bt_pbap_get_vcard_cb cb = bt_event_slot_container[event_index].callback;
+		bt_pbap_pull_vcard_cb cb = bt_event_slot_container[event_index].callback;
 		void *user_data = bt_event_slot_container[event_index].user_data;
 		bt_pbap_vcard_pull_t *vc_pull = (bt_pbap_vcard_pull_t *)(param->param_data);
 
@@ -1906,7 +1906,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 
 		_bt_unset_cb(BT_EVENT_PBAP_VCARD_PULL);
 		_bt_convert_address_to_string(&device_addr, &vc_pull->btaddr);
-		cb(device_addr, vc_pull->vcf_file, vc_pull->success, user_data);
+		cb(device_addr, vc_pull->vcf_file, (bool)vc_pull->success, user_data);
 
 		if (device_addr != NULL)
 			free(device_addr);
@@ -1922,7 +1922,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 
 		_bt_unset_cb(BT_EVENT_PBAP_PHONEBOOK_SEARCH);
 		_bt_convert_address_to_string(&device_addr, &vc_list->btaddr);
-		cb(device_addr, vc_list->vcards, vc_list->length, vc_list->success, user_data);
+		cb(device_addr, vc_list->vcards, vc_list->length, (bool)vc_list->success, user_data);
 
 		if (device_addr != NULL)
 			free(device_addr);
