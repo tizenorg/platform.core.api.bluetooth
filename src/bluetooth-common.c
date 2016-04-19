@@ -1834,15 +1834,29 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 		break;
 #ifdef TIZEN_WEARABLE
 	case BLUETOOTH_PBAP_CONNECTED: {
-		bt_pbap_enabled_cb cb = bt_event_slot_container[event_index].callback;
+		bt_pbap_connection_state_changed_cb cb = bt_event_slot_container[event_index].callback;
 		void *user_data = bt_event_slot_container[event_index].user_data;
 		bt_pbap_connected_t *connected = (bt_pbap_connected_t *)param->param_data;
 
-		BT_INFO("BLUETOOTH_PBAP_CONNECTED/DISCONNECTED");
-		if (connected->connected == 0)
-			_bt_unset_cb(BT_EVENT_PBAP_CONNECTION_STATUS);
+		BT_INFO("BLUETOOTH_PBAP_CONNECTED");
+
 		_bt_convert_address_to_string(&device_addr, &connected->btaddr);
-		cb(device_addr, connected->connected, user_data);
+		cb(_bt_get_error_code(param->result), true, device_addr, user_data);
+
+		if (device_addr != NULL)
+			free(device_addr);
+
+		break;
+	}
+	case BLUETOOTH_PBAP_DISCONNECTED: {
+		bt_pbap_connection_state_changed_cb cb = bt_event_slot_container[event_index].callback;
+		void *user_data = bt_event_slot_container[event_index].user_data;
+		bt_pbap_connected_t *connected = (bt_pbap_connected_t *)param->param_data;
+
+		BT_INFO("BLUETOOTH_PBAP_DISCONNECTED");
+
+		_bt_convert_address_to_string(&device_addr, &connected->btaddr);
+		cb(_bt_get_error_code(param->result), false, device_addr, user_data);
 
 		if (device_addr != NULL)
 			free(device_addr);
@@ -1850,7 +1864,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 		break;
 	}
 	case BLUETOOTH_PBAP_PHONEBOOK_SIZE: {
-		bt_pbap_phonebook_size_cb cb = bt_event_slot_container[event_index].callback;
+		bt_pbap_phone_book_size_cb cb = bt_event_slot_container[event_index].callback;
 		void *user_data = bt_event_slot_container[event_index].user_data;
 		bt_pbap_phonebook_size_t *pb_size = (bt_pbap_phonebook_size_t *)param->param_data;
 
@@ -1858,7 +1872,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 
 		_bt_unset_cb(BT_EVENT_PBAP_PHONEBOOK_SIZE);
 		_bt_convert_address_to_string(&device_addr, &pb_size->btaddr);
-		cb(device_addr, pb_size->size, user_data);
+		cb(_bt_get_error_code(param->result), device_addr, pb_size->size, user_data);
 
 		if (device_addr != NULL)
 			free(device_addr);
@@ -1866,7 +1880,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 		break;
 	}
 	case BLUETOOTH_PBAP_PHONEBOOK_PULL: {
-		bt_pbap_phonebook_pull_cb cb = bt_event_slot_container[event_index].callback;
+		bt_pbap_phone_book_received_cb cb = bt_event_slot_container[event_index].callback;
 		void *user_data = bt_event_slot_container[event_index].user_data;
 		bt_pbap_phonebook_pull_t *pb_pull = (bt_pbap_phonebook_pull_t *)(param->param_data);
 
@@ -1874,7 +1888,8 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 
 		_bt_unset_cb(BT_EVENT_PBAP_PHONEBOOK_PULL);
 		_bt_convert_address_to_string(&device_addr, &pb_pull->btaddr);
-		cb(device_addr, pb_pull->vcf_file, pb_pull->success, user_data);
+		cb(_bt_get_error_code(param->result), device_addr,
+			(const char *)pb_pull->vcf_file, user_data);
 
 		if (device_addr != NULL)
 			free(device_addr);
@@ -1885,20 +1900,29 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 		bt_pbap_list_vcards_cb cb = bt_event_slot_container[event_index].callback;
 		void *user_data = bt_event_slot_container[event_index].user_data;
 		bt_pbap_vcard_list_t *vc_list = (bt_pbap_vcard_list_t *)(param->param_data);
+		bt_pbap_vcard_info_s *vcard_info = NULL;
+
+		if (vc_list->length > 0)
+			vcard_info = g_malloc0(vc_list->length * sizeof(bt_pbap_vcard_info_s));
 
 		BT_INFO("BLUETOOTH_PBAP_VCARD_LIST");
 
 		_bt_unset_cb(BT_EVENT_PBAP_VCARD_LIST);
 		_bt_convert_address_to_string(&device_addr, &vc_list->btaddr);
-		cb(device_addr, vc_list->vcards, vc_list->length, vc_list->success, user_data);
+		cb(_bt_get_error_code(param->result), device_addr,
+			(const bt_pbap_vcard_info_s *)vcard_info, vc_list->length,
+			user_data);
 
 		if (device_addr != NULL)
 			free(device_addr);
 
+		if (vcard_info != NULL)
+			free(vcard_info);
+
 		break;
 	}
 	case BLUETOOTH_PBAP_VCARD_PULL: {
-		bt_pbap_get_vcard_cb cb = bt_event_slot_container[event_index].callback;
+		bt_pbap_phone_book_received_cb cb = bt_event_slot_container[event_index].callback;
 		void *user_data = bt_event_slot_container[event_index].user_data;
 		bt_pbap_vcard_pull_t *vc_pull = (bt_pbap_vcard_pull_t *)(param->param_data);
 
@@ -1906,7 +1930,8 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 
 		_bt_unset_cb(BT_EVENT_PBAP_VCARD_PULL);
 		_bt_convert_address_to_string(&device_addr, &vc_pull->btaddr);
-		cb(device_addr, vc_pull->vcf_file, vc_pull->success, user_data);
+		cb(_bt_get_error_code(param->result), device_addr,
+			(const char *)vc_pull->vcf_file, user_data);
 
 		if (device_addr != NULL)
 			free(device_addr);
@@ -1914,18 +1939,27 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 		break;
 	}
 	case BLUETOOTH_PBAP_PHONEBOOK_SEARCH: {
-		bt_pbap_search_list_cb cb = bt_event_slot_container[event_index].callback;
+		bt_pbap_list_vcards_cb cb = bt_event_slot_container[event_index].callback;
 		void *user_data = bt_event_slot_container[event_index].user_data;
 		bt_pbap_phonebook_search_list_t *vc_list = (bt_pbap_phonebook_search_list_t *)(param->param_data);
+		bt_pbap_vcard_info_s *vcard_info = NULL;
+
+		if (vc_list->length > 0)
+			vcard_info = g_malloc0(vc_list->length * sizeof(bt_pbap_vcard_info_s));
 
 		BT_INFO("BLUETOOTH_PBAP_PHONEBOOK_SEARCH");
 
 		_bt_unset_cb(BT_EVENT_PBAP_PHONEBOOK_SEARCH);
 		_bt_convert_address_to_string(&device_addr, &vc_list->btaddr);
-		cb(device_addr, vc_list->vcards, vc_list->length, vc_list->success, user_data);
+		cb(_bt_get_error_code(param->result), device_addr,
+			(const bt_pbap_vcard_info_s *)vcard_info, vc_list->length,
+			user_data);
 
 		if (device_addr != NULL)
 			free(device_addr);
+
+		if (vcard_info != NULL)
+			free(vcard_info);
 
 		break;
 	}
@@ -2536,6 +2570,7 @@ static int __bt_get_cb_index(int event)
 		return BT_EVENT_LE_DATA_LENGTH_CHANGED; /* LCOV_EXCL_LINE */
 #ifdef TIZEN_WEARABLE
 	case BLUETOOTH_PBAP_CONNECTED:
+	case BLUETOOTH_PBAP_DISCONNECTED:
 		return BT_EVENT_PBAP_CONNECTION_STATUS;
 	case BLUETOOTH_PBAP_PHONEBOOK_SIZE:
 		return BT_EVENT_PBAP_PHONEBOOK_SIZE;
