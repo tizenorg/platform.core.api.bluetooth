@@ -36,6 +36,42 @@ extern "C"
 
 
 /**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PBAP_CLIENT_MODULE
+ * @brief  definitions for PBAP fields.
+ * @since_tizen 3.0
+ */
+#define BT_PBAP_FIELD_ALL		(0xFFFFFFFFFFFFFFFFULL)
+#define BT_PBAP_FIELD_VERSION	(1ULL << 0)
+#define BT_PBAP_FIELD_FN		(1ULL << 1)
+#define BT_PBAP_FIELD_N			(1ULL << 2)
+#define BT_PBAP_FIELD_PHOTO		(1ULL << 3)
+#define BT_PBAP_FIELD_BDAY		(1ULL << 4)
+#define BT_PBAP_FIELD_ADR		(1ULL << 5)
+#define BT_PBAP_FIELD_LABEL		(1ULL << 6)
+#define BT_PBAP_FIELD_TEL		(1ULL << 7)
+#define BT_PBAP_FIELD_EMAIL		(1ULL << 8)
+#define BT_PBAP_FIELD_MAILER	(1ULL << 9)
+#define BT_PBAP_FIELD_TZ		(1ULL << 10)
+#define BT_PBAP_FIELD_GEO		(1ULL << 11)
+#define BT_PBAP_FIELD_TITLE		(1ULL << 12)
+#define BT_PBAP_FIELD_ROLE		(1ULL << 13)
+#define BT_PBAP_FIELD_LOGO		(1ULL << 14)
+#define BT_PBAP_FIELD_AGENT		(1ULL << 15)
+#define BT_PBAP_FIELD_ORG		(1ULL << 16)
+#define BT_PBAP_FIELD_NOTE		(1ULL << 17)
+#define BT_PBAP_FIELD_REV		(1ULL << 18)
+#define BT_PBAP_FIELD_SOUND		(1ULL << 19)
+#define BT_PBAP_FIELD_URL		(1ULL << 20)
+#define BT_PBAP_FIELD_UID		(1ULL << 21)
+#define BT_PBAP_FIELD_KEY		(1ULL << 22)
+#define BT_PBAP_FIELD_NICKNAME	(1ULL << 23)
+#define BT_PBAP_FIELD_CATEGORIES	(1ULL << 24)
+#define BT_PBAP_FIELD_PROID		(1ULL << 25)
+#define BT_PBAP_FIELD_CLASS		(1ULL << 26)
+#define BT_PBAP_FIELD_SORT_STRING	(1ULL << 27)
+#define BT_PBAP_FIELD_X_IRMC_CALL_DATETIME		(1ULL << 28)
+
+/**
  * @ingroup CAPI_NETWORK_BLUETOOTH_MODULE
  * @brief Enumerations of Bluetooth error codes.
  * @since_tizen 2.3.1
@@ -586,6 +622,61 @@ typedef enum {
 typedef enum {
 	BT_PANU_SERVICE_TYPE_NAP = 0,  /**< Network Access Point */
 } bt_panu_service_type_e;
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PBAP_MODULE
+ * @brief  Enumerations of Addressbook memory for PBAP.
+ * @since_tizen 3.0
+ */
+typedef enum {
+	BT_PBAP_PHONE = 0x00, /**< Request for Addressbook from Phone*/
+	BT_PBAP_SIM , /**< Request for Addressbook from SIM*/
+} bt_pbap_addressbook_source_e;
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PBAP_MODULE
+ * @brief  Enumerations of Folder type.
+ * @since_tizen 3.0
+ */
+typedef enum {
+	BT_PBAP_PHONEBOOK = 0x00, /**< Request for Addressbook*/
+	BT_PBAP_INCOMING , /**< Request for Incoming Calls*/
+	BT_PBAP_OUTGOING , /**< Request for Outgoing Calls*/
+	BT_PBAP_MISSED , /**< Request for Missed Calls*/
+	BT_PBAP_COMBINED , /**< Request for Combined Calls*/
+} bt_pbap_folder_type_e;
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PBAP_MODULE
+ * @brief  Enumerations of Phonebook Search field.
+ * @since_tizen 3.0
+ */
+typedef enum {
+	BT_PBAP_SEARCH_NAME = 0x00, /**< Request for Search by name (default)*/
+	BT_PBAP_SEARCH_NUMBER, /**< Request for Search by phone number*/
+	BT_PBAP_SEARCH_SOUND, /**< Request for Search by sound*/
+} bt_pbap_search_field_e;
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PBAP_MODULE
+ * @brief  Enumerations of vCard Formats.
+ * @since_tizen 3.0
+ */
+typedef enum {
+	BT_PBAP_APP_PARAM_VCARD21 = 0x00, /**< vCard Format 2.1 (default)*/
+	BT_PBAP_APP_PARAM_VCARD30, /**< vCard Format 3.0*/
+} bt_pbap_filter_vcard_format_e;
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PBAP_MODULE
+ * @brief  Enumerations of Sorting Orders.
+ * @since_tizen 3.0
+ */
+typedef enum {
+	BT_PBAP_APP_PARAM_ORDER_INDEXED = 0x00, /**< Filter Order Indexed (default)*/
+	BT_PBAP_APP_PARAM_ORDER_ALPHANUMERIC, /**< Filter Order Alphanumeric*/
+	BT_PBAP_APP_PARAM_ORDER_PHONETIC, /**< Filter Order Phonetic*/
+} bt_pbap_filter_sort_order_e;
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
@@ -1495,6 +1586,101 @@ typedef void (*bt_hid_device_connection_state_changed_cb) (int result,
 
 typedef void (*bt_hid_device_data_received_cb)(const bt_hid_device_received_data_s *data, void *user_data);
 /* HID device related type */
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PBAP_CLIENT_MODULE
+ * @brief  Called when PBAP is Connected or Disconnected.
+ * @since_tizen 3.0
+ *
+ * @param[in] remote_address Remote Device address
+ * @param[in] pbap_enabled PBAP connection status (@c 1 = enabled, @c 0 = disabled)
+ * @param[in] user_data The user data passed from the callback registration function
+ * @see bt_pbap_connect()
+ * @see bt_pbap_disconnect()
+ */
+typedef void (*bt_pbap_enabled_cb)(const char *remote_address,
+		int pbap_enabled, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PBAP_CLIENT_MODULE
+ * @brief  Called when PBAP Phonebook Size is returned.
+ * @since_tizen 3.0
+ *
+ * @param[in] remote_address Remote Device address
+ * @param[in] size Size of Phonebook
+ * @param[in] user_data The user data passed from the callback registration function
+ * @see bt_pbap_get_phonebook_size()
+ * @see bt_pbap_connect()
+ * @see bt_pbap_disconnect()
+ */
+typedef void (*bt_pbap_phonebook_size_cb)(const char *remote_address,
+		int size, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PBAP_CLIENT_MODULE
+ * @brief  Called when PBAP Phonebook Pull returns all contacts.
+ * @since_tizen 3.0
+ *
+ * @param[in] remote_address Remote Device address
+ * @param[in] vcf_file File in which vCards are saved
+ * @param[in] status Status for successful Transfer (@c 0 = Unsuccessful, @c 1 = Successful)
+ * @param[in] user_data The user data passed from the callback registration function
+ * @see bt_pbap_get_phonebook()
+ * @see bt_pbap_connect()
+ * @see bt_pbap_disconnect()
+ */
+typedef void (*bt_pbap_phonebook_pull_cb)(const char *remote_address,
+		char *vcf_file, int status, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PBAP_CLIENT_MODULE
+ * @brief  Called when PBAP List vCards returns the handles and Names.
+ * @since_tizen 3.0
+ *
+ * @param[in] remote_address Remote Device address
+ * @param[in] vcards List of vCards
+ * @param[in] count Number of contacts in the list
+ * @param[in] status Status for successful Transfer (@c 0 = Unsuccessful, @c 1 = Successful)
+ * @param[in] user_data The user data passed from the callback registration function
+ * @see bt_pbap_get_phonebook()
+ * @see bt_pbap_connect()
+ * @see bt_pbap_disconnect()
+ */
+typedef void (*bt_pbap_list_vcards_cb)(const char *remote_address,
+		char **vcards, int count, int status, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PBAP_CLIENT_MODULE
+ * @brief  Called when PBAP Get vCard returns the contact.
+ * @since_tizen 3.0
+ *
+ * @param[in] remote_address Remote Device address
+ * @param[in] vcard Contact as vCard
+ * @param[in] status Status for successful Transfer (@c 0 = Unsuccessful, @c 1 = Successful)
+ * @param[in] user_data The user data passed from the callback registration function
+ * @see bt_pbap_get_phonebook()
+ * @see bt_pbap_connect()
+ * @see bt_pbap_disconnect()
+ */
+typedef void (*bt_pbap_get_vcard_cb)(const char *remote_address,
+		char *vcard, int status, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PBAP_CLIENT_MODULE
+ * @brief  Called when PBAP Phonebook Search returns the handles and Names.
+ * @since_tizen 3.0
+ *
+ * @param[in] remote_address Remote Device address
+ * @param[in] vcards List of vCards
+ * @param[in] count Number of contacts in the list
+ * @param[in] status Status for successful Transfer (@c 0 = Unsuccessful, @c 1 = Successful)
+ * @param[in] user_data The user data passed from the callback registration function
+ * @see bt_pbap_get_phonebook()
+ * @see bt_pbap_connect()
+ * @see bt_pbap_disconnect()
+ */
+typedef void (*bt_pbap_search_list_cb)(const char *remote_address,
+		char **vcards, int count, int status, void *user_data);
 
 #ifdef __cplusplus
 }
