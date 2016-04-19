@@ -132,7 +132,7 @@ int bt_pbap_get_phonebook_size(const char *address, bt_pbap_addressbook_source_e
 int bt_pbap_get_phonebook(const char *address, bt_pbap_addressbook_source_e source,
 		bt_pbap_folder_type_e type, bt_pbap_filter_vcard_format_e format,
 		bt_pbap_filter_sort_order_e order, unsigned short offset,
-		unsigned short maxlistcount, long long unsigned fields,
+		unsigned short max_list_count, long long unsigned fields,
 		bt_pbap_phonebook_pull_cb callback, void *user_data)
 {
 	bluetooth_device_address_t addr_hex = { {0,} };
@@ -146,18 +146,18 @@ int bt_pbap_get_phonebook(const char *address, bt_pbap_addressbook_source_e sour
 	BT_CHECK_INPUT_PARAMETER(callback);
 
 	/* To get size of phonebook, a separate API is provided
-	 * Hence, passing maxlistcount as 0 is restricted. */
-	if (maxlistcount <= 0)
+	 * Hence, passing max_list_count as 0 is restricted. */
+	if (max_list_count <= 0)
 		return BT_ERROR_INVALID_PARAMETER;
 
 	/* Maximum value of maxlistcount is 65535 */
-	if (maxlistcount > 65535)
-		maxlistcount = 65535;
+	if (max_list_count > 65535)
+		max_list_count = 65535;
 
 	app_param.format = format;
 	app_param.order = order;
 	app_param.offset = offset;
-	app_param.maxlist = maxlistcount;
+	app_param.maxlist = max_list_count;
 	app_param.fields = fields;
 
 	folder.addressbook = source;
@@ -176,7 +176,7 @@ int bt_pbap_get_phonebook(const char *address, bt_pbap_addressbook_source_e sour
 
 int bt_pbap_get_list(const char *address, bt_pbap_addressbook_source_e source,
 		bt_pbap_folder_type_e type, bt_pbap_filter_sort_order_e order,
-		unsigned short offset, unsigned short maxlistcount,
+		unsigned short offset, unsigned short max_list_count,
 		bt_pbap_list_vcards_cb callback, void *user_data)
 {
 	bluetooth_device_address_t addr_hex = { {0,} };
@@ -192,7 +192,7 @@ int bt_pbap_get_list(const char *address, bt_pbap_addressbook_source_e source,
 	_bt_convert_address_to_hex(&addr_hex, address);
 	app_param.order = order;
 	app_param.offset = offset;
-	app_param.maxlist = maxlistcount;
+	app_param.maxlist = max_list_count;
 
 	folder.addressbook = source;
 	folder.folder_type = type;
@@ -245,7 +245,7 @@ int bt_pbap_phonebook_search(const char *address,
 		bt_pbap_addressbook_source_e source, bt_pbap_folder_type_e type,
 		bt_pbap_search_field_e search_attribute, const char *search_value,
 		bt_pbap_filter_sort_order_e order,
-		unsigned short offset, unsigned short maxlistcount,
+		unsigned short offset, unsigned short max_list_count,
 		bt_pbap_search_list_cb callback, void *user_data)
 {
 	bluetooth_device_address_t addr_hex = { {0,} };
@@ -264,7 +264,7 @@ int bt_pbap_phonebook_search(const char *address,
 
 	app_param.order = order;
 	app_param.offset = offset;
-	app_param.maxlist = maxlistcount;
+	app_param.maxlist = max_list_count;
 	app_param.search_attribute = search_attribute;
 	strncpy(app_param.search_value, search_value,
 			BLUETOOTH_PBAP_MAX_SEARCH_VALUE_LENGTH - 1);
