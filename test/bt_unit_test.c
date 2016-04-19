@@ -884,9 +884,9 @@ tc_table_t tc_pbap_client[] = {
 		, BT_UNIT_TEST_FUNCTION_PBAP_CLIENT_CONNECT},
 	{"bt_pbap_disconnect()"
 		, BT_UNIT_TEST_FUNCTION_PBAP_CLIENT_DISCONNECT},
-	{"bt_pbap_get_phonebook_size()"
+	{"bt_pbap_get_phone_book_size()"
 		, BT_UNIT_TEST_FUNCTION_PBAP_CLIENT_GETSIZE},
-	{"bt_pbap_get_phonebook()"
+	{"bt_pbap_get_phone_book()"
 		, BT_UNIT_TEST_FUNCTION_PBAP_CLIENT_PHONEBOOKPULL},
 	{"bt_pbap_get_list()"
 		, BT_UNIT_TEST_FUNCTION_PBAP_CLIENT_VCARDLIST},
@@ -2628,7 +2628,7 @@ void __bt_hf_speaker_gain_changed_cb(int gain,
 }
 
 void __bt_pbap_enabled_cb(const char *remote_address,
-	int pbap_enabled, void *user_data)
+	bool pbap_enabled, void *user_data)
 {
 	TC_PRT("__bt_pbap_enabled_cb");
 	TC_PRT("Remote Device: %s", remote_address);
@@ -2644,7 +2644,7 @@ void __bt_pbap_phonebook_size_cb(const char *remote_address,
 }
 
 void __bt_pbap_phonebook_pull_cb(const char *remote_address,
-	char *vcf_file, int status, void *user_data)
+	char *vcf_file, bool status, void *user_data)
 {
 	TC_PRT("__bt_pbap_phonebook_pull_cb");
 	TC_PRT("Remote Device: %s", remote_address);
@@ -2654,7 +2654,7 @@ void __bt_pbap_phonebook_pull_cb(const char *remote_address,
 }
 
 void __bt_pbap_vcard_list_cb(const char *remote_address,
-	char **vcards, int count, int status, void *user_data)
+	char **vcards, int count, bool status, void *user_data)
 {
 	TC_PRT("__bt_pbap_vcard_list_cb");
 	TC_PRT("Remote Device: %s", remote_address);
@@ -7380,7 +7380,7 @@ int test_input_callback(void *data)
 			break;
 		}
 		case BT_UNIT_TEST_FUNCTION_PBAP_CLIENT_GETSIZE: {
-			ret = bt_pbap_get_phonebook_size(remote_addr,
+			ret = bt_pbap_get_phone_book_size(remote_addr,
 					0, 0,
 					__bt_pbap_phonebook_size_cb,
 					NULL);
@@ -7389,7 +7389,7 @@ int test_input_callback(void *data)
 		}
 		case BT_UNIT_TEST_FUNCTION_PBAP_CLIENT_PHONEBOOKPULL: {
 			long long unsigned fields = BT_PBAP_FIELD_PHOTO | BT_PBAP_FIELD_EMAIL | BT_PBAP_FIELD_ORG;
-			ret = bt_pbap_get_phonebook(remote_addr,
+			ret = bt_pbap_get_phone_book(remote_addr,
 					0, 0, 0, 0, 0, 100,
 					fields, __bt_pbap_phonebook_pull_cb,
 					NULL);
