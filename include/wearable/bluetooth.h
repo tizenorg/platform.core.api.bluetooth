@@ -3596,9 +3596,324 @@ int bt_gatt_set_connection_state_changed_cb(bt_gatt_connection_state_changed_cb 
 int bt_gatt_unset_connection_state_changed_cb(void);
 
 /**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PBAP_CLIENT_MODULE
+ * @brief Initializes the Bluetooth PBAP Client.
+ * @details This initialization is necessary to call other PBAP client APIs.
+ * @since_tizen 3.0
+ *
+ * @remarks This function must be called to initialize Bluetooth PBAP client. You must free all resources of the Bluetooth service
+ * by calling bt_pbap_deinit() if Bluetooth PBAP Client is no longer needed.
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The state of the local Bluetooth adapter must be #BT_ADAPTER_ENABLED.
+ *
+ * @see  bt_pbap_deinit()
+ * @see  bt_pbap_connect()
+ * @see  bt_pbap_disconnect()
+ * @see  bt_pbap_get_phone_book_size()
+ * @see  bt_pbap_get_phone_book()
+ * @see  bt_pbap_get_list()
+ * @see  bt_pbap_pull_vcard()
+ * @see  bt_pbap_phonebook_search()
+ */
+int bt_pbap_init(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PBAP_CLIENT_MODULE
+ * @brief Deinitializes the Bluetooth PBAP Client.
+ * @details This deinitialization must be done to free resources when the PBAP client is not longer needed.
+ * @since_tizen 3.0
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The state of the local Bluetooth adapter must be #BT_ADAPTER_ENABLED.
+ *	The PBAP client must be initialized with bt_pbap_init().
+ * @see  bt_pbap_deinit()
+ * @see  bt_pbap_connect()
+ * @see  bt_pbap_disconnect()
+ * @see  bt_pbap_get_phone_book_size()
+ * @see  bt_pbap_get_phone_book()
+ * @see  bt_pbap_get_list()
+ * @see  bt_pbap_pull_vcard()
+ * @see  bt_pbap_phonebook_search()
+ */
+int bt_pbap_deinit(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PBAP_CLIENT_MODULE
+ * @brief Connects to PBAP server, asynchronously.
+ * @since_tizen 3.0
+ * @privlevel public
+ * @privilege http://tizen.org/privilege/bluetooth
+ *
+ * @param[in] address The other device's address
+ * @param[in] callback The callback function called when PBAP session is connected.
+ * @param[in] user_data Data to be passed to PBAP enabled/disabled callback.
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Adapter is not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The state of the local Bluetooth adapter must be #BT_ADAPTER_ENABLED.
+ *	The PBAP client must be initialized with bt_pbap_init().
+ * @see bt_pbap_disconnect()
+ */
+int bt_pbap_connect(const char *address, bt_pbap_enabled_cb callback, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PBAP_CLIENT_MODULE
+ * @brief Disconnects from PBAP server, asynchronously.
+ * @since_tizen 3.0
+ * @privlevel public
+ * @privilege http://tizen.org/privilege/bluetooth
+ *
+ * @param[in] address The other device's address
+ * @param[in] callback The callback function called when PBAP session is disconnected.
+ * @param[in] user_data Data to be passed to PBAP enabled/disabled callback.
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Adapter is not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The state of the local Bluetooth adapter must be #BT_ADAPTER_ENABLED.
+ *	The PBAP client must be initialized with bt_pbap_init().
+ *	PBAP connection must be created with bt_pbap_connect().
+ *
+ * @see bt_pbap_connect()
+ */
+int bt_pbap_disconnect(const char *address, bt_pbap_enabled_cb callback, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PBAP_CLIENT_MODULE
+ * @brief Gets size of phonebook from PBAP server, asynchronously.
+ * @since_tizen 3.0
+ * @privlevel public
+ * @privilege http://tizen.org/privilege/bluetooth
+ *
+ * @param[in] address The other device's address
+ * @param[in] source Source of the phone book (Phone/SIM)
+ * @param[in] folder_type Type of folder
+ * @param[in] callback The callback function called when PBAP phone book size is returned.
+ * @param[in] user_data Data to be passed to the PBAP phone book size callback.
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Adapter is not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The state of the local Bluetooth adapter must be #BT_ADAPTER_ENABLED.
+ *	The PBAP client must be initialized with bt_pbap_init().
+ *	PBAP connection must be created with bt_pbap_connect().
+ *
+ * @see bt_pbap_connect()
+ */
+int bt_pbap_get_phone_book_size(const char *address,
+						bt_pbap_address_book_source_e source,
+						bt_pbap_folder_type_e folder_type,
+						bt_pbap_phone_book_size_cb callback,
+						void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PBAP_CLIENT_MODULE
+ * @brief Gets contacts and call logs as vCards from PBAP server, asynchronously.
+ * @details The received phone book file will be saved in the downloads folder.
+                 Tizen 3.0 platform uses "/opt/home/owner/content/Downloads" folder as the downloads folder.
+ * @since_tizen 3.0
+ * @privlevel public
+ * @privilege http://tizen.org/privilege/bluetooth
+ *                 http://tizen.org/privilege/mediastorage
+ *
+ * @param[in] address The other device's address
+ * @param[in] source Source of phone book (Phone/SIM)
+ * @param[in] folder_type Type of folder
+ * @param[in] format The vCard format
+ * @param[in] order Specifies which field shall be used to sort vCards.
+ * @param[in] offset The number of vCards to be excluded, counting from the beginning
+ * @param[in] max_list_count The maximum number of vCards to be fetched
+ * @param[in] fields vCard fields to be fetched.
+ * @param[in] callback The callback function called when PBAP phone book is Pulled.
+ * @param[in] user_data Data to be passed to the PBAP phone book pulling callback.
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Adapter is not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The state of the local Bluetooth adapter must be #BT_ADAPTER_ENABLED.
+ *	The PBAP client must be initialized with bt_pbap_init().
+ *	PBAP connection must be created with bt_pbap_connect().
+ *
+ * @see bt_pbap_connect()
+ */
+int bt_pbap_get_phone_book(const char *address,
+						bt_pbap_address_book_source_e source,
+						bt_pbap_folder_type_e folder_type,
+						bt_pbap_vcard_format_e format,
+						bt_pbap_sort_order_e order,
+						unsigned short offset,
+						unsigned short max_list_count,
+						long long unsigned fields,
+						bt_pbap_phone_book_get_cb callback,
+						void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PBAP_CLIENT_MODULE
+ * @brief Gets contact and calls from PBAP server, asynchronously.
+ * @since_tizen 3.0
+ * @privlevel public
+ * @privilege http://tizen.org/privilege/bluetooth
+ *
+ * @param[in] address The other device's address
+ * @param[in] source Source of phone book (Phone/SIM)
+ * @param[in] folder_type Type of folder
+ * @param[in] order Specifies which field shall be used to sort vCards.
+ * @param[in] offset vCards to be excluded from beginning.
+ * @param[in] max_list_count Maximum number of vCards to be fetched
+ * @param[in] callback The callback function called when PBAP List is returned.
+ * @param[in] user_data Data to be passed to the PBAP phone book pulling callback.
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Adapter is not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The state of the local Bluetooth adapter must be #BT_ADAPTER_ENABLED.
+ *	The PBAP client must be initialized with bt_pbap_init().
+ *	PBAP connection must be created with bt_pbap_connect().
+ *
+ * @see bt_pbap_connect()
+ */
+int bt_pbap_get_list(const char *address,
+					bt_pbap_address_book_source_e source,
+					bt_pbap_folder_type_e folder_type,
+					bt_pbap_sort_order_e order,
+					unsigned short offset,
+					unsigned short max_list_count,
+					bt_pbap_list_vcards_cb callback,
+					void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PBAP_CLIENT_MODULE
+ * @brief Gets a contact and call log from PBAP server, asynchronously.
+ * @details The received vcard file will be saved in the downloads folder.
+                 Tizen 3.0 platform uses "/opt/home/owner/content/Downloads" folder as the downloads folder.
+ * @since_tizen 3.0
+ * @privlevel public
+ * @privilege http://tizen.org/privilege/bluetooth
+ *                 http://tizen.org/privilege/mediastorage
+ *
+ * @param[in] address The other device's address
+ * @param[in] source Source of phone book (Phone/SIM)
+ * @param[in] folder_type Type of folder
+ * @param[in] index The handle index of vCard to be fetched
+ * @param[in] format Format of vCard
+ * @param[in] fields Fields of vCard to be fetched.
+ * @param[in] callback The callback function called when PBAP phone book is Pulled.
+ * @param[in] user_data Data to be passed to the PBAP phone book Pulling callback.
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Adapter is not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The state of the local Bluetooth adapter must be #BT_ADAPTER_ENABLED.
+ *	The PBAP client must be initialized with bt_pbap_init().
+ *	PBAP connection must be created with bt_pbap_connect().
+ *
+ * @see bt_pbap_connect()
+ */
+int bt_pbap_pull_vcard(const char *address,
+					bt_pbap_address_book_source_e source,
+					bt_pbap_folder_type_e folder_type,
+					int index,
+					bt_pbap_vcard_format_e format,
+					long long unsigned fields,
+					bt_pbap_pull_vcard_cb callback,
+					void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_PBAP_CLIENT_MODULE
+ * @brief Gets the contacts and call list from PBAP server, asynchronously.
+ * @since_tizen 3.0
+ * @privlevel public
+ * @privilege http://tizen.org/privilege/bluetooth
+ *
+ * @param[in] address The other device's address
+ * @param[in] source Source of phone book (Phone/SIM)
+ * @param[in] folder_type Type of folder
+ * @param[in] search_attribute field to be search
+ * @param[in] search_value pattern to be searched for
+ * @param[in] order Specifies which field shall be used to sort vCards.
+ * @param[in] offset vCards to be excluded from beginning.
+ * @param[in] max_list_count Maximum number of vCards to be fetched
+ * @param[in] callback The callback function called when PBAP List is returned.
+ * @param[in] user_data Data to be passed to the PBAP phone book pulling callback.
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Adapter is not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The state of the local Bluetooth adapter must be #BT_ADAPTER_ENABLED.
+ *	The PBAP client must be initialized with bt_pbap_init().
+ *	PBAP connection must be created with bt_pbap_connect().
+ *
+ * @see bt_pbap_connect()
+ */
+int bt_pbap_phonebook_search(const char *address,
+					bt_pbap_address_book_source_e source,
+					bt_pbap_folder_type_e folder_type,
+					bt_pbap_search_field_e search_attribute,
+					const char *search_value,
+					bt_pbap_sort_order_e order,
+					unsigned short offset,
+					unsigned short max_list_count,
+					bt_pbap_search_list_cb callback,
+					void *user_data);
+
+/**
  * @}
  */
-
 
 #ifdef __cplusplus
 }
