@@ -352,6 +352,23 @@ typedef struct {
 	unsigned int time_out;   /**< Supervision timeout (msec) */
 } bt_le_conn_update_s;
 
+
+/**
+ * Structure to DPM device list
+ */
+typedef struct {
+	int count;
+	char **devices;
+} bt_dpm_device_list_s;
+
+/**
+ * Structure to DPM uuid list
+ */
+typedef struct {
+	int count;
+	char **uuids;
+} bt_dpm_uuids_list_s;
+
 /**
  * @}
  */
