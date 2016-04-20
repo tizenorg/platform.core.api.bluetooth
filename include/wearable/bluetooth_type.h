@@ -580,6 +580,55 @@ typedef enum {
 } bt_gatt_property_e;
 
 /**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
+ * @brief DPM BT allowance state
+ * @since_tizen 3.0
+ */
+ typedef enum {
+	 BT_DPM_ERROR	 = -1,	 /**< bluetooth allowance error */
+	 BT_DPM_BT_ALLOWED, 	 /**< bluetooth allowance allowed */
+	 BT_DPM_HANDSFREE_ONLY, /**< bluetooth allowance handsfree only */
+	 BT_DPM_BT_RESTRICTED,	/**< bluetooth allowance restricted */
+ } bt_dpm_allow_e;
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
+ * @brief DPM Policy status
+ * @since_tizen 3.0
+ */
+typedef enum {
+	BT_DPM_STATUS_ERROR = -1,
+
+	BT_DPM_ALLOWED		= 0,	/**< DPM Policy status allowed. */
+	BT_DPM_RESTRICTED		= 1,	/**< DPM Policy status restricted. */
+
+	BT_DPM_ENABLE			= 1,	/**< DPM Policy status enabled. */
+	BT_DPM_DISABLE	= 0,	/**< DPM Policy status disabled. */
+
+	BT_DPM_FALSE		= 0,	/**< DPM Policy status false. */
+	BT_DPM_TRUE 		= 1,	/**< DPM Policy status true. */
+} bt_dpm_status_e;
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
+ * @brief DPM Profile states
+ * @since_tizen 3.0
+ */
+typedef enum {
+	BT_DPM_POLICY_A2DP_PROFILE_STATE,
+	BT_DPM_POLICY_AVRCP_PROFILE_STATE,
+	BT_DPM_POLICY_BPP_PROFILE_STATE,
+	BT_DPM_POLICY_DUN_PROFILE_STATE,
+	BT_DPM_POLICY_FTP_PROFILE_STATE,
+	BT_DPM_POLICY_HFP_PROFILE_STATE,
+	BT_DPM_POLICY_HSP_PROFILE_STATE,
+	BT_DPM_POLICY_PBAP_PROFILE_STATE,
+	BT_DPM_POLICY_SAP_PROFILE_STATE,
+	BT_DPM_POLICY_SPP_PROFILE_STATE,
+	BT_DPM_PROFILE_NONE,
+} bt_dpm_profile_e;
+
+/**
  * @ingroup CAPI_NETWORK_BLUETOOTH_PAN_PANU_MODULE
  * @brief  Enumerations for the types of PAN(Personal Area Networking) service
  * @since_tizen 2.3.1
