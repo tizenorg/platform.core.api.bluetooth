@@ -332,6 +332,22 @@ typedef struct {
 	bt_gatt_client_request_completed_cb cb;
 } bt_gatt_client_cb_data_s;
 
+/**
+ * Structure to DPM device list
+ */
+typedef struct {
+	int count;
+	char **devices;
+} bt_dpm_device_list_s;
+
+/**
+ * Structure to DPM uuid list
+ */
+typedef struct {
+	int count;
+	char **uuids;
+} bt_dpm_uuids_list_s;
+
 typedef void (*_bt_gatt_client_value_changed_cb)(char *char_path,
 		unsigned char *value, int value_length, void *user_data);
 
@@ -694,6 +710,44 @@ int bt_passkey_reply(char *passkey, bool authentication_reply);
  * @see  bt_adapter_set_authentication_req_cb()
  */
 int bt_passkey_confirmation_reply(bool confirmation_reply);
+
+int bt_dpm_set_allow_bluetooth_mode(bt_dpm_allow_t value);
+int bt_dpm_get_allow_bluetooth_mode(bt_dpm_allow_t *value);
+int bt_dpm_activate_bluetooth_device_restriction(bt_dpm_status_t value);
+int bt_dpm_is_bluetooth_device_restriction_active(bt_dpm_status_t *value);
+int bt_dpm_activate_bluetoooth_uuid_restriction(bt_dpm_status_t value);
+int bt_dpm_is_bluetooth_uuid_restriction_active(bt_dpm_status_t *value);
+int bt_dpm_add_bluetooth_devices_to_blacklist(const char *device_address);
+int bt_dpm_add_bluetooth_devices_to_whitelist(const char *device_address);
+int bt_dpm_add_bluetooth_uuids_to_blacklist(const char *service_uuid);
+int bt_dpm_add_bluetooth_uuids_to_whitelist(const char *service_uuid);
+int bt_dpm_clear_bluetooth_devices_from_blacklist(void);
+int bt_dpm_clear_bluetooth_devices_from_whitelist(void);
+int bt_dpm_clear_bluetooth_uuids_from_blacklist(void);
+int bt_dpm_clear_bluetooth_uuids_from_whitelist(void);
+int bt_dpm_get_bluetooth_devices_from_blacklist(bt_dpm_device_list_s *device_list);
+int bt_dpm_get_bluetooth_devices_from_whitelist(bt_dpm_device_list_s *device_list);
+int bt_dpm_get_bluetooth_uuids_from_blacklist(bt_dpm_uuids_list_s *uuid_list);
+int bt_dpm_get_bluetooth_uuids_from_whitelist(bt_dpm_uuids_list_s *uuid_list);
+int bt_dpm_remove_bluetooth_device_from_whitelist(const char *device_address);
+int bt_dpm_remove_bluetooth_device_from_blacklist(const char *device_address);
+int bt_dpm_remove_bluetooth_uuid_from_whitelist(const char *service_uuid);
+int bt_dpm_remove_bluetooth_uuid_from_blacklist(const char *service_uuid);
+int bt_dpm_set_allow_bluetooth_outgoing_call(bt_dpm_status_t value);
+int bt_dpm_get_allow_bluetooth_outgoing_call(bt_dpm_status_t *value);
+int bt_dpm_set_bluetooth_pairing_state(bt_dpm_status_t value);
+int bt_dpm_get_bluetooth_pairing_state(bt_dpm_status_t *value);
+int bt_dpm_set_bluetooth_profile_state(bt_dpm_profile_t profile, bt_dpm_status_t value);
+int bt_dpm_get_bluetooth_profile_state(bt_dpm_profile_t profile, bt_dpm_status_t *value);
+int bt_dpm_set_bluetooth_desktop_connectivity_state(bt_dpm_status_t value);
+int bt_dpm_get_bluetooth_desktop_connectivity_state(bt_dpm_status_t *value);
+int bt_dpm_set_bluetooth_discoverable_state(bt_dpm_status_t value);
+int bt_dpm_get_bluetooth_discoverable_state(bt_dpm_status_t *value);
+int bt_dpm_set_bluetooth_limited_discoverable_state(bt_dpm_status_t value);
+int bt_dpm_get_bluetooth_limited_discoverable_state(bt_dpm_status_t *value);
+int bt_dpm_set_bluetooth_data_transfer_state(bt_dpm_status_t value);
+int bt_dpm_get_bluetooth_data_transfer_state(bt_dpm_status_t *value);
+
 
 #ifdef __cplusplus
 }
