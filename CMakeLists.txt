@@ -59,6 +59,7 @@ src/bluetooth-audio.c
 src/bluetooth-avrcp.c
 src/bluetooth-gatt.c
 src/bluetooth-ipsp.c
+src/bluetooth-dpm.c
 )
 ELSE ()
 SET(SOURCES
@@ -75,6 +76,7 @@ src/bluetooth-audio.c
 src/bluetooth-avrcp.c
 src/bluetooth-gatt.c
 src/bluetooth-ipsp.c
+src/bluetooth-dpm.c
 )
 IF (TIZEN_WEARABLE)
 LIST(APPEND SOURCES src/bluetooth-pbap.c)
