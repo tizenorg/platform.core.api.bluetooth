@@ -1150,6 +1150,9 @@ int bt_gatt_set_int_value(bt_gatt_h gatt_handle, bt_data_type_int_e type,
 	switch (type) {
 	case BT_DATA_TYPE_SINT8:
 		value = __convert_int_to_signed_bits(value, 8);
+		if (*val)
+			(*val)[idx] = (char)(value & 0xFF);
+		break;
 	case BT_DATA_TYPE_UINT8:
 		if (*val)
 			(*val)[idx] = (char)(value & 0xFF);
@@ -1157,6 +1160,11 @@ int bt_gatt_set_int_value(bt_gatt_h gatt_handle, bt_data_type_int_e type,
 
 	case BT_DATA_TYPE_SINT16:
 		value = __convert_int_to_signed_bits(value, 16);
+		if (*val) {
+			 (*val)[idx++] = (char)(value & 0xFF);
+			 (*val)[idx] = (char)((value >> 8) & 0xFF);
+		}
+		break;
 	case BT_DATA_TYPE_UINT16:
 		if (*val) {
 			 (*val)[idx++] = (char)(value & 0xFF);
@@ -1166,6 +1174,13 @@ int bt_gatt_set_int_value(bt_gatt_h gatt_handle, bt_data_type_int_e type,
 
 	case BT_DATA_TYPE_SINT32:
 		value = __convert_int_to_signed_bits(value, 32);
+		if (*val) {
+			(*val)[idx++] = (char)(value & 0xFF);
+			(*val)[idx++] = (char)((value >> 8) & 0xFF);
+			(*val)[idx++] = (char)((value >> 16) & 0xFF);
+			(*val)[idx] = (char)((value >> 24) & 0xFF);
+		}
+		break;
 	case BT_DATA_TYPE_UINT32:
 		if (*val) {
 			(*val)[idx++] = (char)(value & 0xFF);
