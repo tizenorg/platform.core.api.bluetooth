@@ -1624,7 +1624,7 @@ static void __bt_socket_data_received_cb(bt_socket_received_data_s *data,
 	TC_PRT("+");
 
 	if (data == NULL) {
-		TC_PRT("No recieved data!");
+		TC_PRT("No received data!");
 		return;
 	}
 
