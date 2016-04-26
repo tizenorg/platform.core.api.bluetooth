@@ -143,10 +143,10 @@ typedef enum {
 	BT_ADAPTER_LE_ADVERTISING_FILTER_DEFAULT = 0x00, /**< White list is not in use */
 	BT_ADAPTER_LE_ADVERTISING_FILTER_ALLOW_SCAN_WL = 0x01, /**< Allow the scan
 					request that in the White list */
-	BT_ADAPTER_LE_ADVERTISING_FILTER_ALLOW_CONN_WL = 0x02, /**< Allow the connectoin
+	BT_ADAPTER_LE_ADVERTISING_FILTER_ALLOW_CONN_WL = 0x02, /**< Allow the connection
 					request that in the White list */
 	BT_ADAPTER_LE_ADVERTISING_FILTER_ALLOW_SCAN_CONN_WL = 0x03, /**< Allow the
-					scan and connectoin request that in the White list */
+					scan and connection request that in the White list */
 } bt_adapter_le_advertising_filter_policy_e;
 
 /**
@@ -170,7 +170,7 @@ typedef enum {
  */
 typedef enum {
 	BT_ADAPTER_LE_PACKET_ADVERTISING, /**< Advertising packet */
-	BT_ADAPTER_LE_PACKET_SCAN_RESPONSE, /**< Sacn response packet */
+	BT_ADAPTER_LE_PACKET_SCAN_RESPONSE, /**< Scan response packet */
 } bt_adapter_le_packet_type_e;
 
 /**
@@ -205,7 +205,7 @@ typedef enum {
 typedef enum {
 	BT_DEVICE_CONNECTION_LINK_BREDR, /**< BR/EDR link */
 	BT_DEVICE_CONNECTION_LINK_LE, /**< LE link */
-	BT_DEVICE_CONNECTION_LINK_DEFAULT = 0xFF, /**< The connection type defualt */
+	BT_DEVICE_CONNECTION_LINK_DEFAULT = 0xFF, /**< The connection type default */
 } bt_device_connection_link_type_e;
 
 /**
@@ -527,7 +527,7 @@ typedef enum {
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Enumerations for the player state
- * @since_tizen 2.4
+ * @since_tizen 3.0
  */
 typedef enum {
 	BT_AVRCP_PLAYER_STATE_STOPPED = 0x00,  /**< Stopped */
@@ -536,6 +536,87 @@ typedef enum {
 	BT_AVRCP_PLAYER_STATE_FORWARD_SEEK,  /**< Seek Forward */
 	BT_AVRCP_PLAYER_STATE_REWIND_SEEK,  /**< Seek Rewind */
 } bt_avrcp_player_state_e;
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @brief  Enumeration for the player control commands
+ * @since_tizen 3.0
+ */
+typedef enum {
+	BT_AVRCP_CONTROL_PLAY = 0x01,   /**< Play */
+	BT_AVRCP_CONTROL_PAUSE,   /**< Pause */
+	BT_AVRCP_CONTROL_STOP,   /**< Stop */
+	BT_AVRCP_CONTROL_NEXT,   /**< Next Track*/
+	BT_AVRCP_CONTROL_PREVIOUS,   /**< Previous track */
+	BT_AVRCP_CONTROL_FAST_FORWARD,   /**< Fast Forward */
+	BT_AVRCP_CONTROL_REWIND   /**< Rewind */
+} bt_avrcp_player_command_e;
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @brief Structure of Track metadata information.
+ * @since_tizen 3.0
+ *
+ * @see #bt_class_s
+ */
+typedef struct {
+	const char *title;   /**< Title */
+	const char *artist;   /**< Artist */
+	const char *album;   /**< Album name */
+	const char *genre;   /**< Album Genre */
+	unsigned int total_tracks;   /**< The total number of tracks */
+	unsigned int number;   /**< Track number */
+	unsigned int duration;   /**< Duration */
+} bt_avrcp_metadata_attributes_info_s;
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @brief  Called when the connection state is changed.
+ * @since_tizen 3.0
+ * @remarks The callback is called in the main loop
+ * @param[in] connected  The state to be changed. @a true means connected state, Otherwise, @a false.
+ * @param[in] remote_address  The remote address
+ * @param[in] user_data The user data passed from the callback registration function
+ * @see bt_avrcp_control_initialize()
+ * @see bt_avrcp_control_deinitialize()
+ */
+typedef void (*bt_avrcp_control_connection_state_changed_cb) (bool connected, const char *remote_address, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @brief  Called when the Song position mode is changed by the remote target device.
+ * @since_tizen 3.0
+ * @remarks The callback is called in the main loop
+ * @param[in] position The song position
+ * @param[in] user_data The user data passed from the callback registration function
+ * @see bt_avrcp_set_song_position_changed_cb()
+ * @see bt_avrcp_unset_song_position_changed_cb()
+ */
+typedef void (*bt_avrcp_song_position_changed_cb) (unsigned int position, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @brief  Called when the Song metadata information is changed by the remote target device.
+ * @since_tizen 3.0
+ * @remarks The callback is called in the main loop
+ * @param[in] track The song metadata information
+ * @param[in] user_data The user data passed from the callback registration function
+ * @see bt_avrcp_set_track_info_changed_cb()
+ * @see bt_avrcp_unset_track_info_changed_cb()
+ */
+typedef void (*bt_avrcp_track_info_changed_cb) (bt_avrcp_metadata_attributes_info_s *track, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @brief  Called when the Song Play status mode is changed by the remote target device.
+ * @since_tizen 3.0
+ * @remarks The callback is called in the main loop
+ * @param[in] play_state The song play status
+ * @param[in] user_data The user data passed from the callback registration function
+ * @see bt_avrcp_set_play_status_changed_cb()
+ * @see bt_avrcp_unset_play_status_changed_cb()
+ */
+typedef void (*bt_avrcp_play_status_changed_cb) (bt_avrcp_player_state_e play_state, void *user_data);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_HDP_MODULE
@@ -1144,7 +1225,7 @@ typedef void (*bt_socket_data_received_cb)(bt_socket_received_data_s *data, void
  * @param[in] connection The connection information which is established or disconnected
  * @param[in] user_data The user data passed from the callback registration function
  * @pre Either bt_socket_connect_rfcomm() will invoke this function.
- * In addtion, bt_socket_connection_state_changed_cb() will be invoked when the socket connection state is changed.
+ * In addition, bt_socket_connection_state_changed_cb() will be invoked when the socket connection state is changed.
  * @see bt_socket_listen_and_accept_rfcomm()
  * @see bt_socket_connect_rfcomm()
  * @see bt_socket_set_connection_state_changed_cb()
@@ -1182,7 +1263,7 @@ typedef void (*bt_opp_server_connection_requested_cb)(const char *remote_address
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_OPP_SERVER_MODULE
- * @brief  Called when a file is being transfered.
+ * @brief  Called when a file is being transferred.
  * @since_tizen 2.3
  *
  * @param[in] file  The path of file to be pushed
@@ -1223,12 +1304,12 @@ typedef void (*bt_opp_client_push_responded_cb)(int result, const char *remote_a
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_OPP_CLIENT_MODULE
- * @brief  Called when each file is being transfered.
+ * @brief  Called when each file is being transferred.
  * @since_tizen 2.3
  *
  * @param[in] file  The path of file to be pushed
  * @param[in] size The file size (bytes)
- * @param[in] percent The progress in percentage (1 ~ 100). 100 means that a file is transfered completely.
+ * @param[in] percent The progress in percentage (1 ~ 100). 100 means that a file is transferred completely.
  * @param[in] user_data The user data passed from the callback registration function
  * @pre bt_opp_client_push_files() will invoke this function.
  * @see bt_opp_client_push_files()
@@ -1697,7 +1778,7 @@ typedef enum {
 	BT_HID_HANDSHAKE_ERR_INVALID_REPORT_ID, /**< Handshake error code send invalid report id */
 	BT_HID_HANDSHAKE_ERR_UNSUPPORTED_REQUEST, /**< Handshake error code request unsupported request */
 	BT_HID_HANDSHAKE_ERR_INVALID_PARAMETER, /**< Handshake error code received invalid parameter */
-	BT_HID_HANDSHAKE_ERR_UNKNOWN = 0x0e, /**< unkown error */
+	BT_HID_HANDSHAKE_ERR_UNKNOWN = 0x0e, /**< unknown error */
 	BT_HID_HANDSHAKE_ERR_FATAL /**< Fatal error */
 } bluetooth_hid_handshake_type_t;
 
