@@ -623,9 +623,35 @@
  * The @a Target is the device whose characteristics are being altered.
  * In a "walkman" type media player scenario, the @a Control device may be a headset that allows tracks to be skipped and the @a Target device would be the actual medial player.
  *
- * @section CAPI_NETWORK_BLUETOOTH_AVRCP__MODULE_FEATURE Related Features
+ * @section CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE_FEATURE Related Features
  * This API is related with the following features:\n
  *  - http://tizen.org/feature/network.bluetooth.audio.media\n
+ *
+ * It is recommended to design feature related codes in your application for reliability.\n
+ *
+ * You can check if a device supports the related features for this API by using @ref CAPI_SYSTEM_SYSTEM_INFO_MODULE, thereby controlling the procedure of your application.\n
+ *
+ * To ensure your application is only running on the device with specific features, please define the features in your manifest file using the manifest editor in the SDK.\n
+ *
+ * More details on featuring your application can be found from <a href="https://developer.tizen.org/development/tools/native-tools/manifest-text-editor#feature"><b>Feature Element</b>.</a>
+ *
+ */
+
+ /**
+ * @defgroup CAPI_NETWORK_BLUETOOTH_AVRCP_CONTROL_MODULE Bluetooth AVRCP
+ * @brief Bluetooth AVRCP(Audio/Video Remote Control Profile) API provides functions for control the remote device.
+ * @ingroup CAPI_NETWORK_BLUETOOTH_MODULE
+ *
+ * @section CAPI_NETWORK_BLUETOOTH_AVRCP_CONTROL_MODULE_HEADER Required Header
+ *  \#include <bluetooth.h>
+ *
+ * @section CAPI_NETWORK_BLUETOOTH_AVRCP_CONTROL_MODULE_OVERVIEW Overview
+ * This API supports the @a Control(Sink) role in AVRCP spec.
+ * In a "walkman" type media player scenario, the @a Control device may be a headset that allows tracks to be skipped and the @a Target device would be the actual medial player.
+ *
+ * @section CAPI_NETWORK_BLUETOOTH_AVRCP_CONTROL_MODULE_FEATURE Related Features
+ * This API is related with the following features:\n
+ *  - http://tizen.org/feature/network.bluetooth.audio.avrcp.control\n
  *
  * It is recommended to design feature related codes in your application for reliability.\n
  *
