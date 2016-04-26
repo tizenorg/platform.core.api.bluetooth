@@ -628,7 +628,7 @@ int bt_avrcp_unset_scan_mode_changed_cb(void)
 }
 
 /* LCOV_EXCL_START */
-int bt_avrcp_set_song_position_changed_cb(bt_avrcp_song_position_changed_cb callback, void *user_data)
+int bt_avrcp_set_position_changed_cb(bt_avrcp_position_changed_cb callback, void *user_data)
 {
 	BT_CHECK_AVRCP_SUPPORT();
 	BT_CHECK_INIT_STATUS();
@@ -637,7 +637,7 @@ int bt_avrcp_set_song_position_changed_cb(bt_avrcp_song_position_changed_cb call
 	return BT_ERROR_NONE;
 }
 
-int bt_avrcp_unset_song_position_changed_cb(void)
+int bt_avrcp_unset_position_changed_cb(void)
 {
 	BT_CHECK_AVRCP_SUPPORT();
 	BT_CHECK_INIT_STATUS();

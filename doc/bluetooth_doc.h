@@ -34,6 +34,8 @@
  * In addition, #bt_deinitialize() should be called when Bluetooth Service is no longer needed.
  * Please refer Bluetooth Tutorial if you want to get more detailed usages and information of this api.
  *
+ * Note on callbacks: All callbacks in this module are called in the main loop context.
+ *
  * @section CAPI_NETWORK_BLUETOOTH_MODULE_FEATURE Related Features
  * This API is related with the following features:\n
  *  - http://tizen.org/feature/network.bluetooth\n
@@ -557,7 +559,7 @@
 /**
  * @internal
  * @defgroup CAPI_NETWORK_BLUETOOTH_AUDIO_AG_MODULE Bluetooth AG
- * @brief Bluetooth AG(Audio Gateway) API provides functions for controling the remote audio device.
+ * @brief Bluetooth AG(Audio Gateway) API provides functions for controlling the remote audio device.
  * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_MODULE
  *
  * @section CAPI_NETWORK_BLUETOOTH_AUDIO_AG_MODULE_HEADER Required Header
@@ -565,7 +567,7 @@
  *
  * @section CAPI_NETWORK_BLUETOOTH_AUDIO_AG_MODULE_OVERVIEW Overview
  * This API supports the @a Audio @a Gateway role in HSP and HFP.
- * Audio Gateway is the devie that is the gateway of the audio, both for input and output, typically a mobile phone or PC.
+ * Audio Gateway is the device that is the gateway of the audio, both for input and output, typically a mobile phone or PC.
  *
  * @section CAPI_NETWORK_BLUETOOTH_AUDIO_AG_MODULE_FEATURE Related Features
  * This API is related with the following features:\n
@@ -612,18 +614,31 @@
 
 /**
  * @defgroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE Bluetooth AVRCP
- * @brief Bluetooth AVRCP(Audio/Video Remote Control Profile) API provides functions for notifying the change of target device to the control device.
+ * @brief Bluetooth AVRCP(Audio/Video Remote Control Profile) API provides functions for notifying the change of target device to the control device(@a Target role) and functions for controlling the remote device(@a Controller role).
  * @ingroup CAPI_NETWORK_BLUETOOTH_MODULE
  *
  * @section CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE_HEADER Required Header
  *  \#include <bluetooth.h>
  *
  * @section CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE_OVERVIEW Overview
+ * AVRCP profile let users send AV control signals and information between two devices.
+ *
+ */
+
+/**
+ * @defgroup CAPI_NETWORK_BLUETOOTH_AVRCP_TARGET_MODULE Bluetooth AVRCP Target
+ * @brief Bluetooth AVRCP(Audio/Video Remote Control Profile) Target API provides functions for notifying the change of target device to the control device.
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ *
+ * @section CAPI_NETWORK_BLUETOOTH_AVRCP_TARGET_MODULE_HEADER Required Header
+ *  \#include <bluetooth.h>
+ *
+ * @section CAPI_NETWORK_BLUETOOTH_AVRCP_TARGET_MODULE_OVERVIEW Overview
  * This API supports the @a Target role in AVRCP spec.
  * The @a Target is the device whose characteristics are being altered.
  * In a "walkman" type media player scenario, the @a Control device may be a headset that allows tracks to be skipped and the @a Target device would be the actual medial player.
  *
- * @section CAPI_NETWORK_BLUETOOTH_AVRCP__MODULE_FEATURE Related Features
+ * @section CAPI_NETWORK_BLUETOOTH_AVRCP_TARGET_MODULE_FEATURE Related Features
  * This API is related with the following features:\n
  *  - http://tizen.org/feature/network.bluetooth.audio.media\n
  *
@@ -632,6 +647,32 @@
  * You can check if a device supports the related features for this API by using @ref CAPI_SYSTEM_SYSTEM_INFO_MODULE, thereby controlling the procedure of your application.\n
  *
  * To ensure your application is only running on the device with specific features, please define the features in your manifest file using the manifest editor in the SDK.\n
+ *
+ * More details on featuring your application can be found from <a href="https://developer.tizen.org/development/tools/native-tools/manifest-text-editor#feature"><b>Feature Element</b>.</a>
+ *
+ */
+
+ /**
+ * @defgroup CAPI_NETWORK_BLUETOOTH_AVRCP_CONTROL_MODULE Bluetooth AVRCP Controller
+ * @brief Bluetooth AVRCP(Audio/Video Remote Control Profile) Control API provides functions for controlling the remote device.
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ *
+ * @section CAPI_NETWORK_BLUETOOTH_AVRCP_CONTROL_MODULE_HEADER Required Header
+ *  \#include <bluetooth.h>
+ *
+ * @section CAPI_NETWORK_BLUETOOTH_AVRCP_CONTROL_MODULE_OVERVIEW Overview
+ * This API supports the @a Controller role in the AVRCP spec.
+ * In a "walkman" type media player scenario, the @a Control device may be a headset that allows tracks to be skipped and the @a Target device would be the actual medial player.
+ *
+ * @section CAPI_NETWORK_BLUETOOTH_AVRCP_CONTROL_MODULE_FEATURE Related Features
+ * This API is related with the following features:\n
+ *  - http://tizen.org/feature/network.bluetooth.audio.controller\n
+ *
+ * It is recommended to create application with regard to features, to increase reliability.\n
+ *
+ * You can check if a device supports the related features for this API by using @ref CAPI_SYSTEM_SYSTEM_INFO_MODULE, thereby controlling the procedure of your application.\n
+ *
+ * To ensure your application is only running on a device with specific features, please define the features in your manifest file using the manifest editor in the SDK.\n
  *
  * More details on featuring your application can be found from <a href="https://developer.tizen.org/development/tools/native-tools/manifest-text-editor#feature"><b>Feature Element</b>.</a>
  *
