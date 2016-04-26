@@ -594,8 +594,8 @@ int bt_adapter_unset_device_discovery_state_changed_cb(void);
  * @brief Get the Hash and Randmoizer value, synchronously.
  * @since_tizen 2.3
  *
- * @param[out] hash The hash value recieved from the controller
- * @param[out] randomizer The hash value recieved from the controller
+ * @param[out] hash The hash value received from the controller
+ * @param[out] randomizer The hash value received from the controller
  * @param[out] hash_len The length of the hash value
  * @param[out] randomizer_len The length of the randomizer value
  * @return 0 on success, otherwise a negative error value.
@@ -621,8 +621,8 @@ int bt_adapter_get_local_oob_data(unsigned char **hash, unsigned char **randomiz
  * @privilege %http://tizen.org/privilege/bluetooth
  *
  * @param[in] remote_address Remote device address
- * @param[in] hash The hash value recieved from the controller
- * @param[in] randomizer The hash value recieved from the controller
+ * @param[in] hash The hash value received from the controller
+ * @param[in] randomizer The hash value received from the controller
  * @param[in] hash_len The length of the hash value. Allowed value is 16
  * @param[in] randomizer_len The length of the randomizer value. Allowed value is 16
  * @return 0 on success, otherwise a negative error value.
@@ -928,7 +928,7 @@ int bt_adapter_le_get_scan_result_tx_power_level(const bt_adapter_le_device_scan
  *
  * @remarks The @a uuids must be iterated as count and each pointed data must be released with free().
  * Then uuids must be released with free(). \n
- * 16-bit service solicitation UUID or 128-bit service solicitaion UUID is supported.
+ * 16-bit service solicitation UUID or 128-bit service solicitation UUID is supported.
  * (e.g. 180F, 0000180F-0000-1000-8000-00805F9B34FB)
  *
  * @param[in] info The scan result information
@@ -1045,7 +1045,7 @@ int bt_adapter_le_get_scan_result_manufacturer_data(const bt_adapter_le_device_s
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
- * @brief Create advertiser to advertise device's existence or respond to LE scanning reqeust.
+ * @brief Create advertiser to advertise device's existence or respond to LE scanning request.
  * @since_tizen 2.3
  *
  * @param[out] advertiser The handle of advertiser
@@ -1364,7 +1364,7 @@ int bt_adapter_le_clear_advertising_data(bt_advertiser_h advertiser, bt_adapter_
  * @privilege %http://tizen.org/privilege/bluetooth
  *
  * @details Once Bluetooth advertising is started, nearby Bluetooth LE(Low Energy) supported
- * devices can know this device's existence. And one of them can make a connection reqeust,
+ * devices can know this device's existence. And one of them can make a connection request,
  * if it is allowed.
  *
  * @param[in] advertiser The handle of advertiser
@@ -1427,7 +1427,7 @@ int bt_adapter_le_stop_advertising(bt_advertiser_h advertiser);
  * @privilege %http://tizen.org/privilege/bluetooth
  *
  * @details Once Bluetooth advertising is started, nearby Bluetooth LE(Low Energy) supported
- * devices can know this device's existence. And one of them can make a connection reqeust,
+ * devices can know this device's existence. And one of them can make a connection request,
  * if it is allowed.
  *
  * @param[in] advertiser The handle of advertiser
@@ -2241,7 +2241,7 @@ int bt_opp_server_deinitialize(void);
  * @privilege %http://tizen.org/privilege/bluetooth
  * @remarks If you initialize OPP server by bt_opp_server_initialize_by_connection_request(), then name is ignored.
  * You can cancel the pushes by bt_opp_server_cancel_transfer() with transfer_id.
- * @param[in] progress_cb  The callback called when a file is being transfered
+ * @param[in] progress_cb  The callback called when a file is being transferred
  * @param[in] finished_cb  The callback called when a transfer is finished
  * @param[in] name  The name to store. This can be NULL if you initialize OPP server by bt_opp_server_initialize_by_connection_request().
  * @param[in] user_data The user data to be passed to the callback function
@@ -2392,12 +2392,12 @@ int bt_opp_client_clear_files(void);
  * @privlevel public
  * @privilege %http://tizen.org/privilege/bluetooth
  * @details At first, bt_opp_client_push_responded_cb() will be called when OPP server responds to the push request.
- * After connection is established, bt_opp_client_push_progress_cb() will be called repeatedly until a file is tranfered completely.
- * If you send several files, then bt_opp_client_push_progress_cb() with another file will be called repeatedly until the file is tranfered completely.
+ * After connection is established, bt_opp_client_push_progress_cb() will be called repeatedly until a file is transferred completely.
+ * If you send several files, then bt_opp_client_push_progress_cb() with another file will be called repeatedly until the file is transferred completely.
  * bt_opp_client_push_finished_cb() will be called when the push request is finished.
  * @param[in] remote_address The remote address
  * @param[in] responded_cb  The callback called when OPP server responds to the push request
- * @param[in] progress_cb  The callback called when each file is being transfered
+ * @param[in] progress_cb  The callback called when each file is being transferred
  * @param[in] finished_cb  The callback called when the push request is finished
  * @param[in] user_data The user data to be passed to the callback function
  * @return 0 on success, otherwise a negative error value.
@@ -2645,10 +2645,10 @@ int bt_audio_set_connection_state_changed_cb(bt_audio_connection_state_changed_c
 int bt_audio_unset_connection_state_changed_cb(void);
 
 /**
- * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
- * @brief Initializes the Bluetooth AVRCP(Audio/Video Remote Control Profile) service.
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_TARGET_MODULE
+ * @brief Initializes the Bluetooth AVRCP (Audio/Video Remote Control Profile) target service.
  * @since_tizen 2.4
- * @remarks This function must be called before Bluetooth AVRCP service. \n
+ * @remarks This function must be called before any other AVRCP target functions are called. \n
  * You must free all resources of the this service by calling bt_avrcp_target_deinitialize()
  * if Bluetooth AVRCP service is no longer needed.
  * @param[in] callback The callback function called when the connection state is changed
@@ -2667,8 +2667,8 @@ int bt_audio_unset_connection_state_changed_cb(void);
 int bt_avrcp_target_initialize(bt_avrcp_target_connection_state_changed_cb callback, void *user_data);
 
 /**
- * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
- * @brief Deinitializes the Bluetooth AVRCP(Audio/Video Remote Control Profile) service.
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_TARGET_MODULE
+ * @brief Deinitializes the Bluetooth AVRCP (Audio/Video Remote Control Profile) target service.
  * @since_tizen 2.4
  * @return 0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
@@ -2681,8 +2681,8 @@ int bt_avrcp_target_initialize(bt_avrcp_target_connection_state_changed_cb callb
 int bt_avrcp_target_deinitialize(void);
 
 /**
- * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
- * @brief  Notifies the equalize state to the remote device.
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_TARGET_MODULE
+ * @brief  Notifies the equalizer state to the remote device.
  * @since_tizen 2.4
  * @privlevel public
  * @privilege %http://tizen.org/privilege/bluetooth
@@ -2704,7 +2704,7 @@ int bt_avrcp_target_deinitialize(void);
 int bt_avrcp_target_notify_equalizer_state(bt_avrcp_equalizer_state_e state);
 
 /**
- * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_TARGET_MODULE
  * @brief  Notifies the repeat mode to the remote device.
  * @since_tizen 2.4
  * @privlevel public
@@ -2727,7 +2727,7 @@ int bt_avrcp_target_notify_equalizer_state(bt_avrcp_equalizer_state_e state);
 int bt_avrcp_target_notify_repeat_mode(bt_avrcp_repeat_mode_e mode);
 
 /**
- * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_TARGET_MODULE
  * @brief  Notifies the shuffle mode to the remote device.
  * @since_tizen 2.4
  * @privlevel public
@@ -2750,7 +2750,7 @@ int bt_avrcp_target_notify_repeat_mode(bt_avrcp_repeat_mode_e mode);
 int bt_avrcp_target_notify_shuffle_mode(bt_avrcp_shuffle_mode_e mode);
 
 /**
- * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_TARGET_MODULE
  * @brief  Notifies the scan mode to the remote device.
  * @since_tizen 2.4
  * @privlevel public
@@ -2773,7 +2773,7 @@ int bt_avrcp_target_notify_shuffle_mode(bt_avrcp_shuffle_mode_e mode);
 int bt_avrcp_target_notify_scan_mode(bt_avrcp_scan_mode_e mode);
 
 /**
- * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_TARGET_MODULE
  * @brief  Notifies the player state to the remote device.
  * @since_tizen 2.4
  * @privlevel public
@@ -2796,7 +2796,7 @@ int bt_avrcp_target_notify_scan_mode(bt_avrcp_scan_mode_e mode);
 int bt_avrcp_target_notify_player_state(bt_avrcp_player_state_e state);
 
 /**
- * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_TARGET_MODULE
  * @brief  Notifies the current position of song to the remote device.
  * @since_tizen 2.4
  * @privlevel public
@@ -2819,7 +2819,7 @@ int bt_avrcp_target_notify_player_state(bt_avrcp_player_state_e state);
 int bt_avrcp_target_notify_position(unsigned int position);
 
 /**
- * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_TARGET_MODULE
  * @brief  Notifies the track to the remote device.
  * @since_tizen 2.4
  * @privlevel public
@@ -2849,7 +2849,7 @@ int bt_avrcp_target_notify_track(const char *title, const char *artist, const ch
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
- * @brief  Registers a callback function that will be invoked when the equalizer state is changed by the remote control device.
+ * @brief  Registers a callback function that will be invoked when the equalizer state is changed.
  * @since_tizen 2.4
  * @param[in] callback The callback function to register
  * @param[in] user_data The user data to be passed to the callback function
@@ -2859,30 +2859,32 @@ int bt_avrcp_target_notify_track(const char *title, const char *artist, const ch
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
  * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
  *
- * @pre The Bluetooth service must be initialized by bt_initialize().
- * @see bt_initialize()
+ * @pre The AVRCP service must be initialized with bt_avrcp_target_initialize() or bt_avrcp_control_initialize().
+ * @see bt_avrcp_target_initialize()
+ * @see bt_avrcp_control_initialize()
  * @see bt_avrcp_unset_equalizer_state_changed_cb()
  */
 int bt_avrcp_set_equalizer_state_changed_cb(bt_avrcp_equalizer_state_changed_cb callback, void *user_data);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
- * @brief  Unregisters a callback function that will be invoked when the equalizer state is changed by the remote control device.
+ * @brief  Unregisters a callback function that will be invoked when the equalizer state is changed.
  * @since_tizen 2.4
  * @return   0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
  *
- * @pre The Bluetooth service must be initialized by bt_initialize().
- * @see bt_initialize()
+ * @pre The AVRCP service must be initialized with bt_avrcp_target_initialize() or bt_avrcp_control_initialize().
+ * @see bt_avrcp_target_initialize()
+ * @see bt_avrcp_control_initialize()
  * @see bt_avrcp_set_equalizer_state_changed_cb()
  */
 int bt_avrcp_unset_equalizer_state_changed_cb(void);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
- * @brief  Registers a callback function that will be invoked when the repeat mode is changed by the remote control device.
+ * @brief  Registers a callback function that will be invoked when the repeat mode is changed.
  * @since_tizen 2.4
  * @param[in] callback The callback function to register
  * @param[in] user_data The user data to be passed to the callback function
@@ -2892,30 +2894,32 @@ int bt_avrcp_unset_equalizer_state_changed_cb(void);
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
  * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
  *
- * @pre The Bluetooth service must be initialized by bt_initialize().
- * @see bt_initialize()
+ * @pre The AVRCP service must be initialized with bt_avrcp_target_initialize() or bt_avrcp_control_initialize().
+ * @see bt_avrcp_target_initialize()
+ * @see bt_avrcp_control_initialize()
  * @see bt_avrcp_unset_repeat_mode_changed_cb()
  */
 int bt_avrcp_set_repeat_mode_changed_cb(bt_avrcp_repeat_mode_changed_cb callback, void *user_data);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
- * @brief  Unregisters a callback function that will be invoked when the repeat mode is changed by the remote control device.
+ * @brief  Unregisters a callback function that will be invoked when the repeat mode is changed.
  * @since_tizen 2.4
  * @return   0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
  *
- * @pre The Bluetooth service must be initialized by bt_initialize().
- * @see bt_initialize()
+ * @pre The AVRCP service must be initialized with bt_avrcp_target_initialize() or bt_avrcp_control_initialize().
+ * @see bt_avrcp_target_initialize()
+ * @see bt_avrcp_control_initialize()
  * @see bt_avrcp_set_repeat_mode_changed_cb()
  */
 int bt_avrcp_unset_repeat_mode_changed_cb(void);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
- * @brief  Registers a callback function that will be invoked when the shuffle mode is changed by the remote control device.
+ * @brief  Registers a callback function that will be invoked when the shuffle mode is changed.
  * @since_tizen 2.4
  * @param[in] callback The callback function to register
  * @param[in] user_data The user data to be passed to the callback function
@@ -2925,30 +2929,32 @@ int bt_avrcp_unset_repeat_mode_changed_cb(void);
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
  * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
  *
- * @pre The Bluetooth service must be initialized by bt_initialize().
- * @see bt_initialize()
+ * @pre The AVRCP service must be initialized with bt_avrcp_target_initialize() or bt_avrcp_control_initialize().
+ * @see bt_avrcp_target_initialize()
+ * @see bt_avrcp_control_initialize()
  * @see bt_avrcp_unset_shuffle_mode_changed_cb()
  */
 int bt_avrcp_set_shuffle_mode_changed_cb(bt_avrcp_shuffle_mode_changed_cb callback, void *user_data);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
- * @brief  Unregisters a callback function that will be invoked when the shuffle mode is changed by the remote control device.
+ * @brief  Unregisters a callback function that will be invoked when the shuffle mode is changed.
  * @since_tizen 2.4
  * @return   0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
  *
- * @pre The Bluetooth service must be initialized by bt_initialize().
- * @see bt_initialize()
+ * @pre The AVRCP service must be initialized with bt_avrcp_target_initialize() or bt_avrcp_control_initialize().
+ * @see bt_avrcp_target_initialize()
+ * @see bt_avrcp_control_initialize()
  * @see bt_avrcp_set_shuffle_mode_changed_cb()
  */
 int bt_avrcp_unset_shuffle_mode_changed_cb(void);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
- * @brief  Registers a callback function that will be invoked when the scan mode is changed by the remote control device.
+ * @brief  Registers a callback function that will be invoked when the scan mode is changed.
  * @since_tizen 2.4
  * @param[in] callback The callback function to register
  * @param[in] user_data The user data to be passed to the callback function
@@ -2958,26 +2964,469 @@ int bt_avrcp_unset_shuffle_mode_changed_cb(void);
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
  * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
  *
- * @pre The Bluetooth service must be initialized by bt_initialize().
- * @see bt_initialize()
+ * @pre The AVRCP service must be initialized with bt_avrcp_target_initialize() or bt_avrcp_control_initialize().
+ * @see bt_avrcp_target_initialize()
+ * @see bt_avrcp_control_initialize()
  * @see bt_avrcp_unset_scan_mode_changed_cb()
  */
 int bt_avrcp_set_scan_mode_changed_cb(bt_avrcp_scan_mode_changed_cb callback, void *user_data);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
- * @brief  Unregisters a callback function that will be invoked when the scan mode is changed by the remote control device.
+ * @brief  Unregisters a callback function that will be invoked when the scan mode is changed.
  * @since_tizen 2.4
  * @return   0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
  *
- * @pre The Bluetooth service must be initialized by bt_initialize().
- * @see bt_initialize()
+ * @pre The AVRCP service must be initialized with bt_avrcp_target_initialize() or bt_avrcp_control_initialize().
+ * @see bt_avrcp_target_initialize()
+ * @see bt_avrcp_control_initialize()
  * @see bt_avrcp_set_scan_mode_changed_cb()
  */
 int bt_avrcp_unset_scan_mode_changed_cb(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @brief  Registers a callback function that will be invoked when the song position is changed.
+ * @since_tizen 3.0
+ * @param[in] callback The callback function to register
+ * @param[in] user_data The user data to be passed to the callback function
+ * @return   0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The AVRCP service must be initialized with bt_avrcp_target_initialize() or bt_avrcp_control_initialize().
+ * @see bt_avrcp_target_initialize()
+ * @see bt_avrcp_control_initialize()
+ * @see bt_avrcp_set_position_changed_cb()
+ */
+int bt_avrcp_set_position_changed_cb(bt_avrcp_position_changed_cb callback, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @brief  Unregisters a callback function that will be invoked when the song position is changed.
+ * @since_tizen 3.0
+ * @return   0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The AVRCP service must be initialized with bt_avrcp_target_initialize() or bt_avrcp_control_initialize().
+ * @see bt_avrcp_target_initialize()
+ * @see bt_avrcp_control_initialize()
+ * @see bt_avrcp_set_position_changed_cb()
+ */
+int bt_avrcp_unset_position_changed_cb(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @brief  Registers a callback function that will be invoked when the Play status is changed.
+ * @since_tizen 3.0
+ * @param[in] callback The callback function to register
+ * @param[in] user_data The user data to be passed to the callback function
+ * @return   0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The AVRCP service must be initialized with bt_avrcp_target_initialize() or bt_avrcp_control_initialize().
+ * @see bt_avrcp_target_initialize()
+ * @see bt_avrcp_control_initialize()
+ * @see bt_avrcp_unset_play_status_changed_cb()
+ */
+int bt_avrcp_set_play_status_changed_cb(bt_avrcp_play_status_changed_cb callback, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @brief  Unregisters a callback function that will be invoked when the Play status is changed.
+ * @since_tizen 3.0
+ * @return   0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The AVRCP service must be initialized with bt_avrcp_target_initialize() or bt_avrcp_control_initialize().
+ * @see bt_avrcp_target_initialize()
+ * @see bt_avrcp_control_initialize()
+ * @see bt_avrcp_unset_play_status_changed_cb()
+ */
+int bt_avrcp_unset_play_status_changed_cb(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @brief  Registers a callback function that will be invoked when the track metadata is changed.
+ * @since_tizen 3.0
+ * @param[in] callback The callback function to register
+ * @param[in] user_data The user data to be passed to the callback function
+ * @return   0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The AVRCP service must be initialized with bt_avrcp_target_initialize() or bt_avrcp_control_initialize().
+ * @see bt_avrcp_target_initialize()
+ * @see bt_avrcp_control_initialize()
+ * @see bt_avrcp_unset_track_info_changed_cb()
+ */
+int bt_avrcp_set_track_info_changed_cb(bt_avrcp_track_info_changed_cb callback, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
+ * @brief  Unregisters a callback function that will be invoked when the track metadata is changed.
+ * @since_tizen 3.0
+ * @return   0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The AVRCP service must be initialized with bt_avrcp_target_initialize() or bt_avrcp_control_initialize().
+ * @see bt_avrcp_target_initialize()
+ * @see bt_avrcp_control_initialize()
+ * @see bt_avrcp_set_track_info_changed_cb()
+ */
+int bt_avrcp_unset_track_info_changed_cb(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_CONTROL_MODULE
+ * @brief Initializes the Bluetooth AVRCP (Audio/Video Remote Control Profile) controller service.
+ * @since_tizen 3.0
+ * @remarks This function must be called before any other AVRCP controller functions are called. \n
+ * You must free all resources of the this service by calling bt_avrcp_control_deinitialize()
+ * if Bluetooth AVRCP service is no longer needed.
+ * @param[in] callback The callback function called when the connection state is changed
+ * @param[in] user_data The user data to be passed to the callback function
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ * @see bt_initialize()
+ * @see bt_avrcp_control_deinitialize()
+ */
+int bt_avrcp_control_initialize(bt_avrcp_control_connection_state_changed_cb callback, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_CONTROL_MODULE
+ * @brief Deinitializes the Bluetooth AVRCP (Audio/Video Remote Control Profile) controller service.
+ * @since_tizen 3.0
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ * @pre The Bluetooth audio service must be initialized with bt_avrcp_control_initialize().
+ * @see bt_avrcp_control_initialize()
+ */
+int bt_avrcp_control_deinitialize(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_CONTROL_MODULE
+ * @brief Connects the AVRCP (Audio/Video Remote Control Profile) target device.
+ * @since_tizen 3.0
+ * @privlevel public
+ * @privilege %http://tizen.org/privilege/bluetooth
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ * @pre The Bluetooth audio service must be initialized with bt_avrcp_control_initialize().
+ * @see bt_avrcp_control_initialize()
+ */
+int bt_avrcp_control_connect(const char *remote_address);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_CONTROL_MODULE
+ * @brief Disconnects from the AVRCP (Audio/Video Remote Control Profile) target device.
+ * @since_tizen 3.0
+ * @privlevel public
+ * @privilege %http://tizen.org/privilege/bluetooth
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ * @pre The Bluetooth audio service must be initialized with bt_avrcp_control_initialize().
+ * @see bt_avrcp_control_initialize()
+ * @see bt_avrcp_control_connect()
+ */
+int bt_avrcp_control_disconnect(const char *remote_address);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_CONTROL_MODULE
+ * @brief Sends a command to the target device.
+ * @since_tizen 3.0
+ * @privlevel public
+ * @privilege %http://tizen.org/privilege/bluetooth
+ * @param[in] cmd The commands, one of: Play, Pause, Next, Rewind.
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ * @pre The Bluetooth audio service must be initialized with bt_avrcp_control_initialize().
+ * @see bt_avrcp_control_initialize()
+ * @see bt_avrcp_control_connect()
+ */
+int bt_avrcp_control_send_player_command(bt_avrcp_player_command_e cmd);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_CONTROL_MODULE
+ * @brief  Sends the equalizer state change request to the remote device.
+ * @since_tizen 3.0
+ * @privlevel public
+ * @privilege %http://tizen.org/privilege/bluetooth
+ * @param[in] state The new equalizer state, one of: ON, OFF
+ * @return  0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The remote device must be connected.
+ * @see bt_avrcp_target_connection_state_changed_cb()
+ * @see bt_avrcp_target_initialize()
+ */
+int bt_avrcp_control_set_equalizer_state(bt_avrcp_equalizer_state_e state);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_CONTROL_MODULE
+ * @brief  Gets the the equalizer state of the remote device.
+ * @since_tizen 3.0
+ * @param[out] state The equalizer state, one of: ON, OFF
+ * @return  0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The remote device must be connected.
+ * @see bt_avrcp_target_connection_state_changed_cb()
+ * @see bt_avrcp_target_initialize()
+ */
+int bt_avrcp_control_get_equalizer_state(bt_avrcp_equalizer_state_e *state);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_CONTROL_MODULE
+ * @brief  Sends the repeat change request to the remote device.
+ * @since_tizen 3.0
+ * @privlevel public
+ * @privilege %http://tizen.org/privilege/bluetooth
+ * @param[in] mode The new repeat mode, one of: OFF, SINGLE, ALL
+ * @return  0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The remote device must be connected.
+ * @see bt_avrcp_target_connection_state_changed_cb()
+ * @see bt_avrcp_target_initialize()
+ */
+int bt_avrcp_control_set_repeat_mode(bt_avrcp_repeat_mode_e mode);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_CONTROL_MODULE
+ * @brief  Gets the repeat state of the remote device.
+ * @since_tizen 3.0
+ * @param[out] mode The repeat mode, one of: OFF, SINGLE, ALL
+ * @return  0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The remote device must be connected.
+ * @see bt_avrcp_target_connection_state_changed_cb()
+ * @see bt_avrcp_target_initialize()
+ */
+int bt_avrcp_control_get_repeat_mode(bt_avrcp_repeat_mode_e *mode);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_CONTROL_MODULE
+ * @brief  Sends the shuffle mode change request to the remote device.
+ * @since_tizen 3.0
+ * @privlevel public
+ * @privilege %http://tizen.org/privilege/bluetooth
+ * @param[in] mode The new shuffle mode, one of: OFF, GROUP, ALL
+ * @return  0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The remote device must be connected.
+ * @see bt_avrcp_target_connection_state_changed_cb()
+ * @see bt_avrcp_target_initialize()
+ */
+int bt_avrcp_control_set_shuffle_mode(bt_avrcp_shuffle_mode_e mode);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_CONTROL_MODULE
+ * @brief  Gets the shuffle mode of the remote device.
+ * @since_tizen 3.0
+ * @param[out] mode The shuffle mode, one of: OFF, GROUP, ALL
+ * @return  0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The remote device must be connected.
+ * @see bt_avrcp_target_connection_state_changed_cb()
+ * @see bt_avrcp_target_initialize()
+ */
+int bt_avrcp_control_get_shuffle_mode(bt_avrcp_shuffle_mode_e *mode);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_CONTROL_MODULE
+ * @brief  Sends the scan mode change request to the remote device.
+ * @since_tizen 3.0
+ * @privlevel public
+ * @privilege %http://tizen.org/privilege/bluetooth
+ * @param[in] mode The new scan mode, one of: OFF, GROUP, ALL
+ * @return  0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The remote device must be connected.
+ * @see bt_avrcp_target_connection_state_changed_cb()
+ * @see bt_avrcp_target_initialize()
+ */
+int bt_avrcp_control_set_scan_mode(bt_avrcp_scan_mode_e mode);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_CONTROL_MODULE
+ * @brief  Gets the scan mode of the remote device.
+ * @since_tizen 3.0
+ * @param[out] mode The scan mode, one of: OFF, GROUP, ALL
+ * @return  0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The remote device must be connected.
+ * @see bt_avrcp_target_connection_state_changed_cb()
+ * @see bt_avrcp_target_initialize()
+ */
+int bt_avrcp_control_get_scan_mode(bt_avrcp_scan_mode_e *mode);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_CONTROL_MODULE
+ * @brief  Gets the position of the song played by the remote device.
+ * @since_tizen 3.0
+ * @param[out] position The position, in milliseconds
+ * @return  0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The remote device must be connected.
+ * @see bt_avrcp_target_connection_state_changed_cb()
+ * @see bt_avrcp_target_initialize()
+ */
+int bt_avrcp_control_get_position(unsigned int *position);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_CONTROL_MODULE
+ * @brief  Gets the play status of the remote device.
+ * @since_tizen 3.0
+ * @param[out] status The play status, one of: PLAYING, STOPPED...
+ * @return  0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The remote device must be connected.
+ * @see bt_avrcp_target_connection_state_changed_cb()
+ * @see bt_avrcp_target_initialize()
+ */
+int bt_avrcp_control_get_play_status(bt_avrcp_player_state_e *status);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_CONTROL_MODULE
+ * @brief  Gets the metadata of the track played by the remote device.
+ * @since_tizen 3.0
+ * @remarks The @a track must be released using bt_avrcp_control_free_track_info()
+ * @param[out] track The track metadata.
+ * @return  0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre The remote device must be connected.
+ * @see bt_avrcp_target_connection_state_changed_cb()
+ * @see bt_avrcp_target_initialize()
+ */
+int bt_avrcp_control_get_track_info(bt_avrcp_metadata_attributes_info_s **track);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_CONTROL_MODULE
+ * @brief  Frees the track metadata.
+ * @since_tizen 3.0
+ * @param[in] track The track metadata.
+ * @return  0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ * @pre track should point to valid metadata address.
+ * @see bt_avrcp_control_get_track_info()
+ * @see bt_avrcp_target_initialize()
+ */
+int bt_avrcp_control_free_track_info(bt_avrcp_metadata_attributes_info_s *track);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_HDP_MODULE
@@ -3795,7 +4244,7 @@ int bt_gatt_characteristic_get_write_type(bt_gatt_h characteristic,
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Updates the write type of the specified charateristic
+ * @brief  Updates the write type of the specified characteristic
  * @since_tizen 2.3.1
  *
  * @param[in] characteristic The characteristic's GATT handle
@@ -4055,7 +4504,7 @@ int bt_gatt_client_foreach_services(bt_gatt_client_h client,
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief Connect to a specific LE based service on a remote bluetooth dievice address, asynchronously.
+ * @brief Connect to a specific LE based service on a remote bluetooth device address, asynchronously.
  * @since_tizen 2.3
  * @privlevel public
  * @privilege %http://tizen.org/privilege/bluetooth
@@ -4069,7 +4518,7 @@ int bt_gatt_client_foreach_services(bt_gatt_client_h client,
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_NOT_ENABLED Not enabled
- * @retval #BT_ERROR_INVALID_PARAMETER Invalid paramater
+ * @retval #BT_ERROR_INVALID_PARAMETER Invalid parameter
  * @retval #BT_ERROR_OPERATION_FAILED Operation failed
  * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
  * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
@@ -4088,7 +4537,7 @@ int bt_gatt_connect(const char *address, bool auto_connect);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief Disconnect to LE connection with the given remote Bluetooth dievice address, asynchronously.
+ * @brief Disconnect to LE connection with the given remote Bluetooth device address, asynchronously.
  * @since_tizen 2.3
  * @privlevel public
  * @privilege %http://tizen.org/privilege/bluetooth
@@ -4099,7 +4548,7 @@ int bt_gatt_connect(const char *address, bool auto_connect);
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_NOT_ENABLED Not enabled
- * @retval #BT_ERROR_INVALID_PARAMETER Invalid paramater
+ * @retval #BT_ERROR_INVALID_PARAMETER Invalid parameter
  * @retval #BT_ERROR_OPERATION_FAILED Operation failed
  * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
  * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
@@ -4125,7 +4574,7 @@ int bt_gatt_disconnect(const char *address);
  *
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_INVALID_PARAMETER Invalid paramater
+ * @retval #BT_ERROR_INVALID_PARAMETER Invalid parameter
  * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
  *
  * @see bt_gatt_connect()
