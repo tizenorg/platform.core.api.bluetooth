@@ -722,13 +722,13 @@ tc_table_t tc_avrcp[] = {
 		, BT_UNIT_TEST_FUNCTION_AVRCP_CONTROL_GET_PLAY_STATUS},
 	{"bt_avrcp_control_player_GET_TRACK_INFO"
 		, BT_UNIT_TEST_FUNCTION_AVRCP_CONTROL_GET_TRACK_INFO},
-	{"bt_avrcp_set_song_position_changed_cb"
+	{"bt_avrcp_set_position_changed_cb"
 		, BT_UNIT_TEST_FUNCTION_AVRCP_SET_SONG_POSITION_CHANGED_CB},
 	{"bt_avrcp_set_play_status_changed_cb"
 		, BT_UNIT_TEST_FUNCTION_AVRCP_SET_PLAY_STATE_CHANGED_CB},
 	{"bt_avrcp_set_track_info_changed_cb"
 		, BT_UNIT_TEST_FUNCTION_AVRCP_SET_TRACK_INFO_CHANGED_CB},
-	{"bt_avrcp_unset_song_position_changed_cb"
+	{"bt_avrcp_unset_position_changed_cb"
 		, BT_UNIT_TEST_FUNCTION_AVRCP_UNSET_SONG_POSITION_CHANGED_CB},
 	{"bt_avrcp_unset_play_status_changed_cb"
 		, BT_UNIT_TEST_FUNCTION_AVRCP_UNSET_PLAY_STATE_CHANGED_CB},
@@ -1626,7 +1626,7 @@ static void __bt_socket_data_received_cb(bt_socket_received_data_s *data,
 	TC_PRT("+");
 
 	if (data == NULL) {
-		TC_PRT("No recieved data!");
+		TC_PRT("No received data!");
 		return;
 	}
 
@@ -7147,7 +7147,7 @@ int test_input_callback(void *data)
 			}
 
 		case BT_UNIT_TEST_FUNCTION_AVRCP_SET_SONG_POSITION_CHANGED_CB:
-			ret = bt_avrcp_set_song_position_changed_cb(
+			ret = bt_avrcp_set_position_changed_cb(
 					__bt_avrcp_song_position_changed_cb,
 					NULL);
 			TC_PRT("returns %s\n", __bt_get_error_message(ret));
@@ -7168,7 +7168,7 @@ int test_input_callback(void *data)
 			break;
 
 		case BT_UNIT_TEST_FUNCTION_AVRCP_UNSET_SONG_POSITION_CHANGED_CB:
-			ret = bt_avrcp_unset_song_position_changed_cb();
+			ret = bt_avrcp_unset_position_changed_cb();
 			TC_PRT("returns %s\n", __bt_get_error_message(ret));
 			break;
 

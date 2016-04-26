@@ -1209,7 +1209,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 			free(device_addr);
 		break;
 	case BLUETOOTH_EVENT_HDP_DATA_RECEIVED:
-		BT_INFO("HDP data recieved callback will be ");
+		BT_INFO("HDP data received callback will be ");
 		hdp_data_ind = (bt_hdp_data_ind_t *)(param->param_data);
 		if (param->result != BLUETOOTH_ERROR_NONE)
 			BT_ERR("Fail to receive HDP data");
@@ -1442,7 +1442,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 	case BLUETOOTH_EVENT_AVRCP_SONG_POSITION_STATUS:
 		BT_INFO("BLUETOOTH_EVENT_AVRCP_SONG_POSITION_STATUS ");
 		unsigned int *postion = (unsigned int *)(param->param_data);
-		((bt_avrcp_song_position_changed_cb)bt_event_slot_container[event_index].callback)
+		((bt_avrcp_position_changed_cb)bt_event_slot_container[event_index].callback)
 		(*postion, bt_event_slot_container[event_index].user_data);
 		break;
 	case BLUETOOTH_EVENT_AVRCP_TRACK_CHANGED:
