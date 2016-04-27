@@ -193,6 +193,7 @@ typedef enum {
 	BT_PROFILE_AG = 0x20, /**< Audio Gateway Profile */
 	BT_PROFILE_GATT = 0x40, /**< Generic Attribute Profile */
 	BT_PROFILE_NAP_SERVER = 0x80, /**< NAP server Profile */
+	BT_PROFILE_A2DP_SINK = 0x100, /**< Advanced Audio Distribution Profile Sink role */
 } bt_profile_e;
 
 /**
