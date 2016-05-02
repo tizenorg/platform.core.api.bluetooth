@@ -2419,7 +2419,7 @@ int bt_audio_unset_connection_state_changed_cb(void);
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief Initializes the Bluetooth AVRCP(Audio/Video Remote Control Profile) service.
- * @since_tizen 2.4
+ * @since_tizen 3.0
  * @remarks This function must be called before Bluetooth AVRCP service. \n
  * You must free all resources of the this service by calling bt_avrcp_target_deinitialize()
  * if Bluetooth AVRCP service is no longer needed.
@@ -2441,7 +2441,7 @@ int bt_avrcp_target_initialize(bt_avrcp_target_connection_state_changed_cb callb
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief Deinitializes the Bluetooth AVRCP(Audio/Video Remote Control Profile) service.
- * @since_tizen 2.4
+ * @since_tizen 3.0
  * @return 0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
@@ -2455,7 +2455,7 @@ int bt_avrcp_target_deinitialize(void);
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Notifies the equalize state to the remote device.
- * @since_tizen 2.4
+ * @since_tizen 3.0
  * @privlevel public
  * @privilege %http://tizen.org/privilege/bluetooth
  * @param[in] state The state of equalizer
@@ -2478,7 +2478,7 @@ int bt_avrcp_target_notify_equalizer_state(bt_avrcp_equalizer_state_e state);
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Notifies the repeat mode to the remote device.
- * @since_tizen 2.4
+ * @since_tizen 3.0
  * @privlevel public
  * @privilege %http://tizen.org/privilege/bluetooth
  * @param[in] mode The repeat mode
@@ -2501,7 +2501,7 @@ int bt_avrcp_target_notify_repeat_mode(bt_avrcp_repeat_mode_e mode);
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Notifies the shuffle mode to the remote device.
- * @since_tizen 2.4
+ * @since_tizen 3.0
  * @privlevel public
  * @privilege %http://tizen.org/privilege/bluetooth
  * @param[in] mode The repeat mode
@@ -2524,7 +2524,7 @@ int bt_avrcp_target_notify_shuffle_mode(bt_avrcp_shuffle_mode_e mode);
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Notifies the scan mode to the remote device.
- * @since_tizen 2.4
+ * @since_tizen 3.0
  * @privlevel public
  * @privilege %http://tizen.org/privilege/bluetooth
  * @param[in] mode The scan mode
@@ -2547,7 +2547,7 @@ int bt_avrcp_target_notify_scan_mode(bt_avrcp_scan_mode_e mode);
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Notifies the player state to the remote device.
- * @since_tizen 2.4
+ * @since_tizen 3.0
  * @privlevel public
  * @privilege %http://tizen.org/privilege/bluetooth
  * @param[in] state The player state
@@ -2570,7 +2570,7 @@ int bt_avrcp_target_notify_player_state(bt_avrcp_player_state_e state);
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Notifies the current position of song to the remote device.
- * @since_tizen 2.4
+ * @since_tizen 3.0
  * @privlevel public
  * @privilege %http://tizen.org/privilege/bluetooth
  * @param[in] position The current position in milliseconds
@@ -2593,7 +2593,7 @@ int bt_avrcp_target_notify_position(unsigned int position);
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Notifies the track to the remote device.
- * @since_tizen 2.4
+ * @since_tizen 3.0
  * @privlevel public
  * @privilege %http://tizen.org/privilege/bluetooth
  * @param[in] title The title of track
@@ -2622,7 +2622,7 @@ int bt_avrcp_target_notify_track(const char *title, const char *artist, const ch
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Registers a callback function that will be invoked when the equalizer state is changed by the remote control device.
- * @since_tizen 2.4
+ * @since_tizen 3.0
  * @param[in] callback The callback function to register
  * @param[in] user_data The user data to be passed to the callback function
  * @return   0 on success, otherwise a negative error value.
@@ -2640,7 +2640,7 @@ int bt_avrcp_set_equalizer_state_changed_cb(bt_avrcp_equalizer_state_changed_cb 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Unregisters a callback function that will be invoked when the equalizer state is changed by the remote control device.
- * @since_tizen 2.4
+ * @since_tizen 3.0
  * @return   0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
@@ -2655,7 +2655,7 @@ int bt_avrcp_unset_equalizer_state_changed_cb(void);
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Registers a callback function that will be invoked when the repeat mode is changed by the remote control device.
- * @since_tizen 2.4
+ * @since_tizen 3.0
  * @param[in] callback The callback function to register
  * @param[in] user_data The user data to be passed to the callback function
  * @return   0 on success, otherwise a negative error value.
@@ -2673,7 +2673,7 @@ int bt_avrcp_set_repeat_mode_changed_cb(bt_avrcp_repeat_mode_changed_cb callback
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Unregisters a callback function that will be invoked when the repeat mode is changed by the remote control device.
- * @since_tizen 2.4
+ * @since_tizen 3.0
  * @return   0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
@@ -2688,7 +2688,7 @@ int bt_avrcp_unset_repeat_mode_changed_cb(void);
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Registers a callback function that will be invoked when the shuffle mode is changed by the remote control device.
- * @since_tizen 2.4
+ * @since_tizen 3.0
  * @param[in] callback The callback function to register
  * @param[in] user_data The user data to be passed to the callback function
  * @return   0 on success, otherwise a negative error value.
@@ -2706,7 +2706,7 @@ int bt_avrcp_set_shuffle_mode_changed_cb(bt_avrcp_shuffle_mode_changed_cb callba
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Unregisters a callback function that will be invoked when the shuffle mode is changed by the remote control device.
- * @since_tizen 2.4
+ * @since_tizen 3.0
  * @return   0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
@@ -2721,7 +2721,7 @@ int bt_avrcp_unset_shuffle_mode_changed_cb(void);
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Registers a callback function that will be invoked when the scan mode is changed by the remote control device.
- * @since_tizen 2.4
+ * @since_tizen 3.0
  * @param[in] callback The callback function to register
  * @param[in] user_data The user data to be passed to the callback function
  * @return   0 on success, otherwise a negative error value.
@@ -2739,7 +2739,7 @@ int bt_avrcp_set_scan_mode_changed_cb(bt_avrcp_scan_mode_changed_cb callback, vo
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Unregisters a callback function that will be invoked when the scan mode is changed by the remote control device.
- * @since_tizen 2.4
+ * @since_tizen 3.0
  * @return   0 on success, otherwise a negative error value.
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
