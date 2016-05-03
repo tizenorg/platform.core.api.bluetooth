@@ -81,7 +81,7 @@ export FFLAGS="$FFLAGS -DTIZEN_HFP_DISABLE"
 %endif
 
 
-%if "%{?profile}" == "mobile"
+%if "%{?profile}" == "mobile" || "%{?profile}" == "common"
 export CFLAGS="$CFLAGS -DBT_ENABLE_LEGACY_GATT_CLIENT"
 export CXXFLAGS="$CXXFLAGS -DBT_ENABLE_LEGACY_GATT_CLIENT"
 export FFLAGS="$FFLAGS -DBT_ENABLE_LEGACY_GATT_CLIENT"
