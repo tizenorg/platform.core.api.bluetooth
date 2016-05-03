@@ -75,10 +75,11 @@ src/bluetooth-audio.c
 src/bluetooth-avrcp.c
 src/bluetooth-gatt.c
 src/bluetooth-ipsp.c
-src/bluetooth-dpm.c
 )
 IF (TIZEN_WEARABLE)
 LIST(APPEND SOURCES src/bluetooth-pbap.c)
+ELSE ()
+LIST(APPEND SOURCES src/bluetooth-dpm.c)
 ENDIF (TIZEN_WEARABLE)
 ENDIF (TIZEN_TV)
 

@@ -157,8 +157,10 @@ tc_table_t tc_main[] = {
 		, BT_UNIT_TEST_TABLE_IPSP},
 	{"HDP"
 		, BT_UNIT_TEST_TABLE_HDP},
+#ifndef TIZEN_WEARABLE
 	{"DPM"
 		, BT_UNIT_TEST_TABLE_DPM},
+#endif
 #ifdef TIZEN_WEARABLE
 	{"HF Role"
 		, BT_UNIT_TEST_TABLE_HF},
@@ -826,6 +828,7 @@ tc_table_t tc_HDP[] = {
 	{NULL					, 0x0000},
 };
 
+#if (!defined(TIZEN_WEARABLE) && !defined(TIZEN_TV))
 tc_table_t tc_DPM[] = {
 	/* DPM functions */
 	{"BACK"
@@ -908,6 +911,7 @@ tc_table_t tc_DPM[] = {
 		, BT_UNIT_TEST_FUNCTION_ACTIVATE_FLAG_TO_SET_PARAMETERS},
 	{NULL					, 0x0000},
 };
+#endif
 
 #ifdef TIZEN_WEARABLE
 tc_table_t tc_hf[] = {
@@ -1055,9 +1059,11 @@ void tc_usage_print(void)
 	case BT_UNIT_TEST_TABLE_HDP:
 		tc_table = tc_HDP;
 		break;
+#if (!defined(TIZEN_WEARABLE) && !defined(TIZEN_TV))
 	case BT_UNIT_TEST_TABLE_DPM:
 		tc_table = tc_DPM;
 		break;
+#endif
 #ifdef TIZEN_WEARABLE
 	case BT_UNIT_TEST_TABLE_HF:
 		tc_table = tc_hf;
@@ -3642,6 +3648,7 @@ int test_set_params(int test_id, char *param)
 		break;
 	}
 
+#ifdef TIZEN_MOBILE
 	case BT_UNIT_TEST_TABLE_DPM: {
 		switch (test_id) {
 			case BT_UNIT_TEST_FUNCTION_DPM_SET_ALLOW_BLUETOOTH_MODE: {
@@ -3888,6 +3895,7 @@ int test_set_params(int test_id, char *param)
 		}
 		break;
 	}
+#endif
 
 	case BT_UNIT_TEST_TABLE_AVRCP: {
 		switch (test_id) {
@@ -7520,6 +7528,7 @@ int test_input_callback(void *data)
 		}
 			break;
 	}
+#ifdef TIZEN_MOBILE
 	case BT_UNIT_TEST_TABLE_DPM: {
 		switch (test_id) {
 		case BT_UNIT_TEST_FUNCTION_DPM_SET_DEFAULT_POLICIES: {
@@ -8030,6 +8039,7 @@ int test_input_callback(void *data)
 		}
 		break;
 	}
+#endif
 #ifdef TIZEN_WEARABLE
 	case BT_UNIT_TEST_TABLE_HF: {
 		switch (test_id) {
