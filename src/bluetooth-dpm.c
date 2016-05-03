@@ -53,7 +53,7 @@ int bt_dpm_set_allow_bluetooth_mode(bt_dpm_allow_e value)
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_set_allow_bluetooth_mode(dpm_value));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_set_allow_mode(dpm_value));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 
@@ -67,7 +67,7 @@ int bt_dpm_get_allow_bluetooth_mode(bt_dpm_allow_e *value)
 
 	BT_CHECK_BT_SUPPORT();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_get_allow_bluetooth_mode(&dpm_value));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_get_allow_mode(&dpm_value));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 	*value = dpm_value;
@@ -75,7 +75,7 @@ int bt_dpm_get_allow_bluetooth_mode(bt_dpm_allow_e *value)
 	return error_code;
 }
 
-int bt_dpm_activate_bluetooth_device_restriction(bt_dpm_status_e value)
+int bt_dpm_activate_device_restriction(bt_dpm_status_e value)
 {
 	int error_code = BT_ERROR_NONE;
 	bt_dpm_status_t dpm_value = value;
@@ -83,14 +83,14 @@ int bt_dpm_activate_bluetooth_device_restriction(bt_dpm_status_e value)
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_activate_bluetooth_device_restriction(dpm_value));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_activate_device_restriction(dpm_value));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 
 	return error_code;
 }
 
-int bt_dpm_is_bluetooth_device_restriction_active(bt_dpm_status_e *value)
+int bt_dpm_is_device_restriction_active(bt_dpm_status_e *value)
 {
 	int error_code = BT_ERROR_NONE;
 	bt_dpm_status_t dpm_value = BLUETOOTH_DPM_STATUS_ERROR;
@@ -98,7 +98,7 @@ int bt_dpm_is_bluetooth_device_restriction_active(bt_dpm_status_e *value)
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_is_bluetooth_device_restriction_active(&dpm_value));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_is_device_restriction_active(&dpm_value));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 	*value = dpm_value;
@@ -106,7 +106,7 @@ int bt_dpm_is_bluetooth_device_restriction_active(bt_dpm_status_e *value)
 	return error_code;
 }
 
-int bt_dpm_activate_bluetoooth_uuid_restriction(bt_dpm_status_e value)
+int bt_dpm_activate_uuid_restriction(bt_dpm_status_e value)
 {
 	int error_code = BT_ERROR_NONE;
 	bt_dpm_status_t dpm_value = value;
@@ -114,14 +114,14 @@ int bt_dpm_activate_bluetoooth_uuid_restriction(bt_dpm_status_e value)
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_activate_bluetoooth_uuid_restriction(dpm_value));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_activate_uuid_restriction(dpm_value));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 
 	return error_code;
 }
 
-int bt_dpm_is_bluetooth_uuid_restriction_active(bt_dpm_status_e *value)
+int bt_dpm_is_uuid_restriction_active(bt_dpm_status_e *value)
 {
 	int error_code = BT_ERROR_NONE;
 	bt_dpm_status_t dpm_value = BLUETOOTH_DPM_STATUS_ERROR;
@@ -129,7 +129,7 @@ int bt_dpm_is_bluetooth_uuid_restriction_active(bt_dpm_status_e *value)
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_is_bluetooth_uuid_restriction_active(&dpm_value));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_is_uuid_restriction_active(&dpm_value));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 	*value = dpm_value;
@@ -137,7 +137,7 @@ int bt_dpm_is_bluetooth_uuid_restriction_active(bt_dpm_status_e *value)
 	return error_code;
 }
 
-int bt_dpm_add_bluetooth_devices_to_blacklist(const char *device_address)
+int bt_dpm_add_devices_to_blacklist(const char *device_address)
 {
 	bluetooth_device_address_t addr_hex = { {0,} };
 	int error_code = BT_ERROR_NONE;
@@ -147,14 +147,14 @@ int bt_dpm_add_bluetooth_devices_to_blacklist(const char *device_address)
 	BT_CHECK_INPUT_PARAMETER(device_address);
 
 	_bt_convert_address_to_hex(&addr_hex, device_address);
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_add_bluetooth_devices_to_blacklist(&addr_hex));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_add_devices_to_blacklist(&addr_hex));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 
 	return error_code;
 }
 
-int bt_dpm_add_bluetooth_devices_to_whitelist(const char *device_address)
+int bt_dpm_add_devices_to_whitelist(const char *device_address)
 {
 	bluetooth_device_address_t addr_hex = { {0,} };
 	int error_code = BT_ERROR_NONE;
@@ -164,91 +164,91 @@ int bt_dpm_add_bluetooth_devices_to_whitelist(const char *device_address)
 	BT_CHECK_INPUT_PARAMETER(device_address);
 
 	_bt_convert_address_to_hex(&addr_hex, device_address);
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_add_bluetooth_devices_to_whitelist(&addr_hex));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_add_devices_to_whitelist(&addr_hex));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 
 	return error_code;
 }
 
-int bt_dpm_add_bluetooth_uuids_to_blacklist(const char *service_uuid)
+int bt_dpm_add_uuids_to_blacklist(const char *service_uuid)
 {
 	int error_code = BT_ERROR_NONE;
 
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_add_bluetooth_uuids_to_blacklist(service_uuid));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_add_uuids_to_blacklist(service_uuid));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 
 	return error_code;
 }
 
-int bt_dpm_add_bluetooth_uuids_to_whitelist(const char *service_uuid)
+int bt_dpm_add_uuids_to_whitelist(const char *service_uuid)
 {
 	int error_code = BT_ERROR_NONE;
 
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_add_bluetooth_uuids_to_whitelist(service_uuid));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_add_uuids_to_whitelist(service_uuid));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 
 	return error_code;
 }
 
-int bt_dpm_clear_bluetooth_devices_from_blacklist(void)
+int bt_dpm_clear_devices_from_blacklist(void)
 {
 	int error_code = BT_ERROR_NONE;
 
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_clear_bluetooth_devices_from_blacklist());
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_clear_devices_from_blacklist());
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 
 	return error_code;
 }
 
-int bt_dpm_clear_bluetooth_devices_from_whitelist(void)
+int bt_dpm_clear_devices_from_whitelist(void)
 {
 	int error_code = BT_ERROR_NONE;
 
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_clear_bluetooth_devices_from_whitelist());
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_clear_devices_from_whitelist());
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 
 	return error_code;
 }
 
-int bt_dpm_clear_bluetooth_uuids_from_blacklist(void)
+int bt_dpm_clear_uuids_from_blacklist(void)
 {
 	int error_code = BT_ERROR_NONE;
 
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_clear_bluetooth_uuids_from_blacklist());
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_clear_uuids_from_blacklist());
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 
 	return error_code;
 }
 
-int bt_dpm_clear_bluetooth_uuids_from_whitelist(void)
+int bt_dpm_clear_uuids_from_whitelist(void)
 {
 	int error_code = BT_ERROR_NONE;
 
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_clear_bluetooth_uuids_from_whitelist());
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_clear_uuids_from_whitelist());
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 
@@ -280,7 +280,7 @@ static int __bt_get_bt_dpm_device_list_info_s(bt_dpm_device_list_s **device_info
 	return BT_ERROR_NONE;
 }
 
-int bt_dpm_get_bluetooth_devices_from_blacklist(bt_dpm_device_list_s **device_list)
+int bt_dpm_get_devices_from_blacklist(bt_dpm_device_list_s **device_list)
 {
 	int error_code = BT_ERROR_NONE;
 	bt_dpm_device_list_t dev_list;
@@ -288,7 +288,7 @@ int bt_dpm_get_bluetooth_devices_from_blacklist(bt_dpm_device_list_s **device_li
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_get_bluetooth_devices_from_blacklist(&dev_list));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_get_devices_from_blacklist(&dev_list));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 
@@ -297,7 +297,7 @@ int bt_dpm_get_bluetooth_devices_from_blacklist(bt_dpm_device_list_s **device_li
 	return error_code;
 }
 
-int bt_dpm_get_bluetooth_devices_from_whitelist(bt_dpm_device_list_s **device_list)
+int bt_dpm_get_devices_from_whitelist(bt_dpm_device_list_s **device_list)
 {
 	int error_code = BT_ERROR_NONE;
 	bt_dpm_device_list_t dev_list;
@@ -305,7 +305,7 @@ int bt_dpm_get_bluetooth_devices_from_whitelist(bt_dpm_device_list_s **device_li
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_get_bluetooth_devices_from_whitelist(&dev_list));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_get_devices_from_whitelist(&dev_list));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 
@@ -343,7 +343,7 @@ static int __bt_get_bt_dpm_uuid_list_info_s(bt_dpm_uuids_list_s **uuid_list, bt_
 	return BT_ERROR_NONE;
 }
 
-int bt_dpm_get_bluetooth_uuids_from_blacklist(bt_dpm_uuids_list_s **uuid_list)
+int bt_dpm_get_uuids_from_blacklist(bt_dpm_uuids_list_s **uuid_list)
 {
 	int error_code = BT_ERROR_NONE;
 	bt_dpm_uuids_list_t uuids;
@@ -351,7 +351,7 @@ int bt_dpm_get_bluetooth_uuids_from_blacklist(bt_dpm_uuids_list_s **uuid_list)
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_get_bluetooth_uuids_from_blacklist(&uuids));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_get_uuids_from_blacklist(&uuids));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 
@@ -360,7 +360,7 @@ int bt_dpm_get_bluetooth_uuids_from_blacklist(bt_dpm_uuids_list_s **uuid_list)
 	return error_code;
 }
 
-int bt_dpm_get_bluetooth_uuids_from_whitelist(bt_dpm_uuids_list_s **uuid_list)
+int bt_dpm_get_uuids_from_whitelist(bt_dpm_uuids_list_s **uuid_list)
 {
 	int error_code = BT_ERROR_NONE;
 	bt_dpm_uuids_list_t uuids;
@@ -368,7 +368,7 @@ int bt_dpm_get_bluetooth_uuids_from_whitelist(bt_dpm_uuids_list_s **uuid_list)
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_get_bluetooth_uuids_from_whitelist(&uuids));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_get_uuids_from_whitelist(&uuids));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 
@@ -377,7 +377,7 @@ int bt_dpm_get_bluetooth_uuids_from_whitelist(bt_dpm_uuids_list_s **uuid_list)
 	return error_code;
 }
 
-int bt_dpm_remove_bluetooth_device_from_whitelist(const char *device_address)
+int bt_dpm_remove_device_from_whitelist(const char *device_address)
 {
 	bluetooth_device_address_t addr_hex = { {0,} };
 	int error_code = BT_ERROR_NONE;
@@ -387,14 +387,14 @@ int bt_dpm_remove_bluetooth_device_from_whitelist(const char *device_address)
 	BT_CHECK_INPUT_PARAMETER(device_address);
 
 	_bt_convert_address_to_hex(&addr_hex, device_address);
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_remove_bluetooth_device_from_whitelist(&addr_hex));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_remove_device_from_whitelist(&addr_hex));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 
 	return error_code;
 }
 
-int bt_dpm_remove_bluetooth_device_from_blacklist(const char *device_address)
+int bt_dpm_remove_device_from_blacklist(const char *device_address)
 {
 	bluetooth_device_address_t addr_hex = { {0,} };
 	int error_code = BT_ERROR_NONE;
@@ -404,73 +404,42 @@ int bt_dpm_remove_bluetooth_device_from_blacklist(const char *device_address)
 	BT_CHECK_INPUT_PARAMETER(device_address);
 
 	_bt_convert_address_to_hex(&addr_hex, device_address);
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_remove_bluetooth_device_from_blacklist(&addr_hex));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_remove_device_from_blacklist(&addr_hex));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 
 	return error_code;
 }
 
-int bt_dpm_remove_bluetooth_uuid_from_whitelist(const char *service_uuid)
+int bt_dpm_remove_uuid_from_whitelist(const char *service_uuid)
 {
 	int error_code = BT_ERROR_NONE;
 
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_remove_bluetooth_uuid_from_whitelist(service_uuid));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_remove_uuid_from_whitelist(service_uuid));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 
 	return error_code;
 }
 
-int bt_dpm_remove_bluetooth_uuid_from_blacklist(const char *service_uuid)
+int bt_dpm_remove_uuid_from_blacklist(const char *service_uuid)
 {
 	int error_code = BT_ERROR_NONE;
 
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_remove_bluetooth_uuid_from_blacklist(service_uuid));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_remove_uuid_from_blacklist(service_uuid));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 
 	return error_code;
 }
 
-int bt_dpm_set_allow_bluetooth_outgoing_call(bt_dpm_status_e value)
-{
-	int error_code = BT_ERROR_NONE;
-	bt_dpm_status_t dpm_value = value;
-
-	BT_CHECK_BT_SUPPORT();
-	BT_CHECK_INIT_STATUS();
-
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_set_allow_bluetooth_outgoing_call(dpm_value));
-	if (error_code != BT_ERROR_NONE)
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
-
-	return error_code;
-}
-
-int bt_dpm_get_allow_bluetooth_outgoing_call(bt_dpm_status_e *value)
-{
-	int error_code = BT_ERROR_NONE;
-	bt_dpm_status_t dpm_value = BLUETOOTH_DPM_STATUS_ERROR;
-
-	BT_CHECK_BT_SUPPORT();
-	BT_CHECK_INIT_STATUS();
-
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_get_allow_bluetooth_outgoing_call(&dpm_value));
-	if (error_code != BT_ERROR_NONE)
-		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
-	*value = dpm_value;
-
-	return error_code;
-}
-
-int bt_dpm_set_bluetooth_pairing_state(bt_dpm_status_e value)
+int bt_dpm_set_allow_outgoing_call(bt_dpm_status_e value)
 {
 	int error_code = BT_ERROR_NONE;
 	bt_dpm_status_t dpm_value = value;
@@ -478,14 +447,14 @@ int bt_dpm_set_bluetooth_pairing_state(bt_dpm_status_e value)
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_set_bluetooth_pairing_state(dpm_value));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_set_allow_outgoing_call(dpm_value));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 
 	return error_code;
 }
 
-int bt_dpm_get_bluetooth_pairing_state(bt_dpm_status_e *value)
+int bt_dpm_get_allow_outgoing_call(bt_dpm_status_e *value)
 {
 	int error_code = BT_ERROR_NONE;
 	bt_dpm_status_t dpm_value = BLUETOOTH_DPM_STATUS_ERROR;
@@ -493,7 +462,7 @@ int bt_dpm_get_bluetooth_pairing_state(bt_dpm_status_e *value)
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_get_bluetooth_pairing_state(&dpm_value));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_get_allow_outgoing_call(&dpm_value));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 	*value = dpm_value;
@@ -501,7 +470,38 @@ int bt_dpm_get_bluetooth_pairing_state(bt_dpm_status_e *value)
 	return error_code;
 }
 
-int bt_dpm_set_bluetooth_profile_state(bt_dpm_profile_e profile, bt_dpm_status_e value)
+int bt_dpm_set_pairing_state(bt_dpm_status_e value)
+{
+	int error_code = BT_ERROR_NONE;
+	bt_dpm_status_t dpm_value = value;
+
+	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_INIT_STATUS();
+
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_set_pairing_state(dpm_value));
+	if (error_code != BT_ERROR_NONE)
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
+
+	return error_code;
+}
+
+int bt_dpm_get_pairing_state(bt_dpm_status_e *value)
+{
+	int error_code = BT_ERROR_NONE;
+	bt_dpm_status_t dpm_value = BLUETOOTH_DPM_STATUS_ERROR;
+
+	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_INIT_STATUS();
+
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_get_pairing_state(&dpm_value));
+	if (error_code != BT_ERROR_NONE)
+		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
+	*value = dpm_value;
+
+	return error_code;
+}
+
+int bt_dpm_set_profile_state(bt_dpm_profile_e profile, bt_dpm_status_e value)
 {
 	int error_code = BT_ERROR_NONE;
 	bt_dpm_status_t dpm_value = value;
@@ -510,14 +510,14 @@ int bt_dpm_set_bluetooth_profile_state(bt_dpm_profile_e profile, bt_dpm_status_e
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_set_bluetooth_profile_state(dpm_profile, dpm_value));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_set_profile_state(dpm_profile, dpm_value));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 
 	return error_code;
 }
 
-int bt_dpm_get_bluetooth_profile_state(bt_dpm_profile_e profile, bt_dpm_status_e *value)
+int bt_dpm_get_profile_state(bt_dpm_profile_e profile, bt_dpm_status_e *value)
 {
 	int error_code = BT_ERROR_NONE;
 	bt_dpm_status_t dpm_value = BLUETOOTH_DPM_STATUS_ERROR;
@@ -525,7 +525,7 @@ int bt_dpm_get_bluetooth_profile_state(bt_dpm_profile_e profile, bt_dpm_status_e
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_get_bluetooth_profile_state(profile, &dpm_value));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_get_profile_state(profile, &dpm_value));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 	*value = dpm_value;
@@ -533,7 +533,7 @@ int bt_dpm_get_bluetooth_profile_state(bt_dpm_profile_e profile, bt_dpm_status_e
 	return error_code;
 }
 
-int bt_dpm_set_bluetooth_desktop_connectivity_state(bt_dpm_status_e value)
+int bt_dpm_set_desktop_connectivity_state(bt_dpm_status_e value)
 {
 	int error_code = BT_ERROR_NONE;
 	bt_dpm_status_t dpm_value = value;
@@ -541,14 +541,14 @@ int bt_dpm_set_bluetooth_desktop_connectivity_state(bt_dpm_status_e value)
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_set_bluetooth_desktop_connectivity_state(dpm_value));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_set_desktop_connectivity_state(dpm_value));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 
 	return error_code;
 }
 
-int bt_dpm_get_bluetooth_desktop_connectivity_state(bt_dpm_status_e *value)
+int bt_dpm_get_desktop_connectivity_state(bt_dpm_status_e *value)
 {
 	int error_code = BT_ERROR_NONE;
 	bt_dpm_status_t dpm_value = BLUETOOTH_DPM_STATUS_ERROR;
@@ -556,7 +556,7 @@ int bt_dpm_get_bluetooth_desktop_connectivity_state(bt_dpm_status_e *value)
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_get_bluetooth_desktop_connectivity_state(&dpm_value));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_get_desktop_connectivity_state(&dpm_value));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 	*value = dpm_value;
@@ -564,7 +564,7 @@ int bt_dpm_get_bluetooth_desktop_connectivity_state(bt_dpm_status_e *value)
 	return error_code;
 }
 
-int bt_dpm_set_bluetooth_discoverable_state(bt_dpm_status_e value)
+int bt_dpm_set_discoverable_state(bt_dpm_status_e value)
 {
 	int error_code = BT_ERROR_NONE;
 	bt_dpm_status_t dpm_value = value;
@@ -572,14 +572,14 @@ int bt_dpm_set_bluetooth_discoverable_state(bt_dpm_status_e value)
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_set_bluetooth_discoverable_state(dpm_value));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_set_discoverable_state(dpm_value));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 
 	return error_code;
 }
 
-int bt_dpm_get_bluetooth_discoverable_state(bt_dpm_status_e *value)
+int bt_dpm_get_discoverable_state(bt_dpm_status_e *value)
 {
 	int error_code = BT_ERROR_NONE;
 	bt_dpm_status_t dpm_value = BLUETOOTH_DPM_STATUS_ERROR;
@@ -587,7 +587,7 @@ int bt_dpm_get_bluetooth_discoverable_state(bt_dpm_status_e *value)
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_get_bluetooth_discoverable_state(&dpm_value));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_get_discoverable_state(&dpm_value));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 	*value = dpm_value;
@@ -595,7 +595,7 @@ int bt_dpm_get_bluetooth_discoverable_state(bt_dpm_status_e *value)
 	return error_code;
 }
 
-int bt_dpm_set_bluetooth_limited_discoverable_state(bt_dpm_status_e value)
+int bt_dpm_set_limited_discoverable_state(bt_dpm_status_e value)
 {
 	int error_code = BT_ERROR_NONE;
 	bt_dpm_status_t dpm_value = value;
@@ -603,14 +603,14 @@ int bt_dpm_set_bluetooth_limited_discoverable_state(bt_dpm_status_e value)
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_set_bluetooth_limited_discoverable_state(dpm_value));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_set_limited_discoverable_state(dpm_value));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 
 	return error_code;
 }
 
-int bt_dpm_get_bluetooth_limited_discoverable_state(bt_dpm_status_e *value)
+int bt_dpm_get_limited_discoverable_state(bt_dpm_status_e *value)
 {
 	int error_code = BT_ERROR_NONE;
 	bt_dpm_status_t dpm_value = BLUETOOTH_DPM_STATUS_ERROR;
@@ -618,7 +618,7 @@ int bt_dpm_get_bluetooth_limited_discoverable_state(bt_dpm_status_e *value)
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_get_bluetooth_limited_discoverable_state(&dpm_value));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_get_limited_discoverable_state(&dpm_value));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 	*value = dpm_value;
@@ -626,7 +626,7 @@ int bt_dpm_get_bluetooth_limited_discoverable_state(bt_dpm_status_e *value)
 	return error_code;
 }
 
-int bt_dpm_set_bluetooth_data_transfer_state(bt_dpm_status_e value)
+int bt_dpm_set_data_transfer_state(bt_dpm_status_e value)
 {
 	int error_code = BT_ERROR_NONE;
 	bt_dpm_status_t dpm_value = value;
@@ -634,14 +634,14 @@ int bt_dpm_set_bluetooth_data_transfer_state(bt_dpm_status_e value)
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_set_bluetooth_data_transfer_state(dpm_value));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_set_data_transfer_state(dpm_value));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 
 	return error_code;
 }
 
-int bt_dpm_get_bluetooth_data_transfer_state(bt_dpm_status_e *value)
+int bt_dpm_get_data_transfer_state(bt_dpm_status_e *value)
 {
 	int error_code = BT_ERROR_NONE;
 	bt_dpm_status_t dpm_value = BLUETOOTH_DPM_STATUS_ERROR;
@@ -649,7 +649,7 @@ int bt_dpm_get_bluetooth_data_transfer_state(bt_dpm_status_e *value)
 	BT_CHECK_BT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
-	error_code = _bt_dpm_get_error_code(bluetooth_dpm_get_bluetooth_data_transfer_state(&dpm_value));
+	error_code = _bt_dpm_get_error_code(bluetooth_dpm_get_data_transfer_state(&dpm_value));
 	if (error_code != BT_ERROR_NONE)
 		BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(error_code), error_code);
 	*value = dpm_value;
