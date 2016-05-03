@@ -3248,7 +3248,7 @@ int bt_dpm_get_allow_bluetooth_mode(bt_dpm_allow_e *value);
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_activate_bluetooth_device_restriction(bt_dpm_status_e value);
+int bt_dpm_activate_device_restriction(bt_dpm_status_e value);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3269,7 +3269,7 @@ int bt_dpm_activate_bluetooth_device_restriction(bt_dpm_status_e value);
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_is_bluetooth_device_restriction_active(bt_dpm_status_e *value);
+int bt_dpm_is_device_restriction_active(bt_dpm_status_e *value);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3290,7 +3290,7 @@ int bt_dpm_is_bluetooth_device_restriction_active(bt_dpm_status_e *value);
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_activate_bluetoooth_uuid_restriction(bt_dpm_status_e value);
+int bt_dpm_activate_uuid_restriction(bt_dpm_status_e value);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3311,7 +3311,7 @@ int bt_dpm_activate_bluetoooth_uuid_restriction(bt_dpm_status_e value);
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_is_bluetooth_uuid_restriction_active(bt_dpm_status_e *value);
+int bt_dpm_is_uuid_restriction_active(bt_dpm_status_e *value);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3330,7 +3330,7 @@ int bt_dpm_is_bluetooth_uuid_restriction_active(bt_dpm_status_e *value);
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_add_bluetooth_devices_to_blacklist(const char *device_address);
+int bt_dpm_add_devices_to_blacklist(const char *device_address);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3349,7 +3349,7 @@ int bt_dpm_add_bluetooth_devices_to_blacklist(const char *device_address);
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_add_bluetooth_devices_to_whitelist(const char *device_address);
+int bt_dpm_add_devices_to_whitelist(const char *device_address);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3368,7 +3368,7 @@ int bt_dpm_add_bluetooth_devices_to_whitelist(const char *device_address);
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_add_bluetooth_uuids_to_blacklist(const char *service_uuid);
+int bt_dpm_add_uuids_to_blacklist(const char *service_uuid);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3387,7 +3387,7 @@ int bt_dpm_add_bluetooth_uuids_to_blacklist(const char *service_uuid);
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_add_bluetooth_uuids_to_whitelist(const char *service_uuid);
+int bt_dpm_add_uuids_to_whitelist(const char *service_uuid);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3406,7 +3406,7 @@ int bt_dpm_add_bluetooth_uuids_to_whitelist(const char *service_uuid);
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_clear_bluetooth_devices_from_blacklist(void);
+int bt_dpm_clear_devices_from_blacklist(void);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3425,7 +3425,7 @@ int bt_dpm_clear_bluetooth_devices_from_blacklist(void);
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_clear_bluetooth_devices_from_whitelist(void);
+int bt_dpm_clear_devices_from_whitelist(void);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3444,7 +3444,7 @@ int bt_dpm_clear_bluetooth_devices_from_whitelist(void);
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_clear_bluetooth_uuids_from_blacklist(void);
+int bt_dpm_clear_uuids_from_blacklist(void);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3463,7 +3463,7 @@ int bt_dpm_clear_bluetooth_uuids_from_blacklist(void);
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_clear_bluetooth_uuids_from_whitelist(void);
+int bt_dpm_clear_uuids_from_whitelist(void);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3482,7 +3482,7 @@ int bt_dpm_clear_bluetooth_uuids_from_whitelist(void);
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_get_bluetooth_devices_from_blacklist(bt_dpm_device_list_s **device_list);
+int bt_dpm_get_devices_from_blacklist(bt_dpm_device_list_s **device_list);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3501,7 +3501,7 @@ int bt_dpm_get_bluetooth_devices_from_blacklist(bt_dpm_device_list_s **device_li
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_get_bluetooth_devices_from_whitelist(bt_dpm_device_list_s **device_list);
+int bt_dpm_get_devices_from_whitelist(bt_dpm_device_list_s **device_list);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3520,7 +3520,7 @@ int bt_dpm_get_bluetooth_devices_from_whitelist(bt_dpm_device_list_s **device_li
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_get_bluetooth_uuids_from_blacklist(bt_dpm_uuids_list_s **uuid_list);
+int bt_dpm_get_uuids_from_blacklist(bt_dpm_uuids_list_s **uuid_list);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3539,7 +3539,7 @@ int bt_dpm_get_bluetooth_uuids_from_blacklist(bt_dpm_uuids_list_s **uuid_list);
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_get_bluetooth_uuids_from_whitelist(bt_dpm_uuids_list_s **uuid_list);
+int bt_dpm_get_uuids_from_whitelist(bt_dpm_uuids_list_s **uuid_list);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3558,7 +3558,7 @@ int bt_dpm_get_bluetooth_uuids_from_whitelist(bt_dpm_uuids_list_s **uuid_list);
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_remove_bluetooth_device_from_whitelist(const char *device_address);
+int bt_dpm_remove_device_from_whitelist(const char *device_address);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3577,7 +3577,7 @@ int bt_dpm_remove_bluetooth_device_from_whitelist(const char *device_address);
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_remove_bluetooth_device_from_blacklist(const char *device_address);
+int bt_dpm_remove_device_from_blacklist(const char *device_address);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3596,7 +3596,7 @@ int bt_dpm_remove_bluetooth_device_from_blacklist(const char *device_address);
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_remove_bluetooth_uuid_from_whitelist(const char *service_uuid);
+int bt_dpm_remove_uuid_from_whitelist(const char *service_uuid);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3615,7 +3615,7 @@ int bt_dpm_remove_bluetooth_uuid_from_whitelist(const char *service_uuid);
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_remove_bluetooth_uuid_from_blacklist(const char *service_uuid);
+int bt_dpm_remove_uuid_from_blacklist(const char *service_uuid);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3636,7 +3636,7 @@ int bt_dpm_remove_bluetooth_uuid_from_blacklist(const char *service_uuid);
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_set_allow_bluetooth_outgoing_call(bt_dpm_status_e value);
+int bt_dpm_set_allow_outgoing_call(bt_dpm_status_e value);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3657,7 +3657,7 @@ int bt_dpm_set_allow_bluetooth_outgoing_call(bt_dpm_status_e value);
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_get_allow_bluetooth_outgoing_call(bt_dpm_status_e *value);
+int bt_dpm_get_allow_outgoing_call(bt_dpm_status_e *value);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3678,7 +3678,7 @@ int bt_dpm_get_allow_bluetooth_outgoing_call(bt_dpm_status_e *value);
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_set_bluetooth_pairing_state(bt_dpm_status_e value);
+int bt_dpm_set_pairing_state(bt_dpm_status_e value);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3699,7 +3699,7 @@ int bt_dpm_set_bluetooth_pairing_state(bt_dpm_status_e value);
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_get_bluetooth_pairing_state(bt_dpm_status_e *value);
+int bt_dpm_get_pairing_state(bt_dpm_status_e *value);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3729,7 +3729,7 @@ int bt_dpm_get_bluetooth_pairing_state(bt_dpm_status_e *value);
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_set_bluetooth_profile_state(bt_dpm_profile_e profile, bt_dpm_status_e value);
+int bt_dpm_set_profile_state(bt_dpm_profile_e profile, bt_dpm_status_e value);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3762,7 +3762,7 @@ int bt_dpm_set_bluetooth_profile_state(bt_dpm_profile_e profile, bt_dpm_status_e
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_get_bluetooth_profile_state(bt_dpm_profile_e profile, bt_dpm_status_e *value);
+int bt_dpm_get_profile_state(bt_dpm_profile_e profile, bt_dpm_status_e *value);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3783,7 +3783,7 @@ int bt_dpm_get_bluetooth_profile_state(bt_dpm_profile_e profile, bt_dpm_status_e
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_set_bluetooth_desktop_connectivity_state(bt_dpm_status_e value);
+int bt_dpm_set_desktop_connectivity_state(bt_dpm_status_e value);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3804,7 +3804,7 @@ int bt_dpm_set_bluetooth_desktop_connectivity_state(bt_dpm_status_e value);
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_get_bluetooth_desktop_connectivity_state(bt_dpm_status_e *value);
+int bt_dpm_get_desktop_connectivity_state(bt_dpm_status_e *value);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3825,7 +3825,7 @@ int bt_dpm_get_bluetooth_desktop_connectivity_state(bt_dpm_status_e *value);
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_set_bluetooth_discoverable_state(bt_dpm_status_e value);
+int bt_dpm_set_discoverable_state(bt_dpm_status_e value);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3846,7 +3846,7 @@ int bt_dpm_set_bluetooth_discoverable_state(bt_dpm_status_e value);
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_get_bluetooth_discoverable_state(bt_dpm_status_e *value);
+int bt_dpm_get_discoverable_state(bt_dpm_status_e *value);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3868,7 +3868,7 @@ int bt_dpm_get_bluetooth_discoverable_state(bt_dpm_status_e *value);
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
 
-int bt_dpm_set_bluetooth_limited_discoverable_state(bt_dpm_status_e value);
+int bt_dpm_set_limited_discoverable_state(bt_dpm_status_e value);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3889,7 +3889,7 @@ int bt_dpm_set_bluetooth_limited_discoverable_state(bt_dpm_status_e value);
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_get_bluetooth_limited_discoverable_state(bt_dpm_status_e *value);
+int bt_dpm_get_limited_discoverable_state(bt_dpm_status_e *value);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3910,7 +3910,7 @@ int bt_dpm_get_bluetooth_limited_discoverable_state(bt_dpm_status_e *value);
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_set_bluetooth_data_transfer_state(bt_dpm_status_e value);
+int bt_dpm_set_data_transfer_state(bt_dpm_status_e value);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_DPM_MODULE
@@ -3931,7 +3931,7 @@ int bt_dpm_set_bluetooth_data_transfer_state(bt_dpm_status_e value);
  * @pre bt_dpm_set_allow_bluetooth_mode must be allowed.
  * @see bt_dpm_get_allow_bluetooth_mode()
  */
-int bt_dpm_get_bluetooth_data_transfer_state(bt_dpm_status_e *value);
+int bt_dpm_get_data_transfer_state(bt_dpm_status_e *value);
 
 /**
  * @}
