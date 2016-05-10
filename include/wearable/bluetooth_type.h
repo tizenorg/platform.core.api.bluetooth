@@ -1440,7 +1440,13 @@ typedef void (*bt_nap_connection_state_changed_cb) (bool connected, const char *
  */
 typedef void (*bt_panu_connection_state_changed_cb) (int result, bool connected, const char *remote_address, bt_panu_service_type_e type, void *user_data);
 
-/* HID device related type */
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE
+ * @brief Structure of hid mouse's information.
+ * @since_tizen 3.0
+ *
+ * @see bt_hid_device_send_mouse_event()
+ */
 typedef struct {
 	unsigned char btcode;
 	unsigned char rep_id;
@@ -1450,6 +1456,13 @@ typedef struct {
 	signed char axis_z;
 } bt_hid_mouse_data_s;
 
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE
+ * @brief Structure of hid keyboard's information.
+ * @since_tizen 3.0
+ *
+ * @see bt_hid_device_send_key_event()
+ */
 typedef struct {
 	unsigned char btcode;
 	unsigned char rep_id;
@@ -1457,6 +1470,11 @@ typedef struct {
 	unsigned char key[8];
 } bt_hid_key_data_s;
 
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE
+ * @brief Enumerations of Bluetooth hid header's type.
+ * @since_tizen 3.0
+ */
 typedef enum {
 	BT_HID_HEADER_HANDSHAKE,
 	BT_HID_HEADER_HID_CONTROL,
@@ -1468,11 +1486,21 @@ typedef enum {
 	BT_HID_HEADER_UNKNOWN
 } bluetooth_hid_header_type_t;
 
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE
+ * @brief Enumerations of Bluetooth hid parameter's type.
+ * @since_tizen 3.0
+ */
 typedef enum {
 	BT_HID_PARAM_DATA_RTYPE_INPUT,
 	BT_HID_PARAM_DATA_RTYPE_OUTPUT
 } bluetooth_hid_param_type_t;
 
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE
+ * @brief Enumerations of Bluetooth hid handshake's type.
+ * @since_tizen 3.0
+ */
 typedef enum {
 	BT_HID_HANDSHAKE_SUCCESSFUL = 0x00, /**< Handshake error code none */
 	BT_HID_HANDSHAKE_NOT_READY, /**< Handshake error code Not Ready */
@@ -1483,6 +1511,11 @@ typedef enum {
 	BT_HID_HANDSHAKE_ERR_FATAL /**< Fatal error */
 } bluetooth_hid_handshake_type_t;
 
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE
+ * @brief Structure of hid device's received data information.
+ * @since_tizen 3.0
+ */
 typedef struct {
 	const char *address;
 	bluetooth_hid_header_type_t type;
@@ -1491,9 +1524,29 @@ typedef struct {
 	const char *data;     /**< The received data */
 } bt_hid_device_received_data_s;
 
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE
+ * @brief  Called when the Bluetooth hid device connection's state changes.
+ * @since_tizen 3.0
+ *
+ * @param[in]   result  The result of changing the connection state.
+ * @param[in]   connected  The state to be changed. @a true means connected state, Otherwise, @a false.
+ * @param[in]   remote_address  The remote device's address
+ * @param[in]   user_data  The user data passed from the callback registration function
+ * @see bt_hid_device_activate()
+ */
 typedef void (*bt_hid_device_connection_state_changed_cb) (int result,
 	bool connected, const char *remote_address, void *user_data);
 
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE
+ * @brief  Called when device gets some data from HID Host.
+ * @since_tizen 3.0
+ *
+ * @param[in]   data  The data from HID Host.
+ * @param[in]   user_data  The user data passed from the callback registration function
+ * @see bt_hid_device_set_data_received_cb()
+ */
 typedef void (*bt_hid_device_data_received_cb)(const bt_hid_device_received_data_s *data, void *user_data);
 /* HID device related type */
 
