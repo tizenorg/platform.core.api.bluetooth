@@ -444,7 +444,7 @@ typedef enum {
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Enumerations for the equalizer state
- * @since_tizen 2.4
+ * @since_tizen 3.0
  */
 typedef enum {
 	BT_AVRCP_EQUALIZER_STATE_OFF = 0x01,  /**< Equalizer Off */
@@ -454,7 +454,7 @@ typedef enum {
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Enumerations for the repeat mode
- * @since_tizen 2.4
+ * @since_tizen 3.0
  */
 typedef enum {
 	BT_AVRCP_REPEAT_MODE_OFF = 0x01,  /**< Repeat Off */
@@ -466,7 +466,7 @@ typedef enum {
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Enumerations for the shuffle mode
- * @since_tizen 2.4
+ * @since_tizen 3.0
  */
 typedef enum {
 	BT_AVRCP_SHUFFLE_MODE_OFF = 0x01,  /**< Shuffle Off */
@@ -477,7 +477,7 @@ typedef enum {
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Enumerations for the scan mode
- * @since_tizen 2.4
+ * @since_tizen 3.0
  */
 typedef enum {
 	BT_AVRCP_SCAN_MODE_OFF = 0x01,  /**< Scan Off */
@@ -488,7 +488,7 @@ typedef enum {
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AVRCP_MODULE
  * @brief  Enumerations for the player state
- * @since_tizen 2.4
+ * @since_tizen 3.0
  */
 typedef enum {
 	BT_AVRCP_PLAYER_STATE_STOPPED = 0x00,  /**< Stopped */
