@@ -529,6 +529,35 @@
  */
 
 /**
+ * @if WEARABLE
+ * @defgroup CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE Bluetooth HID Device
+ * @brief The Bluetooth HID (Human Interface Device) API provides functions for connecting Bluetooth HID such as keyboards and mice.
+ * @ingroup CAPI_NETWORK_BLUETOOTH_MODULE
+ *
+ * @section CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE_HEADER Required Header
+ *  \#include <bluetooth.h>
+ *
+ * @section CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE_OVERVIEW Overview
+ * In HID Profile, there are two roles - @a Host and @a Device.
+ * The @a Host is a device that uses or requests the services of a HID. The @a Device is a device that provides the service of human data input and output to and from the @a Host.
+ * This API supports the @a Device role.
+ *
+ * @section CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE_FEATURE Related Features
+ * This API is related to the following features:\n
+ *  - http://tizen.org/feature/network.bluetooth.hid_device\n
+ *
+ * It is recommended to use features in your application for reliability.\n
+ *
+ * You can check if a device supports the related features for this API by using @ref CAPI_SYSTEM_SYSTEM_INFO_MODULE, thereby controlling your application's actions.\n
+ *
+ * To ensure your application runs only on devices with the required features, please declare the features in your manifest file using the manifest editor in the SDK.\n
+ *
+ * More details on using features in your application can be found in the <a href="https://developer.tizen.org/development/tools/native-tools/manifest-text-editor#feature"><b>Feature Element</b> description.</a>
+ * @endif
+ *
+ */
+
+/**
  * @defgroup CAPI_NETWORK_BLUETOOTH_AUDIO_MODULE Bluetooth Audio
  * @brief Bluetooth Audio API provides functions for connecting to Bluetooth audio devices such as headset, hand-free and headphone.
  * @ingroup CAPI_NETWORK_BLUETOOTH_MODULE
