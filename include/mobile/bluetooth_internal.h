@@ -2269,7 +2269,7 @@ int bt_gatt_server_notify(bt_gatt_h characteristic, bool need_confirm,
  * If there are multiple services which have same UUID, only the first matched one will be returned.
  *
  * @param[in] server The GATT server's handle
- * @param[in] uuid The serivce's GATT handle which has this UUID will be returned if it exists
+ * @param[in] uuid The service's GATT handle which has this UUID will be returned if it exists
  * @param[out] service The service's GATT handle which has @a uuid if it exists
  * @return  0 on success, otherwise a negative error value
  * @retval #BT_ERROR_NONE Successful
@@ -3056,7 +3056,7 @@ int bt_device_le_conn_update(const char *device_address,
  * @privilege %http://tizen.org/privilege/bluetooth.admin
  *
  * @remarks This function must be called to register HID UUID
- * then only remote device could be able identify this one as HID device
+ * then only remote device could be able to identify this one as HID device
  *
  * @param[in] callback  The callback called when the connection state is changed
  * @param[in] user_data The user data to be passed to the callback function

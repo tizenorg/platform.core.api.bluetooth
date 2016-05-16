@@ -1626,7 +1626,7 @@ static void __bt_socket_data_received_cb(bt_socket_received_data_s *data,
 	TC_PRT("+");
 
 	if (data == NULL) {
-		TC_PRT("No recieved data!");
+		TC_PRT("No received data!");
 		return;
 	}
 
@@ -6512,7 +6512,7 @@ int test_input_callback(void *data)
 		case BT_UNIT_TEST_FUNCTION_GATT_SET_CHARACTERISTIC_VALUE: {
 			unsigned char value[] = { 1 };
 			if (selected_char_index == 0) {
-				TC_PRT("Need to select charateristic value \n");
+				TC_PRT("Need to select characteristic value \n");
 				break;
 			}
 
@@ -6526,7 +6526,7 @@ int test_input_callback(void *data)
 		case BT_UNIT_TEST_FUNCTION_GATT_SET_CHARACTERISTIC_VALUE_REQUEST: {
 			unsigned char value[] = { 1 };
 			if (selected_char_index == 0) {
-				TC_PRT("Need to select charateristic value \n");
+				TC_PRT("Need to select characteristic value \n");
 				break;
 			}
 
@@ -6539,7 +6539,7 @@ int test_input_callback(void *data)
 
 		case BT_UNIT_TEST_FUNCTION_GATT_READ_CHARACTERISTIC_VALUE: {
 			if (selected_char_index == 0) {
-				TC_PRT("Need to select charateristic value \n");
+				TC_PRT("Need to select characteristic value \n");
 				break;
 			}
 
