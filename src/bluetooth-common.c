@@ -1180,7 +1180,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 		break;
 
 	case BLUETOOTH_EVENT_HDP_DISCONNECTED:
-		BT_INFO("HDP disconnected callback will be ");
+		BT_INFO("HDP disconnected");
 		hdp_disconn_info = (bt_hdp_disconnected_t *)(param->param_data);
 
 		_bt_convert_address_to_string(&device_addr, &hdp_disconn_info->device_address);
@@ -1192,7 +1192,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 			free(device_addr);
 		break;
 	case BLUETOOTH_EVENT_HDP_DATA_RECEIVED:
-		BT_INFO("HDP data recieved callback will be ");
+		BT_INFO("HDP data received");
 		hdp_data_ind = (bt_hdp_data_ind_t *)(param->param_data);
 		if (param->result != BLUETOOTH_ERROR_NONE)
 			BT_ERR("Fail to receive HDP data");
