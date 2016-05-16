@@ -594,8 +594,8 @@ int bt_adapter_unset_device_discovery_state_changed_cb(void);
  * @brief Get the Hash and Randmoizer value, synchronously.
  * @since_tizen 2.3
  *
- * @param[out] hash The hash value recieved from the controller
- * @param[out] randomizer The hash value recieved from the controller
+ * @param[out] hash The hash value received from the controller
+ * @param[out] randomizer The hash value received from the controller
  * @param[out] hash_len The length of the hash value
  * @param[out] randomizer_len The length of the randomizer value
  * @return 0 on success, otherwise a negative error value.
@@ -621,8 +621,8 @@ int bt_adapter_get_local_oob_data(unsigned char **hash, unsigned char **randomiz
  * @privilege %http://tizen.org/privilege/bluetooth
  *
  * @param[in] remote_address Remote device address
- * @param[in] hash The hash value recieved from the controller
- * @param[in] randomizer The hash value recieved from the controller
+ * @param[in] hash The hash value received from the controller
+ * @param[in] randomizer The hash value received from the controller
  * @param[in] hash_len The length of the hash value. Allowed value is 16
  * @param[in] randomizer_len The length of the randomizer value. Allowed value is 16
  * @return 0 on success, otherwise a negative error value.
@@ -928,7 +928,7 @@ int bt_adapter_le_get_scan_result_tx_power_level(const bt_adapter_le_device_scan
  *
  * @remarks The @a uuids must be iterated as count and each pointed data must be released with free().
  * Then uuids must be released with free(). \n
- * 16-bit service solicitation UUID or 128-bit service solicitaion UUID is supported.
+ * 16-bit service solicitation UUID or 128-bit service solicitation UUID is supported.
  * (e.g. 180F, 0000180F-0000-1000-8000-00805F9B34FB)
  *
  * @param[in] info The scan result information
@@ -2241,7 +2241,7 @@ int bt_opp_server_deinitialize(void);
  * @privilege %http://tizen.org/privilege/bluetooth
  * @remarks If you initialize OPP server by bt_opp_server_initialize_by_connection_request(), then name is ignored.
  * You can cancel the pushes by bt_opp_server_cancel_transfer() with transfer_id.
- * @param[in] progress_cb  The callback called when a file is being transfered
+ * @param[in] progress_cb  The callback called when a file is being transferred
  * @param[in] finished_cb  The callback called when a transfer is finished
  * @param[in] name  The name to store. This can be NULL if you initialize OPP server by bt_opp_server_initialize_by_connection_request().
  * @param[in] user_data The user data to be passed to the callback function
@@ -2397,7 +2397,7 @@ int bt_opp_client_clear_files(void);
  * bt_opp_client_push_finished_cb() will be called when the push request is finished.
  * @param[in] remote_address The remote address
  * @param[in] responded_cb  The callback called when OPP server responds to the push request
- * @param[in] progress_cb  The callback called when each file is being transfered
+ * @param[in] progress_cb  The callback called when each file is being transferred
  * @param[in] finished_cb  The callback called when the push request is finished
  * @param[in] user_data The user data to be passed to the callback function
  * @return 0 on success, otherwise a negative error value.
@@ -3795,7 +3795,7 @@ int bt_gatt_characteristic_get_write_type(bt_gatt_h characteristic,
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Updates the write type of the specified charateristic
+ * @brief  Updates the write type of the specified characteristic
  * @since_tizen 2.3.1
  *
  * @param[in] characteristic The characteristic's GATT handle
@@ -4024,7 +4024,7 @@ int bt_gatt_client_unset_characteristic_value_changed_cb(bt_gatt_h characteristi
  * If there are multiple services which have same UUID, only the first matched one will be returned.
  *
  * @param[in] client The GATT client's handle
- * @param[in] uuid The serivce's GATT handle which has this UUID will be returned if it exists
+ * @param[in] uuid The service's GATT handle which has this UUID will be returned if it exists
  * @param[out] service The service's GATT handle which has @a uuid if it exists
  * @return  0 on success, otherwise a negative error value
  * @retval #BT_ERROR_NONE Successful
@@ -4055,7 +4055,7 @@ int bt_gatt_client_foreach_services(bt_gatt_client_h client,
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief Connect to a specific LE based service on a remote bluetooth dievice address, asynchronously.
+ * @brief Connect to a specific LE based service on a remote bluetooth device address, asynchronously.
  * @since_tizen 2.3
  * @privlevel public
  * @privilege %http://tizen.org/privilege/bluetooth
@@ -4069,7 +4069,7 @@ int bt_gatt_client_foreach_services(bt_gatt_client_h client,
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_NOT_ENABLED Not enabled
- * @retval #BT_ERROR_INVALID_PARAMETER Invalid paramater
+ * @retval #BT_ERROR_INVALID_PARAMETER Invalid parameter
  * @retval #BT_ERROR_OPERATION_FAILED Operation failed
  * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
  * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
@@ -4088,7 +4088,7 @@ int bt_gatt_connect(const char *address, bool auto_connect);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief Disconnect to LE connection with the given remote Bluetooth dievice address, asynchronously.
+ * @brief Disconnect to LE connection with the given remote Bluetooth device address, asynchronously.
  * @since_tizen 2.3
  * @privlevel public
  * @privilege %http://tizen.org/privilege/bluetooth
@@ -4099,7 +4099,7 @@ int bt_gatt_connect(const char *address, bool auto_connect);
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
  * @retval #BT_ERROR_NOT_ENABLED Not enabled
- * @retval #BT_ERROR_INVALID_PARAMETER Invalid paramater
+ * @retval #BT_ERROR_INVALID_PARAMETER Invalid parameter
  * @retval #BT_ERROR_OPERATION_FAILED Operation failed
  * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
  * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
@@ -4125,7 +4125,7 @@ int bt_gatt_disconnect(const char *address);
  *
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
- * @retval #BT_ERROR_INVALID_PARAMETER Invalid paramater
+ * @retval #BT_ERROR_INVALID_PARAMETER Invalid parameter
  * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
  *
  * @see bt_gatt_connect()
