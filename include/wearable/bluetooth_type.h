@@ -1071,7 +1071,7 @@ typedef void (*bt_opp_server_connection_requested_cb)(const char *remote_address
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_OPP_SERVER_MODULE
- * @brief  Called when a file is being transfered.
+ * @brief  Called when a file is being transferred.
  * @since_tizen 2.3.1
  *
  * @param[in] file  The path of file to be pushed
@@ -1112,12 +1112,12 @@ typedef void (*bt_opp_client_push_responded_cb)(int result, const char *remote_a
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_OPP_CLIENT_MODULE
- * @brief  Called when each file is being transfered.
+ * @brief  Called when each file is being transferred.
  * @since_tizen 2.3.1
  *
  * @param[in] file  The path of file to be pushed
  * @param[in] size The file size (bytes)
- * @param[in] percent The progress in percentage (1 ~ 100). 100 means that a file is transfered completely.
+ * @param[in] percent The progress in percentage (1 ~ 100). 100 means that a file is transferred completely.
  * @param[in] user_data The user data passed from the callback registration function
  * @pre bt_opp_client_push_files() will invoke this function.
  * @see bt_opp_client_push_files()
