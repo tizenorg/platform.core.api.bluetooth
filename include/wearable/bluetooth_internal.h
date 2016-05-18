@@ -2415,6 +2415,51 @@ int bt_gatt_destroy(bt_gatt_h gatt_handle);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief Destroys the GATT handle
+ * @since_tizen 2.4
+ *
+ * @param[in] gatt_handle The handle of service
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_service_create()
+ */
+int bt_gatt_service_destroy(bt_gatt_h gatt_handle);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief Destroys the GATT handle
+ * @since_tizen 2.4
+ *
+ * @param[in] gatt_handle The handle of characteristic
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_characteristic_create()
+ */
+int bt_gatt_characteristic_destroy(bt_gatt_h gatt_handle);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief Destroys the GATT handle
+ * @since_tizen 2.4
+ *
+ * @param[in] gatt_handle The handle of descriptor
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_descriptor_create()
+ */
+int bt_gatt_descriptor_destroy(bt_gatt_h gatt_handle);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
  * @brief  Gets the permissions which a characteristic or descriptor's GATT handle has
  * @since_tizen 2.4
  *

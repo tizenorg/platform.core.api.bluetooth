@@ -898,6 +898,61 @@ int bt_gatt_destroy(bt_gatt_h gatt_handle)
 
 	return BT_ERROR_NONE;
 }
+
+int bt_gatt_service_destroy(bt_gatt_h gatt_handle)
+{
+	bt_gatt_common_s *handle = (bt_gatt_common_s *)gatt_handle;
+
+	BT_CHECK_GATT_SUPPORT();
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(gatt_handle);
+
+	if (handle->type == BT_GATT_TYPE_SERVICE)
+		__bt_gatt_destroy_service(gatt_handle);
+	else {
+		BT_ERR("Type is invalid(type:%d)", handle->type);
+		return BT_ERROR_INVALID_PARAMETER;
+	}
+
+	return BT_ERROR_NONE;
+}
+
+int bt_gatt_characteristic_destroy(bt_gatt_h gatt_handle)
+{
+	bt_gatt_common_s *handle = (bt_gatt_common_s *)gatt_handle;
+
+	BT_CHECK_GATT_SUPPORT();
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(gatt_handle);
+
+	if (handle->type == BT_GATT_TYPE_CHARACTERISTIC)
+		__bt_gatt_destroy_characteristic(gatt_handle);
+	else {
+		BT_ERR("Type is invalid(type:%d)", handle->type);
+		return BT_ERROR_INVALID_PARAMETER;
+	}
+
+	return BT_ERROR_NONE;
+}
+
+int bt_gatt_descriptor_destroy(bt_gatt_h gatt_handle)
+{
+	bt_gatt_common_s *handle = (bt_gatt_common_s *)gatt_handle;
+
+	BT_CHECK_GATT_SUPPORT();
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(gatt_handle);
+
+	if (handle->type == BT_GATT_TYPE_DESCRIPTOR)
+		__bt_gatt_destroy_descriptor(gatt_handle);
+	else {
+		BT_ERR("Type is invalid(type:%d)", handle->type);
+		return BT_ERROR_INVALID_PARAMETER;
+	}
+
+	return BT_ERROR_NONE;
+}
+
 /* LCOV_EXCL_STOP */
 
 int bt_gatt_get_value(bt_gatt_h gatt_handle, char **value, int *value_length)
