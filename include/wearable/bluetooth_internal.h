@@ -2460,21 +2460,37 @@ int bt_gatt_descriptor_destroy(bt_gatt_h gatt_handle);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Gets the permissions which a characteristic or descriptor's GATT handle has
+ * @brief  Gets the permissions which a characteristic's GATT handle has
  * @since_tizen 2.4
  *
- * @param[in] gatt_handle The handle of a characteristic or descriptor
- * @param[out] permissions The permissions which a characteristic or descriptor's GATT handle has.
+ * @param[in] gatt_handle The handle of a characteristic
+ * @param[out] permissions The permissions which a characteristic's GATT handle has.
  * @return  0 on success, otherwise a negative error value
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
  * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
  *
  * @see bt_gatt_characteristic_create()
+ * @see bt_gatt_permission_e
+ */
+int bt_gatt_characteristic_get_permissions(bt_gatt_h gatt_handle, int *permissions);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
+ * @brief  Gets the permissions which a descriptor's GATT handle has
+ * @since_tizen 2.4
+ *
+ * @param[in] gatt_handle The handle of a descriptor
+ * @param[out] permissions The permissions which a descriptor's GATT handle has.
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
  * @see bt_gatt_descriptor_create()
  * @see bt_gatt_permission_e
  */
-int bt_gatt_get_permissions(bt_gatt_h gatt_handle, int *permissions);
+int bt_gatt_descriptor_get_permissions(bt_gatt_h gatt_handle, int *permissions);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE

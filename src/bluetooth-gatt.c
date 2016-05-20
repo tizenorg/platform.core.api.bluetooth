@@ -1367,11 +1367,10 @@ int bt_gatt_set_float_value(bt_gatt_h gatt_handle, bt_data_type_float_e type,
 	return BT_ERROR_NONE; /* LCOV_EXCL_STOP */
 }
 /* LCOV_EXCL_START */
-int bt_gatt_get_permissions(bt_gatt_h gatt_handle, int *permissions)
+int bt_gatt_characteristic_get_permissions(bt_gatt_h gatt_handle, int *permissions)
 {
 	bt_gatt_common_s *handle = (bt_gatt_common_s *)gatt_handle;
 	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)gatt_handle;
-	bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s *)gatt_handle;
 
 	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
@@ -1381,7 +1380,26 @@ int bt_gatt_get_permissions(bt_gatt_h gatt_handle, int *permissions)
 
 	if (handle->type == BT_GATT_TYPE_CHARACTERISTIC)
 		*permissions = chr->permissions;
-	else if (handle->type == BT_GATT_TYPE_DESCRIPTOR)
+	else {
+		BT_ERR("Type is invalid(type:%d)", handle->type);
+		return BT_ERROR_INVALID_PARAMETER;
+	}
+
+	return BT_ERROR_NONE;
+}
+
+int bt_gatt_descriptor_get_permissions(bt_gatt_h gatt_handle, int *permissions)
+{
+	bt_gatt_common_s *handle = (bt_gatt_common_s *)gatt_handle;
+	bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s *)gatt_handle;
+
+	BT_CHECK_GATT_SUPPORT();
+	BT_CHECK_INIT_STATUS();
+
+	BT_CHECK_INPUT_PARAMETER(gatt_handle);
+	BT_CHECK_INPUT_PARAMETER(permissions);
+
+	if (handle->type == BT_GATT_TYPE_DESCRIPTOR)
 		*permissions = desc->permissions;
 	else {
 		BT_ERR("Type is invalid(type:%d)", handle->type);
