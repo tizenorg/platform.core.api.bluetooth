@@ -59,6 +59,7 @@ src/bluetooth-audio.c
 src/bluetooth-avrcp.c
 src/bluetooth-gatt.c
 src/bluetooth-ipsp.c
+src/bluetooth-dpm.c
 )
 ELSE ()
 SET(SOURCES
@@ -75,13 +76,11 @@ src/bluetooth-audio.c
 src/bluetooth-avrcp.c
 src/bluetooth-gatt.c
 src/bluetooth-ipsp.c
+src/bluetooth-dpm.c
 )
 IF (TIZEN_WEARABLE)
 LIST(APPEND SOURCES src/bluetooth-pbap.c)
 ENDIF (TIZEN_WEARABLE)
-IF (TIZEN_MOBILE)
-LIST(APPEND SOURCES src/bluetooth-dpm.c)
-ENDIF (TIZEN_MOBILE)
 ENDIF (TIZEN_TV)
 
 ADD_LIBRARY(${fw_name} SHARED ${SOURCES})
