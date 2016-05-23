@@ -26,6 +26,7 @@
 #include "bluetooth_internal.h"
 #include "bluetooth_private.h"
 
+/* LCOV_EXCL_START */
 static int _bt_dpm_get_error_code(int origin_error)
 {
 	switch (origin_error) {
@@ -656,3 +657,4 @@ int bt_dpm_get_data_transfer_state(bt_dpm_status_e *value)
 
 	return error_code;
 }
+/* LCOV_EXCL_STOP */
