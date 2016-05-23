@@ -486,12 +486,12 @@ static int __bt_get_bt_device_connection_info_s(bt_device_connection_info_s **de
 }
 
 static bt_gatt_server_read_value_requested_cb __bt_gatt_attribute_get_read_cb(
-					bt_gatt_h service, bt_gatt_h characteristic, void **user_data)
+					bt_gatt_h service, bt_gatt_h attribute, void **user_data)
 {
 	gchar *svc_path = (gchar *)service;
-	gchar *chr_path = (gchar *)characteristic;
+	gchar *att_path = (gchar *)attribute;
 	const GSList *gatt_server_list = NULL;
-	const GSList *l1, *l2, *l3;
+	const GSList *l1, *l2, *l3, *l4;
 
 	gatt_server_list = _bt_gatt_get_server_list();
 
@@ -508,12 +508,26 @@ static bt_gatt_server_read_value_requested_cb __bt_gatt_attribute_get_read_cb(
 				for (l3 = svc->characteristics; l3 != NULL; l3 = l3->next) {
 					bt_gatt_characteristic_s *chr = l3->data;
 
-					if (chr && g_strcmp0(chr->path, chr_path) == 0) {
-						if (chr->read_requested_cb) {
-							*user_data = chr->read_requested_user_data;
-							return chr->read_requested_cb;
-						} else
-							return NULL;
+					if (chr) {
+						if (g_strcmp0(chr->path, att_path) == 0) {
+							if (chr->read_requested_cb) {
+								*user_data = chr->read_requested_user_data;
+								return chr->read_requested_cb;
+							} else
+								return NULL;
+						} else {
+							for (l4 = chr->descriptors; l4 != NULL; l4 = l4->next) {
+								bt_gatt_descriptor_s *desc = l4->data;
+
+								if (desc && g_strcmp0(desc->path, att_path) == 0) {
+									if (desc->read_requested_cb) {
+										*user_data = desc->read_requested_user_data;
+										return desc->read_requested_cb;
+									} else
+										return NULL;
+								}
+							}
+						}
 					}
 				}
 			}
@@ -557,8 +571,11 @@ static bt_gatt_server_value_changed_cb __bt_gatt_attribute_get_value_change_cb(
 								bt_gatt_descriptor_s *desc = l4->data;
 
 								if (desc && g_strcmp0(desc->path, att_path) == 0) {
-									/* TODO: Call value changed callback registerd for the descriptor */
-									return NULL;
+									if (desc->read_requested_cb) {
+										*user_data = desc->server_value_changed_user_data;
+										return desc->server_value_changed_cb;
+									} else
+										return NULL;
 								}
 							}
 						}
