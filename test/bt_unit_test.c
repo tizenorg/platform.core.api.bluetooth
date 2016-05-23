@@ -1495,6 +1495,7 @@ void __bt_gatt_server_read_value_requested_cb(
 	int offset, void *user_data)
 {
 	char char_value_1[3] = {0, 1, 2};
+	int resp_status = BT_ERROR_NONE;
 
 	TC_PRT("__bt_gatt_server_read_value_requested_cb");
 	TC_PRT("remote_address %s", remote_address);
@@ -1504,7 +1505,7 @@ void __bt_gatt_server_read_value_requested_cb(
 	TC_PRT("Offset %d", offset);
 	/* Get the attribute new values here */
 	bt_gatt_server_send_response(request_id, offset,
-		char_value_1, 3 - offset);
+		resp_status, char_value_1, 3 - offset);
 }
 
 void __bt_gatt_server_notification_state_change_cb(bool notify,
@@ -2342,15 +2343,19 @@ void __bt_gatt_server_notification_sent_cb(int result,
 }
 
 void __bt_gatt_server_value_changed_cb(char *remote_address,
-	bt_gatt_server_h server, bt_gatt_h gatt_handle,
-	int offset, char *value, int len, void *user_data)
+				int request_id, bt_gatt_server_h server,
+				bt_gatt_h gatt_handle, int offset,
+				char *value, int len, void *user_data)
 {
-	int i;
+	int i, resp_status =  BT_ERROR_NONE;
 	TC_PRT("remote_address : %s", remote_address);
 	TC_PRT("offset : %d", offset);
 	TC_PRT("len [%d] : ", len);
 	for (i = 0; i < len; i++)
 		printf("%d ", value[i]);
+
+	bt_gatt_server_send_response(request_id, offset,
+		resp_status, NULL, 0);
 
 	printf("\n");
 }

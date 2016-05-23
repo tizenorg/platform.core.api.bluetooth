@@ -1689,11 +1689,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 			return;
 		}
 
-		bluetooth_gatt_send_response(value_change->req_id,
-							BLUETOOTH_GATT_ATT_REQUEST_TYPE_WRITE,
-							BLUETOOTH_ERROR_NONE, 0, NULL, 0);
-
-		cb(value_change->address, value_change->service_handle,
+		cb(value_change->address, value_change->req_id, value_change->service_handle,
 					value_change->att_handle, value_change->offset,
 					(char *)value_change->att_value, value_change->val_len, user_data);
 		break;
@@ -1774,8 +1770,8 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 						chr->value_length = char_val->val_len;
 						/* TODO : Fix build error temporary */
 						if (chr->server_value_changed_cb)
-							chr->server_value_changed_cb(NULL, (bt_gatt_server_h)serv, (bt_gatt_h)chr,
-											0, (char *)char_val->char_value, char_val->val_len,
+							chr->server_value_changed_cb(NULL, 0, (bt_gatt_server_h)serv, (bt_gatt_h)chr,
+											0, (char*)char_val->char_value, char_val->val_len,
 											chr->server_value_changed_user_data);
 					}
 				}
