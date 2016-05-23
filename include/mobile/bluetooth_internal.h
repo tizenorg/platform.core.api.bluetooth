@@ -2135,10 +2135,10 @@ int bt_gatt_server_set_notification_state_change_cb(bt_gatt_h gatt_handle,
  * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
  * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
  *
- * @see bt_gatt_server_value_changed_cb()
+ * @see bt_gatt_server_write_value_requested_cb()
  */
-int bt_gatt_server_set_value_changed_cb(bt_gatt_h gatt_handle,
-				bt_gatt_server_value_changed_cb callback,
+int bt_gatt_server_set_write_value_requested_cb(bt_gatt_h gatt_handle,
+				bt_gatt_server_write_value_requested_cb callback,
 				void *user_data);
 
 /**
@@ -2222,8 +2222,10 @@ int bt_gatt_server_start(void);
  *
  * @remarks Until this function is called, a read request is not finished.
  *
- * @param[in] request_id The identification of a read request
+ * @param[in] request_id The identification of a read/write request
+ * @param[in] request_type The request type for read/write.
  * @param[in] offset The offset from where a value is read
+ * @param[in] resp_status The applciation error if any occured or BT_ERROR_NONE for successful.
  * @param[in] value The value to be sent. It will be sent from @a offset. If it is NULL, a requested GATT handle's value will be sent from @a offset.
  * @param[in] value_length Value Length
  * @return  0 on success, otherwise a negative error value
@@ -2233,8 +2235,8 @@ int bt_gatt_server_start(void);
  *
  * @see bt_gatt_server_read_value_requested_cb()
  */
-int bt_gatt_server_send_response(int request_id,
-			int offset, char *value, int value_length);
+int bt_gatt_server_send_response(int request_id, int request_type,
+			int offset, int resp_status, char *value, int value_length);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE

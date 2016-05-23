@@ -1495,6 +1495,7 @@ void __bt_gatt_server_read_value_requested_cb(
 	int offset, void *user_data)
 {
 	char char_value_1[3] = {0, 1, 2};
+	int resp_status = BT_ERROR_NONE;
 
 	TC_PRT("__bt_gatt_server_read_value_requested_cb");
 	TC_PRT("remote_address %s", remote_address);
@@ -1503,8 +1504,9 @@ void __bt_gatt_server_read_value_requested_cb(
 	TC_PRT("gatt_handle %s", (char *)gatt_handle);
 	TC_PRT("Offset %d", offset);
 	/* Get the attribute new values here */
-	bt_gatt_server_send_response(request_id, offset,
-		char_value_1, 3 - offset);
+	bt_gatt_server_send_response(request_id,
+		BLUETOOTH_GATT_ATT_REQUEST_TYPE_READ, offset,
+		resp_status, char_value_1, 3 - offset);
 }
 
 void __bt_gatt_server_notification_state_change_cb(bool notify,
@@ -2341,16 +2343,21 @@ void __bt_gatt_server_notification_sent_cb(int result,
 	TC_PRT("characteristic : %p", characteristic);
 }
 
-void __bt_gatt_server_value_changed_cb(char *remote_address,
-	bt_gatt_server_h server, bt_gatt_h gatt_handle,
-	int offset, char *value, int len, void *user_data)
+void __bt_gatt_server_write_value_requested_cb(char *remote_address,
+				int request_id, bt_gatt_server_h server,
+				bt_gatt_h gatt_handle, int offset,
+				char *value, int len, void *user_data)
 {
-	int i;
+	int i, resp_status =  BT_ERROR_NONE;
 	TC_PRT("remote_address : %s", remote_address);
 	TC_PRT("offset : %d", offset);
 	TC_PRT("len [%d] : ", len);
 	for (i = 0; i < len; i++)
 		printf("%d ", value[i]);
+
+	bt_gatt_server_send_response(request_id,
+	BLUETOOTH_GATT_ATT_REQUEST_TYPE_WRITE, offset,
+		resp_status, NULL, 0);
 
 	printf("\n");
 }
@@ -6141,10 +6148,10 @@ int test_input_callback(void *data)
 					value_length, &characteristic);
 			TC_PRT("bt_gatt_characteristic_create : %s\n", __bt_get_error_message(ret));
 
-			ret = bt_gatt_server_set_value_changed_cb(characteristic,
-				__bt_gatt_server_value_changed_cb,
+			ret = bt_gatt_server_set_write_value_requested_cb(characteristic,
+				__bt_gatt_server_write_value_requested_cb,
 				NULL);
-			TC_PRT("bt_gatt_server_set_value_changed_cb : %s\n", __bt_get_error_message(ret));
+			TC_PRT("bt_gatt_server_set_write_value_requested_cb : %s\n", __bt_get_error_message(ret));
 
 			bt_gatt_server_set_read_value_requested_cb(characteristic,
 				__bt_gatt_server_read_value_requested_cb, NULL);
@@ -6200,8 +6207,8 @@ int test_input_callback(void *data)
 			bt_gatt_server_set_read_value_requested_cb(descriptor,
 				__bt_gatt_server_read_value_requested_cb, NULL);
 
-			ret = bt_gatt_server_set_value_changed_cb(descriptor,
-				__bt_gatt_server_value_changed_cb,
+			ret = bt_gatt_server_set_write_value_requested_cb(descriptor,
+				__bt_gatt_server_write_value_requested_cb,
 				NULL);
 
 			ret = bt_gatt_characteristic_add_descriptor(characteristic, descriptor);

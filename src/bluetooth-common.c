@@ -536,7 +536,7 @@ static bt_gatt_server_read_value_requested_cb __bt_gatt_attribute_get_read_cb(
 	return NULL;
 }
 
-static bt_gatt_server_value_changed_cb __bt_gatt_attribute_get_value_change_cb(
+static bt_gatt_server_write_value_requested_cb __bt_gatt_attribute_get_value_change_cb(
 					bt_gatt_h service, bt_gatt_h attribute, void **user_data)
 {
 	gchar *svc_path = (gchar *)service;
@@ -561,9 +561,9 @@ static bt_gatt_server_value_changed_cb __bt_gatt_attribute_get_value_change_cb(
 
 					if (chr) {
 						if (g_strcmp0(chr->path, att_path) == 0) {
-							if (chr->server_value_changed_cb) {
-								*user_data = chr->server_value_changed_user_data;
-								return chr->server_value_changed_cb;
+							if (chr->write_value_requested_cb) {
+								*user_data = chr->write_value_requested_user_data;
+								return chr->write_value_requested_cb;
 							} else
 								return NULL;
 						} else {
@@ -571,9 +571,9 @@ static bt_gatt_server_value_changed_cb __bt_gatt_attribute_get_value_change_cb(
 								bt_gatt_descriptor_s *desc = l4->data;
 
 								if (desc && g_strcmp0(desc->path, att_path) == 0) {
-									if (desc->read_requested_cb) {
-										*user_data = desc->server_value_changed_user_data;
-										return desc->server_value_changed_cb;
+									if (desc->write_value_requested_cb) {
+										*user_data = desc->write_value_requested_user_data;
+										return desc->write_value_requested_cb;
 									} else
 										return NULL;
 								}
@@ -1676,7 +1676,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 	}
 	case BLUETOOTH_EVENT_GATT_SERVER_VALUE_CHANGED: {
 		bt_gatt_value_change_t *value_change = param->param_data;
-		bt_gatt_server_value_changed_cb cb;
+		bt_gatt_server_write_value_requested_cb cb;
 		void *user_data = NULL;
 		cb = __bt_gatt_attribute_get_value_change_cb(value_change->service_handle,
 						value_change->att_handle, &user_data);
@@ -1689,11 +1689,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 			return;
 		}
 
-		bluetooth_gatt_send_response(value_change->req_id,
-							BLUETOOTH_GATT_ATT_REQUEST_TYPE_WRITE,
-							BLUETOOTH_ERROR_NONE, 0, NULL, 0);
-
-		cb(value_change->address, value_change->service_handle,
+		cb(value_change->address, value_change->req_id, value_change->service_handle,
 					value_change->att_handle, value_change->offset,
 					(char *)value_change->att_value, value_change->val_len, user_data);
 		break;
@@ -1773,10 +1769,10 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 							chr->value = g_memdup(char_val->char_value, char_val->val_len);
 						chr->value_length = char_val->val_len;
 						/* TODO : Fix build error temporary */
-						if (chr->server_value_changed_cb)
-							chr->server_value_changed_cb(NULL, (bt_gatt_server_h)serv, (bt_gatt_h)chr,
-											0, (char *)char_val->char_value, char_val->val_len,
-											chr->server_value_changed_user_data);
+						if (chr->write_value_requested_cb)
+							chr->write_value_requested_cb(NULL, 0, (bt_gatt_server_h)serv, (bt_gatt_h)chr,
+											0, (char*)char_val->char_value, char_val->val_len,
+											chr->write_value_requested_user_data);
 					}
 				}
 			}

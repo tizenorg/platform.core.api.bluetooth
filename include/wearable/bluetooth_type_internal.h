@@ -649,17 +649,18 @@ typedef void *bt_gatt_server_h;
  * @param[in] remote_address The address of the remote device which requests a change
  * @param[in] server The GATT server handle
  * @param[in] gatt_handle The characteristic or descriptor's GATT handle which has an old value
+ * @param[in] request_id The identification of this request. It will be used to send a reponse.
  * @param[in] offset The requested offset from where the @a gatt_handle value will be updated
  * @param[in] value The new value
  * @param[in] len The length of @a value
  * @param[in] user_data The user data passed from the registration function
  *
- * @see bt_gatt_server_set_value_changed_cb()
+ * @see bt_gatt_server_set_write_value_requested_cb()
  */
-typedef void (*bt_gatt_server_value_changed_cb) (char *remote_address,
-				bt_gatt_server_h server, bt_gatt_h gatt_handle,
-				int offset, char *value, int len,
-				void *user_data);
+typedef void (*bt_gatt_server_write_value_requested_cb) (char *remote_address,
+				int request_id, bt_gatt_server_h server,
+				bt_gatt_h gatt_handle, int offset,
+				char *value, int len, void *user_data);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
