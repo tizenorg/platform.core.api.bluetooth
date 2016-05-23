@@ -6197,6 +6197,13 @@ int test_input_callback(void *data)
 					desc_value, value_length, &descriptor);
 			TC_PRT("bt_gatt_descriptor_create : %s\n", __bt_get_error_message(ret));
 
+			bt_gatt_server_set_read_value_requested_cb(descriptor,
+				__bt_gatt_server_read_value_requested_cb, NULL);
+
+			ret = bt_gatt_server_set_value_changed_cb(descriptor,
+				__bt_gatt_server_value_changed_cb,
+				NULL);
+
 			ret = bt_gatt_characteristic_add_descriptor(characteristic, descriptor);
 			TC_PRT("bt_gatt_characteristic_add_descriptor : %s\n", __bt_get_error_message(ret));
 
