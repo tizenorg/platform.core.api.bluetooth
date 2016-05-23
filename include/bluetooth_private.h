@@ -316,6 +316,12 @@ typedef struct {
 
 	int permissions;
 
+	bt_gatt_server_value_changed_cb server_value_changed_cb;
+	void *server_value_changed_user_data;
+
+	bt_gatt_server_read_value_requested_cb read_requested_cb;
+	void *read_requested_user_data;
+
 	int value_length;
 	char *value;
 } bt_gatt_descriptor_s;

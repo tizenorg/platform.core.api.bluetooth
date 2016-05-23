@@ -2110,15 +2110,25 @@ int bt_gatt_server_set_read_value_requested_cb(bt_gatt_h gatt_handle,
 				bt_gatt_server_read_value_requested_cb callback,
 				void *user_data)
 {
+	bt_gatt_common_s *handle = (bt_gatt_common_s *)gatt_handle;
 	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)gatt_handle;
+	bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s*)gatt_handle;
 
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_GATT_SERVER_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(gatt_handle);
 	BT_CHECK_INPUT_PARAMETER(callback);
 
-	chr->read_requested_cb = callback;
-	chr->read_requested_user_data = user_data;
+	if (handle->type == BT_GATT_TYPE_CHARACTERISTIC) {
+		chr->read_requested_cb = callback;
+		chr->read_requested_user_data = user_data;
+	} else if (handle->type == BT_GATT_TYPE_DESCRIPTOR) {
+		desc->read_requested_cb = callback;
+		desc->read_requested_user_data = user_data;
+	} else {
+		BT_ERR("Type is invalid(type:%d)", handle->type);
+		return BT_ERROR_INVALID_PARAMETER;
+	}
 
 	_bt_set_cb(BT_EVENT_GATT_SERVER_READ_REQUESTED, callback, user_data);
 
@@ -2363,20 +2373,29 @@ int bt_gatt_server_notify(bt_gatt_h characteristic, bool need_confirm,
 	return ret;
 }
 
-int bt_gatt_server_set_value_changed_cb(bt_gatt_h characteristic,
+int bt_gatt_server_set_value_changed_cb(bt_gatt_h gatt_handle,
 		bt_gatt_server_value_changed_cb callback,
 		void *user_data)
 {
-	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)characteristic;
+	bt_gatt_common_s *handle = (bt_gatt_common_s *)gatt_handle;
+	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)gatt_handle;
+	bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s*)gatt_handle;
 
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_GATT_SERVER_INIT_STATUS();
-
-	BT_CHECK_INPUT_PARAMETER(characteristic);
+	BT_CHECK_INPUT_PARAMETER(gatt_handle);
 	BT_CHECK_INPUT_PARAMETER(callback);
 
-	chr->server_value_changed_cb = callback;
-	chr->server_value_changed_user_data = user_data;
+	if (handle->type == BT_GATT_TYPE_CHARACTERISTIC) {
+		chr->server_value_changed_cb = callback;
+		chr->server_value_changed_user_data = user_data;
+	} else if (handle->type == BT_GATT_TYPE_DESCRIPTOR) {
+		desc->server_value_changed_cb = callback;
+		desc->server_value_changed_user_data = user_data;
+	} else {
+		BT_ERR("Type is invalid(type:%d)", handle->type);
+		return BT_ERROR_INVALID_PARAMETER;
+	}
 
 	return BT_ERROR_NONE;
 }
