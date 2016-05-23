@@ -2224,6 +2224,7 @@ int bt_gatt_server_start(void);
  *
  * @param[in] request_id The identification of a read request
  * @param[in] offset The offset from where a value is read
+ * @param[in] resp_status The applciation error if any occured or BT_ERROR_NONE for successful.
  * @param[in] value The value to be sent. It will be sent from @a offset. If it is NULL, a requested GATT handle's value will be sent from @a offset.
  * @param[in] value_length Value Length
  * @return  0 on success, otherwise a negative error value
@@ -2234,7 +2235,7 @@ int bt_gatt_server_start(void);
  * @see bt_gatt_server_read_value_requested_cb()
  */
 int bt_gatt_server_send_response(int request_id,
-			int offset, char *value, int value_length);
+			int offset, int resp_status, char *value, int value_length);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE

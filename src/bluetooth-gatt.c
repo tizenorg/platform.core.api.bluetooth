@@ -2307,7 +2307,7 @@ int bt_gatt_server_start(void)
 }
 
 int bt_gatt_server_send_response(int request_id,
-		int offset, char *value, int value_length)
+		int offset, int resp_status, char *value, int value_length)
 {
 	int ret = BT_ERROR_NONE;
 	BT_CHECK_INIT_STATUS();
@@ -2320,8 +2320,7 @@ int bt_gatt_server_send_response(int request_id,
 	 * once the new parameters available to CAPI API, the below
 	 * code be made generic for both read and write */
 	ret = _bt_get_error_code(bluetooth_gatt_send_response(request_id,
-					BLUETOOTH_GATT_ATT_REQUEST_TYPE_READ,
-					BT_ERROR_NONE,
+					BLUETOOTH_GATT_ATT_REQUEST_TYPE_READ, resp_status,
 					offset, value, value_length));
 
 	if (ret != BT_ERROR_NONE)
