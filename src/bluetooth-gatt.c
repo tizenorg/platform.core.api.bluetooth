@@ -2306,22 +2306,17 @@ int bt_gatt_server_start(void)
 	return ret;
 }
 
-int bt_gatt_server_send_response(int request_id,
-		int offset, char *value, int value_length)
+int bt_gatt_server_send_response(int request_id, int request_type,
+		int offset, int resp_status, char *value, int value_length)
 {
 	int ret = BT_ERROR_NONE;
 	BT_CHECK_INIT_STATUS();
-	BT_CHECK_INPUT_PARAMETER(value);
 
-	if (value_length <= 0)
+	if (value_length < 0)
 		return BT_ERROR_INVALID_PARAMETER;
 
-	/* By Default the response is sent for read requests,
-	 * once the new parameters available to CAPI API, the below
-	 * code be made generic for both read and write */
 	ret = _bt_get_error_code(bluetooth_gatt_send_response(request_id,
-					BLUETOOTH_GATT_ATT_REQUEST_TYPE_READ,
-					BT_ERROR_NONE,
+					request_type, resp_status,
 					offset, value, value_length));
 
 	if (ret != BT_ERROR_NONE)
@@ -2373,8 +2368,8 @@ int bt_gatt_server_notify(bt_gatt_h characteristic, bool need_confirm,
 	return ret;
 }
 
-int bt_gatt_server_set_value_changed_cb(bt_gatt_h gatt_handle,
-		bt_gatt_server_value_changed_cb callback,
+int bt_gatt_server_set_write_value_requested_cb(bt_gatt_h gatt_handle,
+		bt_gatt_server_write_value_requested_cb callback,
 		void *user_data)
 {
 	bt_gatt_common_s *handle = (bt_gatt_common_s *)gatt_handle;
@@ -2387,11 +2382,11 @@ int bt_gatt_server_set_value_changed_cb(bt_gatt_h gatt_handle,
 	BT_CHECK_INPUT_PARAMETER(callback);
 
 	if (handle->type == BT_GATT_TYPE_CHARACTERISTIC) {
-		chr->server_value_changed_cb = callback;
-		chr->server_value_changed_user_data = user_data;
+		chr->write_value_requested_cb = callback;
+		chr->write_value_requested_user_data = user_data;
 	} else if (handle->type == BT_GATT_TYPE_DESCRIPTOR) {
-		desc->server_value_changed_cb = callback;
-		desc->server_value_changed_user_data = user_data;
+		desc->write_value_requested_cb = callback;
+		desc->write_value_requested_user_data = user_data;
 	} else {
 		BT_ERR("Type is invalid(type:%d)", handle->type);
 		return BT_ERROR_INVALID_PARAMETER;
