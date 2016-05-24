@@ -52,6 +52,7 @@ typedef enum {
 	BT_ERROR_PERMISSION_DENIED = TIZEN_ERROR_PERMISSION_DENIED, /**< Permission denied */
 	BT_ERROR_QUOTA_EXCEEDED = TIZEN_ERROR_QUOTA_EXCEEDED, /**< Quota exceeded */
 	BT_ERROR_NO_DATA = TIZEN_ERROR_NO_DATA, /**< No data available */
+	BT_ERROR_DEVICE_POLICY_RESTRICTION = TIZEN_ERROR_DEVICE_POLICY_RESTRICTION, /**< Device policy restriction (Since 3.0) */
 	BT_ERROR_NOT_INITIALIZED = TIZEN_ERROR_BLUETOOTH|0x0101, /**< Local adapter not initialized */
 	BT_ERROR_NOT_ENABLED = TIZEN_ERROR_BLUETOOTH|0x0102, /**< Local adapter not enabled */
 	BT_ERROR_ALREADY_DONE = TIZEN_ERROR_BLUETOOTH|0x0103, /**< Operation already done  */
