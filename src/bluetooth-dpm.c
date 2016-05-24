@@ -262,7 +262,7 @@ static int __bt_get_bt_dpm_device_list_info_s(bt_dpm_device_list_s **device_info
 
 	BT_CHECK_INPUT_PARAMETER(source_info);
 
-	*device_info = (bt_dpm_device_list_s *)malloc(sizeof(device_info));
+	*device_info = (bt_dpm_device_list_s *)malloc(sizeof(bt_dpm_device_list_s));
 	if (*device_info == NULL)
 		return BT_ERROR_OUT_OF_MEMORY;
 
@@ -321,7 +321,7 @@ static int __bt_get_bt_dpm_uuid_list_info_s(bt_dpm_uuids_list_s **uuid_list, bt_
 
 	BT_CHECK_INPUT_PARAMETER(source_info);
 
-	*uuid_list = (bt_dpm_uuids_list_s *)malloc(sizeof(uuid_list));
+	*uuid_list = (bt_dpm_uuids_list_s *)malloc(sizeof(bt_dpm_uuids_list_s));
 	if (*uuid_list == NULL)
 		return BT_ERROR_OUT_OF_MEMORY;
 
