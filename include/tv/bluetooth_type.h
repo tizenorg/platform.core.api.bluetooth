@@ -1686,12 +1686,12 @@ typedef enum {
 	BT_HID_HEADER_SET_PROTOCOL,
 	BT_HID_HEADER_DATA,
 	BT_HID_HEADER_UNKNOWN
-} bluetooth_hid_header_type_t;
+} bt_hid_header_type_t;
 
 typedef enum {
 	BT_HID_PARAM_DATA_RTYPE_INPUT,
 	BT_HID_PARAM_DATA_RTYPE_OUTPUT
-} bluetooth_hid_param_type_t;
+} bt_hid_param_type_t;
 
 typedef enum {
 	BT_HID_HANDSHAKE_SUCCESSFUL = 0x00, /**< Handshake error code none */
@@ -1705,8 +1705,8 @@ typedef enum {
 
 typedef struct {
 	const char *address;
-	bluetooth_hid_header_type_t type;
-	bluetooth_hid_param_type_t param;
+	bt_hid_header_type_t type;
+	bt_hid_param_type_t param;
 	int data_size;  /**< The length of the received data */
 	const char *data;     /**< The received data */
 } bt_hid_device_received_data_s;
