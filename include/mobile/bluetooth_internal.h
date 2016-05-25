@@ -2758,7 +2758,7 @@ int bt_hid_device_unset_data_received_cb(void);
  * @see bt_hid_device_connection_state_changed_cb()
  */
 int bt_hid_device_reply_to_report(const char *remote_address,
-		bluetooth_hid_header_type_t htype, bluetooth_hid_param_type_t ptype,
+		bt_hid_header_type_t htype, bt_hid_param_type_t ptype,
 		const char *data, unsigned int data_len);
 
 /**
