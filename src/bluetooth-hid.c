@@ -236,6 +236,23 @@ int bt_hid_device_send_mouse_event(const char *remote_address,
 	BT_CHECK_INPUT_PARAMETER(remote_address);
 	BT_CHECK_INPUT_PARAMETER(mouse_data);
 
+	if (mouse->button != BT_HID_MOUSE_BUTTON_LEFT ||
+		mouse->button != BT_HID_MOUSE_BUTTON_RIGHT ||
+		mouse->button != BT_HID_MOUSE_BUTTON_MIDDLE) {
+		return BT_ERROR_INVALID_PARAMETER;
+	}
+
+	if (mouse_data->axis_x > 127 || mouse_data->axis_x < -128) {
+		BT_ERR("Exceed range of axis_x");
+		return -1;
+	} else if (mouse_data->axis_y > 127 || mouse_data->axis_y < -128) {
+		BT_ERR("Exceed range of axis_y");
+		return -1;
+	} else if (mouse_data->padding > 127 || mouse_data->padding < -128) {
+		BT_ERR("Exceed range of padding");
+		return -1;
+	}
+
 	ret = bluetooth_hid_device_send_mouse_event(remote_address,
 			*(hid_send_mouse_event_t *)mouse_data);
 	if (ret <= 0) {
@@ -290,8 +307,8 @@ int bt_hid_device_send_key_event(const char *remote_address,
 }
 
 int bt_hid_device_reply_to_report(const char *remote_address,
-		bluetooth_hid_header_type_t htype,
-		bluetooth_hid_param_type_t ptype,
+		bt_hid_header_type_e header_type,
+		bt_hid_param_type_e param_type,
 		const char *data, unsigned int data_len)
 {
 	int ret;
@@ -299,8 +316,8 @@ int bt_hid_device_reply_to_report(const char *remote_address,
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(remote_address);
 
-	ret = bluetooth_hid_device_reply_to_report(remote_address, htype,
-				ptype, data, data_len);
+	ret = bluetooth_hid_device_reply_to_report(remote_address, header_type,
+				param_type, data, data_len);
 	if (ret <= 0) {
 		if (ret == -1) {
 			/* write fail case */
