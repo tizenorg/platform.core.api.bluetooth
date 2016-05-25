@@ -1653,10 +1653,10 @@ static void __bt_hid_device_data_received_cb(const bt_hid_device_received_data_s
 		return;
 	}
 	TC_PRT("Address: %s", data->address);
-	TC_PRT("Type: %d", data->type);
-	TC_PRT("Param: %d", data->param);
+	TC_PRT("Type: %d", data->header_type);
+	TC_PRT("Param_type: %d", data->param_type);
 
-	switch (data->type) {
+	switch (data->header_type) {
 	case BT_HID_HEADER_HANDSHAKE:
 		TC_PRT("HANDSHAKE data");
 		break;
@@ -1672,7 +1672,7 @@ static void __bt_hid_device_data_received_cb(const bt_hid_device_received_data_s
 		/* Will send character 'a' */
 		char	pressedkey[8]	 = { 4, 0, 0, 0,  0, 0, 0, 0 };
 		memcpy(send_data.key, pressedkey, 8);
-		send_data.modify = 0;
+		send_data.modifier = 0;
 		if (data->data[1] == 0x02) {
 		ret = bt_hid_device_reply_to_report(remote_addr,
 				BT_HID_HEADER_GET_REPORT,
@@ -1719,7 +1719,7 @@ static void __bt_hid_device_data_received_cb(const bt_hid_device_received_data_s
 		break;
 	}
 
-	switch (data->param) {
+	switch (data->param_type) {
 	case BT_HID_PARAM_DATA_RTYPE_INPUT:
 		TC_PRT("Input Report");
 		break;
@@ -7264,7 +7264,7 @@ int test_input_callback(void *data)
 			int i;
 
 			send_data.button = 1;
-			send_data.axis_z  = 0x00;
+			send_data.padding  = BT_HID_MOUSE_BUTTON_LEFT;
 
 			send_data.axis_x = 10;
 			send_data.axis_y = 0;
@@ -7339,7 +7339,7 @@ int test_input_callback(void *data)
 			char	pressedkey[8]	 = { 4, 0, 0, 0,  0, 0, 0, 0 };
 			char	pressedkey1[8]	 = { 0, 0, 0, 0,  0, 0, 0, 0 };
 			memcpy(send_data.key, pressedkey, 8);
-			send_data.modify = 0;
+			send_data.modifier = 0;
 			ret = bt_hid_device_send_key_event(
 					remote_addr, &send_data);
 			TC_PRT("returns %d\n", ret);
