@@ -2211,7 +2211,7 @@ int bt_opp_client_push_files(const char *remote_address, bt_opp_client_push_resp
 int bt_opp_client_cancel_push(void);
 
 /**
- * @ingroup CAPI_NETWORK_BLUETOOTH_HID_MODULE
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_HOST_MODULE
  * @brief Initializes the Bluetooth HID(Human Interface Device) Host.
  * @since_tizen 2.3.1
  * @remarks This function must be called before Bluetooth HID Host starts. \n
@@ -2233,7 +2233,7 @@ int bt_opp_client_cancel_push(void);
 int bt_hid_host_initialize(bt_hid_host_connection_state_changed_cb connection_cb, void *user_data);
 
 /**
- * @ingroup CAPI_NETWORK_BLUETOOTH_HID_MODULE
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_HOST_MODULE
  * @brief Deinitializes the Bluetooth HID(Human Interface Device) Host.
  * @since_tizen 2.3.1
  * @return 0 on success, otherwise a negative error value.
@@ -2248,7 +2248,7 @@ int bt_hid_host_initialize(bt_hid_host_connection_state_changed_cb connection_cb
 int bt_hid_host_deinitialize(void);
 
 /**
- * @ingroup CAPI_NETWORK_BLUETOOTH_HID_MODULE
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_HOST_MODULE
  * @brief Connects the remote device with the HID(Human Interface Device) service, asynchronously.
  * @since_tizen 2.3.1
  * @privlevel public
@@ -2272,7 +2272,7 @@ int bt_hid_host_deinitialize(void);
 int bt_hid_host_connect(const char *remote_address);
 
 /**
- * @ingroup CAPI_NETWORK_BLUETOOTH_HID_MODULE
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_HOST_MODULE
  * @brief Disconnects the remote device with the HID(Human Interface Device) service, asynchronously.
  * @since_tizen 2.3.1
  * @privlevel public
@@ -2294,6 +2294,213 @@ int bt_hid_host_connect(const char *remote_address);
  * @see bt_hid_host_connection_state_changed_cb()
  */
 int bt_hid_host_disconnect(const char *remote_address);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE
+ * @brief Activates the Bluetooth HID Device role.
+ * @since_tizen 3.0
+ * @privlevel pubilc
+ * @privilege %http://tizen.org/privilege/bluetooth
+ *
+ * @remarks This function must be called to register HID UUID.
+ * Only then a remote device is able to identify this one as a HID device.
+ *
+ * @param[in] callback  The callback called when the connection state is changed
+ * @param[in] user_data The user data to be passed to the callback function
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_NOW_IN_PROGRESS  Already activated
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED   Not supported
+ *
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ * @see bt_initialize()
+ * @see bt_hid_device_deactivate()
+ */
+int bt_hid_device_activate(bt_hid_device_connection_state_changed_cb callback, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE
+ * @brief Deactivates the Bluetooth HID Device role.
+ * @since_tizen 3.0
+ * @privlevel pubilc
+ * @privilege %http://tizen.org/privilege/bluetooth
+ *
+ * @remarks This function must be called to deregister the HID UUID.
+ *
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_NOT_IN_PROGRESS  Not activated
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED   Not supported
+ *
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ * @see bt_initialize()
+ * @see bt_hid_device_activate()
+ */
+int bt_hid_device_deactivate(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE
+ * @brief Initiates the HID device connection with the Device role, asynchronously.
+ * @since_tizen 3.0
+ * @privlevel pubilc
+ * @privilege %http://tizen.org/privilege/bluetooth
+ *
+ * @remarks This function must be called to Initiate the HID device role connection.
+ *
+ * @param[in] remote_address The remote device's address.
+
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_NOT_IN_PROGRESS  Not activated
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_ALREADY_DONE   Already connected
+ * @retval #BT_ERROR_NOT_SUPPORTED   Not supported
+ *
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ * @pre The local device must be bonded with the remote device by bt_device_create_bond().
+ * @see bt_initialize()
+ * @see bt_hid_device_activate()
+ */
+int bt_hid_device_connect(const char *remote_address);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE
+ * @brief Disconnects from the HID Host device, asynchronously.
+ * @since_tizen 3.0
+ * @privlevel pubilc
+ * @privilege %http://tizen.org/privilege/bluetooth
+ *
+ * @param[in] remote_address The remote device's address.
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_REMOTE_DEVICE_NOT_CONNECTED  Remote device is not connected
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED   Not supported
+ *
+ * @pre The Bluetooth service must be initialized with bt_initialize().
+ * @see bt_initialize()
+ * @see bt_hid_device_connection_state_changed_cb()
+ */
+int bt_hid_device_disconnect(const char *remote_address);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE
+ * @brief Sends the mouse event data to the remote device.
+ * @since_tizen 3.0
+ * @privlevel pubilc
+ * @privilege %http://tizen.org/privilege/bluetooth
+ *
+ * @param[in] remote_address The remote device's address.
+ * @param[in] mouse_data The mouse data to be passed to the remote device.
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED   Not supported
+ *
+ * @pre The HID connection must be established.
+ * @see bt_hid_device_connection_state_changed_cb()
+ */
+int bt_hid_device_send_mouse_event(const char *remote_address,
+                  const bt_hid_mouse_data_s *mouse_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE
+ * @brief Sends the keyboard event data to the remote device.
+ * @since_tizen 3.0
+ * @privlevel pubilc
+ * @privilege %http://tizen.org/privilege/bluetooth
+ *
+ * @param[in] remote_address The remote device's address.
+ * @param[in] key_data The key data to be passed to the remote device
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED   Not supported
+ *
+ * @pre The HID connection must be established.
+ * @see bt_hid_device_connection_state_changed_cb()
+ */
+int bt_hid_device_send_key_event(const char *remote_address,
+                  const bt_hid_key_data_s *key_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE
+ * @brief Sets the callback called when the device receives data from the HID Host.
+ * @since_tizen 3.0
+ *
+ * @param[in] callback The callback function to be set when data is received.
+ * @param[in] user_data The user data to be passed to the callback.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED   Not supported
+ *
+ * @see bt_hid_device_connection_state_changed_cb()
+ */
+int bt_hid_device_set_data_received_cb(bt_hid_device_data_received_cb callback, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE
+ * @brief Unsets the data received callback.
+ * @since_tizen 3.0
+ *
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_SUPPORTED   Not supported
+ *
+ * @see bt_hid_device_connection_state_changed_cb()
+ */
+int bt_hid_device_unset_data_received_cb(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE
+ * @brief Responds to reports from the HID Host.
+ * @since_tizen 3.0
+ * @privlevel pubilc
+ * @privilege %http://tizen.org/privilege/bluetooth
+ *
+ * @param[in] remote_address The remote device's address.
+ * @param[in] header_type The response header type
+ * @param[in] param_type The response parameter type
+ * @param[in] data The response data
+ * @param[in] data_len The length of the response data
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_NOT_ENABLED  Not enabled
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED   Not supported
+ *
+ * @pre The HID connection must be established.
+ * @see bt_hid_device_connection_state_changed_cb()
+ */
+int bt_hid_device_reply_to_report(const char *remote_address,
+				bt_hid_header_type_e header_type,
+				bt_hid_param_type_e param_type,
+		            const char *data, unsigned int data_len);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_MODULE
