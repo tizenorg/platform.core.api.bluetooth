@@ -2619,7 +2619,7 @@ int bt_hid_device_deactivate(void);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_HID_MODULE
- * @brief Initiates HID device Connection with device role
+ * @brief Initiates HID device Connection with device role, asynchronously.
  * @since_tizen 2.3.1
  * @privlevel platform
  * @privilege %http://tizen.org/privilege/bluetooth.admin
@@ -2638,6 +2638,7 @@ int bt_hid_device_deactivate(void);
  * @retval #BT_ERROR_ALREADY_DONE   Already connected
  *
  * @pre The Bluetooth service must be initialized with bt_initialize().
+ * @pre The local device must be bonded with the remote device by bt_device_create_bond().
  * @see bt_initialize()
  * @see bt_hid_device_activate()
  */
@@ -2645,7 +2646,7 @@ int bt_hid_device_connect(const char *remote_address);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_HID_MODULE
- * @brief Disconnects the connection with HID Host device.
+ * @brief Disconnects the connection with HID Host device, asynchronously.
  * @since_tizen 2.3.1
  * @privlevel platform
  * @privilege %http://tizen.org/privilege/bluetooth.admin
@@ -2758,7 +2759,7 @@ int bt_hid_device_unset_data_received_cb(void);
  * @see bt_hid_device_connection_state_changed_cb()
  */
 int bt_hid_device_reply_to_report(const char *remote_address,
-		bluetooth_hid_header_type_t htype, bluetooth_hid_param_type_t ptype,
+		bt_hid_header_type_e htype, bt_hid_param_type_e ptype,
 		const char *data, unsigned int data_len);
 
 /**
