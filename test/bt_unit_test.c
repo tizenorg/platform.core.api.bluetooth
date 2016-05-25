@@ -7261,7 +7261,7 @@ int test_input_callback(void *data)
 			int i;
 
 			send_data.button = 1;
-			send_data.axis_z  = 0x00;
+			send_data.padding  = 0x00;
 
 			send_data.axis_x = 10;
 			send_data.axis_y = 0;
