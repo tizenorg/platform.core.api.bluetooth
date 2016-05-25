@@ -290,8 +290,8 @@ int bt_hid_device_send_key_event(const char *remote_address,
 }
 
 int bt_hid_device_reply_to_report(const char *remote_address,
-		bluetooth_hid_header_type_t htype,
-		bluetooth_hid_param_type_t ptype,
+		bt_hid_header_type_e header_type,
+		bt_hid_param_type_e param_type,
 		const char *data, unsigned int data_len)
 {
 	int ret;
@@ -299,8 +299,8 @@ int bt_hid_device_reply_to_report(const char *remote_address,
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(remote_address);
 
-	ret = bluetooth_hid_device_reply_to_report(remote_address, htype,
-				ptype, data, data_len);
+	ret = bluetooth_hid_device_reply_to_report(remote_address, header_type,
+				param_type, data, data_len);
 	if (ret <= 0) {
 		if (ret == -1) {
 			/* write fail case */
