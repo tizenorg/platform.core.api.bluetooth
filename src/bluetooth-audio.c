@@ -240,9 +240,15 @@ int bt_audio_connect(const char *remote_address, bt_audio_profile_type_e type)
 		BT_ERR("HSP NOT SUPPORTED(0x%08x)", BT_ERROR_NOT_SUPPORTED);
 		type = BT_AUDIO_PROFILE_TYPE_A2DP;
 #else
-		BT_CHECK_AUDIO_INIT_STATUS();
-		BT_ERR("HSP and A2DP SUPPORTED");
-		type = BT_AUDIO_PROFILE_TYPE_ALL;
+		if (is_audio_ag_initialized == false) {
+			BT_CHECK_A2DP_INIT_STATUS();
+			BT_ERR("ALL connect flow, but this device is HSP NOT SUPPORTED(0x%08x)", BT_ERROR_NOT_SUPPORTED);
+			type = BT_AUDIO_PROFILE_TYPE_A2DP;
+		} else {
+			BT_CHECK_AUDIO_INIT_STATUS();
+			BT_ERR("HSP and A2DP SUPPORTED");
+			type = BT_AUDIO_PROFILE_TYPE_ALL;
+		}
 #endif
 	}
 
