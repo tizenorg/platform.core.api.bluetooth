@@ -194,8 +194,8 @@ typedef enum {
 	BT_DPM_ENABLE			 = 1,	 /**< DPM Policy status enabled. */
 	BT_DPM_DISABLE	= 0,	 /**< DPM Policy status disabled. */
 
-	BT_DPM_FALSE		 = 0,	 /**< DPM Policy status false. */
-	BT_DPM_TRUE 	 = 1,	 /**< DPM Policy status true. */
+	BT_DPM_FALSE	 = 0,	/**< DPM Policy status false. */
+	BT_DPM_TRUE		= 1,	/**< DPM Policy status true. */
 } bt_dpm_status_e;
 
 /**

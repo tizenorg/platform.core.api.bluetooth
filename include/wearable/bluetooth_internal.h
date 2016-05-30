@@ -3116,10 +3116,10 @@ int bt_hid_device_reply_to_report(const char *remote_address,
  * @privilege %http://tizen.org/privilege/bluetooth.admin
  *
  * @param[in]	value - BT Allow value.
- * 	 	BT_DPM_ERROR	 = -1,	 < bluetooth allowance error
- *	 	BT_DPM_BT_ALLOWED,		 < bluetooth allowance allowed
- *	 	BT_DPM_HANDSFREE_ONLY,  < bluetooth allowance handsfree only
- *	 	BT_DPM_BT_RESTRICTED,  < bluetooth allowance restricted
+ *		BT_DPM_ERROR	 = -1,	 < bluetooth allowance error
+ *		BT_DPM_BT_ALLOWED,		 < bluetooth allowance allowed
+ *		BT_DPM_HANDSFREE_ONLY,  < bluetooth allowance handsfree only
+ *		BT_DPM_BT_RESTRICTED,  < bluetooth allowance restricted
  * @retval #BT_ERROR_NONE  Successful
  * @retval #BT_ERROR_INVALID_PARAMETER  invalid paramter
  * @retval #BT_ERROR_NOT_SUPPORTED  Not suported

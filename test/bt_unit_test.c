@@ -2764,7 +2764,7 @@ void __bt_pbap_vcard_list_cb(int result, const char *remote_address,
 	TC_PRT("Remote Device: %s", remote_address);
 	TC_PRT("vCard Count: %d", count);
 
-	for (i = 0; i <count; i++)
+	for (i = 0; i < count; i++)
 		TC_PRT("vCard[%d]: %s", vcard_info[i].index, vcard_info[i].contact_name);
 
 	TC_PRT("Listing Status: %s",
@@ -3839,22 +3839,22 @@ int test_set_params(int test_id, char *param)
 					return 0;
 				}
 				switch (param_index) {
-					case 0:
-						TC_PRT("Input Profile Type (avail. : \n0.BT_DPM_POLICY_A2DP_PROFILE_STATE, \
-														\n1.BT_DPM_POLICY_AVRCP_PROFILE_STATE, \
-														\n2.BT_DPM_POLICY_BPP_PROFILE_STATE, \
-														\n3.BT_DPM_POLICY_DUN_PROFILE_STATE, \
-														\n4.BT_DPM_POLICY_FTP_PROFILE_STATE, \
-														\n5.BT_DPM_POLICY_HFP_PROFILE_STATE, \
-														\n6.BT_DPM_POLICY_HSP_PROFILE_STATE, \
-														\n7.BT_DPM_POLICY_PBAP_PROFILE_STATE, \
-														\n8.BT_DPM_POLICY_SAP_PROFILE_STATE, \
-														\n9.BT_DPM_POLICY_SPP_PROFILE_STATE, \
-														\n10.BT_DPM_PROFILE_NONE");
-						break;
-					case 1:
-						TC_PRT("Input Value Type (avail. : \n0.BT_DPM_BT_ALLOWED, \n1.BT_DPM_RESTRICTED");
-						break;
+				case 0:
+					TC_PRT("Input Profile Type (avail. : \n0.BT_DPM_POLICY_A2DP_PROFILE_STATE, \
+													\n1.BT_DPM_POLICY_AVRCP_PROFILE_STATE, \
+													\n2.BT_DPM_POLICY_BPP_PROFILE_STATE, \
+													\n3.BT_DPM_POLICY_DUN_PROFILE_STATE, \
+													\n4.BT_DPM_POLICY_FTP_PROFILE_STATE, \
+													\n5.BT_DPM_POLICY_HFP_PROFILE_STATE, \
+													\n6.BT_DPM_POLICY_HSP_PROFILE_STATE, \
+													\n7.BT_DPM_POLICY_PBAP_PROFILE_STATE, \
+													\n8.BT_DPM_POLICY_SAP_PROFILE_STATE, \
+													\n9.BT_DPM_POLICY_SPP_PROFILE_STATE, \
+													\n10.BT_DPM_PROFILE_NONE");
+					break;
+				case 1:
+					TC_PRT("Input Value Type (avail. : \n0.BT_DPM_BT_ALLOWED, \n1.BT_DPM_RESTRICTED");
+					break;
 				}
 				TC_PRT("Input param(%d) type:%s",
 						param_index + 1, param_type);
@@ -7764,7 +7764,7 @@ int test_input_callback(void *data)
 						__bt_get_error_message(ret));
 			if (device_list) {
 				TC_PRT("list len %d", device_list->count);
-				for (i = 0; i<device_list->count; i++) {
+				for (i = 0; i < device_list->count; i++) {
 					str = g_strdup((const gchar*)device_list->devices[i]);
 					TC_PRT("%d: %s\n", i, str);
 					g_free(str);
@@ -7784,7 +7784,7 @@ int test_input_callback(void *data)
 
 			if (device_list) {
 				TC_PRT("list len %d", device_list->count);
-				for (i = 0; i<device_list->count; i++) {
+				for (i = 0; i < device_list->count; i++) {
 					str = g_strdup((const gchar*)device_list->devices[i]);
 					TC_PRT("%d: %s\n", i, str);
 					g_free(str);
@@ -7804,7 +7804,7 @@ int test_input_callback(void *data)
 
 			if (uuids_list) {
 				TC_PRT("list len %d", uuids_list->count);
-				for (i = 0; i<uuids_list->count; i++) {
+				for (i = 0; i < uuids_list->count; i++) {
 					str = g_strdup(uuids_list->uuids[i]);
 					TC_PRT("%d: %s\n", i, str);
 					g_free(str);
@@ -7824,7 +7824,7 @@ int test_input_callback(void *data)
 
 			if (uuids_list) {
 				TC_PRT("list len %d", uuids_list->count);
-				for (i = 0; i<uuids_list->count; i++) {
+				for (i = 0; i < uuids_list->count; i++) {
 					str = g_strdup(uuids_list->uuids[i]);
 					TC_PRT("%d: %s\n", i, str);
 					g_free(str);
