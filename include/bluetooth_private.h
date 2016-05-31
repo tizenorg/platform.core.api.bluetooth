@@ -68,7 +68,7 @@ typedef enum {
 	BT_EVENT_OPP_PUSH_REQUESTED, /**< OPP push is requested */
 	BT_EVENT_OPP_SERVER_TRANSFER_PROGRESS, /**< OPP transfer progress */
 	BT_EVENT_OPP_SERVER_TRANSFER_FINISHED, /**< OPP transfer is completed */
-	BT_EVENT_OPP_CLIENT_PUSH_RESPONSED, /**< OPP client connection is reponsed */
+	BT_EVENT_OPP_CLIENT_PUSH_RESPONSED, /**< OPP client connection is responsed */
 	BT_EVENT_OPP_CLIENT_PUSH_PROGRESS, /**< OPP client push progress */
 	BT_EVENT_OPP_CLIENT_PUSH_FINISHED, /**< OPP client push is finished */
 	BT_EVENT_PAN_CONNECTION_STATE_CHANGED, /**< PAN connection change */
@@ -300,7 +300,7 @@ typedef struct {
 	bt_gatt_server_notification_sent_cb notified_cb;
 	void *notified_user_data;
 
-	bt_gatt_server_notification_state_change_cb notification_changed_cb;
+	bt_gatt_server_characteristic_notification_state_changed_cb notification_changed_cb;
 	void *notification_changed_user_data;
 
 	int value_length;
