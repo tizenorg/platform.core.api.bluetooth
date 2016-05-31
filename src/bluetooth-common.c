@@ -591,7 +591,7 @@ static bt_gatt_server_write_value_requested_cb __bt_gatt_attribute_get_value_cha
 	return NULL;
 }
 
-static bt_gatt_server_notification_state_change_cb __bt_gatt_attribute_get_notification_change_cb(
+static bt_gatt_server_notification_state_changed_cb __bt_gatt_attribute_get_notification_change_cb(
 					bt_gatt_h service, bt_gatt_h attribute, void **user_data)
 {
 	gchar *svc_path = (gchar *)service;
@@ -1700,7 +1700,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 	}
 	case BLUETOOTH_EVENT_GATT_SERVER_NOTIFICATION_STATE_CHANGED: {
 		bt_gatt_char_notify_change_t *value_change = param->param_data;
-		bt_gatt_server_notification_state_change_cb cb;
+		bt_gatt_server_notification_state_changed_cb cb;
 		void *user_data = NULL;
 		cb = __bt_gatt_attribute_get_notification_change_cb(value_change->service_handle,
 						value_change->att_handle, &user_data);
