@@ -2135,8 +2135,8 @@ int bt_gatt_server_set_read_value_requested_cb(bt_gatt_h gatt_handle,
 	return BT_ERROR_NONE;
 }
 
-int bt_gatt_server_set_notification_state_change_cb(bt_gatt_h gatt_handle,
-			bt_gatt_server_notification_state_change_cb callback,
+int bt_gatt_server_set_characteristic_notification_state_change_cb(bt_gatt_h gatt_handle,
+			bt_gatt_server_characteristic_notification_state_changed_cb callback,
 			void *user_data)
 {
 	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)gatt_handle;
@@ -2291,6 +2291,8 @@ int bt_gatt_server_start(void)
 {
 	int ret = BT_ERROR_NONE;
 
+	BT_CHECK_GATT_SUPPORT();
+
 	if (!is_gatt_server_started) {
 		ret = bluetooth_gatt_register_application();
 
@@ -2306,7 +2308,7 @@ int bt_gatt_server_start(void)
 	return ret;
 }
 
-int bt_gatt_server_send_response(int request_id, int request_type,
+int bt_gatt_server_send_response(int request_id, bluetooth_gatt_att_request_type_t request_type,
 		int offset, int resp_status, char *value, int value_length)
 {
 	int ret = BT_ERROR_NONE;
@@ -2325,7 +2327,7 @@ int bt_gatt_server_send_response(int request_id, int request_type,
 	return ret;
 }
 
-int bt_gatt_server_notify(bt_gatt_h characteristic, bool need_confirm,
+int bt_gatt_server_notify_characteristic_changed_value(bt_gatt_h characteristic,
 				bt_gatt_server_notification_sent_cb callback,
 				const char *device_address, void *user_data)
 {
