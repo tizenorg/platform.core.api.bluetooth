@@ -2136,7 +2136,7 @@ int bt_gatt_server_set_read_value_requested_cb(bt_gatt_h gatt_handle,
 }
 
 int bt_gatt_server_set_notification_state_change_cb(bt_gatt_h gatt_handle,
-			bt_gatt_server_notification_state_change_cb callback,
+			bt_gatt_server_notification_state_changed_cb callback,
 			void *user_data)
 {
 	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)gatt_handle;
