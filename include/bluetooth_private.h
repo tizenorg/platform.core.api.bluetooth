@@ -300,7 +300,7 @@ typedef struct {
 	bt_gatt_server_notification_sent_cb notified_cb;
 	void *notified_user_data;
 
-	bt_gatt_server_notification_state_change_cb notification_changed_cb;
+	bt_gatt_server_notification_state_changed_cb notification_changed_cb;
 	void *notification_changed_user_data;
 
 	int value_length;
