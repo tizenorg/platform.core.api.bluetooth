@@ -1388,7 +1388,7 @@ int bt_gatt_characteristic_get_permissions(bt_gatt_h gatt_handle, int *permissio
 	return BT_ERROR_NONE;
 }
 
-int bt_gatt_descriptor_get_permissions(bt_gatt_h gatt_handle, int *permissions)
+int bt_gatt_descriptor_get_permissions(bt_gatt_h gatt_handle, bt_gatt_permission_e *permissions)
 {
 	bt_gatt_common_s *handle = (bt_gatt_common_s *)gatt_handle;
 	bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s *)gatt_handle;
@@ -2136,7 +2136,7 @@ int bt_gatt_server_set_read_value_requested_cb(bt_gatt_h gatt_handle,
 }
 
 int bt_gatt_server_set_notification_state_change_cb(bt_gatt_h gatt_handle,
-			bt_gatt_server_notification_state_change_cb callback,
+			bt_gatt_server_notification_state_changed_cb callback,
 			void *user_data)
 {
 	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)gatt_handle;
@@ -2290,6 +2290,8 @@ int bt_gatt_server_unregister_all_services(bt_gatt_server_h server)
 int bt_gatt_server_start(void)
 {
 	int ret = BT_ERROR_NONE;
+
+	BT_CHECK_GATT_SUPPORT();
 
 	if (!is_gatt_server_started) {
 		ret = bluetooth_gatt_register_application();
