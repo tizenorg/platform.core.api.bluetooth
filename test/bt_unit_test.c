@@ -5872,7 +5872,7 @@ int test_input_callback(void *data)
 
 			bt_gatt_server_set_read_value_requested_cb(characteristic,
 				__bt_gatt_server_read_value_requested_cb, NULL);
-			bt_gatt_server_set_notification_state_change_cb(characteristic,
+			bt_gatt_server_set_characteristic_notification_state_change_cb(characteristic,
 				__bt_gatt_server_notification_state_change_cb, NULL);
 			ret = bt_gatt_service_add_characteristic(service, characteristic);
 			TC_PRT("bt_gatt_service_add_characteristic : %s\n", __bt_get_error_message(ret));
@@ -5942,7 +5942,7 @@ int test_input_callback(void *data)
 
 			bt_gatt_server_set_read_value_requested_cb(characteristic,
 				__bt_gatt_server_read_value_requested_cb, NULL);
-			bt_gatt_server_set_notification_state_change_cb(characteristic,
+			bt_gatt_server_set_characteristic_notification_state_change_cb(characteristic,
 				__bt_gatt_server_notification_state_change_cb, NULL);
 			ret = bt_gatt_service_add_characteristic(service, characteristic);
 			TC_PRT("bt_gatt_service_add_characteristic : %s\n", __bt_get_error_message(ret));
@@ -6025,7 +6025,7 @@ int test_input_callback(void *data)
 
 			bt_gatt_server_set_read_value_requested_cb(characteristic,
 				__bt_gatt_server_read_value_requested_cb, NULL);
-			bt_gatt_server_set_notification_state_change_cb(characteristic,
+			bt_gatt_server_set_characteristic_notification_state_change_cb(characteristic,
 				__bt_gatt_server_notification_state_change_cb, NULL);
 			ret = bt_gatt_service_add_characteristic(service, characteristic);
 			TC_PRT("bt_gatt_service_add_characteristic : %s\n", __bt_get_error_message(ret));
