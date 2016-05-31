@@ -113,6 +113,7 @@ typedef enum {
 #endif
 	BT_EVENT_IPSP_INIT_STATE_CHANGED, /**< IPSP Init status changed callback */
 	BT_EVENT_IPSP_CONNECTION_STATUS, /**< IPSP connection status callback */
+	BT_EVENT_IPSP_CONNECTION_BT_IFACE_INFO, /**< IPSP connection BT Iface Info Callback */
 	BT_EVENT_LE_DATA_LENGTH_CHANGED, /** LE data length changed callback */
 	BT_EVENT_ADVERTISING_STATE_CHANGED, /**< Advertising state changed callback */
 	BT_EVENT_MANUFACTURER_DATA_CHANGED, /**< Manufacturer data changed callback */
@@ -561,6 +562,22 @@ int _bt_le_ipsp_set_connection_state_changed_cb(_bt_le_ipsp_connection_state_cha
  * @brief Unset IPSP connection state event change callback.
  */
 int _bt_le_ipsp_unset_connection_state_changed_cb(void);
+
+
+/**
+ * @internal
+ * @brief IPSP Connection Interface Info callback
+ */
+typedef void (*_bt_le_ipsp_connection_bt_iface_info_cb)
+				(int result, const char *remote_address, const char *if_name,
+				void *user_data);
+
+/**
+ * @internal
+ * @brief Set IPSP connection state event change callback.
+ */
+int _bt_le_ipsp_set_connection_bt_iface_info_cb(_bt_le_ipsp_connection_bt_iface_info_cb callback,
+						void *user_data);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_LE_MODULE
