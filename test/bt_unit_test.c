@@ -1175,6 +1175,9 @@ static const char *__bt_get_error_message(bt_error_e err)
 	case BT_ERROR_NOT_SUPPORTED:
 		err_str = "BT_ERROR_NOT_SUPPORTED";
 		break;
+	case BT_ERROR_DEVICE_POLICY_RESTRICTION:
+		err_str = "DEVICE_POLICY_RESTRICTION";
+		break;
 	default:
 		err_str = "NOT Defined";
 		break;
