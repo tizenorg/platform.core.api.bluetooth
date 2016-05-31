@@ -53,7 +53,7 @@ int __bt_check_ipsp_init_status(void)
 	return BT_ERROR_NONE;
 }
 
-int _bt_le_ipsp_is_initialized(void)
+int bt_ipsp_is_initialized(void)
 {
 	BT_CHECK_IPSP_SUPPORT();
 	BT_CHECK_INIT_STATUS();
@@ -61,7 +61,7 @@ int _bt_le_ipsp_is_initialized(void)
 	return BT_ERROR_NONE;
 }
 
-int _bt_le_ipsp_initialize(bt_le_ipsp_init_state_changed_cb callback,
+int bt_ipsp_initialize(bt_ipsp_init_state_changed_cb callback,
 								void *user_data)
 {
 	int error;
@@ -86,7 +86,7 @@ int _bt_le_ipsp_initialize(bt_le_ipsp_init_state_changed_cb callback,
 	return BT_ERROR_NONE;
 }
 
-int _bt_le_ipsp_deinitialize(void)
+int bt_ipsp_deinitialize(void)
 {
 	int error;
 
@@ -105,7 +105,7 @@ int _bt_le_ipsp_deinitialize(void)
 	return BT_ERROR_NONE;
 }
 
-int _bt_le_ipsp_connect(const char *address)
+int bt_ipsp_connect(const char *address)
 {
 	int ret;
 	bluetooth_device_address_t bd_addr = { {0,} };
@@ -124,7 +124,7 @@ int _bt_le_ipsp_connect(const char *address)
 	return ret;
 }
 
-int _bt_le_ipsp_disconnect(const char *address)
+int bt_ipsp_disconnect(const char *address)
 {
 	int ret;
 	bluetooth_device_address_t bd_addr = { {0,} };
@@ -143,7 +143,7 @@ int _bt_le_ipsp_disconnect(const char *address)
 	return ret;
 }
 
-int _bt_le_ipsp_set_connection_state_changed_cb(_bt_le_ipsp_connection_state_changed_cb callback, void *user_data)
+int bt_ipsp_set_connection_state_changed_cb(bt_ipsp_connection_state_changed_cb callback, void *user_data)
 {
 	BT_CHECK_IPSP_SUPPORT();
 	BT_CHECK_INIT_STATUS();
@@ -153,12 +153,22 @@ int _bt_le_ipsp_set_connection_state_changed_cb(_bt_le_ipsp_connection_state_cha
 	return BT_ERROR_NONE;
 }
 
-int _bt_le_ipsp_unset_connection_state_changed_cb(void)
+int bt_ipsp_unset_connection_state_changed_cb(void)
 {
 	BT_CHECK_IPSP_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 
 	_bt_unset_cb(BT_EVENT_IPSP_CONNECTION_STATUS);
+	return BT_ERROR_NONE;
+}
+
+int bt_ipsp_set_connection_interface_info_cb(bt_ipsp_connection_interface_info_cb callback, void *user_data)
+{
+	BT_CHECK_IPSP_SUPPORT();
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(callback);
+	_bt_set_cb(BT_EVENT_IPSP_CONNECTION_INTERFACE_INFO, callback, user_data);
+
 	return BT_ERROR_NONE;
 }
 /* LCOV_EXCL_STOP */

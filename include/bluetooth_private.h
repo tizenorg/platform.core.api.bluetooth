@@ -113,6 +113,7 @@ typedef enum {
 #endif
 	BT_EVENT_IPSP_INIT_STATE_CHANGED, /**< IPSP Init status changed callback */
 	BT_EVENT_IPSP_CONNECTION_STATUS, /**< IPSP connection status callback */
+	BT_EVENT_IPSP_CONNECTION_INTERFACE_INFO, /**< IPSP connection BT Interface Info Callback */
 	BT_EVENT_LE_DATA_LENGTH_CHANGED, /** LE data length changed callback */
 	BT_EVENT_ADVERTISING_STATE_CHANGED, /**< Advertising state changed callback */
 	BT_EVENT_MANUFACTURER_DATA_CHANGED, /**< Manufacturer data changed callback */
@@ -510,57 +511,73 @@ int _bt_gatt_client_update_all(bt_gatt_client_h client);
  * @internal
  * @brief IPSP Init state changed callback
  */
-typedef void (*bt_le_ipsp_init_state_changed_cb)
+typedef void (*bt_ipsp_init_state_changed_cb)
 		(int result, bool ipsp_initialized, void *user_data);
 
 /**
  * @internal
- * @brief Initialize Bluetooth LE IPSP service and set the callback
+ * @brief Initialize Bluetooth IPSP service and set the callback
  */
-int _bt_le_ipsp_initialize(bt_le_ipsp_init_state_changed_cb callback, void *user_data);
+int bt_ipsp_initialize(bt_ipsp_init_state_changed_cb callback, void *user_data);
 
 /**
  * @internal
- * @brief De-Initialize Bluetooth LE IPSP service and unset the callback
+ * @brief De-Initialize Bluetooth IPSP service and unset the callback
  */
-int _bt_le_ipsp_deinitialize(void);
+int bt_ipsp_deinitialize(void);
 
 /**
  * @internal
  * @brief Connect to a IPSP service over LE to remote device.
  */
-int _bt_le_ipsp_connect(const char *address);
+int bt_ipsp_connect(const char *address);
 
 /**
  * @internal
  * @brief Disconnect to a IPSP service over LE to remote device.
  */
-int _bt_le_ipsp_disconnect(const char *address);
+int bt_ipsp_disconnect(const char *address);
 
 /**
 * @internal
 * @brief Check whether IPSP service is initialized
 */
-int _bt_le_ipsp_is_initialized(void);
+int bt_ipsp_is_initialized(void);
 
 /**
  * @internal
  * @brief IPSP Connection state changed callback
  */
-typedef void (*_bt_le_ipsp_connection_state_changed_cb)
+typedef void (*bt_ipsp_connection_state_changed_cb)
 		(int result, bool connected, const char *remote_address, void *user_data);
 /**
  * @internal
  * @brief Set IPSP connection state event change callback.
  */
-int _bt_le_ipsp_set_connection_state_changed_cb(_bt_le_ipsp_connection_state_changed_cb callback,
+int bt_ipsp_set_connection_state_changed_cb(bt_ipsp_connection_state_changed_cb callback,
 						void *user_data);
 
 /**
  * @internal
  * @brief Unset IPSP connection state event change callback.
  */
-int _bt_le_ipsp_unset_connection_state_changed_cb(void);
+int bt_ipsp_unset_connection_state_changed_cb(void);
+
+
+/**
+ * @internal
+ * @brief IPSP Connection Interface Info callback
+ */
+typedef void (*bt_ipsp_connection_interface_info_cb)
+				(int result, const char *remote_address, const char *if_name,
+				void *user_data);
+
+/**
+ * @internal
+ * @brief Set IPSP connection state event change callback.
+ */
+int bt_ipsp_set_connection_interface_info_cb(bt_ipsp_connection_interface_info_cb callback,
+						void *user_data);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_LE_MODULE

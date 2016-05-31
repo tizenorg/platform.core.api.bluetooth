@@ -30,6 +30,13 @@
 #ifdef ARCH64
 #include <stdint.h>
 #endif
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <net/if.h>
+#include <netdb.h>
+#include <sys/types.h>
+#include <ifaddrs.h>
+#include <linux/if_link.h>
 
 #include "bluetooth.h"
 #include "bluetooth_internal.h"
@@ -60,6 +67,7 @@ const char *custom_uuid = "fa87c0d0-afac-11de-8a39-0800200c9a66";
 
 static bt_unit_test_table_e current_tc_table;
 static char remote_addr[18] = "F6:FB:8F:D8:C8:7C";
+static char ipsp_iface_name[17] = "";
 static bool input_automated_test_delay = false;
 
 /* For HDP profile TEST */
@@ -75,6 +83,8 @@ static int server_fd;
 static int client_fd;
 static int custom_server_fd;
 static int custom_client_fd;
+static int ipsp_server_sock = 0;
+static int ipsp_client_sock = 0;
 
 static int bt_onoff_cnt = 0;
 static int bt_onoff_cnt_success = 0;
@@ -776,24 +786,36 @@ tc_table_t tc_ipsp[] = {
 	/* IPSP functions */
 	{"BACK"
 		, BT_UNIT_TEST_FUNCTION_BACK},
-	{"bt_le_ipsp_register"
+	{"bt_ipsp_register[Server role]"
 		, BT_UNIT_TEST_FUNCTION_IPSP_REGISTER},
-	{"bt_le_ipsp_unregister"
+	{"bt_ipsp_unregister[Server role]"
 		, BT_UNIT_TEST_FUNCTION_IPSP_UNREGISTER},
-	{"bt_le_ipsp_initialize"
+	{"bt_ipsp_initialize[Server role]"
 		, BT_UNIT_TEST_FUNCTION_IPSP_INITIALIZE},
-	{"bt_le_ipsp_deinitialize"
+	{"bt_ipsp_deinitialize[Server role]"
 		, BT_UNIT_TEST_FUNCTION_IPSP_DEINITIALIZE},
-	{"bt_le_ipsp_connect"
+	{"bt_ipsp_connect[Client role]"
 		, BT_UNIT_TEST_FUNCTION_IPSP_CONNECT},
-	{"bt_le_ipsp_disconnect"
+	{"bt_ipsp_disconnect[Client role]"
 		, BT_UNIT_TEST_FUNCTION_IPSP_DISCONNECT},
-	{"bt_le_ipsp_start_advertising"
+	{"bt_ipsp_start_advertising[Server role]"
 		, BT_UNIT_TEST_FUNCTION_IPSP_START_ADVERTISING},
-	{"bt_ipsp_set_connection_state_changed_cb"
+	{"bt_ipsp_set_connection_state_changed_cb[Client/Server role]"
 		, BT_UNIT_TEST_FUNCTION_IPSP_SET_CONNECTION_STATE_CHANGED_CB},
-	{"bt_ipsp_nsset_connection_state_changed_cb"
+	{"bt_ipsp_unsset_connection_state_changed_cb[Client/Server role]"
 		, BT_UNIT_TEST_FUNCTION_IPSP_UNSET_CONNECTION_STATE_CHANGED_CB},
+	{"bt_ipsp_set_connection_interface_info_cb[Client/Server role]"
+		, BT_UNIT_TEST_FUNCTION_IPSP_SET_CONNECTION_BT_IFACE_INFO_CB},
+	{"bt_ipsp_create_ipsp_app_server_socket[Server App role]"
+		, BT_UNIT_TEST_FUNCTION_IPSP_CREATE_APP_SERVER_SOCKET},
+	{"bt_ipsp_connect_with_ipsp_app_server_socket[Client App role]"
+		, BT_UNIT_TEST_FUNCTION_IPSP_CONNECT_WITH_APP_SERVER_SOCKET},
+	{"bt_ipsp_send_ipv6_application_data[Client/Server App role][Max 255 bytes]"
+		, BT_UNIT_TEST_FUNCTION_IPSP_SEND_IPV6_APP_DATA},
+	{"bt_ipsp_recv_ipv6_application_data[Client/Server App role]"
+		, BT_UNIT_TEST_FUNCTION_IPSP_RECV_IPV6_APP_DATA},
+	{"bt_ipsp_close_socket[Client/Server App role]"
+		, BT_UNIT_TEST_FUNCTION_IPSP_CLOSE_SOCKET},
 	{"Select this menu to set parameters and then select the function again."
 		, BT_UNIT_TEST_FUNCTION_ACTIVATE_FLAG_TO_SET_PARAMETERS},
 	{NULL					, 0x0000},
@@ -2632,7 +2654,7 @@ void __bt_hid_device_connection_state_changed_cb(int result,
 	TC_PRT("Connected %d", connected);
 }
 
-void __bt_le_ipsp_init_state_changed_cb(int result,
+void __bt_ipsp_init_state_changed_cb(int result,
 	bool ipsp_initialized, void *user_data)
 {
 	TC_PRT("result: %s", __bt_get_error_message(result));
@@ -2644,12 +2666,23 @@ void __bt_le_ipsp_init_state_changed_cb(int result,
 	}
 }
 
-void __bt_le_ipsp_connection_state_changed_cb(int result,
+void __bt_ipsp_connection_state_changed_cb(int result,
 	bool connected, const char *remote_address, void *user_data)
 {
-	TC_PRT("__bt_le_ipsp_connection_state_changed_cb: called");
+	TC_PRT("__bt_ipsp_connection_state_changed_cb: called");
 	TC_PRT("result: %s", __bt_get_error_message(result));
 	TC_PRT("Connected: %d", connected);
+}
+
+void __bt_ipsp_connection_interface_info_cb(int result,
+			const char *remote_address, const char *iface_name,
+			void *user_data)
+{
+	TC_PRT("__bt_ipsp_connection_bt_iface_info_cb: called");
+	TC_PRT("result: %s", __bt_get_error_message(result));
+	TC_PRT("Remote BT address : %s", remote_address);
+	TC_PRT("Local BT Interface : %s is UP", iface_name);
+	memcpy(ipsp_iface_name, iface_name, strlen(iface_name));
 }
 
 #ifdef TIZEN_WEARABLE
@@ -3940,6 +3973,97 @@ int test_set_params(int test_id, char *param)
 	}
 	case BT_UNIT_TEST_TABLE_IPSP: {
 		switch (test_id) {
+		case BT_UNIT_TEST_FUNCTION_IPSP_CONNECT_WITH_APP_SERVER_SOCKET : {
+			if (param_index == 0) {
+				g_test_param.param_count = 1;
+				g_test_param.params = g_malloc0(sizeof(char *) * g_test_param.param_count);
+				param_type = BT_UNIT_TEST_PARAM_TYPE_STRING;
+			}
+
+			if (param_index > 0) {
+				int len = strlen(param);
+				g_test_param.params[param_index - 1] = g_malloc0(len + 1);
+				/* Remove new line character */
+				param[len - 1] = '\0';
+				strcpy(g_test_param.params[param_index - 1], param);
+			}
+
+			if (param_index == g_test_param.param_count) {
+				need_to_set_params = false;
+				test_input_callback(GINT_TO_POINTER(test_id));
+				param_index = 0;
+				return 0;
+			}
+
+			TC_PRT("IPSP Client : Input IPSP App server's IPv6 address to connect :");
+			
+			param_index++;
+			break;
+		}
+		case BT_UNIT_TEST_FUNCTION_IPSP_SEND_IPV6_APP_DATA : {
+			if (param_index == 0) {
+				g_test_param.param_count = 2;
+				g_test_param.params = g_malloc0(sizeof(char *) * g_test_param.param_count);
+				param_type = BT_UNIT_TEST_PARAM_TYPE_STRING;
+			}
+
+			if (param_index > 0) {
+				int len = strlen(param);
+				g_test_param.params[param_index - 1] = g_malloc0(len + 1);
+				/* Remove new line character */
+				param[len - 1] = '\0';
+				strcpy(g_test_param.params[param_index - 1], param);
+			}
+
+			if (param_index == g_test_param.param_count) {
+				need_to_set_params = false;
+				test_input_callback(GINT_TO_POINTER(test_id));
+				param_index = 0;
+				return 0;
+			}
+
+			switch (param_index) {
+			case 0:
+				TC_PRT("IPSP : Input current role of Application[Server[0] / Client[1] :");
+				break;
+			case 1:
+			TC_PRT("IPSP : input data to send :");
+				break;
+			}
+
+				param_index++;
+
+			break;
+		}
+		case BT_UNIT_TEST_FUNCTION_IPSP_RECV_IPV6_APP_DATA : {
+			if (param_index == 0) {
+				g_test_param.param_count = 1;
+				g_test_param.params = g_malloc0(sizeof(char *) * g_test_param.param_count);
+				param_type = BT_UNIT_TEST_PARAM_TYPE_STRING;
+			}
+		
+			if (param_index > 0) {
+				int len = strlen(param);
+				g_test_param.params[param_index - 1] = g_malloc0(len + 1);
+				/* Remove new line character */
+				param[len - 1] = '\0';
+			strcpy(g_test_param.params[param_index - 1], param);
+		}
+	
+		if (param_index == g_test_param.param_count) {
+			need_to_set_params = false;
+			test_input_callback(GINT_TO_POINTER(test_id));
+			param_index = 0;
+			return 0;
+		}
+	
+		TC_PRT("IPSP : Input current role of Application[Server[0]/Client[1] :");
+	
+		param_index++;
+	
+		break;
+	}
+
 		default:
 			TC_PRT("There is no param to set\n");
 			need_to_set_params = false;
@@ -7412,30 +7536,32 @@ int test_input_callback(void *data)
 		case BT_UNIT_TEST_FUNCTION_IPSP_INITIALIZE:
 			/* Initialize IPSP server */
 			if (server != NULL && ipsp_h.svc != NULL) {
-				ret = _bt_le_ipsp_initialize(
-						&__bt_le_ipsp_init_state_changed_cb,
+				ret = bt_ipsp_initialize(
+						&__bt_ipsp_init_state_changed_cb,
 						NULL);
-				TC_PRT("bt_le_ipsp_initialize : returns %s\n", __bt_get_error_message(ret));
+				TC_PRT("bt_ipsp_initialize : returns %s\n", __bt_get_error_message(ret));
 			} else {
 				TC_PRT("Gatt Server or IPSP not registered !");
 			}
 			break;
 		case BT_UNIT_TEST_FUNCTION_IPSP_DEINITIALIZE:
 			/* De-Initialize IPSP server */
-			ret = _bt_le_ipsp_deinitialize();
-			TC_PRT("bt_le_ipsp_deinitialize : returns %s\n", __bt_get_error_message(ret));
+			ret = bt_ipsp_deinitialize();
+			TC_PRT("bt_ipsp_deinitialize : returns %s\n", __bt_get_error_message(ret));
 			break;
 		case BT_UNIT_TEST_FUNCTION_IPSP_CONNECT:
-			ret = _bt_le_ipsp_connect(remote_addr);
+			ret = bt_ipsp_connect(remote_addr);
+			TC_PRT("bt_ipsp_connect : returns %s\n", __bt_get_error_message(ret));
 			break;
 		case BT_UNIT_TEST_FUNCTION_IPSP_DISCONNECT:
-			ret = _bt_le_ipsp_disconnect(remote_addr);
+			ret = bt_ipsp_disconnect(remote_addr);
+			TC_PRT("bt_ipsp_disconnect : returns %s\n", __bt_get_error_message(ret));
 			break;
 		case BT_UNIT_TEST_FUNCTION_IPSP_START_ADVERTISING: {
 			const char *ipsp_svc_uuid_16 = "1820";
-			ret = _bt_le_ipsp_is_initialized();
+			ret = bt_ipsp_is_initialized();
 			if (ret != BT_ERROR_NONE) {
-				TC_PRT("bt_le_ipsp_add_advertising_data: returns %s\n", __bt_get_error_message(ret));
+				TC_PRT("bt_ipsp_add_advertising_data: returns %s\n", __bt_get_error_message(ret));
 				break;
 			}
 			/* Add IPSP service in advertising data */
@@ -7484,16 +7610,233 @@ int test_input_callback(void *data)
 			break;
 		}
 		case BT_UNIT_TEST_FUNCTION_IPSP_SET_CONNECTION_STATE_CHANGED_CB:
-			ret = _bt_le_ipsp_set_connection_state_changed_cb(
-					__bt_le_ipsp_connection_state_changed_cb,
+			ret = bt_ipsp_set_connection_state_changed_cb(
+					__bt_ipsp_connection_state_changed_cb,
 					NULL);
 			TC_PRT("returns %s\n", __bt_get_error_message(ret));
 			break;
 
 		case BT_UNIT_TEST_FUNCTION_IPSP_UNSET_CONNECTION_STATE_CHANGED_CB:
-			ret = _bt_le_ipsp_unset_connection_state_changed_cb();
+			ret = bt_ipsp_unset_connection_state_changed_cb();
 			TC_PRT("returns %s\n", __bt_get_error_message(ret));
 			break;
+
+		case BT_UNIT_TEST_FUNCTION_IPSP_SET_CONNECTION_BT_IFACE_INFO_CB:
+			ret = bt_ipsp_set_connection_interface_info_cb(__bt_ipsp_connection_interface_info_cb, NULL);
+			TC_PRT("returns %s\n", __bt_get_error_message(ret));
+		break;
+
+		case BT_UNIT_TEST_FUNCTION_IPSP_CREATE_APP_SERVER_SOCKET: {
+			int serverSocket = 0;
+			struct ifaddrs *ifap, *ifa;
+			struct sockaddr_in6 serverAddr, clientAddr;
+			socklen_t clilen;
+			char host[NI_MAXHOST];
+			char client_ipv6[100] = {0, };
+			char *addr = NULL;
+
+			printf("\n****** IPSP Application Server Started ******\n");
+
+			getifaddrs (&ifap);
+
+			for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
+				if (ifa->ifa_addr->sa_family == AF_INET6) {
+					if (!memcmp(ifa->ifa_name, ipsp_iface_name, IFNAMSIZ)) {
+						getnameinfo(ifa->ifa_addr, sizeof(struct sockaddr_in6), host, NI_MAXHOST,	 NULL, 0, NI_NUMERICHOST);
+						addr = strchr(host, '%');
+						if (addr != NULL) {
+							addr = g_strndup(host, (addr - host));
+							TC_PRT("Found match Interface: %s and addr : %s\n", ifa->ifa_name, addr);
+						}
+					}
+				}
+			}
+
+			freeifaddrs(ifap);
+
+			bzero((char *) &serverAddr, sizeof(serverAddr));
+
+			serverAddr.sin6_flowinfo = 0;
+			serverAddr.sin6_family = AF_INET6;
+			serverAddr.sin6_addr = in6addr_any;
+			serverAddr.sin6_port = htons(3344);
+			serverAddr.sin6_scope_id = if_nametoindex(ipsp_iface_name);
+			inet_pton(AF_INET6, addr, &(serverAddr.sin6_addr.s6_addr));
+
+			g_free(addr);
+
+			/* Create the IPSP APP server socket */
+			serverSocket = socket(AF_INET6, SOCK_STREAM, 0);
+			if (serverSocket < 0)
+				TC_PRT("\nIPSP server Error : In socket creation !");
+			else
+				TC_PRT("\nIPSP Server : Socket created..");
+			/* Bind the address struct to the socket */
+			if (bind(serverSocket, (struct sockaddr *) &serverAddr, sizeof(serverAddr)) < 0)
+				TC_PRT("\nIPSP server Error : In socket binding !");
+			else
+				TC_PRT("\nIPSP Server : Socket binding done..");
+
+			/* Listen on the socket, with 1 max connection requests queued */
+			if(listen(serverSocket, 1) < 0)
+				TC_PRT("\nIPSP server Error : In socket listening !");
+			else
+				TC_PRT("\nIPSP server : Socket listening, waiting for connection...\n");
+
+			/* Accept call creates a new socket for the incoming connection */
+			clilen = sizeof(clientAddr);
+			ipsp_server_sock = accept(serverSocket, (struct sockaddr *) &clientAddr, &clilen);
+			if (ipsp_server_sock  < 0)
+				TC_PRT("\nIPSP server Error : While accepting incoming connection !");
+
+			inet_ntop(AF_INET6, &(clientAddr.sin6_addr), client_ipv6, 100);
+			TC_PRT("\n****** IPSP server : Incoming connection from client... %s successful, ready to send/receive IPV6 data ******", client_ipv6);
+
+			close(serverSocket);
+
+			break;
+		}
+		case BT_UNIT_TEST_FUNCTION_IPSP_CONNECT_WITH_APP_SERVER_SOCKET: {
+			char *saddr = NULL;
+			struct sockaddr_in6 serverAddr;
+			struct hostent *server;
+
+			if (g_test_param.param_count < 1) {
+				TC_PRT("Input IPSP Application's server IPv6 address first !");
+				break;
+			}
+			saddr = g_test_param.params[0];
+
+			printf("\n****** IPSP Application Client Started ******\n");
+
+			/* Create the IPSP APP Client socket */
+			ipsp_client_sock = socket(AF_INET6, SOCK_STREAM, 0);
+			if (ipsp_client_sock < 0)
+				TC_PRT("\nIPSP Client Error : In socket creation !");
+			else
+				TC_PRT("\nIPSP Client : Socket created..");
+
+			/* Sockets Layer Call: gethostbyname2() */
+			server = gethostbyname2(saddr, AF_INET6);
+
+			if (server == NULL)
+				TC_PRT("\nIPSP Client Error : No such host !");
+
+			memset((char *) &serverAddr, 0, sizeof(serverAddr));
+
+		   serverAddr.sin6_flowinfo = 0;
+		   serverAddr.sin6_family = AF_INET6;
+		   serverAddr.sin6_addr=in6addr_any;
+		   serverAddr.sin6_port = htons(3344);
+			serverAddr.sin6_scope_id = if_nametoindex(ipsp_iface_name);
+
+			memmove((char *) &serverAddr.sin6_addr.s6_addr, (char *) server->h_addr, server->h_length);
+
+			/* Connect with IPSP APP Server socket */
+			if (connect(ipsp_client_sock, (struct sockaddr *) &serverAddr, sizeof(serverAddr)) < 0)
+				TC_PRT("\nIPSP Client Error : %d while connecting with server !", errno);
+			else
+				TC_PRT("\n****** IPSP Client : Connection with : %s successful, ready to send/receive IPV6 data ******\n", saddr);
+
+			__bt_free_test_param(&g_test_param);
+			break;
+		}
+		case BT_UNIT_TEST_FUNCTION_IPSP_SEND_IPV6_APP_DATA : {
+			int role = -1, n = 0;
+			char *data = NULL;
+
+			if (g_test_param.param_count < 2) {
+				TC_PRT("IPSP Error : Input IPSP Application's role and data to send first !");
+				break;
+			}
+
+			role = atoi(g_test_param.params[0]);
+			data = g_test_param.params[1];
+
+			if (role == 0) {
+				if (ipsp_server_sock) {
+					TC_PRT("IPSP : Current role is IPSP Sever !");
+
+				//Sockets Layer Call: send()
+				send(ipsp_server_sock, data, strlen(data) + 1, 0);
+				if (n < 0)
+					TC_PRT("\nIPSP Error : While sending data !");
+				} else {
+					TC_PRT("IPSP Error: There is no connected server socket !");
+				}
+			} else if (role == 1) {
+				if (ipsp_client_sock) {
+				//Sockets Layer Call: send()
+				send(ipsp_client_sock, data, strlen(data) + 1, 0);
+					if (n < 0)
+						TC_PRT("\nIPSP Error : While sending data !");
+					} else {
+						TC_PRT("IPSP Error: There is no connected client socket !");
+				}
+			} else {
+			TC_PRT("IPSP Error: Please input the proper role !");
+		}
+			__bt_free_test_param(&g_test_param);
+
+			break;
+		}
+		case BT_UNIT_TEST_FUNCTION_IPSP_RECV_IPV6_APP_DATA : {
+			int role = -1, n;
+			char buffer[256] = {0};
+
+			if (g_test_param.param_count < 1) {
+				TC_PRT("IPSP Error : Input IPSP Application's role first !");
+				break;
+			}
+
+		role = atoi(g_test_param.params[0]);
+
+		if (role == 0) {
+			if (ipsp_server_sock) {
+				TC_PRT("IPSP : Current role is IPSP Sever,  ready to receive data !");
+
+				//Sockets Layer Call: recv()
+				n = recv(ipsp_server_sock, buffer, 255, 0);
+				if (n < 0)
+					TC_PRT("\nIPSP Server Error : While receiving data from client !");
+					TC_PRT("\nIPSP Server : Message received from client: %s\n", buffer);
+				} else {
+					TC_PRT("IPSP Error: There is no connected or active server socket !");
+				}
+			} else if (role == 1) {
+				if (ipsp_client_sock) {
+					TC_PRT("IPSP : Current role is IPSP Client, ready to receive data !");
+
+				//Sockets Layer Call: recv()
+				n = recv(ipsp_client_sock, buffer, 255, 0);
+				if (n < 0)
+					TC_PRT("\nIPSP Client Error : %d while receiving data from server!", errno);
+					TC_PRT("\nIPSP Client : Message received from server: %s\n", buffer);
+				} else {
+					TC_PRT("IPSP Error: There is no connected or active client socket !");
+				}
+			} else {
+				TC_PRT("IPSP Error: Please input the proper role !");
+			}
+
+			__bt_free_test_param(&g_test_param);
+
+			break;
+		}
+		case BT_UNIT_TEST_FUNCTION_IPSP_CLOSE_SOCKET : {
+			if (ipsp_server_sock) {
+				TC_PRT("IPSP server : Closing server socket..");
+				close(ipsp_server_sock);
+				ipsp_server_sock = 0;
+			}
+			if (ipsp_client_sock) {
+					TC_PRT("IPSP Client : Closing client socket..");
+					close(ipsp_client_sock);
+					ipsp_client_sock = 0;
+			}
+			break;
+		}
+
 		case BT_UNIT_TEST_FUNCTION_ACTIVATE_FLAG_TO_SET_PARAMETERS:
 			need_to_set_params = true;
 			TC_PRT("Select the function again");
