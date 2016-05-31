@@ -23,7 +23,7 @@
 #include <stdbool.h>
 #include <tizen_error.h>
 
-#include "bluetooth_type.h"
+#include <bluetooth_type.h>
 
 #ifdef __cplusplus
 extern "C"
@@ -3746,7 +3746,7 @@ int bt_gatt_unset_characteristic_changed_cb(void);
 /**
  * @deprecated Deprecated since 2.3.1. Use bt_gatt_client_set_characteristic_value_changed_cb instead.
  * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Watches all the characteristic value changes of the service
+ * @brief  Watches all the characteristic value changes of the service.
  * @since_tizen 2.3
  * @privlevel public
  * @privilege %http://tizen.org/privilege/bluetooth
@@ -3766,7 +3766,7 @@ int bt_gatt_watch_characteristic_changes(bt_gatt_attribute_h service);
 /**
  * @deprecated Deprecated since 2.3.1. Use bt_gatt_client_unset_characteristic_value_changed_cb instead.
  * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Remove watching of all the characteristic value changes of the service
+ * @brief  Remove watching of all the characteristic value changes of the service.
  * @since_tizen 2.3
  * @privlevel public
  * @privilege %http://tizen.org/privilege/bluetooth
@@ -3894,7 +3894,7 @@ int bt_gatt_destroy_attribute_handle(bt_gatt_attribute_h handle);
 /**
  * @deprecated Deprecated since 2.3.1. Use gatt_client_read_value instead.
  * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Reads the value of characteristic from remote device
+ * @brief  Reads the value of characteristic from remote device.
  * @since_tizen 2.3
  * @privlevel public
  * @privilege %http://tizen.org/privilege/bluetooth
@@ -3942,7 +3942,7 @@ int bt_gatt_discover_characteristic_descriptor(bt_gatt_attribute_h characteristi
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Gets the value of a characteristic or descriptor's GATT handle
+ * @brief  Gets the value of a characteristic or descriptor's GATT handle.
  * @since_tizen 2.3.1
  *
  * @remarks @a value must be released using free(). \n
@@ -3961,7 +3961,7 @@ int bt_gatt_get_value(bt_gatt_h gatt_handle, char **value, int *value_length);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Gets the value of a characteristic or descriptor's GATT handle as an integer type
+ * @brief  Gets the value of a characteristic or descriptor's GATT handle as an integer type.
  * @since_tizen 2.3.1
  *
  * @remarks This function returns a locally saved value in @a gatt_handle. \n
@@ -3982,7 +3982,7 @@ int bt_gatt_get_int_value(bt_gatt_h gatt_handle, bt_data_type_int_e type,
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Gets the value of a characteristic or descriptor's GATT handle as a float type
+ * @brief  Gets the value of a characteristic or descriptor's GATT handle as a float type.
  * @since_tizen 2.3.1
  *
  * @remarks This function returns a locally saved value in @a gatt_handle. \n
@@ -4003,7 +4003,7 @@ int bt_gatt_get_float_value(bt_gatt_h gatt_handle, bt_data_type_float_e type,
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Updates the value of a characteristic or descriptor's GATT handle
+ * @brief  Updates the value of a characteristic or descriptor's GATT handle.
  * @since_tizen 2.3.1
  *
  * @remarks This function updates a value of @a gatt_handle locally. \n
@@ -4023,7 +4023,7 @@ int bt_gatt_set_value(bt_gatt_h gatt_handle, const char *value, int value_length
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Updates the value of a characteristic or descriptor's GATT handle using a integer type's value
+ * @brief  Updates the value of a characteristic or descriptor's GATT handle using a integer type's value.
  * @since_tizen 2.3.1
  *
  * @remarks This function updates a value of @a gatt_handle locally. \n
@@ -4045,7 +4045,7 @@ int bt_gatt_set_int_value(bt_gatt_h gatt_handle, bt_data_type_int_e type,
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Updates the value of a characteristic or descriptor's GATT handle using a float type's value
+ * @brief  Updates the value of a characteristic or descriptor's GATT handle using a float type's value.
  * @since_tizen 2.3.1
  *
  * @remarks This function updates a value of @a gatt_handle locally. \n
@@ -4068,7 +4068,7 @@ int bt_gatt_set_float_value(bt_gatt_h gatt_handle, bt_data_type_float_e type,
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Gets the UUID of a service, characteristic or descriptor's GATT handle
+ * @brief  Gets the UUID of a service, characteristic or descriptor's GATT handle.
  * @since_tizen 2.3.1
  *
  * @remarks @a uuid must be released using free(). \n
@@ -4085,7 +4085,7 @@ int bt_gatt_get_uuid(bt_gatt_h gatt_handle, char **uuid);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Gets the type of GATT handle
+ * @brief  Gets the type of GATT handle.
  * @since_tizen 2.3.1
  *
  * @param[in] gatt_handle The GATT handle
@@ -4099,7 +4099,7 @@ int bt_gatt_get_type(bt_gatt_h gatt_handle, bt_gatt_type_e *gatt_type);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Gets the GATT client handle which the specified service belongs to
+ * @brief  Gets the GATT client handle which the specified service belongs to.
  * @since_tizen 2.3.1
  *
  * @remark This function doesn't allocate new memory for GATT client handle.
@@ -4119,7 +4119,7 @@ int bt_gatt_service_get_client(bt_gatt_h service, bt_gatt_client_h *client);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Gets a characteristic's GATT handle which has specific UUID
+ * @brief  Gets a characteristic's GATT handle which has specific UUID.
  * @since_tizen 2.3.1
  *
  * @remark The returned GATT handle must not be freed by application.
@@ -4140,7 +4140,7 @@ int bt_gatt_service_get_characteristic(bt_gatt_h service, const char *uuid,
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Invokes @a callback function on each characteristic that belongs to the specified service
+ * @brief  Invokes @a callback function on each characteristic that belongs to the specified service.
  * @since_tizen 2.3.1
  *
  * @param[in] service The service's GATT handle
@@ -4158,7 +4158,7 @@ int bt_gatt_service_foreach_characteristics(bt_gatt_h service,
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Gets an included service's GATT handle which has specific UUID
+ * @brief  Gets an included service's GATT handle which has specific UUID.
  * @since_tizen 2.3.1
  *
  * @remark The returned GATT handle must not be freed by application.
@@ -4179,7 +4179,7 @@ int bt_gatt_service_get_included_service(bt_gatt_h service, const char *uuid,
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Invokes @a callback function on each included service that belongs to the specified service
+ * @brief  Invokes @a callback function on each included service that belongs to the specified service.
  * @since_tizen 2.3.1
  *
  * @param[in] service The service's GATT handle
@@ -4197,7 +4197,7 @@ int bt_gatt_service_foreach_included_services(bt_gatt_h service,
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Gets the service's GATT handle which the specified characteristic belongs to
+ * @brief  Gets the service's GATT handle which the specified characteristic belongs to.
  * @since_tizen 2.3.1
  *
  * @remark The returned GATT handle must not be freed by application.
@@ -4214,7 +4214,7 @@ int bt_gatt_characteristic_get_service(bt_gatt_h characteristic, bt_gatt_h *serv
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Gets the properties which a characteristic's GATT handle has
+ * @brief  Gets the properties which a characteristic's GATT handle has.
  * @since_tizen 2.3.1
  *
  * @param[in] characteristic The characteristic's GATT handle
@@ -4230,7 +4230,7 @@ int bt_gatt_characteristic_get_properties(bt_gatt_h characteristic, int *propert
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief Gets the write type of the specified characteristic
+ * @brief Gets the write type of the specified characteristic.
  * @since_tizen 2.3.1
  *
  * @param[in] characteristic The characteristic's GATT handle
@@ -4247,7 +4247,7 @@ int bt_gatt_characteristic_get_write_type(bt_gatt_h characteristic,
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Updates the write type of the specified characteristic
+ * @brief  Updates the write type of the specified characteristic.
  * @since_tizen 2.3.1
  *
  * @param[in] characteristic The characteristic's GATT handle
@@ -4265,7 +4265,7 @@ int bt_gatt_characteristic_set_write_type(bt_gatt_h characteristic,
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Gets a descriptor's GATT handle which has specific UUID
+ * @brief  Gets a descriptor's GATT handle which has specific UUID.
  * @since_tizen 2.3.1
  *
  * @remark The returned GATT handle must not be freed by application.
@@ -4286,7 +4286,7 @@ int bt_gatt_characteristic_get_descriptor(bt_gatt_h characteristic, const char *
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Invokes @a callback function on each descriptor that belongs to the specified characteristic
+ * @brief  Invokes @a callback function on each descriptor that belongs to the specified characteristic.
  * @since_tizen 2.3.1
  *
  * @param[in] characteristic The characteristic's GATT handle
@@ -4304,7 +4304,7 @@ int bt_gatt_characteristic_foreach_descriptors(bt_gatt_h characteristic,
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Gets the characteristic's GATT handle which the specified descriptor belongs to
+ * @brief  Gets the characteristic's GATT handle which the specified descriptor belongs to.
  * @since_tizen 2.3.1
  *
  * @remark The returned GATT handle must not be freed by application.
@@ -4321,7 +4321,7 @@ int bt_gatt_descriptor_get_characteristic(bt_gatt_h descriptor, bt_gatt_h *chara
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Creates the GATT client handle
+ * @brief  Creates the GATT client handle.
  * @since_tizen 2.3.1
  *
  * @remark The GATT client handle must be freed by bt_gatt_client_destroy() after use
@@ -4341,7 +4341,7 @@ int bt_gatt_client_create(const char *remote_address, bt_gatt_client_h *client);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Destroys the GATT client's handle
+ * @brief  Destroys the GATT client's handle.
  * @since_tizen 2.3.1
  *
  * @remark All related service, characteristic and descriptor's GATT handles are freed also
@@ -4358,7 +4358,7 @@ int bt_gatt_client_destroy(bt_gatt_client_h client);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Gets the address of remote device
+ * @brief  Gets the address of remote device.
  * @since_tizen 2.3.1
  *
  * @param[in] client The created GATT client's handle
@@ -4375,7 +4375,7 @@ int bt_gatt_client_get_remote_address(bt_gatt_client_h client,
 
 /**
  * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Reads the value of a characteristic or descriptor from the remote device asynchronously
+ * @brief  Reads the value of a characteristic or descriptor from the remote device asynchronously.
  * @since_tizen 2.3.1
  * @privlevel public
  * @privilege %http://tizen.org/privilege/bluetooth
@@ -4401,7 +4401,7 @@ int bt_gatt_client_read_value(bt_gatt_h gatt_handle,
 
 /**
  * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Writes the value of a characteristic or descriptor to the remote device asynchronously
+ * @brief  Writes the value of a characteristic or descriptor to the remote device asynchronously.
  * @since_tizen 2.3.1
  * @privlevel public
  * @privilege %http://tizen.org/privilege/bluetooth
@@ -4431,7 +4431,7 @@ int bt_gatt_client_write_value(bt_gatt_h gatt_handle,
 
 /**
  * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Registers a callback function to be invoked when the characteristic value is changed on the remote device
+ * @brief  Registers a callback function to be invoked when the characteristic value is changed on the remote device.
  * @since_tizen 2.3.1
  *
  * @param[in] characteristic The characteristic's GATT handle
@@ -4452,7 +4452,7 @@ int bt_gatt_client_set_characteristic_value_changed_cb(bt_gatt_h characteristic,
 
 /**
  * @ingroup  CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Unregisters a callback function to be invoked when the characteristic value is changed on the remote device
+ * @brief  Unregisters a callback function to be invoked when the characteristic value is changed on the remote device.
  * @since_tizen 2.3.1
  *
  * @param[in] characteristic The characteristic's GATT handle, whose value change will not be informed
@@ -4468,7 +4468,7 @@ int bt_gatt_client_unset_characteristic_value_changed_cb(bt_gatt_h characteristi
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Gets a service's GATT handle which has specific UUID
+ * @brief  Gets a service's GATT handle which has specific UUID.
  * @since_tizen 2.3.1
  *
  * @remark The returned GATT handle must not be freed by application.
@@ -4476,7 +4476,7 @@ int bt_gatt_client_unset_characteristic_value_changed_cb(bt_gatt_h characteristi
  * If there are multiple services which have same UUID, only the first matched one will be returned.
  *
  * @param[in] client The GATT client's handle
- * @param[in] uuid The serivce's GATT handle which has this UUID will be returned if it exists
+ * @param[in] uuid The service's GATT handle which has this UUID will be returned if it exists
  * @param[out] service The service's GATT handle which has @a uuid if it exists
  * @return  0 on success, otherwise a negative error value
  * @retval #BT_ERROR_NONE Successful
@@ -4489,7 +4489,7 @@ int bt_gatt_client_get_service(bt_gatt_client_h client, const char *uuid,
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Invokes @a callback function on each service that belongs to the specified GATT client
+ * @brief  Invokes @a callback function on each service that belongs to the specified GATT client.
  * @since_tizen 2.3.1
  *
  * @param[in] client The GATT client's handle
@@ -4600,6 +4600,530 @@ int bt_gatt_set_connection_state_changed_cb(bt_gatt_connection_state_changed_cb 
  * @see bt_gatt_connection_state_changed_cb()
  */
 int bt_gatt_unset_connection_state_changed_cb(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief Destroys the GATT handle of service.
+ * @since_tizen 3.0
+ *
+ * @param[in] gatt_handle The handle of service
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_service_create()
+ */
+int bt_gatt_service_destroy(bt_gatt_h gatt_handle);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief Destroys the GATT handle of characteristic.
+ * @since_tizen 3.0
+ *
+ * @param[in] gatt_handle The handle of characteristic
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_characteristic_create()
+ */
+int bt_gatt_characteristic_destroy(bt_gatt_h gatt_handle);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief Destroys the GATT handle of descriptor.
+ * @since_tizen 3.0
+ *
+ * @param[in] gatt_handle The handle of descriptor
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_descriptor_create()
+ */
+int bt_gatt_descriptor_destroy(bt_gatt_h gatt_handle);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief  Gets the permissions which a characteristic's GATT handle has.
+ * @since_tizen 3.0
+ *
+ * @remarks The @a permissions can be one ore more values of #bt_gatt_permissions_e, combined with bitwise 'or'.
+ *
+ * @param[in] gatt_handle The handle of a characteristic
+ * @param[out] permissions The permissions which a characteristic's GATT handle has
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_characteristic_create()
+ * @see bt_gatt_permission_e
+ */
+int bt_gatt_characteristic_get_permissions(bt_gatt_h gatt_handle, int *permissions);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief  Gets the permissions which a descriptor's GATT handle has.
+ * @since_tizen 3.0
+ *
+ * @remarks The @a permissions can be one ore more values of #bt_gatt_permissions_e, combined with bitwise 'or'.
+ *
+ * @param[in] gatt_handle The handle of a descriptor
+ * @param[out] permissions The permissions which a characteristic's GATT handle has
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_descriptor_create()
+ * @see bt_gatt_permission_e
+ */
+int bt_gatt_descriptor_get_permissions(bt_gatt_h gatt_handle, int *permissions);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief  Creates the GATT service.
+ * @since_tizen 3.0
+ *
+ * @remarks The @a service should be destroyed by using bt_gatt_service_destroy()
+ *
+ * @param[in] uuid The UUID of the service
+ * @param[in] type The type of the service
+ * @param[out] service The GATT handle of the created service
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_OUT_OF_MEMORY  Out of memory
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_service_destroy()
+ */
+int bt_gatt_service_create(const char *uuid, bt_gatt_service_type_e type,
+			   bt_gatt_h *service);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief  Adds a characteristic to a specified service.
+ * @since_tizen 3.0
+ *
+ * @param[in] service The service's GATT handle
+ * @param[in] characteristic The characteristic's GATT handle to be added
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_service_create()
+ * @see bt_gatt_characteristic_create()
+ */
+int bt_gatt_service_add_characteristic(bt_gatt_h service,
+					bt_gatt_h characteristic);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief  Adds a service to a specified service as included service.
+ * @since_tizen 3.0
+ *
+ * @param[in] service The service's GATT handle
+ * @param[in] included_service The service's GATT handle to be added as included service
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_service_create()
+ */
+int bt_gatt_service_add_included_service(bt_gatt_h service,
+					bt_gatt_h included_service);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief  Gets the GATT server handle to which the specified service belongs.
+ * @since_tizen 3.0
+ *
+ * @remarks The returned Server handle must not be freed by application.
+ *
+ * @param[in] service The service's GATT handle
+ * @param[out] server The GATT server handle to which @a service belongs
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_server_create()
+ * @see bt_gatt_service_create()
+ * @see bt_gatt_server_register_service()
+ */
+int bt_gatt_service_get_server(bt_gatt_h service, bt_gatt_server_h *server);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief  Creates the GATT characteristic.
+ * @since_tizen 3.0
+ *
+ * @remarks The @a permissions can be one ore more values of #bt_gatt_permissions_e, combined with bitwise 'or'.
+ * @remarks The @a properties can be one ore more values of #bt_gatt_property_e, combined with bitwise 'or'.
+ * @remarks The @a characteristic should be destroyed by using bt_gatt_characteristic_destroy().
+ *
+ * @param[in] uuid The UUID of the characteristic
+ * @param[in] permissions the permissions of the characteristic
+ * @param[in] properties The properties of the characteristic
+ * @param[in] Value The value(byte stream) of the characteristic
+ * @param[in] value_length The length of @a value
+ * @param[out] characteristic The GATT handle of the created characteristic
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_OUT_OF_MEMORY  Out of memory
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_characteristic_destroy()
+ */
+int bt_gatt_characteristic_create(const char *uuid, int permissions,
+				int properties, const char *value, int value_length,
+				bt_gatt_h *characteristic);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief  Adds a descriptor to a specified characteristic.
+ * @since_tizen 3.0
+ *
+ * @param[in] characteristic The GATT handle of the characteristic
+ * @param[in] descriptor The descriptor's GATT handle to be added
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_characteristic_create()
+ * @see bt_gatt_descriptor_create()
+ */
+int bt_gatt_characteristic_add_descriptor(bt_gatt_h characteristic,
+					bt_gatt_h descriptor);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief  Creates the GATT characteristic descriptor.
+ * @since_tizen 3.0
+ *
+ * @remarks The @a permissions can be one ore more values of #bt_gatt_permissions_e, combined with bitwise 'or'.
+ * @remarks The @a descriptor should be destroyed by using bt_gatt_descriptor_destroy()
+ *
+ * @param[in] uuid The UUID of the descriptor
+ * @param[in] permissions The permissions of the descriptor
+ * @param[in] value The value(byte stream) associated with the descriptor
+ * @param[in] value_length The length of @a value
+ * @param[out] descriptor The GATT handle of the created characteristic descriptor
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_OUT_OF_MEMORY  Out of memory
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_descriptor_destroy()
+ */
+int bt_gatt_descriptor_create(const char *uuid, int permissions,
+				const char *value, int value_length,
+				bt_gatt_h *descriptor);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief Initializes the GATT Server.
+ * @since_tizen 3.0
+ *
+ * @return  0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre	The state of local Bluetooth must be #BT_ADAPTER_ENABLED.
+ * @see	bt_gatt_server_deinitialize()
+ */
+int bt_gatt_server_initialize(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief DeInitializes the GATT server.
+ * @since_tizen 3.0
+ *
+ * @return  0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE	Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @pre	The state of local Bluetooth must be #BT_ADAPTER_ENABLED.
+ * @see	bt_gatt_server_initialize()
+ */
+int bt_gatt_server_deinitialize(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief  Creates the GATT server's handle.
+ * @since_tizen 3.0
+ *
+ * @param[out] server The GATT server's handle
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_OUT_OF_MEMORY  Out of memory
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_server_destroy()
+ */
+int bt_gatt_server_create(bt_gatt_server_h *server);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief  Destroys the GATT server's handle.
+ * @since_tizen 3.0
+ *
+ * @remarks All registered services to GATT server are unregistered
+ *
+ * @param[in] server The GATT server's handle
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_server_create()
+ */
+int bt_gatt_server_destroy(bt_gatt_server_h server);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief  Registers a callback function to be invoked when a read request for a specified characteristic or descriptor is issued from a remote device(GATT client).
+ * @since_tizen 3.0
+ *
+ * @param[in] gatt_handle The GATT handle of a characteristic or descriptor
+ * @param[in] callback The callback to be invoked
+ * @param[in] user_data The user data to be passed to @a callback function
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_server_read_value_requested_cb()
+ * @see bt_gatt_server_send_response()
+ */
+int bt_gatt_server_set_read_value_requested_cb(bt_gatt_h gatt_handle,
+				bt_gatt_server_read_value_requested_cb callback,
+				void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief  Registers a callback function to be invoked when the remote device enables or disables the Notification/Indication for particular characteristics.
+ * @since_tizen 3.0
+ *
+ * @param[in] gatt_handle The GATT handle of a characteristic
+ * @param[in] callback The callback to be invoked
+ * @param[in] user_data The user data to be passed to @a callback function
+ * @return	0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER	Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED	Not supported
+ *
+ * @see bt_gatt_server_characteristic_notification_state_changed_cb()
+ */
+int bt_gatt_server_set_characteristic_notification_state_change_cb(bt_gatt_h gatt_handle,
+				bt_gatt_server_characteristic_notification_state_changed_cb callback,
+				void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief  Registers a callback function to be invoked when a value of a characteristic or descriptor has been changed by a remote device(GATT client)'s request.
+ * @since_tizen 3.0
+ *
+ * @param[in] gatt_handle The GATT handle of a characteristic or descriptor
+ * @param[in] callback The callback to be invoked
+ * @param[in] user_data The user data to be passed to @a callback function
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_server_write_value_requested_cb()
+ */
+int bt_gatt_server_set_write_value_requested_cb(bt_gatt_h gatt_handle,
+				bt_gatt_server_write_value_requested_cb callback,
+				void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief  Registers a specified service to the specified GATT server that the local device is hosting.
+ * @since_tizen 3.0
+ * @privlevel public
+ * @privilege %http://tizen.org/privilege/bluetooth
+ *
+ * @param[in] server The GATT server that local device is hosting
+ * @param[in] service The service, which needs to be registered in @a server
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_ALREADY_DONE Operation is already done
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_server_create()
+ * @see bt_gatt_service_create()
+ * @see bt_gatt_server_start()
+ * @see bt_gatt_server_unregister_service()
+ */
+int bt_gatt_server_register_service(bt_gatt_server_h server, bt_gatt_h service);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief  Unregisters a specified service from the specified GATT server that the local device is hosting.
+ * @since_tizen 3.0
+ * @privlevel public
+ * @privilege %http://tizen.org/privilege/bluetooth
+ *
+ * @param[in] server The GATT server that local device is hosting
+ * @param[in] service The service, which needs to be unregistered from @a server
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_SERVICE_NOT_FOUND  Service not found
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_server_register_service()
+ */
+int bt_gatt_server_unregister_service(bt_gatt_server_h server, bt_gatt_h service);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief  Unregisters all services from the specified GATT server that the local device is hosting.
+ * @since_tizen 3.0
+ * @privlevel public
+ * @privilege %http://tizen.org/privilege/bluetooth
+ *
+ * @param[in] server The GATT server that local device is hosting
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_server_register_service()
+ */
+int bt_gatt_server_unregister_all_services(bt_gatt_server_h server);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief  Registers the application along with the GATT services of the application it is hosting.
+ * @since_tizen 3.0
+ * @privlevel public
+ * @privilege %http://tizen.org/privilege/bluetooth
+ *
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_ALREADY_DONE Operation is already done
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_server_initialize()
+ * @see bt_gatt_server_create()
+ * @see bt_gatt_service_create()
+ * @see bt_gatt_server_unregister_service()
+ */
+int bt_gatt_server_start(void);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief  Sends a response to the remote device as a result of a read request.
+ * @since_tizen 3.0
+ * @privlevel public
+ * @privilege %http://tizen.org/privilege/bluetooth
+ *
+ * @remarks Until this function is called, a read request is not finished.
+ *
+ * @param[in] request_id The identification of a read/write request
+ * @param[in] request_type The request type for read/write.
+ * @param[in] offset The offset from where a value is read
+ * @param[in] resp_status The application error if any occurred or BT_ERROR_NONE for successful.
+ * @param[in] value The value to be sent. It will be sent from @a offset. If it is NULL, a requested GATT handle's value will be sent from @a offset.
+ * @param[in] value_length Value Length
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_server_read_value_requested_cb()
+ */
+int bt_gatt_server_send_response(int request_id, int request_type,
+			int offset, int resp_status, char *value, int value_length);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief  Notifies value change of the characteristic to the remote devices which enable a Client Characteristic Configuration Descriptor.
+ * @since_tizen 3.0
+ *
+ * @param[in] characteristic The characteristic which has a changed value
+ * @param[in] need_confirm If it is true, an indication is sent. If it is false, a notification is sent.
+ * @param[in] callback The function to be invoked on each remote device when a sending operation is done
+ * @param[in] device_address Remote device address to send notify or indicate and if set to NULL then notify/indicate all is enabled.
+ * @param[in] user_data The user data to be passed to @a callback function
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_server_notification_sent_cb()
+ */
+int bt_gatt_server_notify_characteristic_changed_value(bt_gatt_h characteristic, bool need_confirm,
+				bt_gatt_server_notification_sent_cb callback,
+				const char *device_address, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief  Gets a service's GATT handle which has specific UUID.
+ * @since_tizen 3.0
+ *
+ * @remark The returned GATT handle must not be freed by application.
+ * It will be freed when an associated server is destroyed by bt_gatt_server_destroy().
+ * If there are multiple services which have same UUID, only the first matched one will be returned.
+ *
+ * @param[in] server The GATT server's handle
+ * @param[in] uuid The service's GATT handle which has this UUID will be returned if it exists
+ * @param[out] service The service's GATT handle which has @a uuid if it exists
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NO_DATA  No data available
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ */
+int bt_gatt_server_get_service(bt_gatt_server_h server, const char *uuid,
+				bt_gatt_h *service);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief  Invokes @a callback function on each service that belongs to the specified GATT server.
+ * @since_tizen 3.0
+ *
+ * @param[in] server The GATT server's handle
+ * @param[in] callback The function to be invoked on each service
+ * @param[in] user_data The user data to be passed to @a callback function
+ * @return  0 on success, otherwise a negative error value
+ * @retval #BT_ERROR_NONE Successful
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_NOT_SUPPORTED  Not supported
+ *
+ * @see bt_gatt_foreach_cb()
+ */
+int bt_gatt_server_foreach_services(bt_gatt_server_h server,
+		bt_gatt_foreach_cb callback, void *user_data);
 
 /**
  * @}

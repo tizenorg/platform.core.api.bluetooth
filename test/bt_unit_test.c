@@ -5872,7 +5872,7 @@ int test_input_callback(void *data)
 
 			bt_gatt_server_set_read_value_requested_cb(characteristic,
 				__bt_gatt_server_read_value_requested_cb, NULL);
-			bt_gatt_server_set_notification_state_change_cb(characteristic,
+			bt_gatt_server_set_characteristic_notification_state_change_cb(characteristic,
 				__bt_gatt_server_notification_state_change_cb, NULL);
 			ret = bt_gatt_service_add_characteristic(service, characteristic);
 			TC_PRT("bt_gatt_service_add_characteristic : %s\n", __bt_get_error_message(ret));
@@ -5904,7 +5904,7 @@ int test_input_callback(void *data)
 			TC_PRT("Value[%d], returns %s\n", char_value[0], __bt_get_error_message(ret));
 
 			/* notify only client remote_addr */
-			ret = bt_gatt_server_notify(battery_h.chr, true,
+			ret = bt_gatt_server_notify_characteristic_changed_value(battery_h.chr, true,
 				__bt_gatt_server_notification_sent_cb,
 				remote_addr, NULL);
 			TC_PRT("bt_gatt_server_notify : %s\n", __bt_get_error_message(ret));
@@ -5942,7 +5942,7 @@ int test_input_callback(void *data)
 
 			bt_gatt_server_set_read_value_requested_cb(characteristic,
 				__bt_gatt_server_read_value_requested_cb, NULL);
-			bt_gatt_server_set_notification_state_change_cb(characteristic,
+			bt_gatt_server_set_characteristic_notification_state_change_cb(characteristic,
 				__bt_gatt_server_notification_state_change_cb, NULL);
 			ret = bt_gatt_service_add_characteristic(service, characteristic);
 			TC_PRT("bt_gatt_service_add_characteristic : %s\n", __bt_get_error_message(ret));
@@ -5988,7 +5988,7 @@ int test_input_callback(void *data)
 				char_value, __bt_get_error_message(ret));
 
 			/* Notify all client devices */
-			ret = bt_gatt_server_notify(heart_rate_h.chr,
+			ret = bt_gatt_server_notify_characteristic_changed_value(heart_rate_h.chr,
 				true, __bt_gatt_server_notification_sent_cb,
 				NULL, NULL);
 			TC_PRT("bt_gatt_server_notify : %s\n", __bt_get_error_message(ret));
@@ -6025,7 +6025,7 @@ int test_input_callback(void *data)
 
 			bt_gatt_server_set_read_value_requested_cb(characteristic,
 				__bt_gatt_server_read_value_requested_cb, NULL);
-			bt_gatt_server_set_notification_state_change_cb(characteristic,
+			bt_gatt_server_set_characteristic_notification_state_change_cb(characteristic,
 				__bt_gatt_server_notification_state_change_cb, NULL);
 			ret = bt_gatt_service_add_characteristic(service, characteristic);
 			TC_PRT("bt_gatt_service_add_characteristic : %s\n", __bt_get_error_message(ret));
@@ -6056,7 +6056,7 @@ int test_input_callback(void *data)
 			TC_PRT("bt_gatt_set_value(value : 1.23) : %s\n", __bt_get_error_message(ret));
 
 			/* notify only client remote_addr */
-			ret = bt_gatt_server_notify(thermometer_h.chr, true,
+			ret = bt_gatt_server_notify_characteristic_changed_value(thermometer_h.chr, true,
 				__bt_gatt_server_notification_sent_cb, remote_addr, NULL);
 			TC_PRT("bt_gatt_server_notify : %s\n", __bt_get_error_message(ret));
 
