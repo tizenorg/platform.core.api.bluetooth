@@ -4383,7 +4383,7 @@ int bt_pbap_client_pull_vcard(const char *address,
  *
  * @see bt_pbap_client_connect()
  */
-int bt_pbap_search_phone_book(const char *address,
+int bt_pbap_client_search_phone_book(const char *address,
 					bt_pbap_address_book_source_e source,
 					bt_pbap_folder_type_e folder_type,
 					bt_pbap_search_field_e search_attribute,
