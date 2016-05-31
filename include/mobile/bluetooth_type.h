@@ -627,7 +627,7 @@ typedef enum {
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Enumerations of the integer type for GATT handle's value
+ * @brief  Enumerations of the integer type for GATT handle's value.
  * @since_tizen 2.3.1
  */
 typedef enum {
@@ -641,7 +641,7 @@ typedef enum {
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Enumerations of the float type for GATT handle's value
+ * @brief  Enumerations of the float type for GATT handle's value.
  * @since_tizen 2.3.1
  */
 typedef enum {
@@ -651,7 +651,7 @@ typedef enum {
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Enumerations of the write type
+ * @brief  Enumerations of the write type.
  * @since_tizen 2.3.1
  */
 typedef enum {
@@ -661,7 +661,7 @@ typedef enum {
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Enumerations of the GATT handle's type
+ * @brief  Enumerations of the GATT handle's type.
  * @since_tizen 2.3.1
  */
 typedef enum {
@@ -672,7 +672,7 @@ typedef enum {
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Enumerations of the service type
+ * @brief  Enumerations of the service type.
  * @since_tizen 2.3.1
  */
 typedef enum {
@@ -682,7 +682,7 @@ typedef enum {
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  Enumerations of the characteristic's property
+ * @brief  Enumerations of the characteristic's property.
  * @since_tizen 2.3.1
  */
 typedef enum {
@@ -697,8 +697,22 @@ typedef enum {
 } bt_gatt_property_e;
 
 /**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief  Enumerations of the attribute's permission.
+ * @since_tizen 3.0
+ */
+typedef enum {
+	BT_GATT_PERMISSION_READ = 0x01,  /**< Read permission */
+	BT_GATT_PERMISSION_WRITE = 0x02,  /**< Write permission */
+	BT_GATT_PERMISSION_ENCRYPTION = 0x04,  /**< Encryption permission */
+	BT_GATT_PERMISSION_AUTHENTICATION = 0x08,  /**< Authentication permission */
+	BT_GATT_PERMISSION_AUTHORIZATION = 0x10,  /**< Authorization permission */
+	BT_GATT_PERMISSION_NONE = 0x20,  /**< None */
+} bt_gatt_permission_e;
+
+/**
  * @ingroup CAPI_NETWORK_BLUETOOTH_PAN_PANU_MODULE
- * @brief  Enumerations for the types of PAN(Personal Area Networking) service
+ * @brief  Enumerations for the types of PAN(Personal Area Networking) service.
  * @since_tizen 2.3
  */
 typedef enum {
@@ -707,7 +721,7 @@ typedef enum {
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
- * @brief The handle to control Bluetooth LE advertising
+ * @brief The handle to control Bluetooth LE advertising.
  * @since_tizen 2.3
  */
 typedef void *bt_advertiser_h;
@@ -715,28 +729,35 @@ typedef void *bt_advertiser_h;
 /**
  * @deprecated Deprecated since 2.3.1. Use bt_gatt_h instead.
  * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_MODULE
- * @brief  The attribute handle of GATT(Generic Attribute Profile)
+ * @brief  The attribute handle of GATT(Generic Attribute Profile).
  * @since_tizen 2.3
  */
 typedef void *bt_gatt_attribute_h;
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
- * @brief The handle of a service, characteristic or descriptor
+ * @brief The handle of a service, characteristic or descriptor.
  * @since_tizen 2.3.1
  */
 typedef void *bt_gatt_h;
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
- * @brief The handle of a GATT client which is associated with a remote device
+ * @brief The handle of a GATT client which is associated with a remote device.
  * @since_tizen 2.3.1
  */
 typedef void *bt_gatt_client_h;
 
 /**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief The handle of a GATT server.
+ * @since_tizen 3.0
+ */
+typedef void *bt_gatt_server_h;
+
+/**
  * @ingroup CAPI_NETWORK_BLUETOOTH_AUDIO_AG_MODULE
- * @brief  The handle of calls state
+ * @brief  The handle of calls state.
  * @since_tizen 2.3
  */
 typedef void *bt_call_list_h;
@@ -818,7 +839,7 @@ typedef struct {
 /**
  * @deprecated Deprecated since 2.3.1
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
- * @brief Structure of advertising parameters
+ * @brief Structure of advertising parameters.
  * @since_tizen 2.3
  *
  * @see bt_adapter_le_advertising_state_changed_cb()
@@ -835,7 +856,7 @@ typedef struct {
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_LE_MODULE
- * @brief LE service data structure
+ * @brief LE service data structure.
  * @since_tizen 2.3.1
  *
  * @see bt_adapter_le_get_scan_result_service_data()
@@ -1672,7 +1693,7 @@ typedef void (*bt_gatt_client_request_completed_cb) (int result,
  * @brief  Called when a value of a watched characteristic's GATT handle has been changed
  * @since_tizen 2.3.1
  *
- * @remarks After this function is returned, a changed vlaue is automatically
+ * @remarks After this function is returned, a changed value is automatically
  * applied to @a characteristic. Before that, @a characteristic has an old value.
  *
  * @param[in] characteristic The characteristic's GATT handle of which value change is informed. It has an old value.
@@ -1704,6 +1725,108 @@ typedef void (*bt_gatt_client_characteristic_value_changed_cb) (bt_gatt_h charac
  * @see bt_gatt_unset_connection_state_changed_cb()
  */
 typedef void (*bt_gatt_connection_state_changed_cb)(int result, bool connected, const char *remote_address, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief  Called when a value of a characteristic or descriptor's GATT handle has been changed.
+ * @since_tizen 3.0
+ *
+ * @details For finishing the request, call the function #bt_gatt_server_send_response in callback.
+ *
+ * @remarks After this function is returned, a changed value is automatically
+ * applied to @a gatt_handle. Before that, @a gatt_handle has an old value.
+ * @remarks The @a remote_address must not be freed by application.
+ * @remarks The @a server must not be freed by application.
+ * @remarks The @a gatt_handle must not be freed by application.
+ * @remarks The @a value must not be freed by application.
+ *
+ * @param[in] remote_address The address of the remote device which requests a change
+ * @param[in] request_id The identification of this request. It will be used to send a response.
+ * @param[in] server The GATT server handle
+ * @param[in] gatt_handle The characteristic's GATT handle which has an old value
+ * @param[in] offset The requested offset from where the @a gatt_handle value will be updated
+ * @param[in] value The new value
+ * @param[in] len The length of @a value
+ * @param[in] user_data The user data passed from the registration function
+ *
+ * @see bt_gatt_server_set_write_value_requested_cb()
+ * @see bt_gatt_server_send_response()
+ */
+typedef void (*bt_gatt_server_write_value_requested_cb) (const char *remote_address,
+				int request_id, bt_gatt_server_h server,
+				bt_gatt_h gatt_handle, int offset,
+				const char *value, int len, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief  Called when the remote device requests to read a value on a GATT server.
+ * @since_tizen 3.0
+ *
+ * @details For finishing the request, call the function #bt_gatt_server_send_response in callback.
+ *
+ * @remarks The @a remote_address must not be freed by application.
+ * @remarks The @a server must not be freed by application.
+ * @remarks The @a gatt_handle must not be freed by application.
+ *
+ * @param[in] remote_address The address of the requesting remote device
+ * @param[in] request_id The identification of this request. It will be used to send a response.
+ * @param[in] server The GATT server handle
+ * @param[in] gatt_handle The characteristic's GATT handle to be read
+ * @param[in] offset The requested offset from where the GATT handle's value is read
+ * @param[in] user_data The user data passed from the registration function
+ *
+ * @see bt_gatt_server_set_read_value_requested_cb()
+ * @see bt_gatt_server_send_response()
+ */
+typedef void (*bt_gatt_server_read_value_requested_cb) (const char *remote_address,
+		int request_id, bt_gatt_server_h server, bt_gatt_h gatt_handle,
+		int offset, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief  Called when the remote device enables or disables the Notification/Indication for particular characteristics.
+ * @since_tizen 3.0
+ *
+ * @details By using this callback function, server can know notification state.
+ *
+ * @remarks The @a server must not be freed by application.
+ * @remarks The @a gatt_handle must not be freed by application.
+ *
+ * @param[in] notify Indicates whether the Notification/Indication is enabled or not
+ * @param[in] server The GATT server handle
+ * @param[in] gatt_handle The characteristic's GATT handle to be read
+ * @param[in] user_data The user data passed from the registration function
+ *
+ * @see bt_gatt_server_set_read_value_requested_cb()
+ */
+typedef void (*bt_gatt_server_characteristic_notification_state_changed_cb) (bool notify,
+			bt_gatt_server_h server, bt_gatt_h gatt_handle, void *user_data);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE
+ * @brief  Called when the sending notification / indication is done.
+ * @since_tizen 3.0
+ *
+ * @remarks The @a remote_address must not be freed by application.
+ * @remarks The @a server must not be freed by application.
+ * @remarks The @a characteristic must not be freed by application.
+ *
+ * @remarks In case of an indication, once a confirmation is received from the remote device this callback will be called. \n
+ * This callback will be called several times if there are two or more remote devices which enable a Client Characteristic Configuration Descriptor(CCCD). \n
+ * For the last remote device, @a completed will be set as true.
+ *
+ * @param[in] result The result of a sending operation
+ * @param[in] remote_address The address of the remote device
+ * @param[in] server The GATT server handle
+ * @param[in] characteristic The characteristic's GATT handle
+ * @param[in] completed If this callback is for the last remote device which enables a CCCD, it will be true. Or it will be false.
+ * @param[in] user_data The user data passed from the requesting function
+ *
+ * @see bt_gatt_server_notify_characteristic_changed_value()
+ */
+typedef void (*bt_gatt_server_notification_sent_cb) (int result,
+		const char *remote_address, bt_gatt_server_h server,
+		bt_gatt_h characteristic, bool completed, void *user_data);
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_PAN_NAP_MODULE
