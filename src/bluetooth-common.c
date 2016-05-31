@@ -764,6 +764,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 	media_metadata_attributes_t *metadata = NULL;
 	bluetooth_authentication_request_info_t *auth_information = NULL;
 	bt_le_data_length_params_t  *data_length_info = NULL;
+	bt_ipsp_interface_info_t *ipsp_iface_info = NULL;
 
 	event_index = __bt_get_cb_index(event);
 
@@ -1824,7 +1825,7 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 		BT_INFO("BLUETOOTH_EVENT_IPSP_CONNECTED");
 		bd_addr = (bluetooth_device_address_t *)(param->param_data);
 		_bt_convert_address_to_string(&device_addr, bd_addr);
-		((_bt_le_ipsp_connection_state_changed_cb)bt_event_slot_container[event_index].callback)
+		((bt_le_ipsp_connection_state_changed_cb)bt_event_slot_container[event_index].callback)
 		(_bt_get_error_code(param->result), TRUE, device_addr,
 		 bt_event_slot_container[event_index].user_data);
 		break;
@@ -1832,8 +1833,16 @@ static void __bt_event_proxy(int event, bluetooth_event_param_t *param, void *us
 		BT_INFO("BLUETOOTH_EVENT_IPSP_DISCONNECTED");
 		bd_addr = (bluetooth_device_address_t *)(param->param_data);
 		_bt_convert_address_to_string(&device_addr, bd_addr);
-		((_bt_le_ipsp_connection_state_changed_cb)bt_event_slot_container[event_index].callback)
+		((bt_le_ipsp_connection_state_changed_cb)bt_event_slot_container[event_index].callback)
 		(_bt_get_error_code(param->result), FALSE, device_addr,
+		 bt_event_slot_container[event_index].user_data);
+		break;
+	case BLUETOOTH_EVENT_IPSP_INTERFACE_INFO:
+		BT_INFO("BLUETOOTH_EVENT_IPSP_INTERFACE_INFO");
+		ipsp_iface_info = (bt_ipsp_interface_info_t *)(param->param_data);
+		_bt_convert_address_to_string(&device_addr, &ipsp_iface_info->btaddr);
+		((bt_le_ipsp_interface_info_cb)bt_event_slot_container[event_index].callback)
+		(_bt_get_error_code(param->result), device_addr, ipsp_iface_info->if_name,
 		 bt_event_slot_container[event_index].user_data);
 		break;
 	case BLUETOOTH_EVENT_LE_DATA_LENGTH_CHANGED:
@@ -2583,6 +2592,8 @@ static int __bt_get_cb_index(int event)
 	case BLUETOOTH_EVENT_IPSP_CONNECTED:
 	case BLUETOOTH_EVENT_IPSP_DISCONNECTED:
 		return BT_EVENT_IPSP_CONNECTION_STATUS; /* LCOV_EXCL_LINE */
+	case BLUETOOTH_EVENT_IPSP_INTERFACE_INFO:
+		return BT_EVENT_IPSP_INTERFACE_INFO;
 	case BLUETOOTH_EVENT_LE_DATA_LENGTH_CHANGED:
 		return BT_EVENT_LE_DATA_LENGTH_CHANGED; /* LCOV_EXCL_LINE */
 #ifdef TIZEN_WEARABLE
