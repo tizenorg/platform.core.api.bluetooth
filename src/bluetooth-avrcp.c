@@ -36,6 +36,17 @@ static bool is_avrcp_control_initialized = false;
 #define BT_CHECK_AVRCP_SUPPORT()
 #endif
 
+#ifdef TIZEN_AVRCP_CONTROL_DISABLE
+#define BT_CHECK_AVRCP_CONTROL_SUPPORT() \
+		{ \
+			BT_CHECK_BT_SUPPORT(); \
+			LOGE("[%s] NOT_SUPPORTED(0x%08x)", __FUNCTION__, BT_ERROR_NOT_SUPPORTED); \
+			return BT_ERROR_NOT_SUPPORTED; \
+		}
+#else
+#define BT_CHECK_AVRCP_CONTROL_SUPPORT()
+#endif
+
 #define BT_CHECK_AVRCP_TARGET_INIT_STATUS() \
 	if (__bt_check_avrcp_target_init_status() == BT_ERROR_NOT_INITIALIZED) { \
 		LOGE("[%s] NOT_INITIALIZED(0x%08x)", __FUNCTION__, BT_ERROR_NOT_INITIALIZED); \
@@ -255,7 +266,7 @@ int bt_avrcp_control_initialize(bt_avrcp_control_connection_state_changed_cb cal
 {
 	int error;
 
-	BT_CHECK_AVRCP_SUPPORT();
+	BT_CHECK_AVRCP_CONTROL_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(callback);
 	_bt_set_cb(BT_EVENT_AVRCP_CONNECTION_STATUS, callback, user_data);
@@ -275,7 +286,7 @@ int bt_avrcp_control_deinitialize(void)
 {
 	int error;
 
-	BT_CHECK_AVRCP_SUPPORT();
+	BT_CHECK_AVRCP_CONTROL_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_AVRCP_CONTROL_INIT_STATUS();
 	if (_bt_check_cb(BT_EVENT_AVRCP_CONNECTION_STATUS) == true)
@@ -299,7 +310,7 @@ int bt_avrcp_control_connect(const char *remote_address)
 	int error;
 	bluetooth_device_address_t addr_hex = { {0,} };
 
-	BT_CHECK_AVRCP_SUPPORT();
+	BT_CHECK_AVRCP_CONTROL_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_AVRCP_CONTROL_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(remote_address);
@@ -318,7 +329,7 @@ int bt_avrcp_control_disconnect(const char *remote_address)
 	int error;
 	bluetooth_device_address_t addr_hex = { {0,} };
 
-	BT_CHECK_AVRCP_SUPPORT();
+	BT_CHECK_AVRCP_CONTROL_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_AVRCP_CONTROL_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(remote_address);
@@ -336,7 +347,7 @@ int bt_avrcp_control_send_player_command(bt_avrcp_player_command_e cmd)
 {
 	int error;
 
-	BT_CHECK_AVRCP_SUPPORT();
+	BT_CHECK_AVRCP_CONTROL_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_AVRCP_CONTROL_INIT_STATUS();
 	error = bluetooth_media_control_command(cmd);
@@ -352,7 +363,7 @@ int bt_avrcp_control_set_equalizer_state(bt_avrcp_equalizer_state_e state)
 {
 	int error;
 
-	BT_CHECK_AVRCP_SUPPORT();
+	BT_CHECK_AVRCP_CONTROL_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_AVRCP_CONTROL_INIT_STATUS();
 	error = bluetooth_media_control_set_property(EQUALIZER, state);
@@ -368,7 +379,7 @@ int bt_avrcp_control_get_equalizer_state(bt_avrcp_equalizer_state_e *state)
 {
 	int error;
 
-	BT_CHECK_AVRCP_SUPPORT();
+	BT_CHECK_AVRCP_CONTROL_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_AVRCP_CONTROL_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(state);
@@ -385,7 +396,7 @@ int bt_avrcp_control_set_repeat_mode(bt_avrcp_repeat_mode_e mode)
 {
 	int error;
 
-	BT_CHECK_AVRCP_SUPPORT();
+	BT_CHECK_AVRCP_CONTROL_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_AVRCP_CONTROL_INIT_STATUS();
 	error = bluetooth_media_control_set_property(REPEAT, mode);
@@ -401,7 +412,7 @@ int bt_avrcp_control_get_repeat_mode(bt_avrcp_repeat_mode_e *mode)
 {
 	int error;
 
-	BT_CHECK_AVRCP_SUPPORT();
+	BT_CHECK_AVRCP_CONTROL_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_AVRCP_CONTROL_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(mode);
@@ -418,7 +429,7 @@ int bt_avrcp_control_set_shuffle_mode(bt_avrcp_shuffle_mode_e mode)
 {
 	int error;
 
-	BT_CHECK_AVRCP_SUPPORT();
+	BT_CHECK_AVRCP_CONTROL_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_AVRCP_CONTROL_INIT_STATUS();
 	error = bluetooth_media_control_set_property(SHUFFLE, mode);
@@ -434,7 +445,7 @@ int bt_avrcp_control_get_shuffle_mode(bt_avrcp_shuffle_mode_e *mode)
 {
 	int error;
 
-	BT_CHECK_AVRCP_SUPPORT();
+	BT_CHECK_AVRCP_CONTROL_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_AVRCP_CONTROL_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(mode);
@@ -450,7 +461,7 @@ int bt_avrcp_control_set_scan_mode(bt_avrcp_scan_mode_e mode)
 {
 	int error;
 
-	BT_CHECK_AVRCP_SUPPORT();
+	BT_CHECK_AVRCP_CONTROL_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_AVRCP_CONTROL_INIT_STATUS();
 	error = bluetooth_media_control_set_property(SCAN, mode);
@@ -466,7 +477,7 @@ int bt_avrcp_control_get_scan_mode(bt_avrcp_scan_mode_e *mode)
 {
 	int error;
 
-	BT_CHECK_AVRCP_SUPPORT();
+	BT_CHECK_AVRCP_CONTROL_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_AVRCP_CONTROL_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(mode);
@@ -483,7 +494,7 @@ int bt_avrcp_control_get_position(unsigned int *position)
 {
 	int error;
 
-	BT_CHECK_AVRCP_SUPPORT();
+	BT_CHECK_AVRCP_CONTROL_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_AVRCP_CONTROL_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(position);
@@ -500,7 +511,7 @@ int bt_avrcp_control_get_play_status(bt_avrcp_player_state_e *status)
 {
 	int error;
 
-	BT_CHECK_AVRCP_SUPPORT();
+	BT_CHECK_AVRCP_CONTROL_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_AVRCP_CONTROL_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(status);
@@ -519,7 +530,7 @@ int bt_avrcp_control_get_track_info(bt_avrcp_metadata_attributes_info_s **track)
 	media_metadata_attributes_t metadata = {0,};
 	bt_avrcp_metadata_attributes_info_s *tr_info = NULL;
 
-	BT_CHECK_AVRCP_SUPPORT();
+	BT_CHECK_AVRCP_CONTROL_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_AVRCP_CONTROL_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(track);
@@ -547,7 +558,7 @@ int bt_avrcp_control_get_track_info(bt_avrcp_metadata_attributes_info_s **track)
 
 int bt_avrcp_control_free_track_info(bt_avrcp_metadata_attributes_info_s *track)
 {
-	BT_CHECK_AVRCP_SUPPORT();
+	BT_CHECK_AVRCP_CONTROL_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(track);
 	g_free((gpointer)track->title);
