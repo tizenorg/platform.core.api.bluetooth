@@ -733,6 +733,33 @@
  *
  */
 
+ /**
+ * @defgroup CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE Bluetooth GATT Server
+ * @brief Bluetooth GATT(Generic Attribute Profile) API provides functions for modifying attributes and registering services, characteristics and descriptors. 
+ * @ingroup CAPI_NETWORK_BLUETOOTH_MODULE
+ *
+ * @section CAPI_NETWORK_BLUETOOTH_GATT_MODULE_HEADER Required Header
+ *  \#include <bluetooth.h>
+ *
+ * @section CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE_OVERVIEW Overview
+ * Two roles are defined for devices that implement GATT.
+ * The @a Server is the device that accepts incoming commands and requests from a client and sends responses, indications and notifications to the client.
+ * The @a Client is the device that initiates commands and requests towards a server and can receive responses, indications and notifications sent by the server.
+ *
+ * @section CAPI_NETWORK_BLUETOOTH_GATT_SERVER_MODULE_FEATURE Related Features
+ * This API is related with the following features:\n
+ *  - http://tizen.org/feature/network.bluetooth.le\n
+ *
+ * It is recommended to create an application with regard to features, to increase reliability.\n
+ *
+ * You can check if a device supports the related features for this API by using @ref CAPI_SYSTEM_SYSTEM_INFO_MODULE, thereby controlling the procedure of your application.\n
+ *
+ * To ensure your application is only running on the device with specific features, please define the features in your manifest file using the manifest editor in the SDK.\n
+ *
+ * More details on featuring your application can be found from <a href="https://developer.tizen.org/development/tools/native-tools/manifest-text-editor#feature"><b>Feature Element</b>.</a>
+ *
+ */
+
 /**
  * @if WEARABLE
  * @defgroup CAPI_NETWORK_BLUETOOTH_PBAP_MODULE Bluetooth PBAP
