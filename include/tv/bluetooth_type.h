@@ -1871,64 +1871,6 @@ typedef void (*bt_nap_connection_state_changed_cb) (bool connected, const char *
  */
 typedef void (*bt_panu_connection_state_changed_cb) (int result, bool connected, const char *remote_address, bt_panu_service_type_e type, void *user_data);
 
-/* HID device related type */
-typedef struct {
-	unsigned char btcode;
-	unsigned char rep_id;
-	unsigned char button;
-	signed char axis_x;
-	signed char axis_y;
-	signed char axis_z;
-} bt_hid_mouse_data_s;
-
-typedef struct {
-	unsigned char btcode;
-	unsigned char rep_id;
-	unsigned char modify;
-	unsigned char key[8];
-} bt_hid_key_data_s;
-
-typedef enum {
-	BT_HID_HEADER_HANDSHAKE,
-	BT_HID_HEADER_HID_CONTROL,
-	BT_HID_HEADER_GET_REPORT,
-	BT_HID_HEADER_SET_REPORT,
-	BT_HID_HEADER_GET_PROTOCOL,
-	BT_HID_HEADER_SET_PROTOCOL,
-	BT_HID_HEADER_DATA,
-	BT_HID_HEADER_UNKNOWN
-} bluetooth_hid_header_type_t;
-
-typedef enum {
-	BT_HID_PARAM_DATA_RTYPE_INPUT,
-	BT_HID_PARAM_DATA_RTYPE_OUTPUT
-} bluetooth_hid_param_type_t;
-
-typedef enum {
-	BT_HID_HANDSHAKE_SUCCESSFUL = 0x00, /**< Handshake error code none */
-	BT_HID_HANDSHAKE_NOT_READY, /**< Handshake error code Not Ready */
-	BT_HID_HANDSHAKE_ERR_INVALID_REPORT_ID, /**< Handshake error code send invalid report id */
-	BT_HID_HANDSHAKE_ERR_UNSUPPORTED_REQUEST, /**< Handshake error code request unsupported request */
-	BT_HID_HANDSHAKE_ERR_INVALID_PARAMETER, /**< Handshake error code received invalid parameter */
-	BT_HID_HANDSHAKE_ERR_UNKNOWN = 0x0e, /**< unknown error */
-	BT_HID_HANDSHAKE_ERR_FATAL /**< Fatal error */
-} bluetooth_hid_handshake_type_t;
-
-typedef struct {
-	const char *address;
-	bluetooth_hid_header_type_t type;
-	bluetooth_hid_param_type_t param;
-	int data_size;  /**< The length of the received data */
-	const char *data;     /**< The received data */
-} bt_hid_device_received_data_s;
-
-typedef void (*bt_hid_device_connection_state_changed_cb) (int result,
-	bool connected, const char *remote_address,
-	void *user_data);
-
-typedef void (*bt_hid_device_data_received_cb)(const bt_hid_device_received_data_s *data, void *user_data);
-/* HID device related type */
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
