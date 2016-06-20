@@ -238,60 +238,128 @@ typedef struct {
 	char **uuids;
 } bt_dpm_uuids_list_s;
 
-/* HID device related type */
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE
+ * @brief Enumerations of the Bluetooth HID mouse's button.
+ * @since_tizen 3.0
+ */
+typedef enum {
+	BT_HID_MOUSE_BUTTON_NONE = 0x00, /**<The mouse's none value*/
+	BT_HID_MOUSE_BUTTON_LEFT = 0x01, /**<The mouse's left button value*/
+	BT_HID_MOUSE_BUTTON_RIGHT = 0x02,  /**<The mouse's right button value*/
+	BT_HID_MOUSE_BUTTON_MIDDLE = 0x04 /**<The mouse's middle button value*/
+} bt_hid_mouse_button_e;
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE
+ * @brief The structure type containing the HID mouse event information.
+ * @since_tizen 3.0
+ *
+ * @see bt_hid_device_send_mouse_event()
+ */
 typedef struct {
-      unsigned char btcode;
-      unsigned char rep_id;
-      unsigned char button;
-      signed char axis_x;
-      signed char axis_y;
-      signed char padding;
+	int buttons; /**< The button values, we can combine key's values when we pressed multiple mouse buttons*/
+	int axis_x; /**< The location's x value, -128 ~127 */
+	int axis_y; /**< The location's y value, -128 ~127 */
+	int padding; /**< The padding value, -128 ~127 */
 } bt_hid_mouse_data_s;
 
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE
+ * @brief The structure type containing the HID keyboard event information.
+ * @since_tizen 3.0
+ * @details If you want to know more detail values, refer to http://www.usb.org/developers/hidpage/ and see "HID Usage Tables"
+ *
+ * @see bt_hid_device_send_key_event()
+ */
 typedef struct {
-      unsigned char btcode;
-      unsigned char rep_id;
-      unsigned char modifier;
-      unsigned char key[8];
+	unsigned char modifier; /**< The modifier keys : such as shift, alt */
+	unsigned char key[8]; /**< The key value - currently pressed keys : Max 8 at once */
 } bt_hid_key_data_s;
 
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE
+ * @brief Enumerations of the Bluetooth HID header type.
+ * @since_tizen 3.0
+ */
 typedef enum {
-      BT_HID_HEADER_HANDSHAKE,
-      BT_HID_HEADER_HID_CONTROL,
-      BT_HID_HEADER_GET_REPORT,
-      BT_HID_HEADER_SET_REPORT,
-      BT_HID_HEADER_GET_PROTOCOL,
-      BT_HID_HEADER_SET_PROTOCOL,
-      BT_HID_HEADER_DATA,
-      BT_HID_HEADER_UNKNOWN
+	BT_HID_HEADER_HANDSHAKE, /**< The Bluetooth HID header type: Handshake */
+	BT_HID_HEADER_HID_CONTROL, /**< The Bluetooth HID header type: HID control */
+	BT_HID_HEADER_GET_REPORT, /**< The Bluetooth HID header type: Get report */
+	BT_HID_HEADER_SET_REPORT, /**< The Bluetooth HID header type: Set report */
+	BT_HID_HEADER_GET_PROTOCOL, /**< The Bluetooth HID header type: Get protocol */
+	BT_HID_HEADER_SET_PROTOCOL, /**< The Bluetooth HID header type: Set protocol */
+	BT_HID_HEADER_DATA, /**< The Bluetooth HID header type: Data */
+	BT_HID_HEADER_UNKNOWN /**< The Bluetooth HID header type: Unknown */
 } bt_hid_header_type_e;
 
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE
+ * @brief Enumerations of the Bluetooth HID parameter type.
+ * @since_tizen 3.0
+ */
 typedef enum {
-      BT_HID_PARAM_DATA_RTYPE_INPUT,
-      BT_HID_PARAM_DATA_RTYPE_OUTPUT
+	BT_HID_PARAM_DATA_RTYPE_INPUT, /**< Parameter type: Input */
+	BT_HID_PARAM_DATA_RTYPE_OUTPUT /**< Parameter type: Output */
 } bt_hid_param_type_e;
 
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE
+ * @brief Enumerations of the Bluetooth HID handshake type.
+ * @since_tizen 3.0
+ */
 typedef enum {
-      BT_HID_HANDSHAKE_SUCCESSFUL = 0x00, /**< Handshake error code none */
-      BT_HID_HANDSHAKE_NOT_READY, /**< Handshake error code Not Ready */
-      BT_HID_HANDSHAKE_ERR_INVALID_REPORT_ID, /**< Handshake error code send invalid report id */
-      BT_HID_HANDSHAKE_ERR_UNSUPPORTED_REQUEST, /**< Handshake error code request unsupported request */
-      BT_HID_HANDSHAKE_ERR_INVALID_PARAMETER, /**< Handshake error code received invalid parameter */
-      BT_HID_HANDSHAKE_ERR_UNKNOWN = 0x0e, /**< unknown error */
-      BT_HID_HANDSHAKE_ERR_FATAL /**< Fatal error */
+	BT_HID_HANDSHAKE_SUCCESSFUL = 0x00, /**< Handshake error code none */
+	BT_HID_HANDSHAKE_NOT_READY, /**< Handshake error code Not Ready */
+	BT_HID_HANDSHAKE_ERR_INVALID_REPORT_ID, /**< Handshake error code send invalid report id */
+	BT_HID_HANDSHAKE_ERR_UNSUPPORTED_REQUEST, /**< Handshake error code request unsupported request */
+	BT_HID_HANDSHAKE_ERR_INVALID_PARAMETER, /**< Handshake error code received invalid parameter */
+	BT_HID_HANDSHAKE_ERR_UNKNOWN = 0x0e, /**< unknown error */
+	BT_HID_HANDSHAKE_ERR_FATAL /**< Fatal error */
 } bt_hid_handshake_type_e;
 
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE
+ * @brief The structure type containing data received from the HID Host.
+ * @since_tizen 3.0
+ */
 typedef struct {
-      const char *address;
-      bt_hid_header_type_e header_type;
-      bt_hid_param_type_e param_type;
-      int data_size;  /**< The length of the received data */
-      const char *data;     /**< The received data */
+	const char *address;  /**< The remote device's address  */
+	bt_hid_header_type_e header_type;  /**< The header type */
+	bt_hid_param_type_e param_type;  /**< The parameter type */
+	int data_size;  /**< The length of the received data */
+	const char *data;     /**< The received data */
 } bt_hid_device_received_data_s;
 
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE
+ * @brief  Called when the Bluetooth HID Device connection state changes.
+ * @details The following error codes can be delivered: \n
+ *             #BT_ERROR_NONE \n
+ *             #BT_ERROR_OPERATION_FAILED \n
+ * @since_tizen 3.0
+ *
+ * @param[in]   result  The result of changing the connection state.
+ * @param[in]   connected  The requested state. @a true means the connection is enabled, @false means the connection is disabled.
+ * @param[in]   remote_address  The remote device's address
+ * @param[in]   user_data  The user data passed from the callback registration function
+ * @see bt_hid_device_activate()
+ */
 typedef void (*bt_hid_device_connection_state_changed_cb) (int result,
-      bool connected, const char *remote_address, void *user_data);
+	bool connected, const char *remote_address, void *user_data);
 
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE
+ * @brief  Called when the HID Device receives data from the HID Host.
+ * @details The following error codes can be delivered: \n
+ *             #BT_ERROR_NONE \n
+ *             #BT_ERROR_OPERATION_FAILED \n
+ * @since_tizen 3.0
+ *
+ * @param[in]   data  The data received from the HID Host.
+ * @param[in]   user_data  The user data passed from the callback registration function
+ * @see bt_hid_device_set_data_received_cb()
+ */
 typedef void (*bt_hid_device_data_received_cb)(const bt_hid_device_received_data_s *data, void *user_data);
 /* HID device related type */
 
