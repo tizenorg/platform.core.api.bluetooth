@@ -2141,6 +2141,7 @@ int bt_gatt_server_set_characteristic_notification_state_change_cb(bt_gatt_h gat
 {
 	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)gatt_handle;
 
+	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_GATT_SERVER_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(gatt_handle);
@@ -2336,6 +2337,7 @@ int bt_gatt_server_notify_characteristic_changed_value(bt_gatt_h characteristic,
 	bluetooth_device_address_t addr_hex = { {0,} };
 	int ret = BT_ERROR_NONE;
 
+	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_GATT_SERVER_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(characteristic);
@@ -2378,6 +2380,7 @@ int bt_gatt_server_set_write_value_requested_cb(bt_gatt_h gatt_handle,
 	bt_gatt_characteristic_s *chr = (bt_gatt_characteristic_s *)gatt_handle;
 	bt_gatt_descriptor_s *desc = (bt_gatt_descriptor_s*)gatt_handle;
 
+	BT_CHECK_GATT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_GATT_SERVER_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(gatt_handle);
