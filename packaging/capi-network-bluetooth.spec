@@ -51,10 +51,6 @@ cp %{SOURCE1001} %{SOURCE1002} .
 %build
 
 %if "%{?_with_emulator}" == "1"
-export CFLAGS="$CFLAGS -DTIZEN_BT_DISABLE"
-export CXXFLAGS="$CXXFLAGS -DTIZEN_BT_DISABLE"
-export FFLAGS="$FFLAGS -DTIZEN_BT_DISABLE"
-
 %if "%{?profile}" == "wearable"
 export CFLAGS="$CFLAGS -DTIZEN_WEARABLE"
 export CXXFLAGS="$CXXFLAGS -DTIZEN_WEARABLE"
