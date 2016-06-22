@@ -592,7 +592,7 @@
  * @if WEARABLE
  * @defgroup CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE Bluetooth HID Device
  * @brief The Bluetooth HID (Human Interface Device) API provides functions for connecting Bluetooth HID such as keyboards and mice.
- * @ingroup CAPI_NETWORK_BLUEETOOTH_HID_MODULE
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_MODULE
  *
  * @section CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE_HEADER Required Header
  *  \#include <bluetooth.h>
@@ -612,7 +612,7 @@
  *
  * To ensure your application runs only on devices with the required features, please declare the features in your manifest file using the manifest editor in the SDK.\n
  *
- * More details on using features in your application can be found in the <a href="https://developer.tizen.org/development/tools/native-tools/manifest-text-editor#feature"><b>Feature Element</b> description.</a>
+ * More details on using features in your application can be found in the <a href="https://developer.tizen.org/development/tools/native-tools/manifest-text-editor#feature"><b>Feature Element</b>.</a>
  * @endif
  *
  */
