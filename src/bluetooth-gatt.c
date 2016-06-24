@@ -2293,12 +2293,17 @@ int bt_gatt_server_start(void)
 	int ret = BT_ERROR_NONE;
 
 	BT_CHECK_GATT_SUPPORT();
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_GATT_SERVER_INIT_STATUS();
 
 	if (!is_gatt_server_started) {
 		ret = bluetooth_gatt_register_application();
 
 		if (ret != BT_ERROR_NONE)
+		{
 			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
+			return ret;
+		}
 
 		is_gatt_server_started = true;
 		return ret;
