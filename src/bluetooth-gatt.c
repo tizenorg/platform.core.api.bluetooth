@@ -2299,8 +2299,7 @@ int bt_gatt_server_start(void)
 	if (!is_gatt_server_started) {
 		ret = bluetooth_gatt_register_application();
 
-		if (ret != BT_ERROR_NONE)
-		{
+		if (ret != BT_ERROR_NONE) {
 			BT_ERR("%s(0x%08x)", _bt_convert_error_to_string(ret), ret);
 			return ret;
 		}
