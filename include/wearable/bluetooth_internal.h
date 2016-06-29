@@ -3166,6 +3166,33 @@ int bt_dpm_set_data_transfer_state(bt_dpm_status_e value);
 int bt_dpm_get_data_transfer_state(bt_dpm_status_e *value);
 
 /**
+ * @ingroup  CAPI_NETWORK_BLUETOOTH_DEVICE_MODULE
+ * @brief  API to reply with PIN or PASSKEY with authentication type - TRUE or FALSE.
+ * @remarks  This function can be called by application when remote device requests PIN or PASSKEY from
+ *           local adapter.
+ * @param[in]  passkey  The passkey to be provided by application when remote devices requests for it.
+ * @param[in]  authentication_reply This indicates whether application wants to accept or cancel the on-going pairing
+ * @pre  This function can only be called when application receieves authentication event (BT_AUTH_PIN_REQUEST)
+ *       from remote device.
+ * @see  bt_adapter_set_authentication_req_cb()
+ */
+int bt_passkey_reply(char *passkey, bool authentication_reply);
+
+/**
+ * @ingroup  CAPI_NETWORK_BLUETOOTH_DEVICE_MODULE
+ * @brief  API to reply to the PASSKEY confirmation for on-going pairing with remote device.
+ * @remarks  This function can be called by application, when local adapter wants PASSKEY confirmation from user.
+ * @param[in]  confirmation_reply This indicates whether application wants to accepts or cancels the on-going pairing
+ *             confirmation_reply : TRUE will indicate that Application has confirmed the PASSKEY
+ *             confirmation_reply : FALSE will indicate that Application has failed to confirm the PASSKEY. In this situation
+ *             the pairing will be failed.
+ * @pre  This function can only be called when application receives authentication event (BT_AUTH_PASSKEY_CONFIRM_REQUEST)
+ *       from remote device.
+ * @see  bt_adapter_set_authentication_req_cb()
+ */
+int bt_passkey_confirmation_reply(bool confirmation_reply);
+
+/**
  * @}
  */
 
