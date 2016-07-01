@@ -763,6 +763,10 @@ tc_table_t tc_hid[] = {
 		, BT_UNIT_TEST_FUNCTION_HID_DEVICE_SEND_MOUSE_EVENT},
 	{"bt_hid_device_send_key_event"
 		, BT_UNIT_TEST_FUNCTION_HID_DEVICE_SEND_KEY_EVENT},
+#ifdef TIZEN_WEARABLE
+	{"bt_hid_device_send_rc_key_event"
+		, BT_UNIT_TEST_FUNCTION_HID_DEVICE_SEND_RC_KEY_EVENT},
+#endif
 	{"bt_hid_device_set_data_received_cb"
 		, BT_UNIT_TEST_FUNCTION_HID_DEVICE_SET_DATA_RECEIVED_CB},
 	{"bt_hid_device_unset_data_received_cd"
@@ -7349,6 +7353,25 @@ int test_input_callback(void *data)
 			TC_PRT("returns %d\n", ret);
 			break;
 		}
+#ifdef TIZEN_WEARABLE
+		case BT_UNIT_TEST_FUNCTION_HID_DEVICE_SEND_RC_KEY_EVENT: {
+			bt_hid_rc_key_data_s send_data;
+			/* Will send volume Up */
+			unsigned short	key_press[3]	 = {0x0007, 0x0000, 0x0000};
+			unsigned short	key_release[3]	 = {0x0000, 0x0000, 0x0000};
+
+			memcpy(send_data.key, key_press, sizeof(key_press));
+			ret = bt_hid_device_send_rc_key_event(
+					remote_addr, &send_data);
+			TC_PRT("returns %d\n", ret);
+
+			memcpy(send_data.key, key_release, sizeof(key_release));
+			ret = bt_hid_device_send_rc_key_event(
+					remote_addr, &send_data);
+			TC_PRT("returns %d\n", ret);
+			break;
+		}
+#endif
 		case BT_UNIT_TEST_FUNCTION_HID_DEVICE_SET_DATA_RECEIVED_CB: {
 			ret = bt_hid_device_set_data_received_cb(
 					__bt_hid_device_data_received_cb,

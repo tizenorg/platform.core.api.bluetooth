@@ -369,6 +369,17 @@ typedef enum {
 } bt_authentication_type_info_e;
 
 /**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_DEVICE_MODULE
+ * @brief The structure type containing the HID RC key event information.
+ * @since_tizen 3.0
+ *
+ * @see bt_hid_device_send_rc_key_event()
+ */
+typedef struct {
+        unsigned short key[3]; /**< The key value - currently pressed keys : Max 3 at once */
+} bt_hid_rc_key_data_s;
+
+/**
  * @internal
  * @brief Check the initialzating status
  */
@@ -700,6 +711,28 @@ int bt_passkey_reply(char *passkey, bool authentication_reply);
  * @see  bt_adapter_set_authentication_req_cb()
  */
 int bt_passkey_confirmation_reply(bool confirmation_reply);
+
+/**
+ * @ingroup CAPI_NETWORK_BLUETOOTH_HID_MODULE
+ * @brief Sends the RC key event data.
+ * @since_tizen 3.0
+ * @privlevel platform
+ * @privilege %http://tizen.org/privilege/bluetooth.admin
+ *
+ * @param[in] remote_address device address of remote device.
+ * @param[in] key_data  key data the need to be passed to remote device
+ * @return 0 on success, otherwise a negative error value.
+ * @retval #BT_ERROR_NONE  Successful
+ * @retval #BT_ERROR_NOT_INITIALIZED  Not initialized
+ * @retval #BT_ERROR_INVALID_PARAMETER  Invalid parameter
+ * @retval #BT_ERROR_OPERATION_FAILED  Operation failed
+ * @retval #BT_ERROR_PERMISSION_DENIED  Permission denied
+ *
+ * @pre The HID connection must be established.
+ * @see bt_hid_device_connection_state_changed_cb()
+ */
+int bt_hid_device_send_rc_key_event(const char *remote_address,
+				const bt_hid_rc_key_data_s *key_data);
 
 #ifdef __cplusplus
 }

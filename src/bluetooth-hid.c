@@ -283,9 +283,12 @@ int bt_hid_device_send_key_event(const char *remote_address,
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(remote_address);
 	BT_CHECK_INPUT_PARAMETER(key_data);
+	hid_send_key_event_t send_event;
 
-	ret = bluetooth_hid_device_send_key_event(remote_address,
-			*(hid_send_key_event_t *)key_data);
+	send_event.modify = key_data->modifier;
+	memcpy(send_event.key, key_data->key, sizeof(send_event.key));
+
+	ret = bluetooth_hid_device_send_key_event(remote_address, send_event);
 	if (ret <= 0) {
 		if (ret == -1) {
 			/* write fail case */
@@ -305,6 +308,43 @@ int bt_hid_device_send_key_event(const char *remote_address,
 
 	return ret;
 }
+
+#ifdef TIZEN_WEARABLE
+int bt_hid_device_send_rc_key_event(const char *remote_address,
+		const bt_hid_rc_key_data_s *key_data)
+{
+	int ret;
+	BT_CHECK_HID_DEVICE_SUPPORT();
+	BT_CHECK_INIT_STATUS();
+	BT_CHECK_INPUT_PARAMETER(remote_address);
+	BT_CHECK_INPUT_PARAMETER(key_data);
+	hid_send_rc_key_event_t send_event;
+
+	send_event.btcode = 0xA1;
+	send_event.rep_id = 0xF7;
+	memcpy(send_event.key, key_data->key, sizeof(send_event.key));
+
+	ret = bluetooth_hid_device_send_rc_key_event(remote_address, send_event);
+	if (ret <= 0) {
+		if (ret == -1) {
+			/* write fail case */
+			if (errno == EACCES || errno == EPERM)
+				set_last_result(BT_ERROR_PERMISSION_DENIED);
+			else if (errno == EAGAIN || errno == EWOULDBLOCK)
+				set_last_result(BT_ERROR_AGAIN);
+			else
+				set_last_result(BT_ERROR_OPERATION_FAILED);
+		} else {
+			ret = _bt_get_error_code(ret);
+			set_last_result(ret);
+		}
+
+		BT_ERR("Write failed, ret = %d", ret);
+	}
+
+	return ret;
+}
+#endif
 
 int bt_hid_device_reply_to_report(const char *remote_address,
 		bt_hid_header_type_e header_type,
