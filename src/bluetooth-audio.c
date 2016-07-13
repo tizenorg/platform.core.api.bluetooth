@@ -164,7 +164,7 @@ int bt_audio_initialize(void)
 		is_audio_hf_initialized = true;
 #endif
 
-#ifndef TELEPHONY_DISABLED /* B2_3G */
+#ifndef TIZEN_HFP_DISABLE /* B2_3G */
 	error = bluetooth_telephony_init((void *)_bt_telephony_event_proxy, NULL);
 	error = _bt_convert_telephony_error_code(error);
 	if (BT_ERROR_NONE != error)
@@ -208,7 +208,7 @@ int bt_audio_deinitialize(void)
 	is_audio_hf_initialized = false;
 #endif
 
-#ifndef TELEPHONY_DISABLED /* B2_3G */
+#ifndef TIZEN_HFP_DISABLE /* B2_3G */
 	error = bluetooth_telephony_deinit();
 	error = _bt_convert_telephony_error_code(error);
 	if (BT_ERROR_NONE != error)
@@ -235,7 +235,7 @@ int bt_audio_connect(const char *remote_address, bt_audio_profile_type_e type)
 		BT_CHECK_A2DP_SUPPORT();
 		BT_CHECK_A2DP_INIT_STATUS();
 	} else if (type == BT_AUDIO_PROFILE_TYPE_ALL) {
-#if defined(TIZEN_HFP_DISABLE) || defined(TELEPHONY_DISABLED)
+#if defined(TIZEN_HFP_DISABLE)
 		BT_CHECK_A2DP_INIT_STATUS();
 		BT_ERR("HSP NOT SUPPORTED(0x%08x)", BT_ERROR_NOT_SUPPORTED);
 		type = BT_AUDIO_PROFILE_TYPE_A2DP;
@@ -255,7 +255,7 @@ int bt_audio_connect(const char *remote_address, bt_audio_profile_type_e type)
 	BT_CHECK_INPUT_PARAMETER(remote_address);
 	_bt_convert_address_to_hex(&addr_hex, remote_address);
 	switch (type) {
-#ifndef TELEPHONY_DISABLED
+#ifndef TIZEN_HFP_DISABLE
 	case BT_AUDIO_PROFILE_TYPE_HSP_HFP:
 		error = bluetooth_ag_connect(&addr_hex);
 		break;
@@ -299,7 +299,7 @@ int bt_audio_disconnect(const char *remote_address, bt_audio_profile_type_e type
 		BT_CHECK_A2DP_SUPPORT();
 		BT_CHECK_A2DP_INIT_STATUS();
 	} else if (type == BT_AUDIO_PROFILE_TYPE_ALL) {
-#if defined(TIZEN_HFP_DISABLE) || defined(TELEPHONY_DISABLED)
+#if defined(TIZEN_HFP_DISABLE)
 		BT_CHECK_A2DP_INIT_STATUS();
 		BT_ERR("HSP NOT SUPPORTED(0x%08x)", BT_ERROR_NOT_SUPPORTED);
 		type = BT_AUDIO_PROFILE_TYPE_A2DP;
@@ -313,7 +313,7 @@ int bt_audio_disconnect(const char *remote_address, bt_audio_profile_type_e type
 	BT_CHECK_INPUT_PARAMETER(remote_address);
 	_bt_convert_address_to_hex(&addr_hex, remote_address);
 	switch (type) {
-#ifndef TELEPHONY_DISABLED
+#ifndef TIZEN_HFP_DISABLE
 	case BT_AUDIO_PROFILE_TYPE_HSP_HFP:
 		error = bluetooth_ag_disconnect(&addr_hex);
 		break;
