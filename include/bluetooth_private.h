@@ -20,6 +20,7 @@
 
 #include <dlog.h>
 #include <stdbool.h>
+#include <system_info.h>
 #include <bluetooth-api.h>
 #include <bluetooth-audio-api.h>
 #include <bluetooth-telephony-api.h>
@@ -42,6 +43,7 @@ extern "C" {
 #define BT_ERR(fmt, args...) SLOGE(fmt, ##args)
 
 #define OPP_UUID "00001105-0000-1000-8000-00805f9b34fb"
+
 
 /**
  * @internal
@@ -347,15 +349,30 @@ typedef void (*_bt_gatt_client_value_changed_cb)(char *char_path,
 		return BT_ERROR_INVALID_PARAMETER; \
 	}
 
-#ifdef TIZEN_BT_DISABLE
-#define BT_CHECK_BT_SUPPORT() \
-	{ \
-		LOGE("[%s] NOT_SUPPORTED(0x%08x)", __FUNCTION__, BT_ERROR_NOT_SUPPORTED); \
-		return BT_ERROR_NOT_SUPPORTED; \
-	}
-#else
-#define BT_CHECK_BT_SUPPORT()
-#endif
+#define BT_FEATURE_COMMON "tizen.org/feature/network.bluetooth"
+#define BT_FEATURE_LE "tizen.org/feature/network.bluetooth.le"
+#define BT_FEATURE_AUDIO_CALL "tizen.org/feature/network.bluetooth.audio.call"
+#define BT_FEATURE_AUDIO_MEDIA "tizen.org/feature/network.bluetooth.audio.media"
+#define BT_FEATURE_AUDIO_CONTROLLER "tizen.org/feature/network.bluetooth.audio.controller"
+#define BT_FEATURE_HEALTH "tizen.org/feature/network.bluetooth.health"
+#define BT_FEATURE_HID_HOST "tizen.org/feature/network.bluetooth.hid"
+#define BT_FEATURE_HID_DEVICE "tizen.org/feature/network.bluetooth.hid_device"
+#define BT_FEATURE_OPP "tizen.org/feature/network.bluetooth.opp"
+#define BT_FEATURE_TETHERING "tizen.org/feature/network.tethering.bluetooth"
+#define BT_FEATURE_PBAP_CLIENT "tizen.org/feature/network.bluetooth.phonebook.client"
+
+#define BT_CHECK_SUPPORTED_FEATURE(feature_name) \
+do	{ \
+	bool is_supported = false; \
+	if (!system_info_get_platform_bool(feature_name, &is_supported)) { \
+		if (is_supported == false) { \
+			LOGE("[%s] NOT_SUPPORTED(0x%08x)", __FUNCTION__, BT_ERROR_NOT_SUPPORTED); \
+			return BT_ERROR_NOT_SUPPORTED; \
+		} \
+	} else { \
+		LOGE("[%s] Fail to get the system feature: [%s]", __FUNCTION__, feature_name); \
+	} \
+} while (0)
 
 /**
  * @ingroup CAPI_NETWORK_BLUETOOTH_ADAPTER_MODULE

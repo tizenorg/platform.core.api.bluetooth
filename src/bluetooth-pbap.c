@@ -25,20 +25,15 @@
 #include "bluetooth_internal.h"
 #include "bluetooth_private.h"
 
-#ifdef TIZEN_PBAP_DISABLE
-#define BT_CHECK_PBAP_SUPPORT() \
-		{ \
-			BT_CHECK_BT_SUPPORT(); \
-			LOGE("[%s] NOT_SUPPORTED(0x%08x)", __FUNCTION__, BT_ERROR_NOT_SUPPORTED); \
-			return BT_ERROR_NOT_SUPPORTED; \
-		}
-#else
-#define BT_CHECK_PBAP_SUPPORT()
-#endif
+#define BT_CHECK_PBAP_CLIENT_SUPPORT() \
+{ \
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON); \
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_PBAP_CLIENT); \
+}
 
 int bt_pbap_client_initialize(void)
 {
-	BT_CHECK_PBAP_SUPPORT();
+	BT_CHECK_PBAP_CLIENT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	int error_code = BT_ERROR_NONE;
 	error_code = _bt_get_error_code(bluetooth_pbap_init());
@@ -50,7 +45,7 @@ int bt_pbap_client_initialize(void)
 
 int bt_pbap_client_deinitialize(void)
 {
-	BT_CHECK_PBAP_SUPPORT();
+	BT_CHECK_PBAP_CLIENT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	int error_code = BT_ERROR_NONE;
 	error_code = _bt_get_error_code(bluetooth_pbap_deinit());
@@ -62,7 +57,7 @@ int bt_pbap_client_deinitialize(void)
 
 int bt_pbap_client_set_connection_state_changed_cb(bt_pbap_connection_state_changed_cb callback, void *user_data)
 {
-	BT_CHECK_PBAP_SUPPORT();
+	BT_CHECK_PBAP_CLIENT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(callback);
 	_bt_set_cb(BT_EVENT_PBAP_CONNECTION_STATUS, callback, user_data);
@@ -71,7 +66,7 @@ int bt_pbap_client_set_connection_state_changed_cb(bt_pbap_connection_state_chan
 }
 int bt_pbap_client_unset_connection_state_changed_cb(void)
 {
-	BT_CHECK_PBAP_SUPPORT();
+	BT_CHECK_PBAP_CLIENT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	if (_bt_check_cb(BT_EVENT_PBAP_CONNECTION_STATUS) == true)
 		_bt_unset_cb(BT_EVENT_PBAP_CONNECTION_STATUS);
@@ -83,7 +78,7 @@ int bt_pbap_client_connect(const char *address)
 	bluetooth_device_address_t addr_hex = { {0,} };
 	int error_code = BT_ERROR_NONE;
 
-	BT_CHECK_PBAP_SUPPORT();
+	BT_CHECK_PBAP_CLIENT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(address);
 
@@ -101,7 +96,7 @@ int bt_pbap_client_disconnect(const char *address)
 	bluetooth_device_address_t addr_hex = { {0,} };
 	int error_code = BT_ERROR_NONE;
 
-	BT_CHECK_PBAP_SUPPORT();
+	BT_CHECK_PBAP_CLIENT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(address);
 
@@ -121,7 +116,7 @@ int bt_pbap_client_get_phone_book_size(const char *address, bt_pbap_address_book
 	bt_pbap_folder_t folder = { 0, };
 	int error_code = BT_ERROR_NONE;
 
-	BT_CHECK_PBAP_SUPPORT();
+	BT_CHECK_PBAP_CLIENT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(address);
 	BT_CHECK_INPUT_PARAMETER(callback);
@@ -150,7 +145,7 @@ int bt_pbap_client_get_phone_book(const char *address, bt_pbap_address_book_sour
 	bt_pbap_folder_t folder = { 0, };
 	int error_code = BT_ERROR_NONE;
 
-	BT_CHECK_PBAP_SUPPORT();
+	BT_CHECK_PBAP_CLIENT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(address);
 	BT_CHECK_INPUT_PARAMETER(callback);
@@ -194,7 +189,7 @@ int bt_pbap_client_get_list(const char *address, bt_pbap_address_book_source_e s
 	bt_pbap_folder_t folder = { 0, };
 	int error_code = BT_ERROR_NONE;
 
-	BT_CHECK_PBAP_SUPPORT();
+	BT_CHECK_PBAP_CLIENT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(address);
 	BT_CHECK_INPUT_PARAMETER(callback);
@@ -228,7 +223,7 @@ int bt_pbap_client_pull_vcard(const char *address, bt_pbap_address_book_source_e
 
 	int error_code = BT_ERROR_NONE;
 
-	BT_CHECK_PBAP_SUPPORT();
+	BT_CHECK_PBAP_CLIENT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(address);
 	BT_CHECK_INPUT_PARAMETER(callback);
@@ -263,7 +258,7 @@ int bt_pbap_client_search_phone_book(const char *address,
 	bt_pbap_search_parameters_t app_param = { 0, };
 	int error_code = BT_ERROR_NONE;
 
-	BT_CHECK_PBAP_SUPPORT();
+	BT_CHECK_PBAP_CLIENT_SUPPORT();
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(address);
 	BT_CHECK_INPUT_PARAMETER(callback);

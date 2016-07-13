@@ -20,9 +20,9 @@ ELSE ()
 ENDIF (TIZEN_TV)
 
 IF (TIZEN_TV)
-	SET(dependents "dlog glib-2.0 capi-base-common bluetooth-api db-util")
+	SET(dependents "dlog glib-2.0 capi-base-common bluetooth-api db-util capi-system-info")
 ELSE ()
-	SET(dependents "dlog glib-2.0 capi-base-common bluetooth-api")
+	SET(dependents "dlog glib-2.0 capi-base-common bluetooth-api capi-system-info")
 ENDIF (TIZEN_TV)
 SET(pc_dependents "capi-base-common glib-2.0")
 

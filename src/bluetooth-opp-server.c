@@ -24,17 +24,11 @@
 
 static bool is_opp_server_initialized = false;
 
-#ifdef TIZEN_OPP_SERVER_DISABLE
 #define BT_CHECK_OPP_SERVER_SUPPORT() \
-	{ \
-		BT_CHECK_BT_SUPPORT(); \
-		LOGE("[%s] NOT_SUPPORTED(0x%08x)", __FUNCTION__, \
-					BT_ERROR_NOT_SUPPORTED); \
-		return BT_ERROR_NOT_SUPPORTED; \
-	}
-#else
-#define BT_CHECK_OPP_SERVER_SUPPORT()
-#endif
+{ \
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON); \
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_OPP); \
+}
 
 
 #define BT_CHECK_OPP_SERVER_INIT_STATUS() \

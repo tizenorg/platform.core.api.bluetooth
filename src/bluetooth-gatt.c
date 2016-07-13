@@ -32,17 +32,11 @@ static GSList *gatt_server_list = NULL;
 static bool is_gatt_server_initialized = false;
 static bool is_gatt_server_started = false;
 
-#ifdef TIZEN_GATT_DISABLE
 #define BT_CHECK_GATT_SUPPORT() \
-		{ \
-			BT_CHECK_BT_SUPPORT(); \
-			LOGE("[%s] NOT_SUPPORTED(0x%08x)", __FUNCTION__, \
-						BT_ERROR_NOT_SUPPORTED); \
-			return BT_ERROR_NOT_SUPPORTED; \
-		}
-#else
-#define BT_CHECK_GATT_SUPPORT()
-#endif
+{ \
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON); \
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_LE); \
+}
 
 #define BT_CHECK_GATT_SERVER_INIT_STATUS() { \
 	if (__bt_check_gatt_server_init_status() == BT_ERROR_NOT_INITIALIZED) { \

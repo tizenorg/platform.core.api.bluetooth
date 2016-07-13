@@ -28,17 +28,11 @@
 #include "bluetooth_internal.h"
 #include "bluetooth_private.h"
 
-#ifdef TIZEN_LE_DISABLE
 #define BT_CHECK_LE_SUPPORT() \
-		{ \
-			BT_CHECK_BT_SUPPORT(); \
-			LOGE("[%s] NOT_SUPPORTED(0x%08x)", \
-			__FUNCTION__, BT_ERROR_NOT_SUPPORTED); \
-			return BT_ERROR_NOT_SUPPORTED; \
-		}
-#else
-#define BT_CHECK_LE_SUPPORT()
-#endif
+{ \
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON); \
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_LE); \
+}
 
 static GSList *advertiser_list = NULL;
 
@@ -47,7 +41,7 @@ int bt_adapter_enable(void)
 {
 	int error_code = BT_ERROR_NONE;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	error_code = _bt_get_error_code(bluetooth_enable_adapter());
 	if (error_code != BT_ERROR_NONE) { /* LCOV_EXCL_LINE */
@@ -61,7 +55,7 @@ int bt_adapter_disable(void)
 {
 	int error_code = BT_ERROR_NONE;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	error_code = _bt_get_error_code(bluetooth_disable_adapter());
 	if (error_code != BT_ERROR_NONE) { /* LCOV_EXCL_LINE */
@@ -75,7 +69,7 @@ int bt_adapter_recover(void)
 {
 	int error_code = BT_ERROR_NONE;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	error_code = _bt_get_error_code(bluetooth_recover_adapter());
 	if (error_code != BT_ERROR_NONE) { /* LCOV_EXCL_LINE */
@@ -89,7 +83,7 @@ int bt_adapter_reset(void)
 {
 	int error_code = BT_ERROR_NONE;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	error_code = _bt_get_error_code(bluetooth_reset_adapter());
 	if (error_code != BT_ERROR_NONE) { /* LCOV_EXCL_LINE */
@@ -102,7 +96,7 @@ int bt_adapter_reset(void)
 
 int bt_adapter_get_state(bt_adapter_state_e *adapter_state)
 {
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(adapter_state);
 
@@ -115,7 +109,7 @@ int bt_adapter_le_enable(void)
 {
 	int error_code = BT_ERROR_NONE;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	error_code = _bt_get_error_code(bluetooth_enable_adapter_le());
 	if (error_code != BT_ERROR_NONE) { /* LCOV_EXCL_LINE */
@@ -129,7 +123,7 @@ int bt_adapter_le_disable(void)
 {
 	int error_code = BT_ERROR_NONE;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 
 	error_code = _bt_get_error_code(bluetooth_disable_adapter_le());
@@ -142,7 +136,7 @@ int bt_adapter_le_disable(void)
 
 int bt_adapter_le_get_state(bt_adapter_le_state_e *adapter_le_state)
 {
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(adapter_le_state);
 
@@ -156,7 +150,7 @@ int bt_adapter_get_address(char **address)
 	bluetooth_device_address_t loc_address = { {0} };
 	int error_code = BT_ERROR_NONE;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(address);
 
@@ -183,7 +177,7 @@ int bt_adapter_get_version(char **version)
 	int ret = BT_ERROR_NONE;
 	bluetooth_version_t loc_ver = { { 0 } };
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(version);
 
@@ -212,7 +206,7 @@ int bt_adapter_get_version(char **version)
 int bt_adapter_get_local_info(char **chipset, char **firmware,
 			char **stack_version, char **profiles)
 {
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 
 	int ret = BT_ERROR_NONE;
@@ -228,7 +222,7 @@ int bt_adapter_get_local_info(char **chipset, char **firmware,
 	char *local_stack_version = NULL;
 	char *local_profiles = NULL;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(chipset);
 	BT_CHECK_INPUT_PARAMETER(firmware);
@@ -432,7 +426,7 @@ int bt_adapter_get_name(char **name)
 	int ret = BT_ERROR_NONE;
 	bluetooth_device_name_t loc_name = { {0} };
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(name);
 
@@ -458,7 +452,7 @@ int bt_adapter_set_name(const char *name)
 	bluetooth_device_name_t loc_name = { {0} };
 	int ret = BT_ERROR_NONE;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(name);
 
@@ -480,7 +474,7 @@ int bt_adapter_get_visibility(bt_adapter_visibility_mode_e *mode, int *duration)
 	bluetooth_discoverable_mode_t discoverable_mode = BLUETOOTH_DISCOVERABLE_MODE_CONNECTABLE;
 	int ret = BT_ERROR_NONE;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(mode);
 
@@ -515,7 +509,7 @@ int bt_adapter_set_visibility(bt_adapter_visibility_mode_e visibility_mode,
 	bluetooth_discoverable_mode_t discoverable_mode = BLUETOOTH_DISCOVERABLE_MODE_CONNECTABLE;
 	int error_code = BT_ERROR_NONE;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	switch (visibility_mode) {
 	case BT_ADAPTER_VISIBILITY_MODE_LIMITED_DISCOVERABLE:
@@ -549,7 +543,7 @@ int bt_adapter_set_connectable_changed_cb(bt_adapter_connectable_changed_cb call
 {
 	int ret = BT_ERROR_NONE;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(callback);
 	_bt_set_cb(BT_EVENT_CONNECTABLE_CHANGED_EVENT, callback, user_data);
@@ -563,7 +557,7 @@ int bt_adapter_set_connectable_changed_cb(bt_adapter_connectable_changed_cb call
 
 int bt_adapter_unset_connectable_changed_cb(void)
 {
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	_bt_unset_cb(BT_EVENT_CONNECTABLE_CHANGED_EVENT);
 	return BT_ERROR_NONE;
@@ -574,7 +568,7 @@ int bt_adapter_get_connectable(bool *connectable)
 	gboolean is_connectable = FALSE;
 	int ret = BT_ERROR_NONE;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(connectable);
 
@@ -593,7 +587,7 @@ int bt_adapter_set_connectable(bool connectable)
 {
 	int error_code = BT_ERROR_NONE;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 
 	error_code = _bt_get_error_code(bluetooth_set_connectable(connectable));
@@ -615,7 +609,7 @@ int bt_adapter_foreach_bonded_device(bt_adapter_bonded_device_cb foreach_cb,
 	int ret = BT_ERROR_NONE;
 	int i = 0;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(foreach_cb);
 
@@ -671,7 +665,7 @@ int bt_adapter_get_bonded_device_info(const char *remote_address,
 	bluetooth_device_address_t addr_hex = { {0,} };
 	bluetooth_device_info_t *info;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(remote_address); /* LCOV_EXCL_START */
 
@@ -702,7 +696,7 @@ int bt_adapter_get_bonded_device_info(const char *remote_address,
 
 int bt_adapter_free_device_info(bt_device_info_s *device_info)
 {
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(device_info);
 
@@ -716,7 +710,7 @@ int bt_adapter_is_service_used(const char *service_uuid, bool *used)
 	int ret = BT_ERROR_NONE;
 	gboolean is_used = FALSE;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(service_uuid);
 	BT_CHECK_INPUT_PARAMETER(used);
@@ -745,7 +739,7 @@ int bt_adapter_set_state_changed_cb(bt_adapter_state_changed_cb callback,
 	BT_DBG("");
 	int ret = BT_ERROR_NONE;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(callback);
 	_bt_set_cb(BT_EVENT_STATE_CHANGED, callback, user_data);
@@ -761,7 +755,7 @@ int bt_adapter_set_state_changed_cb(bt_adapter_state_changed_cb callback,
 int bt_adapter_le_set_state_changed_cb(bt_adapter_le_state_changed_cb callback,
 							void *user_data)
 {
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(callback);
 
@@ -776,7 +770,7 @@ int bt_adapter_set_name_changed_cb(bt_adapter_name_changed_cb callback,
 {
 	int ret = BT_ERROR_NONE;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(callback);
 	_bt_set_cb(BT_EVENT_NAME_CHANGED, callback, user_data);
@@ -793,7 +787,7 @@ int bt_adapter_set_visibility_mode_changed_cb(bt_adapter_visibility_mode_changed
 {
 	int ret = BT_ERROR_NONE;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(callback);
 	_bt_set_cb(BT_EVENT_VISIBILITY_MODE_CHANGED, callback, user_data);
@@ -810,7 +804,7 @@ int bt_adapter_set_device_discovery_state_changed_cb(bt_adapter_device_discovery
 {
 	int ret = BT_ERROR_NONE;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(callback);
 	_bt_set_cb(BT_EVENT_DEVICE_DISCOVERY_STATE_CHANGED,
@@ -840,7 +834,7 @@ int bt_adapter_le_set_device_discovery_state_changed_cb(bt_adapter_le_device_dis
 
 int bt_adapter_unset_state_changed_cb(void)
 {
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	_bt_unset_cb(BT_EVENT_STATE_CHANGED);
 	return BT_ERROR_NONE;
@@ -859,7 +853,7 @@ int bt_adapter_le_unset_state_changed_cb(void)
 
 int bt_adapter_unset_name_changed_cb(void)
 {
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	_bt_unset_cb(BT_EVENT_NAME_CHANGED);
 	return BT_ERROR_NONE;
@@ -867,7 +861,7 @@ int bt_adapter_unset_name_changed_cb(void)
 
 int bt_adapter_unset_visibility_mode_changed_cb(void)
 {
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	_bt_unset_cb(BT_EVENT_VISIBILITY_MODE_CHANGED);
 	return BT_ERROR_NONE;
@@ -878,7 +872,7 @@ int bt_adapter_set_visibility_duration_changed_cb(bt_adapter_visibility_duration
 {
 	int ret = BT_ERROR_NONE;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(callback);
 	_bt_set_cb(BT_EVENT_VISIBILITY_DURATION_CHANGED, callback, user_data);
@@ -892,7 +886,7 @@ int bt_adapter_set_visibility_duration_changed_cb(bt_adapter_visibility_duration
 
 int bt_adapter_unset_visibility_duration_changed_cb(void)
 {
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	_bt_unset_cb(BT_EVENT_VISIBILITY_DURATION_CHANGED);
 	return BT_ERROR_NONE;
@@ -900,7 +894,7 @@ int bt_adapter_unset_visibility_duration_changed_cb(void)
 
 int bt_adapter_unset_device_discovery_state_changed_cb(void)
 {
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	_bt_unset_cb(BT_EVENT_DEVICE_DISCOVERY_STATE_CHANGED);
 	return BT_ERROR_NONE;
@@ -921,7 +915,7 @@ int bt_adapter_start_device_discovery(void)
 {
 	int error_code = BT_ERROR_NONE;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	error_code = _bt_get_error_code(bluetooth_start_discovery(0, 0,
 					BLUETOOTH_DEVICE_MAJOR_MASK_MISC));
@@ -936,7 +930,7 @@ int bt_adapter_stop_device_discovery(void)
 {
 	int error_code = BT_ERROR_NONE;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	error_code = _bt_get_error_code(bluetooth_cancel_discovery());
 	if (error_code != BT_ERROR_NONE) { /* LCOV_EXCL_LINE */
@@ -950,7 +944,7 @@ int bt_adapter_is_discovering(bool *is_discovering)
 {
 	int ret = 0;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(is_discovering);
 
@@ -1022,7 +1016,7 @@ int bt_adapter_get_local_oob_data(unsigned char **hash,
 {
 	int ret = BT_ERROR_NONE;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(hash);
 	BT_CHECK_INPUT_PARAMETER(randomizer);
@@ -1053,7 +1047,7 @@ int bt_adapter_set_remote_oob_data(const char *remote_address,
 	bluetooth_device_address_t addr_hex = { {0,} };
 	bt_oob_data_t oob_data = { {0},};
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(remote_address); /* LCOV_EXCL_START */
 
@@ -1080,7 +1074,7 @@ int bt_adapter_remove_remote_oob_data(const char *remote_address)
 	int ret = BT_ERROR_NONE;
 	bluetooth_device_address_t addr_hex = { {0,} };
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(remote_address);
 
@@ -1103,7 +1097,7 @@ int bt_adapter_set_manufacturer_data(char *data, int len)
 	int ret;
 	bluetooth_manufacturer_data_t m_data = { 0 };
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(data);
 
@@ -1131,7 +1125,7 @@ int bt_adapter_set_manufacturer_data_changed_cb(
 {
 	int ret = BT_ERROR_NONE;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(callback);
 	_bt_set_cb(BT_EVENT_MANUFACTURER_DATA_CHANGED,
@@ -1146,7 +1140,7 @@ int bt_adapter_set_manufacturer_data_changed_cb(
 
 int bt_adapter_unset_manufacturer_data_changed_cb(void)
 {
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	_bt_unset_cb(BT_EVENT_MANUFACTURER_DATA_CHANGED);
 	return BT_ERROR_NONE;
@@ -1178,7 +1172,7 @@ int bt_adapter_le_remove_white_list(const char *address, bt_device_address_type_
 	int error_code = BT_ERROR_NONE;
 	bluetooth_device_address_t addr_hex = { {0,} };
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	BT_CHECK_INPUT_PARAMETER(address);
 	_bt_convert_address_to_hex(&addr_hex, address);
@@ -3306,7 +3300,7 @@ int bt_adapter_le_read_maximum_data_length(
 {
 	int ret = BT_ERROR_NONE;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 
 	bluetooth_le_read_maximum_data_length_t max_le_datalength;
@@ -3334,7 +3328,7 @@ int bt_adapter_le_write_host_suggested_default_data_length(
 {
 	int ret = BT_ERROR_NONE;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 
 	/*Range for host suggested txtime is 0x001B-0x00FB  and
@@ -3362,7 +3356,7 @@ int bt_adapter_le_read_suggested_default_data_length(
 {
 	int ret = BT_ERROR_NONE;
 
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 
 	bluetooth_le_read_host_suggested_data_length_t data_values;

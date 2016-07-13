@@ -24,16 +24,12 @@
 #include "bluetooth.h"
 #include "bluetooth_private.h"
 
-#ifdef TIZEN_PAN_DISABLE
 #define BT_CHECK_PAN_SUPPORT() \
-		{ \
-			BT_CHECK_BT_SUPPORT(); \
-			LOGE("[%s] NOT_SUPPORTED(0x%08x)", __FUNCTION__, BT_ERROR_NOT_SUPPORTED); \
-			return BT_ERROR_NOT_SUPPORTED; \
-		}
-#else
-#define BT_CHECK_PAN_SUPPORT()
-#endif
+{ \
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON); \
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_TETHERING); \
+}
+
 /* LCOV_EXCL_START */
 int bt_nap_activate(void)
 {

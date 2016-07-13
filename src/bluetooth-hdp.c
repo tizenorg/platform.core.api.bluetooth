@@ -24,16 +24,11 @@
 #include "bluetooth.h"
 #include "bluetooth_private.h"
 
-#ifdef TIZEN_HDP_DISABLE
 #define BT_CHECK_HDP_SUPPORT() \
-	{ \
-		BT_CHECK_BT_SUPPORT(); \
-		LOGE("[%s] NOT_SUPPORTED(0x%08x)", __FUNCTION__, BT_ERROR_NOT_SUPPORTED); \
-		return BT_ERROR_NOT_SUPPORTED; \
-	}
-#else
-#define BT_CHECK_HDP_SUPPORT()
-#endif
+{ \
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON); \
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_HEALTH); \
+}
 
 int bt_hdp_register_sink_app(unsigned short data_type, char **app_id)
 {

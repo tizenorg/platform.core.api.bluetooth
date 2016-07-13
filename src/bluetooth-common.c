@@ -63,7 +63,7 @@ static int __bt_gatt_client_update_descriptors(bt_gatt_handle_info_t desc_handle
 
 int bt_initialize(void)
 {
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	if (is_initialized != true) {
 		if (bluetooth_register_callback(&__bt_event_proxy, NULL) != BLUETOOTH_ERROR_NONE) {
 			BT_ERR("OPERATION_FAILED(0x%08x)", BT_ERROR_OPERATION_FAILED); /* LCOV_EXCL_LINE */
@@ -77,7 +77,7 @@ int bt_initialize(void)
 
 int bt_deinitialize(void)
 {
-	BT_CHECK_BT_SUPPORT();
+	BT_CHECK_SUPPORTED_FEATURE(BT_FEATURE_COMMON);
 	BT_CHECK_INIT_STATUS();
 	if (bluetooth_unregister_callback() != BLUETOOTH_ERROR_NONE) {
 		BT_ERR("OPERATION_FAILED(0x%08x)", BT_ERROR_OPERATION_FAILED); /* LCOV_EXCL_LINE */
